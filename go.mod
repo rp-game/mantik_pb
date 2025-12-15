@@ -1,4 +1,4 @@
-module gitlab.com/manatech/mantik/pb
+module github.com/rp-game/mantik_pb
 
 go 1.21
 
