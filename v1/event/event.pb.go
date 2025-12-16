@@ -1466,6 +1466,214 @@ func (x *UnpublishEventResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Order Position Fulfillment (async event handler)
+type OrderPositionFulfillRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OrderId    int64  `protobuf:"varint,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	OrderCode  string `protobuf:"bytes,2,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	PositionId int64  `protobuf:"varint,3,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	ItemId     int64  `protobuf:"varint,4,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Quantity   int32  `protobuf:"varint,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	Email      string `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty"`
+	Organizer  string `protobuf:"bytes,7,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event      string `protobuf:"bytes,8,opt,name=event,proto3" json:"event,omitempty"`
+}
+
+func (x *OrderPositionFulfillRequest) Reset() {
+	*x = OrderPositionFulfillRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[15]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OrderPositionFulfillRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderPositionFulfillRequest) ProtoMessage() {}
+
+func (x *OrderPositionFulfillRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[15]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderPositionFulfillRequest.ProtoReflect.Descriptor instead.
+func (*OrderPositionFulfillRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *OrderPositionFulfillRequest) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *OrderPositionFulfillRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *OrderPositionFulfillRequest) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *OrderPositionFulfillRequest) GetItemId() int64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *OrderPositionFulfillRequest) GetQuantity() int32 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *OrderPositionFulfillRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *OrderPositionFulfillRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *OrderPositionFulfillRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+// Order Position Refund (async event handler)
+type OrderPositionRefundRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OrderId    int64  `protobuf:"varint,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	OrderCode  string `protobuf:"bytes,2,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	PositionId int64  `protobuf:"varint,3,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	ItemId     int64  `protobuf:"varint,4,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Quantity   int32  `protobuf:"varint,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	Email      string `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty"`
+	Organizer  string `protobuf:"bytes,7,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event      string `protobuf:"bytes,8,opt,name=event,proto3" json:"event,omitempty"`
+}
+
+func (x *OrderPositionRefundRequest) Reset() {
+	*x = OrderPositionRefundRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[16]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OrderPositionRefundRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderPositionRefundRequest) ProtoMessage() {}
+
+func (x *OrderPositionRefundRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[16]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderPositionRefundRequest.ProtoReflect.Descriptor instead.
+func (*OrderPositionRefundRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *OrderPositionRefundRequest) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *OrderPositionRefundRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *OrderPositionRefundRequest) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *OrderPositionRefundRequest) GetItemId() int64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *OrderPositionRefundRequest) GetQuantity() int32 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *OrderPositionRefundRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *OrderPositionRefundRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *OrderPositionRefundRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
 var File_v1_event_event_proto protoreflect.FileDescriptor
 
 var file_v1_event_event_proto_rawDesc = []byte{
@@ -1770,10 +1978,42 @@ var file_v1_event_event_proto_rawDesc = []byte{
 	0x6f, 0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65,
 	0x72, 0x72, 0x6f, 0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72, 0x6f,
 	0x72, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x28, 0x5a,
-	0x26, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74,
-	0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76,
-	0x31, 0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0xf7, 0x01,
+	0x0a, 0x1b, 0x4f, 0x72, 0x64, 0x65, 0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x46,
+	0x75, 0x6c, 0x66, 0x69, 0x6c, 0x6c, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x19, 0x0a,
+	0x08, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x07, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x72,
+	0x64, 0x65, 0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74,
+	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x70, 0x6f,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x69, 0x74, 0x65, 0x6d,
+	0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x69, 0x74, 0x65, 0x6d, 0x49,
+	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x71, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x05, 0x52, 0x08, 0x71, 0x75, 0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x14, 0x0a,
+	0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d,
+	0x61, 0x69, 0x6c, 0x12, 0x1c, 0x0a, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72,
+	0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65,
+	0x72, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x22, 0xf6, 0x01, 0x0a, 0x1a, 0x4f, 0x72, 0x64, 0x65,
+	0x72, 0x50, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x66, 0x75, 0x6e, 0x64, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x19, 0x0a, 0x08, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x5f,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x49,
+	0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x43, 0x6f, 0x64, 0x65,
+	0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49,
+	0x64, 0x12, 0x17, 0x0a, 0x07, 0x69, 0x74, 0x65, 0x6d, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x06, 0x69, 0x74, 0x65, 0x6d, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x71, 0x75,
+	0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x71, 0x75,
+	0x61, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x18,
+	0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c, 0x12, 0x1c, 0x0a, 0x09,
+	0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x76,
+	0x65, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74,
+	0x42, 0x28, 0x5a, 0x26, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70,
+	0x62, 0x2f, 0x76, 0x31, 0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -1788,57 +2028,59 @@ func file_v1_event_event_proto_rawDescGZIP() []byte {
 	return file_v1_event_event_proto_rawDescData
 }
 
-var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_v1_event_event_proto_goTypes = []interface{}{
-	(*Event)(nil),                  // 0: riptik.event.v1.Event
-	(*ListEventsRequest)(nil),      // 1: riptik.event.v1.ListEventsRequest
-	(*GetEventRequest)(nil),        // 2: riptik.event.v1.GetEventRequest
-	(*CreateEventRequest)(nil),     // 3: riptik.event.v1.CreateEventRequest
-	(*UpdateEventRequest)(nil),     // 4: riptik.event.v1.UpdateEventRequest
-	(*DeleteEventRequest)(nil),     // 5: riptik.event.v1.DeleteEventRequest
-	(*PublishEventRequest)(nil),    // 6: riptik.event.v1.PublishEventRequest
-	(*UnpublishEventRequest)(nil),  // 7: riptik.event.v1.UnpublishEventRequest
-	(*ListEventsResponse)(nil),     // 8: riptik.event.v1.ListEventsResponse
-	(*GetEventResponse)(nil),       // 9: riptik.event.v1.GetEventResponse
-	(*CreateEventResponse)(nil),    // 10: riptik.event.v1.CreateEventResponse
-	(*UpdateEventResponse)(nil),    // 11: riptik.event.v1.UpdateEventResponse
-	(*DeleteEventResponse)(nil),    // 12: riptik.event.v1.DeleteEventResponse
-	(*PublishEventResponse)(nil),   // 13: riptik.event.v1.PublishEventResponse
-	(*UnpublishEventResponse)(nil), // 14: riptik.event.v1.UnpublishEventResponse
-	nil,                            // 15: riptik.event.v1.Event.NameEntry
-	nil,                            // 16: riptik.event.v1.Event.LocationEntry
-	nil,                            // 17: riptik.event.v1.Event.ContactAddressEntry
-	nil,                            // 18: riptik.event.v1.Event.SalesChannelsEntry
-	nil,                            // 19: riptik.event.v1.Event.SettingsEntry
-	nil,                            // 20: riptik.event.v1.CreateEventRequest.NameEntry
-	nil,                            // 21: riptik.event.v1.CreateEventRequest.LocationEntry
-	nil,                            // 22: riptik.event.v1.CreateEventRequest.SettingsEntry
-	nil,                            // 23: riptik.event.v1.CreateEventRequest.MetaDataEntry
-	nil,                            // 24: riptik.event.v1.UpdateEventRequest.LocationEntry
-	nil,                            // 25: riptik.event.v1.UpdateEventRequest.SettingsEntry
-	(*timestamppb.Timestamp)(nil),  // 26: google.protobuf.Timestamp
-	(*anypb.Any)(nil),              // 27: google.protobuf.Any
+	(*Event)(nil),                       // 0: riptik.event.v1.Event
+	(*ListEventsRequest)(nil),           // 1: riptik.event.v1.ListEventsRequest
+	(*GetEventRequest)(nil),             // 2: riptik.event.v1.GetEventRequest
+	(*CreateEventRequest)(nil),          // 3: riptik.event.v1.CreateEventRequest
+	(*UpdateEventRequest)(nil),          // 4: riptik.event.v1.UpdateEventRequest
+	(*DeleteEventRequest)(nil),          // 5: riptik.event.v1.DeleteEventRequest
+	(*PublishEventRequest)(nil),         // 6: riptik.event.v1.PublishEventRequest
+	(*UnpublishEventRequest)(nil),       // 7: riptik.event.v1.UnpublishEventRequest
+	(*ListEventsResponse)(nil),          // 8: riptik.event.v1.ListEventsResponse
+	(*GetEventResponse)(nil),            // 9: riptik.event.v1.GetEventResponse
+	(*CreateEventResponse)(nil),         // 10: riptik.event.v1.CreateEventResponse
+	(*UpdateEventResponse)(nil),         // 11: riptik.event.v1.UpdateEventResponse
+	(*DeleteEventResponse)(nil),         // 12: riptik.event.v1.DeleteEventResponse
+	(*PublishEventResponse)(nil),        // 13: riptik.event.v1.PublishEventResponse
+	(*UnpublishEventResponse)(nil),      // 14: riptik.event.v1.UnpublishEventResponse
+	(*OrderPositionFulfillRequest)(nil), // 15: riptik.event.v1.OrderPositionFulfillRequest
+	(*OrderPositionRefundRequest)(nil),  // 16: riptik.event.v1.OrderPositionRefundRequest
+	nil,                                 // 17: riptik.event.v1.Event.NameEntry
+	nil,                                 // 18: riptik.event.v1.Event.LocationEntry
+	nil,                                 // 19: riptik.event.v1.Event.ContactAddressEntry
+	nil,                                 // 20: riptik.event.v1.Event.SalesChannelsEntry
+	nil,                                 // 21: riptik.event.v1.Event.SettingsEntry
+	nil,                                 // 22: riptik.event.v1.CreateEventRequest.NameEntry
+	nil,                                 // 23: riptik.event.v1.CreateEventRequest.LocationEntry
+	nil,                                 // 24: riptik.event.v1.CreateEventRequest.SettingsEntry
+	nil,                                 // 25: riptik.event.v1.CreateEventRequest.MetaDataEntry
+	nil,                                 // 26: riptik.event.v1.UpdateEventRequest.LocationEntry
+	nil,                                 // 27: riptik.event.v1.UpdateEventRequest.SettingsEntry
+	(*timestamppb.Timestamp)(nil),       // 28: google.protobuf.Timestamp
+	(*anypb.Any)(nil),                   // 29: google.protobuf.Any
 }
 var file_v1_event_event_proto_depIdxs = []int32{
-	15, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
-	16, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
-	17, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
-	18, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
-	19, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
-	20, // 5: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
-	21, // 6: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
-	22, // 7: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
-	23, // 8: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
-	26, // 9: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
-	26, // 10: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
-	24, // 11: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
-	25, // 12: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
+	17, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
+	18, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
+	19, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
+	20, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
+	21, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
+	22, // 5: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
+	23, // 6: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
+	24, // 7: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
+	25, // 8: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
+	28, // 9: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
+	28, // 10: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
+	26, // 11: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
+	27, // 12: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
 	0,  // 13: riptik.event.v1.ListEventsResponse.results:type_name -> riptik.event.v1.Event
 	0,  // 14: riptik.event.v1.GetEventResponse.event:type_name -> riptik.event.v1.Event
 	0,  // 15: riptik.event.v1.CreateEventResponse.event:type_name -> riptik.event.v1.Event
 	0,  // 16: riptik.event.v1.UpdateEventResponse.event:type_name -> riptik.event.v1.Event
-	27, // 17: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
-	27, // 18: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
+	29, // 17: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
+	29, // 18: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
 	19, // [19:19] is the sub-list for method output_type
 	19, // [19:19] is the sub-list for method input_type
 	19, // [19:19] is the sub-list for extension type_name
@@ -2032,6 +2274,30 @@ func file_v1_event_event_proto_init() {
 				return nil
 			}
 		}
+		file_v1_event_event_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OrderPositionFulfillRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OrderPositionRefundRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2039,7 +2305,7 @@ func file_v1_event_event_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_event_event_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
