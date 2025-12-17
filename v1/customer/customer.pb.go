@@ -1690,6 +1690,124 @@ func (x *DeactivateCustomerResponse) GetCustomer() *Customer {
 	return nil
 }
 
+type DeleteCustomerRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OrganizerId string `protobuf:"bytes,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"` // Required
+	CustomerId  string `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`    // Required
+}
+
+func (x *DeleteCustomerRequest) Reset() {
+	*x = DeleteCustomerRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_customer_customer_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteCustomerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteCustomerRequest) ProtoMessage() {}
+
+func (x *DeleteCustomerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_customer_customer_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteCustomerRequest.ProtoReflect.Descriptor instead.
+func (*DeleteCustomerRequest) Descriptor() ([]byte, []int) {
+	return file_v1_customer_customer_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *DeleteCustomerRequest) GetOrganizerId() string {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return ""
+}
+
+func (x *DeleteCustomerRequest) GetCustomerId() string {
+	if x != nil {
+		return x.CustomerId
+	}
+	return ""
+}
+
+type DeleteCustomerResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success    bool   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                        // Operation success status
+	CustomerId string `protobuf:"bytes,2,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"` // Deleted customer ID
+	Message    string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`                         // Success/error message
+}
+
+func (x *DeleteCustomerResponse) Reset() {
+	*x = DeleteCustomerResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_customer_customer_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteCustomerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteCustomerResponse) ProtoMessage() {}
+
+func (x *DeleteCustomerResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_customer_customer_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteCustomerResponse.ProtoReflect.Descriptor instead.
+func (*DeleteCustomerResponse) Descriptor() ([]byte, []int) {
+	return file_v1_customer_customer_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *DeleteCustomerResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteCustomerResponse) GetCustomerId() string {
+	if x != nil {
+		return x.CustomerId
+	}
+	return ""
+}
+
+func (x *DeleteCustomerResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_v1_customer_customer_proto protoreflect.FileDescriptor
 
 var file_v1_customer_customer_proto_rawDesc = []byte{
@@ -1982,10 +2100,23 @@ var file_v1_customer_customer_proto_rawDesc = []byte{
 	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c, 0x2e,
 	0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x2e,
 	0x76, 0x31, 0x2e, 0x43, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x08, 0x63, 0x75, 0x73,
-	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x42, 0x2b, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
-	0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x22, 0x5b, 0x0a, 0x15, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43,
+	0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x21,
+	0x0a, 0x0c, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x49,
+	0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72,
+	0x49, 0x64, 0x22, 0x6d, 0x0a, 0x16, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x43, 0x75, 0x73, 0x74,
+	0x6f, 0x6d, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07,
+	0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73,
+	0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x1f, 0x0a, 0x0b, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d,
+	0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x63, 0x75, 0x73,
+	0x74, 0x6f, 0x6d, 0x65, 0x72, 0x49, 0x64, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
+	0x65, 0x42, 0x2b, 0x5a, 0x29, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f,
+	0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x75, 0x73, 0x74, 0x6f, 0x6d, 0x65, 0x72, 0x62, 0x06,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2000,7 +2131,7 @@ func file_v1_customer_customer_proto_rawDescGZIP() []byte {
 	return file_v1_customer_customer_proto_rawDescData
 }
 
-var file_v1_customer_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_v1_customer_customer_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_v1_customer_customer_proto_goTypes = []interface{}{
 	(*Customer)(nil),                   // 0: riptik.customer.v1.Customer
 	(*CustomerAddressData)(nil),        // 1: riptik.customer.v1.CustomerAddressData
@@ -2022,16 +2153,18 @@ var file_v1_customer_customer_proto_goTypes = []interface{}{
 	(*PaginationMetadata)(nil),         // 17: riptik.customer.v1.PaginationMetadata
 	(*VerifyCustomerResponse)(nil),     // 18: riptik.customer.v1.VerifyCustomerResponse
 	(*DeactivateCustomerResponse)(nil), // 19: riptik.customer.v1.DeactivateCustomerResponse
-	nil,                                // 20: riptik.customer.v1.Customer.CustomFieldsEntry
-	nil,                                // 21: riptik.customer.v1.CustomerCreateData.CustomFieldsEntry
-	nil,                                // 22: riptik.customer.v1.CustomerUpdateData.CustomFieldsEntry
+	(*DeleteCustomerRequest)(nil),      // 20: riptik.customer.v1.DeleteCustomerRequest
+	(*DeleteCustomerResponse)(nil),     // 21: riptik.customer.v1.DeleteCustomerResponse
+	nil,                                // 22: riptik.customer.v1.Customer.CustomFieldsEntry
+	nil,                                // 23: riptik.customer.v1.CustomerCreateData.CustomFieldsEntry
+	nil,                                // 24: riptik.customer.v1.CustomerUpdateData.CustomFieldsEntry
 }
 var file_v1_customer_customer_proto_depIdxs = []int32{
-	20, // 0: riptik.customer.v1.Customer.custom_fields:type_name -> riptik.customer.v1.Customer.CustomFieldsEntry
-	21, // 1: riptik.customer.v1.CustomerCreateData.custom_fields:type_name -> riptik.customer.v1.CustomerCreateData.CustomFieldsEntry
+	22, // 0: riptik.customer.v1.Customer.custom_fields:type_name -> riptik.customer.v1.Customer.CustomFieldsEntry
+	23, // 1: riptik.customer.v1.CustomerCreateData.custom_fields:type_name -> riptik.customer.v1.CustomerCreateData.CustomFieldsEntry
 	1,  // 2: riptik.customer.v1.CustomerCreateData.address:type_name -> riptik.customer.v1.CustomerAddressData
 	3,  // 3: riptik.customer.v1.CreateCustomerRequest.customer_data:type_name -> riptik.customer.v1.CustomerCreateData
-	22, // 4: riptik.customer.v1.CustomerUpdateData.custom_fields:type_name -> riptik.customer.v1.CustomerUpdateData.CustomFieldsEntry
+	24, // 4: riptik.customer.v1.CustomerUpdateData.custom_fields:type_name -> riptik.customer.v1.CustomerUpdateData.CustomFieldsEntry
 	1,  // 5: riptik.customer.v1.CustomerUpdateData.address:type_name -> riptik.customer.v1.CustomerAddressData
 	5,  // 6: riptik.customer.v1.UpdateCustomerRequest.customer_data:type_name -> riptik.customer.v1.CustomerUpdateData
 	8,  // 7: riptik.customer.v1.SearchCustomersRequest.query:type_name -> riptik.customer.v1.CustomerSearchQuery
@@ -2296,6 +2429,30 @@ func file_v1_customer_customer_proto_init() {
 				return nil
 			}
 		}
+		file_v1_customer_customer_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteCustomerRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_customer_customer_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteCustomerResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2303,7 +2460,7 @@ func file_v1_customer_customer_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_customer_customer_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
