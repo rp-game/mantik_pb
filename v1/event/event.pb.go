@@ -2024,6 +2024,525 @@ func (x *OrderPositionRefundRequest) GetEvent() string {
 	return ""
 }
 
+// Domain model: Organizer
+type Organizer struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id           int64             `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name         string            `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug         string            `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	Settings     map[string]string `protobuf:"bytes,4,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Created      string            `protobuf:"bytes,5,opt,name=created,proto3" json:"created,omitempty"`                               // ISO datetime
+	LastModified string            `protobuf:"bytes,6,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"` // ISO datetime
+}
+
+func (x *Organizer) Reset() {
+	*x = Organizer{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Organizer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Organizer) ProtoMessage() {}
+
+func (x *Organizer) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Organizer.ProtoReflect.Descriptor instead.
+func (*Organizer) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *Organizer) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Organizer) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Organizer) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *Organizer) GetSettings() map[string]string {
+	if x != nil {
+		return x.Settings
+	}
+	return nil
+}
+
+func (x *Organizer) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+func (x *Organizer) GetLastModified() string {
+	if x != nil {
+		return x.LastModified
+	}
+	return ""
+}
+
+// Create Organizer Request
+type CreateOrganizerRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name  string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`   // Organizer name (required)
+	Email string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"` // Email (optional, used for slug generation)
+}
+
+func (x *CreateOrganizerRequest) Reset() {
+	*x = CreateOrganizerRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[21]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateOrganizerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOrganizerRequest) ProtoMessage() {}
+
+func (x *CreateOrganizerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[21]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOrganizerRequest.ProtoReflect.Descriptor instead.
+func (*CreateOrganizerRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *CreateOrganizerRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *CreateOrganizerRequest) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+// Create Organizer Response
+type CreateOrganizerResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success      bool       `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Organizer    *Organizer `protobuf:"bytes,2,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	ErrorCode    string     `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage string     `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+}
+
+func (x *CreateOrganizerResponse) Reset() {
+	*x = CreateOrganizerResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[22]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreateOrganizerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOrganizerResponse) ProtoMessage() {}
+
+func (x *CreateOrganizerResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[22]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOrganizerResponse.ProtoReflect.Descriptor instead.
+func (*CreateOrganizerResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *CreateOrganizerResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateOrganizerResponse) GetOrganizer() *Organizer {
+	if x != nil {
+		return x.Organizer
+	}
+	return nil
+}
+
+func (x *CreateOrganizerResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateOrganizerResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Get Organizer Request
+type GetOrganizerRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Slug string `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"` // Organizer slug (required)
+}
+
+func (x *GetOrganizerRequest) Reset() {
+	*x = GetOrganizerRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[23]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetOrganizerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrganizerRequest) ProtoMessage() {}
+
+func (x *GetOrganizerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[23]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrganizerRequest.ProtoReflect.Descriptor instead.
+func (*GetOrganizerRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetOrganizerRequest) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+// Get Organizer Response
+type GetOrganizerResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success      bool       `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Organizer    *Organizer `protobuf:"bytes,2,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	ErrorCode    string     `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage string     `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+}
+
+func (x *GetOrganizerResponse) Reset() {
+	*x = GetOrganizerResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[24]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetOrganizerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrganizerResponse) ProtoMessage() {}
+
+func (x *GetOrganizerResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[24]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrganizerResponse.ProtoReflect.Descriptor instead.
+func (*GetOrganizerResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *GetOrganizerResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetOrganizerResponse) GetOrganizer() *Organizer {
+	if x != nil {
+		return x.Organizer
+	}
+	return nil
+}
+
+func (x *GetOrganizerResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetOrganizerResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Domain model: Language
+type Language struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Code       string `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`                               // Language code (e.g., "en", "vi")
+	Name       string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                               // Language name in English
+	NativeName string `protobuf:"bytes,3,opt,name=native_name,json=nativeName,proto3" json:"native_name,omitempty"` // Language name in its native form
+	Direction  string `protobuf:"bytes,4,opt,name=direction,proto3" json:"direction,omitempty"`                     // Text direction ("ltr" or "rtl")
+}
+
+func (x *Language) Reset() {
+	*x = Language{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Language) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Language) ProtoMessage() {}
+
+func (x *Language) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Language.ProtoReflect.Descriptor instead.
+func (*Language) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *Language) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *Language) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Language) GetNativeName() string {
+	if x != nil {
+		return x.NativeName
+	}
+	return ""
+}
+
+func (x *Language) GetDirection() string {
+	if x != nil {
+		return x.Direction
+	}
+	return ""
+}
+
+// List Languages Request
+type ListLanguagesRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *ListLanguagesRequest) Reset() {
+	*x = ListLanguagesRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListLanguagesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListLanguagesRequest) ProtoMessage() {}
+
+func (x *ListLanguagesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListLanguagesRequest.ProtoReflect.Descriptor instead.
+func (*ListLanguagesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{26}
+}
+
+// List Languages Response
+type ListLanguagesResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success      bool        `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Languages    []*Language `protobuf:"bytes,2,rep,name=languages,proto3" json:"languages,omitempty"`
+	ErrorCode    string      `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage string      `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+}
+
+func (x *ListLanguagesResponse) Reset() {
+	*x = ListLanguagesResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_event_event_proto_msgTypes[27]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListLanguagesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListLanguagesResponse) ProtoMessage() {}
+
+func (x *ListLanguagesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[27]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListLanguagesResponse.ProtoReflect.Descriptor instead.
+func (*ListLanguagesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *ListLanguagesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListLanguagesResponse) GetLanguages() []*Language {
+	if x != nil {
+		return x.Languages
+	}
+	return nil
+}
+
+func (x *ListLanguagesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListLanguagesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_event_event_proto protoreflect.FileDescriptor
 
 var file_v1_event_event_proto_rawDesc = []byte{
@@ -2430,10 +2949,75 @@ var file_v1_event_event_proto_rawDesc = []byte{
 	0x12, 0x1c, 0x0a, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x18, 0x07, 0x20,
 	0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x12, 0x14,
 	0x0a, 0x05, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65,
-	0x76, 0x65, 0x6e, 0x74, 0x42, 0x28, 0x5a, 0x26, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63,
-	0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63,
-	0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x62, 0x06,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x76, 0x65, 0x6e, 0x74, 0x22, 0x85, 0x02, 0x0a, 0x09, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a,
+	0x65, 0x72, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x6c, 0x75, 0x67, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x73, 0x6c, 0x75, 0x67, 0x12, 0x44, 0x0a, 0x08, 0x73, 0x65,
+	0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x18, 0x04, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x28, 0x2e, 0x72,
+	0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f,
+	0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x2e, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67,
+	0x73, 0x45, 0x6e, 0x74, 0x72, 0x79, 0x52, 0x08, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73,
+	0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x12, 0x23, 0x0a, 0x0d, 0x6c, 0x61,
+	0x73, 0x74, 0x5f, 0x6d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x0c, 0x6c, 0x61, 0x73, 0x74, 0x4d, 0x6f, 0x64, 0x69, 0x66, 0x69, 0x65, 0x64, 0x1a,
+	0x3b, 0x0a, 0x0d, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x45, 0x6e, 0x74, 0x72, 0x79,
+	0x12, 0x10, 0x0a, 0x03, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x03, 0x6b,
+	0x65, 0x79, 0x12, 0x14, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x3a, 0x02, 0x38, 0x01, 0x22, 0x42, 0x0a, 0x16,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x6d,
+	0x61, 0x69, 0x6c, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x6d, 0x61, 0x69, 0x6c,
+	0x22, 0xb1, 0x01, 0x0a, 0x17, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x4f, 0x72, 0x67, 0x61, 0x6e,
+	0x69, 0x7a, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07,
+	0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73,
+	0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x38, 0x0a, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69,
+	0x7a, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x72, 0x69, 0x70, 0x74,
+	0x69, 0x6b, 0x2e, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x72, 0x67, 0x61,
+	0x6e, 0x69, 0x7a, 0x65, 0x72, 0x52, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72,
+	0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x43, 0x6f, 0x64, 0x65, 0x12,
+	0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x22, 0x29, 0x0a, 0x13, 0x47, 0x65, 0x74, 0x4f, 0x72, 0x67, 0x61, 0x6e,
+	0x69, 0x7a, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x73,
+	0x6c, 0x75, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x73, 0x6c, 0x75, 0x67, 0x22,
+	0xae, 0x01, 0x0a, 0x14, 0x47, 0x65, 0x74, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63,
+	0x65, 0x73, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x12, 0x38, 0x0a, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65,
+	0x72, 0x52, 0x09, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x65, 0x72, 0x12, 0x1d, 0x0a, 0x0a,
+	0x65, 0x72, 0x72, 0x6f, 0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x09, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x65,
+	0x72, 0x72, 0x6f, 0x72, 0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x0c, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65,
+	0x22, 0x71, 0x0a, 0x08, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x12, 0x12, 0x0a, 0x04,
+	0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x6e, 0x61, 0x74, 0x69, 0x76, 0x65, 0x5f, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0a, 0x6e, 0x61, 0x74, 0x69, 0x76,
+	0x65, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x64, 0x69, 0x72, 0x65, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x22, 0x16, 0x0a, 0x14, 0x4c, 0x69, 0x73, 0x74, 0x4c, 0x61, 0x6e, 0x67, 0x75,
+	0x61, 0x67, 0x65, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xae, 0x01, 0x0a, 0x15,
+	0x4c, 0x69, 0x73, 0x74, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x73, 0x52, 0x65, 0x73,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12,
+	0x37, 0x0a, 0x09, 0x6c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x19, 0x2e, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x65, 0x76, 0x65, 0x6e,
+	0x74, 0x2e, 0x76, 0x31, 0x2e, 0x4c, 0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x52, 0x09, 0x6c,
+	0x61, 0x6e, 0x67, 0x75, 0x61, 0x67, 0x65, 0x73, 0x12, 0x1d, 0x0a, 0x0a, 0x65, 0x72, 0x72, 0x6f,
+	0x72, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x65, 0x72,
+	0x72, 0x6f, 0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72, 0x6f, 0x72,
+	0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
+	0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x28, 0x5a, 0x26,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31,
+	0x2f, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2448,7 +3032,7 @@ func file_v1_event_event_proto_rawDescGZIP() []byte {
 	return file_v1_event_event_proto_rawDescData
 }
 
-var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
 var file_v1_event_event_proto_goTypes = []interface{}{
 	(*Event)(nil),                       // 0: riptik.event.v1.Event
 	(*SubEvent)(nil),                    // 1: riptik.event.v1.SubEvent
@@ -2470,50 +3054,63 @@ var file_v1_event_event_proto_goTypes = []interface{}{
 	(*UnpublishEventResponse)(nil),      // 17: riptik.event.v1.UnpublishEventResponse
 	(*OrderPositionFulfillRequest)(nil), // 18: riptik.event.v1.OrderPositionFulfillRequest
 	(*OrderPositionRefundRequest)(nil),  // 19: riptik.event.v1.OrderPositionRefundRequest
-	nil,                                 // 20: riptik.event.v1.Event.NameEntry
-	nil,                                 // 21: riptik.event.v1.Event.LocationEntry
-	nil,                                 // 22: riptik.event.v1.Event.ContactAddressEntry
-	nil,                                 // 23: riptik.event.v1.Event.SalesChannelsEntry
-	nil,                                 // 24: riptik.event.v1.Event.SettingsEntry
-	nil,                                 // 25: riptik.event.v1.SubEvent.NameEntry
-	nil,                                 // 26: riptik.event.v1.SubEvent.LocationEntry
-	nil,                                 // 27: riptik.event.v1.CreateEventRequest.NameEntry
-	nil,                                 // 28: riptik.event.v1.CreateEventRequest.LocationEntry
-	nil,                                 // 29: riptik.event.v1.CreateEventRequest.SettingsEntry
-	nil,                                 // 30: riptik.event.v1.CreateEventRequest.MetaDataEntry
-	nil,                                 // 31: riptik.event.v1.UpdateEventRequest.LocationEntry
-	nil,                                 // 32: riptik.event.v1.UpdateEventRequest.SettingsEntry
-	(*timestamppb.Timestamp)(nil),       // 33: google.protobuf.Timestamp
-	(*anypb.Any)(nil),                   // 34: google.protobuf.Any
+	(*Organizer)(nil),                   // 20: riptik.event.v1.Organizer
+	(*CreateOrganizerRequest)(nil),      // 21: riptik.event.v1.CreateOrganizerRequest
+	(*CreateOrganizerResponse)(nil),     // 22: riptik.event.v1.CreateOrganizerResponse
+	(*GetOrganizerRequest)(nil),         // 23: riptik.event.v1.GetOrganizerRequest
+	(*GetOrganizerResponse)(nil),        // 24: riptik.event.v1.GetOrganizerResponse
+	(*Language)(nil),                    // 25: riptik.event.v1.Language
+	(*ListLanguagesRequest)(nil),        // 26: riptik.event.v1.ListLanguagesRequest
+	(*ListLanguagesResponse)(nil),       // 27: riptik.event.v1.ListLanguagesResponse
+	nil,                                 // 28: riptik.event.v1.Event.NameEntry
+	nil,                                 // 29: riptik.event.v1.Event.LocationEntry
+	nil,                                 // 30: riptik.event.v1.Event.ContactAddressEntry
+	nil,                                 // 31: riptik.event.v1.Event.SalesChannelsEntry
+	nil,                                 // 32: riptik.event.v1.Event.SettingsEntry
+	nil,                                 // 33: riptik.event.v1.SubEvent.NameEntry
+	nil,                                 // 34: riptik.event.v1.SubEvent.LocationEntry
+	nil,                                 // 35: riptik.event.v1.CreateEventRequest.NameEntry
+	nil,                                 // 36: riptik.event.v1.CreateEventRequest.LocationEntry
+	nil,                                 // 37: riptik.event.v1.CreateEventRequest.SettingsEntry
+	nil,                                 // 38: riptik.event.v1.CreateEventRequest.MetaDataEntry
+	nil,                                 // 39: riptik.event.v1.UpdateEventRequest.LocationEntry
+	nil,                                 // 40: riptik.event.v1.UpdateEventRequest.SettingsEntry
+	nil,                                 // 41: riptik.event.v1.Organizer.SettingsEntry
+	(*timestamppb.Timestamp)(nil),       // 42: google.protobuf.Timestamp
+	(*anypb.Any)(nil),                   // 43: google.protobuf.Any
 }
 var file_v1_event_event_proto_depIdxs = []int32{
-	20, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
-	21, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
-	22, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
-	23, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
-	24, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
-	25, // 5: riptik.event.v1.SubEvent.name:type_name -> riptik.event.v1.SubEvent.NameEntry
-	26, // 6: riptik.event.v1.SubEvent.location:type_name -> riptik.event.v1.SubEvent.LocationEntry
-	27, // 7: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
-	28, // 8: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
-	29, // 9: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
-	30, // 10: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
-	33, // 11: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
-	33, // 12: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
-	31, // 13: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
-	32, // 14: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
+	28, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
+	29, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
+	30, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
+	31, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
+	32, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
+	33, // 5: riptik.event.v1.SubEvent.name:type_name -> riptik.event.v1.SubEvent.NameEntry
+	34, // 6: riptik.event.v1.SubEvent.location:type_name -> riptik.event.v1.SubEvent.LocationEntry
+	35, // 7: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
+	36, // 8: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
+	37, // 9: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
+	38, // 10: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
+	42, // 11: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
+	42, // 12: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
+	39, // 13: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
+	40, // 14: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
 	0,  // 15: riptik.event.v1.ListEventsResponse.results:type_name -> riptik.event.v1.Event
 	0,  // 16: riptik.event.v1.GetEventResponse.event:type_name -> riptik.event.v1.Event
 	1,  // 17: riptik.event.v1.ListSubEventsResponse.results:type_name -> riptik.event.v1.SubEvent
 	0,  // 18: riptik.event.v1.CreateEventResponse.event:type_name -> riptik.event.v1.Event
 	0,  // 19: riptik.event.v1.UpdateEventResponse.event:type_name -> riptik.event.v1.Event
-	34, // 20: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
-	34, // 21: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
-	22, // [22:22] is the sub-list for method output_type
-	22, // [22:22] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	41, // 20: riptik.event.v1.Organizer.settings:type_name -> riptik.event.v1.Organizer.SettingsEntry
+	20, // 21: riptik.event.v1.CreateOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
+	20, // 22: riptik.event.v1.GetOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
+	25, // 23: riptik.event.v1.ListLanguagesResponse.languages:type_name -> riptik.event.v1.Language
+	43, // 24: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
+	43, // 25: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_v1_event_event_proto_init() }
@@ -2762,6 +3359,102 @@ func file_v1_event_event_proto_init() {
 				return nil
 			}
 		}
+		file_v1_event_event_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Organizer); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateOrganizerRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreateOrganizerResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetOrganizerRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetOrganizerResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Language); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListLanguagesRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_event_event_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListLanguagesResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2769,7 +3462,7 @@ func file_v1_event_event_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_event_event_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   33,
+			NumMessages:   42,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
