@@ -1463,6 +1463,120 @@ func (x *UndoCheckinResponse) GetPositionId() int64 {
 	return 0
 }
 
+// Domain event: CheckinProcessedEvent
+// Published when a check-in is successfully processed
+// Used for updating stats and triggering downstream processes
+type CheckinProcessedEvent struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CheckinId  int64  `protobuf:"varint,1,opt,name=checkin_id,json=checkinId,proto3" json:"checkin_id,omitempty"`    // ID of the checkin record
+	PositionId int64  `protobuf:"varint,2,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"` // Position being checked in
+	ListId     int64  `protobuf:"varint,3,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`             // CheckinList containing the position
+	EventId    int64  `protobuf:"varint,4,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`          // Event being checked into
+	Type       string `protobuf:"bytes,5,opt,name=type,proto3" json:"type,omitempty"`                                // "entry" or "exit"
+	Datetime   string `protobuf:"bytes,6,opt,name=datetime,proto3" json:"datetime,omitempty"`                        // ISO datetime string of the check-in
+	OrderCode  string `protobuf:"bytes,7,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`     // Order code for the ticket
+	Timestamp  string `protobuf:"bytes,8,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                      // ISO datetime string when event was published
+	Source     string `protobuf:"bytes,9,opt,name=source,proto3" json:"source,omitempty"`                            // "checkin-go-service"
+}
+
+func (x *CheckinProcessedEvent) Reset() {
+	*x = CheckinProcessedEvent{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_checkin_checkin_proto_msgTypes[17]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CheckinProcessedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckinProcessedEvent) ProtoMessage() {}
+
+func (x *CheckinProcessedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_checkin_proto_msgTypes[17]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckinProcessedEvent.ProtoReflect.Descriptor instead.
+func (*CheckinProcessedEvent) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CheckinProcessedEvent) GetCheckinId() int64 {
+	if x != nil {
+		return x.CheckinId
+	}
+	return 0
+}
+
+func (x *CheckinProcessedEvent) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *CheckinProcessedEvent) GetListId() int64 {
+	if x != nil {
+		return x.ListId
+	}
+	return 0
+}
+
+func (x *CheckinProcessedEvent) GetEventId() int64 {
+	if x != nil {
+		return x.EventId
+	}
+	return 0
+}
+
+func (x *CheckinProcessedEvent) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *CheckinProcessedEvent) GetDatetime() string {
+	if x != nil {
+		return x.Datetime
+	}
+	return ""
+}
+
+func (x *CheckinProcessedEvent) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *CheckinProcessedEvent) GetTimestamp() string {
+	if x != nil {
+		return x.Timestamp
+	}
+	return ""
+}
+
+func (x *CheckinProcessedEvent) GetSource() string {
+	if x != nil {
+		return x.Source
+	}
+	return ""
+}
+
 var File_v1_checkin_checkin_proto protoreflect.FileDescriptor
 
 var file_v1_checkin_checkin_proto_rawDesc = []byte{
@@ -1704,10 +1818,27 @@ var file_v1_checkin_checkin_proto_rawDesc = []byte{
 	0x6b, 0x69, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x63, 0x68,
 	0x65, 0x63, 0x6b, 0x69, 0x6e, 0x49, 0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74,
 	0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x70, 0x6f,
-	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68,
-	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65,
-	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x63, 0x68, 0x65,
-	0x63, 0x6b, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x49, 0x64, 0x22, 0x90, 0x02, 0x0a, 0x15, 0x43, 0x68, 0x65,
+	0x63, 0x6b, 0x69, 0x6e, 0x50, 0x72, 0x6f, 0x63, 0x65, 0x73, 0x73, 0x65, 0x64, 0x45, 0x76, 0x65,
+	0x6e, 0x74, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x69, 0x6e, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x63, 0x68, 0x65, 0x63, 0x6b, 0x69, 0x6e, 0x49,
+	0x64, 0x12, 0x1f, 0x0a, 0x0b, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e,
+	0x49, 0x64, 0x12, 0x17, 0x0a, 0x07, 0x6c, 0x69, 0x73, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20,
+	0x01, 0x28, 0x03, 0x52, 0x06, 0x6c, 0x69, 0x73, 0x74, 0x49, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x03, 0x52, 0x07, 0x65,
+	0x76, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x05,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x64, 0x61,
+	0x74, 0x65, 0x74, 0x69, 0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x64, 0x61,
+	0x74, 0x65, 0x74, 0x69, 0x6d, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x6f, 0x72, 0x64, 0x65, 0x72, 0x5f,
+	0x63, 0x6f, 0x64, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x72, 0x64, 0x65,
+	0x72, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61,
+	0x6d, 0x70, 0x18, 0x08, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x74, 0x69, 0x6d, 0x65, 0x73, 0x74,
+	0x61, 0x6d, 0x70, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x09, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x42, 0x2a, 0x5a, 0x28, 0x67,
+	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b,
+	0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f,
+	0x63, 0x68, 0x65, 0x63, 0x6b, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1722,7 +1853,7 @@ func file_v1_checkin_checkin_proto_rawDescGZIP() []byte {
 	return file_v1_checkin_checkin_proto_rawDescData
 }
 
-var file_v1_checkin_checkin_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_v1_checkin_checkin_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_v1_checkin_checkin_proto_goTypes = []interface{}{
 	(*Checkin)(nil),                  // 0: riptik.checkin.v1.Checkin
 	(*CheckinPosition)(nil),          // 1: riptik.checkin.v1.CheckinPosition
@@ -1741,17 +1872,18 @@ var file_v1_checkin_checkin_proto_goTypes = []interface{}{
 	(*BulkCheckinResult)(nil),        // 14: riptik.checkin.v1.BulkCheckinResult
 	(*SearchCheckinsResponse)(nil),   // 15: riptik.checkin.v1.SearchCheckinsResponse
 	(*UndoCheckinResponse)(nil),      // 16: riptik.checkin.v1.UndoCheckinResponse
-	nil,                              // 17: riptik.checkin.v1.Checkin.AnswersEntry
-	nil,                              // 18: riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
-	nil,                              // 19: riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
-	nil,                              // 20: riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
+	(*CheckinProcessedEvent)(nil),    // 17: riptik.checkin.v1.CheckinProcessedEvent
+	nil,                              // 18: riptik.checkin.v1.Checkin.AnswersEntry
+	nil,                              // 19: riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
+	nil,                              // 20: riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
+	nil,                              // 21: riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
 }
 var file_v1_checkin_checkin_proto_depIdxs = []int32{
-	17, // 0: riptik.checkin.v1.Checkin.answers:type_name -> riptik.checkin.v1.Checkin.AnswersEntry
+	18, // 0: riptik.checkin.v1.Checkin.answers:type_name -> riptik.checkin.v1.Checkin.AnswersEntry
 	0,  // 1: riptik.checkin.v1.CheckinPosition.checkins:type_name -> riptik.checkin.v1.Checkin
-	18, // 2: riptik.checkin.v1.RedeemCheckinRequest.answers:type_name -> riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
-	19, // 3: riptik.checkin.v1.ListCheckinsRequest.filters:type_name -> riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
-	20, // 4: riptik.checkin.v1.SearchCheckinsRequest.filters:type_name -> riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
+	19, // 2: riptik.checkin.v1.RedeemCheckinRequest.answers:type_name -> riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
+	20, // 3: riptik.checkin.v1.ListCheckinsRequest.filters:type_name -> riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
+	21, // 4: riptik.checkin.v1.SearchCheckinsRequest.filters:type_name -> riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
 	1,  // 5: riptik.checkin.v1.RedeemCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
 	1,  // 6: riptik.checkin.v1.ValidateCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
 	0,  // 7: riptik.checkin.v1.ValidateCheckinResponse.last_checkin:type_name -> riptik.checkin.v1.Checkin
@@ -1977,6 +2109,18 @@ func file_v1_checkin_checkin_proto_init() {
 				return nil
 			}
 		}
+		file_v1_checkin_checkin_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CheckinProcessedEvent); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1984,7 +2128,7 @@ func file_v1_checkin_checkin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_checkin_checkin_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
