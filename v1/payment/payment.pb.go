@@ -2566,6 +2566,304 @@ func (x *CancelGiftCardResponse) GetGiftCard() *GiftCard {
 	return nil
 }
 
+type PaymentIntentData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Amount   string `protobuf:"bytes,1,opt,name=amount,proto3" json:"amount,omitempty"` // Decimal string
+	Currency string `protobuf:"bytes,2,opt,name=currency,proto3" json:"currency,omitempty"`
+	Provider string `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"` // Payment provider
+}
+
+func (x *PaymentIntentData) Reset() {
+	*x = PaymentIntentData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_payment_payment_proto_msgTypes[33]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *PaymentIntentData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaymentIntentData) ProtoMessage() {}
+
+func (x *PaymentIntentData) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[33]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaymentIntentData.ProtoReflect.Descriptor instead.
+func (*PaymentIntentData) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *PaymentIntentData) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *PaymentIntentData) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *PaymentIntentData) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+type CreatePaymentIntentRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	IntentData *PaymentIntentData `protobuf:"bytes,1,opt,name=intent_data,json=intentData,proto3" json:"intent_data,omitempty"` // Required
+}
+
+func (x *CreatePaymentIntentRequest) Reset() {
+	*x = CreatePaymentIntentRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_payment_payment_proto_msgTypes[34]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreatePaymentIntentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePaymentIntentRequest) ProtoMessage() {}
+
+func (x *CreatePaymentIntentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[34]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePaymentIntentRequest.ProtoReflect.Descriptor instead.
+func (*CreatePaymentIntentRequest) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *CreatePaymentIntentRequest) GetIntentData() *PaymentIntentData {
+	if x != nil {
+		return x.IntentData
+	}
+	return nil
+}
+
+type CreatePaymentIntentResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Amount   string `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Currency string `protobuf:"bytes,3,opt,name=currency,proto3" json:"currency,omitempty"`
+	Provider string `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`
+	Status   string `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`   // "pending", "completed", "failed"
+	Created  string `protobuf:"bytes,6,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime string
+}
+
+func (x *CreatePaymentIntentResponse) Reset() {
+	*x = CreatePaymentIntentResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_payment_payment_proto_msgTypes[35]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CreatePaymentIntentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePaymentIntentResponse) ProtoMessage() {}
+
+func (x *CreatePaymentIntentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[35]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePaymentIntentResponse.ProtoReflect.Descriptor instead.
+func (*CreatePaymentIntentResponse) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *CreatePaymentIntentResponse) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *CreatePaymentIntentResponse) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *CreatePaymentIntentResponse) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *CreatePaymentIntentResponse) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *CreatePaymentIntentResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *CreatePaymentIntentResponse) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+type GetAvailablePaymentMethodsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *GetAvailablePaymentMethodsRequest) Reset() {
+	*x = GetAvailablePaymentMethodsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_payment_payment_proto_msgTypes[36]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetAvailablePaymentMethodsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAvailablePaymentMethodsRequest) ProtoMessage() {}
+
+func (x *GetAvailablePaymentMethodsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[36]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAvailablePaymentMethodsRequest.ProtoReflect.Descriptor instead.
+func (*GetAvailablePaymentMethodsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{36}
+}
+
+type GetAvailablePaymentMethodsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Methods        []string `protobuf:"bytes,1,rep,name=methods,proto3" json:"methods,omitempty"` // Available payment methods
+	Currency       string   `protobuf:"bytes,2,opt,name=currency,proto3" json:"currency,omitempty"`
+	AvailableCount int32    `protobuf:"varint,3,opt,name=available_count,json=availableCount,proto3" json:"available_count,omitempty"`
+}
+
+func (x *GetAvailablePaymentMethodsResponse) Reset() {
+	*x = GetAvailablePaymentMethodsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_payment_payment_proto_msgTypes[37]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetAvailablePaymentMethodsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAvailablePaymentMethodsResponse) ProtoMessage() {}
+
+func (x *GetAvailablePaymentMethodsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[37]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAvailablePaymentMethodsResponse.ProtoReflect.Descriptor instead.
+func (*GetAvailablePaymentMethodsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *GetAvailablePaymentMethodsResponse) GetMethods() []string {
+	if x != nil {
+		return x.Methods
+	}
+	return nil
+}
+
+func (x *GetAvailablePaymentMethodsResponse) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *GetAvailablePaymentMethodsResponse) GetAvailableCount() int32 {
+	if x != nil {
+		return x.AvailableCount
+	}
+	return 0
+}
+
 var File_v1_payment_payment_proto protoreflect.FileDescriptor
 
 var file_v1_payment_payment_proto_rawDesc = []byte{
@@ -2992,10 +3290,44 @@ var file_v1_payment_payment_proto_rawDesc = []byte{
 	0x63, 0x61, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1b, 0x2e, 0x72, 0x69, 0x70,
 	0x74, 0x69, 0x6b, 0x2e, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x47,
 	0x69, 0x66, 0x74, 0x43, 0x61, 0x72, 0x64, 0x52, 0x08, 0x67, 0x69, 0x66, 0x74, 0x43, 0x61, 0x72,
-	0x64, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f,
-	0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x64, 0x22, 0x63, 0x0a, 0x11, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65,
+	0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x1a,
+	0x0a, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x72,
+	0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x72,
+	0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x22, 0x63, 0x0a, 0x1a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x0b, 0x69, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x5f, 0x64,
+	0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x72, 0x69, 0x70, 0x74,
+	0x69, 0x6b, 0x2e, 0x70, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x61,
+	0x79, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52,
+	0x0a, 0x69, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x44, 0x61, 0x74, 0x61, 0x22, 0xaf, 0x01, 0x0a, 0x1b,
+	0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x74,
+	0x65, 0x6e, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69,
+	0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x61,
+	0x6d, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x6d, 0x6f,
+	0x75, 0x6e, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x12,
+	0x1a, 0x0a, 0x08, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x08, 0x70, 0x72, 0x6f, 0x76, 0x69, 0x64, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x06, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x06,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x22, 0x23, 0x0a,
+	0x21, 0x47, 0x65, 0x74, 0x41, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x50, 0x61, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x65, 0x74, 0x68, 0x6f, 0x64, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x22, 0x83, 0x01, 0x0a, 0x22, 0x47, 0x65, 0x74, 0x41, 0x76, 0x61, 0x69, 0x6c, 0x61,
+	0x62, 0x6c, 0x65, 0x50, 0x61, 0x79, 0x6d, 0x65, 0x6e, 0x74, 0x4d, 0x65, 0x74, 0x68, 0x6f, 0x64,
+	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x74,
+	0x68, 0x6f, 0x64, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x74, 0x68,
+	0x6f, 0x64, 0x73, 0x12, 0x1a, 0x0a, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x63, 0x79, 0x12,
+	0x27, 0x0a, 0x0f, 0x61, 0x76, 0x61, 0x69, 0x6c, 0x61, 0x62, 0x6c, 0x65, 0x5f, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0e, 0x61, 0x76, 0x61, 0x69, 0x6c, 0x61,
+	0x62, 0x6c, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x2a, 0x5a, 0x28, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65,
+	0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31, 0x2f, 0x70, 0x61, 0x79,
+	0x6d, 0x65, 0x6e, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -3010,61 +3342,66 @@ func file_v1_payment_payment_proto_rawDescGZIP() []byte {
 	return file_v1_payment_payment_proto_rawDescData
 }
 
-var file_v1_payment_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 42)
+var file_v1_payment_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 47)
 var file_v1_payment_payment_proto_goTypes = []interface{}{
-	(*Payment)(nil),                         // 0: riptik.payment.v1.Payment
-	(*Refund)(nil),                          // 1: riptik.payment.v1.Refund
-	(*PaymentSummary)(nil),                  // 2: riptik.payment.v1.PaymentSummary
-	(*PaginationInfo)(nil),                  // 3: riptik.payment.v1.PaginationInfo
-	(*CreatePaymentRequest)(nil),            // 4: riptik.payment.v1.CreatePaymentRequest
-	(*ConfirmPaymentRequest)(nil),           // 5: riptik.payment.v1.ConfirmPaymentRequest
-	(*GetPaymentRequest)(nil),               // 6: riptik.payment.v1.GetPaymentRequest
-	(*ListPaymentsRequest)(nil),             // 7: riptik.payment.v1.ListPaymentsRequest
-	(*CreateRefundRequest)(nil),             // 8: riptik.payment.v1.CreateRefundRequest
-	(*ProcessRefundRequest)(nil),            // 9: riptik.payment.v1.ProcessRefundRequest
-	(*GetRefundRequest)(nil),                // 10: riptik.payment.v1.GetRefundRequest
-	(*PaymentResponse)(nil),                 // 11: riptik.payment.v1.PaymentResponse
-	(*ConfirmPaymentResponse)(nil),          // 12: riptik.payment.v1.ConfirmPaymentResponse
-	(*GetPaymentResponse)(nil),              // 13: riptik.payment.v1.GetPaymentResponse
-	(*ListPaymentsResponse)(nil),            // 14: riptik.payment.v1.ListPaymentsResponse
-	(*RefundResponse)(nil),                  // 15: riptik.payment.v1.RefundResponse
-	(*ProcessRefundResponse)(nil),           // 16: riptik.payment.v1.ProcessRefundResponse
-	(*GiftCardTransaction)(nil),             // 17: riptik.payment.v1.GiftCardTransaction
-	(*GiftCard)(nil),                        // 18: riptik.payment.v1.GiftCard
-	(*CreateGiftCardRequest)(nil),           // 19: riptik.payment.v1.CreateGiftCardRequest
-	(*RedeemGiftCardRequest)(nil),           // 20: riptik.payment.v1.RedeemGiftCardRequest
-	(*GetGiftCardRequest)(nil),              // 21: riptik.payment.v1.GetGiftCardRequest
-	(*ListGiftCardsRequest)(nil),            // 22: riptik.payment.v1.ListGiftCardsRequest
-	(*CheckGiftCardBalanceRequest)(nil),     // 23: riptik.payment.v1.CheckGiftCardBalanceRequest
-	(*GetGiftCardTransactionsRequest)(nil),  // 24: riptik.payment.v1.GetGiftCardTransactionsRequest
-	(*CancelGiftCardRequest)(nil),           // 25: riptik.payment.v1.CancelGiftCardRequest
-	(*CreateGiftCardResponse)(nil),          // 26: riptik.payment.v1.CreateGiftCardResponse
-	(*RedeemGiftCardResponse)(nil),          // 27: riptik.payment.v1.RedeemGiftCardResponse
-	(*GetGiftCardResponse)(nil),             // 28: riptik.payment.v1.GetGiftCardResponse
-	(*ListGiftCardsResponse)(nil),           // 29: riptik.payment.v1.ListGiftCardsResponse
-	(*CheckGiftCardBalanceResponse)(nil),    // 30: riptik.payment.v1.CheckGiftCardBalanceResponse
-	(*GetGiftCardTransactionsResponse)(nil), // 31: riptik.payment.v1.GetGiftCardTransactionsResponse
-	(*CancelGiftCardResponse)(nil),          // 32: riptik.payment.v1.CancelGiftCardResponse
-	nil,                                     // 33: riptik.payment.v1.Payment.MetadataEntry
-	nil,                                     // 34: riptik.payment.v1.Refund.MetadataEntry
-	nil,                                     // 35: riptik.payment.v1.PaymentSummary.ByStatusEntry
-	nil,                                     // 36: riptik.payment.v1.PaymentSummary.ByProviderEntry
-	nil,                                     // 37: riptik.payment.v1.CreatePaymentRequest.MetadataEntry
-	nil,                                     // 38: riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
-	nil,                                     // 39: riptik.payment.v1.CreateRefundRequest.MetadataEntry
-	nil,                                     // 40: riptik.payment.v1.ProcessRefundRequest.MetadataEntry
-	nil,                                     // 41: riptik.payment.v1.GiftCardTransaction.InfoEntry
+	(*Payment)(nil),                            // 0: riptik.payment.v1.Payment
+	(*Refund)(nil),                             // 1: riptik.payment.v1.Refund
+	(*PaymentSummary)(nil),                     // 2: riptik.payment.v1.PaymentSummary
+	(*PaginationInfo)(nil),                     // 3: riptik.payment.v1.PaginationInfo
+	(*CreatePaymentRequest)(nil),               // 4: riptik.payment.v1.CreatePaymentRequest
+	(*ConfirmPaymentRequest)(nil),              // 5: riptik.payment.v1.ConfirmPaymentRequest
+	(*GetPaymentRequest)(nil),                  // 6: riptik.payment.v1.GetPaymentRequest
+	(*ListPaymentsRequest)(nil),                // 7: riptik.payment.v1.ListPaymentsRequest
+	(*CreateRefundRequest)(nil),                // 8: riptik.payment.v1.CreateRefundRequest
+	(*ProcessRefundRequest)(nil),               // 9: riptik.payment.v1.ProcessRefundRequest
+	(*GetRefundRequest)(nil),                   // 10: riptik.payment.v1.GetRefundRequest
+	(*PaymentResponse)(nil),                    // 11: riptik.payment.v1.PaymentResponse
+	(*ConfirmPaymentResponse)(nil),             // 12: riptik.payment.v1.ConfirmPaymentResponse
+	(*GetPaymentResponse)(nil),                 // 13: riptik.payment.v1.GetPaymentResponse
+	(*ListPaymentsResponse)(nil),               // 14: riptik.payment.v1.ListPaymentsResponse
+	(*RefundResponse)(nil),                     // 15: riptik.payment.v1.RefundResponse
+	(*ProcessRefundResponse)(nil),              // 16: riptik.payment.v1.ProcessRefundResponse
+	(*GiftCardTransaction)(nil),                // 17: riptik.payment.v1.GiftCardTransaction
+	(*GiftCard)(nil),                           // 18: riptik.payment.v1.GiftCard
+	(*CreateGiftCardRequest)(nil),              // 19: riptik.payment.v1.CreateGiftCardRequest
+	(*RedeemGiftCardRequest)(nil),              // 20: riptik.payment.v1.RedeemGiftCardRequest
+	(*GetGiftCardRequest)(nil),                 // 21: riptik.payment.v1.GetGiftCardRequest
+	(*ListGiftCardsRequest)(nil),               // 22: riptik.payment.v1.ListGiftCardsRequest
+	(*CheckGiftCardBalanceRequest)(nil),        // 23: riptik.payment.v1.CheckGiftCardBalanceRequest
+	(*GetGiftCardTransactionsRequest)(nil),     // 24: riptik.payment.v1.GetGiftCardTransactionsRequest
+	(*CancelGiftCardRequest)(nil),              // 25: riptik.payment.v1.CancelGiftCardRequest
+	(*CreateGiftCardResponse)(nil),             // 26: riptik.payment.v1.CreateGiftCardResponse
+	(*RedeemGiftCardResponse)(nil),             // 27: riptik.payment.v1.RedeemGiftCardResponse
+	(*GetGiftCardResponse)(nil),                // 28: riptik.payment.v1.GetGiftCardResponse
+	(*ListGiftCardsResponse)(nil),              // 29: riptik.payment.v1.ListGiftCardsResponse
+	(*CheckGiftCardBalanceResponse)(nil),       // 30: riptik.payment.v1.CheckGiftCardBalanceResponse
+	(*GetGiftCardTransactionsResponse)(nil),    // 31: riptik.payment.v1.GetGiftCardTransactionsResponse
+	(*CancelGiftCardResponse)(nil),             // 32: riptik.payment.v1.CancelGiftCardResponse
+	(*PaymentIntentData)(nil),                  // 33: riptik.payment.v1.PaymentIntentData
+	(*CreatePaymentIntentRequest)(nil),         // 34: riptik.payment.v1.CreatePaymentIntentRequest
+	(*CreatePaymentIntentResponse)(nil),        // 35: riptik.payment.v1.CreatePaymentIntentResponse
+	(*GetAvailablePaymentMethodsRequest)(nil),  // 36: riptik.payment.v1.GetAvailablePaymentMethodsRequest
+	(*GetAvailablePaymentMethodsResponse)(nil), // 37: riptik.payment.v1.GetAvailablePaymentMethodsResponse
+	nil, // 38: riptik.payment.v1.Payment.MetadataEntry
+	nil, // 39: riptik.payment.v1.Refund.MetadataEntry
+	nil, // 40: riptik.payment.v1.PaymentSummary.ByStatusEntry
+	nil, // 41: riptik.payment.v1.PaymentSummary.ByProviderEntry
+	nil, // 42: riptik.payment.v1.CreatePaymentRequest.MetadataEntry
+	nil, // 43: riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
+	nil, // 44: riptik.payment.v1.CreateRefundRequest.MetadataEntry
+	nil, // 45: riptik.payment.v1.ProcessRefundRequest.MetadataEntry
+	nil, // 46: riptik.payment.v1.GiftCardTransaction.InfoEntry
 }
 var file_v1_payment_payment_proto_depIdxs = []int32{
-	33, // 0: riptik.payment.v1.Payment.metadata:type_name -> riptik.payment.v1.Payment.MetadataEntry
+	38, // 0: riptik.payment.v1.Payment.metadata:type_name -> riptik.payment.v1.Payment.MetadataEntry
 	1,  // 1: riptik.payment.v1.Payment.refunds:type_name -> riptik.payment.v1.Refund
-	34, // 2: riptik.payment.v1.Refund.metadata:type_name -> riptik.payment.v1.Refund.MetadataEntry
-	35, // 3: riptik.payment.v1.PaymentSummary.by_status:type_name -> riptik.payment.v1.PaymentSummary.ByStatusEntry
-	36, // 4: riptik.payment.v1.PaymentSummary.by_provider:type_name -> riptik.payment.v1.PaymentSummary.ByProviderEntry
-	37, // 5: riptik.payment.v1.CreatePaymentRequest.metadata:type_name -> riptik.payment.v1.CreatePaymentRequest.MetadataEntry
-	38, // 6: riptik.payment.v1.ConfirmPaymentRequest.provider_data:type_name -> riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
-	39, // 7: riptik.payment.v1.CreateRefundRequest.metadata:type_name -> riptik.payment.v1.CreateRefundRequest.MetadataEntry
-	40, // 8: riptik.payment.v1.ProcessRefundRequest.metadata:type_name -> riptik.payment.v1.ProcessRefundRequest.MetadataEntry
+	39, // 2: riptik.payment.v1.Refund.metadata:type_name -> riptik.payment.v1.Refund.MetadataEntry
+	40, // 3: riptik.payment.v1.PaymentSummary.by_status:type_name -> riptik.payment.v1.PaymentSummary.ByStatusEntry
+	41, // 4: riptik.payment.v1.PaymentSummary.by_provider:type_name -> riptik.payment.v1.PaymentSummary.ByProviderEntry
+	42, // 5: riptik.payment.v1.CreatePaymentRequest.metadata:type_name -> riptik.payment.v1.CreatePaymentRequest.MetadataEntry
+	43, // 6: riptik.payment.v1.ConfirmPaymentRequest.provider_data:type_name -> riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
+	44, // 7: riptik.payment.v1.CreateRefundRequest.metadata:type_name -> riptik.payment.v1.CreateRefundRequest.MetadataEntry
+	45, // 8: riptik.payment.v1.ProcessRefundRequest.metadata:type_name -> riptik.payment.v1.ProcessRefundRequest.MetadataEntry
 	0,  // 9: riptik.payment.v1.PaymentResponse.payment:type_name -> riptik.payment.v1.Payment
 	0,  // 10: riptik.payment.v1.ConfirmPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
 	0,  // 11: riptik.payment.v1.GetPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
@@ -3073,18 +3410,19 @@ var file_v1_payment_payment_proto_depIdxs = []int32{
 	2,  // 14: riptik.payment.v1.ListPaymentsResponse.summary:type_name -> riptik.payment.v1.PaymentSummary
 	1,  // 15: riptik.payment.v1.RefundResponse.refund:type_name -> riptik.payment.v1.Refund
 	1,  // 16: riptik.payment.v1.ProcessRefundResponse.refund:type_name -> riptik.payment.v1.Refund
-	41, // 17: riptik.payment.v1.GiftCardTransaction.info:type_name -> riptik.payment.v1.GiftCardTransaction.InfoEntry
+	46, // 17: riptik.payment.v1.GiftCardTransaction.info:type_name -> riptik.payment.v1.GiftCardTransaction.InfoEntry
 	17, // 18: riptik.payment.v1.GiftCard.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
 	18, // 19: riptik.payment.v1.CreateGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
 	18, // 20: riptik.payment.v1.GetGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
 	18, // 21: riptik.payment.v1.ListGiftCardsResponse.results:type_name -> riptik.payment.v1.GiftCard
 	17, // 22: riptik.payment.v1.GetGiftCardTransactionsResponse.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
 	18, // 23: riptik.payment.v1.CancelGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
-	24, // [24:24] is the sub-list for method output_type
-	24, // [24:24] is the sub-list for method input_type
-	24, // [24:24] is the sub-list for extension type_name
-	24, // [24:24] is the sub-list for extension extendee
-	0,  // [0:24] is the sub-list for field type_name
+	33, // 24: riptik.payment.v1.CreatePaymentIntentRequest.intent_data:type_name -> riptik.payment.v1.PaymentIntentData
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_v1_payment_payment_proto_init() }
@@ -3489,6 +3827,66 @@ func file_v1_payment_payment_proto_init() {
 				return nil
 			}
 		}
+		file_v1_payment_payment_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PaymentIntentData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_payment_payment_proto_msgTypes[34].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreatePaymentIntentRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_payment_payment_proto_msgTypes[35].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CreatePaymentIntentResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_payment_payment_proto_msgTypes[36].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetAvailablePaymentMethodsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_payment_payment_proto_msgTypes[37].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetAvailablePaymentMethodsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -3496,7 +3894,7 @@ func file_v1_payment_payment_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_payment_payment_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   42,
+			NumMessages:   47,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
