@@ -1808,6 +1808,259 @@ func (x *ValidateTokenResponse) GetUser() *User {
 	return nil
 }
 
+type Organization struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Slug         string  `protobuf:"bytes,1,opt,name=slug,proto3" json:"slug,omitempty"`                                       // Unique organization identifier
+	Name         string  `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                       // Organization name
+	Enabled      bool    `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`                                // Active status
+	UserCount    int32   `protobuf:"varint,4,opt,name=user_count,json=userCount,proto3" json:"user_count,omitempty"`           // Number of users
+	EventCount   int32   `protobuf:"varint,5,opt,name=event_count,json=eventCount,proto3" json:"event_count,omitempty"`        // Number of events
+	TotalRevenue float64 `protobuf:"fixed64,6,opt,name=total_revenue,json=totalRevenue,proto3" json:"total_revenue,omitempty"` // Total revenue
+	CreatedAt    string  `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`            // ISO datetime string
+}
+
+func (x *Organization) Reset() {
+	*x = Organization{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_user_user_proto_msgTypes[28]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Organization) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Organization) ProtoMessage() {}
+
+func (x *Organization) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_user_user_proto_msgTypes[28]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Organization.ProtoReflect.Descriptor instead.
+func (*Organization) Descriptor() ([]byte, []int) {
+	return file_v1_user_user_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *Organization) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
+func (x *Organization) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Organization) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *Organization) GetUserCount() int32 {
+	if x != nil {
+		return x.UserCount
+	}
+	return 0
+}
+
+func (x *Organization) GetEventCount() int32 {
+	if x != nil {
+		return x.EventCount
+	}
+	return 0
+}
+
+func (x *Organization) GetTotalRevenue() float64 {
+	if x != nil {
+		return x.TotalRevenue
+	}
+	return 0
+}
+
+func (x *Organization) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+type ListOrganizationsRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Page     int32  `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`                         // Optional, defaults to 1
+	PageSize int32  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // Optional, defaults to 25
+	Search   string `protobuf:"bytes,3,opt,name=search,proto3" json:"search,omitempty"`                      // Optional search term
+	Enabled  bool   `protobuf:"varint,4,opt,name=enabled,proto3" json:"enabled,omitempty"`                   // Optional filter, defaults to true
+}
+
+func (x *ListOrganizationsRequest) Reset() {
+	*x = ListOrganizationsRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_user_user_proto_msgTypes[29]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListOrganizationsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrganizationsRequest) ProtoMessage() {}
+
+func (x *ListOrganizationsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_user_user_proto_msgTypes[29]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrganizationsRequest.ProtoReflect.Descriptor instead.
+func (*ListOrganizationsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_user_user_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ListOrganizationsRequest) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListOrganizationsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListOrganizationsRequest) GetSearch() string {
+	if x != nil {
+		return x.Search
+	}
+	return ""
+}
+
+func (x *ListOrganizationsRequest) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+type ListOrganizationsResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Success       bool            `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Organizations []*Organization `protobuf:"bytes,2,rep,name=organizations,proto3" json:"organizations,omitempty"`
+	Total         int32           `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`                                  // Total count
+	Page          int32           `protobuf:"varint,4,opt,name=page,proto3" json:"page,omitempty"`                                    // Current page
+	PageSize      int32           `protobuf:"varint,5,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`            // Items per page
+	ErrorMessage  string          `protobuf:"bytes,6,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // Error message if not success
+}
+
+func (x *ListOrganizationsResponse) Reset() {
+	*x = ListOrganizationsResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_v1_user_user_proto_msgTypes[30]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ListOrganizationsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrganizationsResponse) ProtoMessage() {}
+
+func (x *ListOrganizationsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_user_user_proto_msgTypes[30]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrganizationsResponse.ProtoReflect.Descriptor instead.
+func (*ListOrganizationsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_user_user_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ListOrganizationsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListOrganizationsResponse) GetOrganizations() []*Organization {
+	if x != nil {
+		return x.Organizations
+	}
+	return nil
+}
+
+func (x *ListOrganizationsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ListOrganizationsResponse) GetPage() int32 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *ListOrganizationsResponse) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *ListOrganizationsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_user_user_proto protoreflect.FileDescriptor
 
 var file_v1_user_user_proto_rawDesc = []byte{
@@ -2012,10 +2265,46 @@ var file_v1_user_user_proto_rawDesc = []byte{
 	0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73,
 	0x65, 0x72, 0x49, 0x64, 0x12, 0x28, 0x0a, 0x04, 0x75, 0x73, 0x65, 0x72, 0x18, 0x03, 0x20, 0x01,
 	0x28, 0x0b, 0x32, 0x14, 0x2e, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x75, 0x73, 0x65, 0x72,
-	0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x42, 0x27,
-	0x5a, 0x25, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70,
-	0x74, 0x69, 0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f,
-	0x76, 0x31, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x2e, 0x76, 0x31, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x22, 0xd4,
+	0x01, 0x0a, 0x0c, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x12, 0x0a, 0x04, 0x73, 0x6c, 0x75, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x73,
+	0x6c, 0x75, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c,
+	0x65, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65,
+	0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x75, 0x73, 0x65, 0x72, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x12, 0x1f, 0x0a, 0x0b, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x5f, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
+	0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x65, 0x76, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x23, 0x0a, 0x0d, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x5f, 0x72, 0x65, 0x76, 0x65, 0x6e,
+	0x75, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x01, 0x52, 0x0c, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x52,
+	0x65, 0x76, 0x65, 0x6e, 0x75, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65,
+	0x64, 0x5f, 0x61, 0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61,
+	0x74, 0x65, 0x64, 0x41, 0x74, 0x22, 0x7d, 0x0a, 0x18, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x72, 0x67,
+	0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x04, 0x70, 0x61, 0x67, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x73, 0x69,
+	0x7a, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x70, 0x61, 0x67, 0x65, 0x53, 0x69,
+	0x7a, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x12, 0x18, 0x0a, 0x07, 0x65, 0x6e,
+	0x61, 0x62, 0x6c, 0x65, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x65, 0x6e, 0x61,
+	0x62, 0x6c, 0x65, 0x64, 0x22, 0xe5, 0x01, 0x0a, 0x19, 0x4c, 0x69, 0x73, 0x74, 0x4f, 0x72, 0x67,
+	0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x08, 0x52, 0x07, 0x73, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x12, 0x42, 0x0a, 0x0d,
+	0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02, 0x20,
+	0x03, 0x28, 0x0b, 0x32, 0x1c, 0x2e, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6b, 0x2e, 0x75, 0x73, 0x65,
+	0x72, 0x2e, 0x76, 0x31, 0x2e, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x52, 0x0d, 0x6f, 0x72, 0x67, 0x61, 0x6e, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73,
+	0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x12, 0x0a, 0x04, 0x70, 0x61, 0x67, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x05, 0x52, 0x04, 0x70, 0x61, 0x67, 0x65, 0x12, 0x1b, 0x0a, 0x09, 0x70, 0x61,
+	0x67, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x70,
+	0x61, 0x67, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x12, 0x23, 0x0a, 0x0d, 0x65, 0x72, 0x72, 0x6f, 0x72,
+	0x5f, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c,
+	0x65, 0x72, 0x72, 0x6f, 0x72, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x27, 0x5a, 0x25,
+	0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x72, 0x69, 0x70, 0x74, 0x69,
+	0x6b, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2f, 0x70, 0x62, 0x2f, 0x76, 0x31,
+	0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2030,36 +2319,39 @@ func file_v1_user_user_proto_rawDescGZIP() []byte {
 	return file_v1_user_user_proto_rawDescData
 }
 
-var file_v1_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+var file_v1_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
 var file_v1_user_user_proto_goTypes = []interface{}{
-	(*User)(nil),                   // 0: riptik.user.v1.User
-	(*CreateUserRequest)(nil),      // 1: riptik.user.v1.CreateUserRequest
-	(*UpdateUserRequest)(nil),      // 2: riptik.user.v1.UpdateUserRequest
-	(*GetUserRequest)(nil),         // 3: riptik.user.v1.GetUserRequest
-	(*GetUserByEmailRequest)(nil),  // 4: riptik.user.v1.GetUserByEmailRequest
-	(*ListUsersRequest)(nil),       // 5: riptik.user.v1.ListUsersRequest
-	(*DeleteUserRequest)(nil),      // 6: riptik.user.v1.DeleteUserRequest
-	(*ActivateUserRequest)(nil),    // 7: riptik.user.v1.ActivateUserRequest
-	(*DeactivateUserRequest)(nil),  // 8: riptik.user.v1.DeactivateUserRequest
-	(*GetUserStatsRequest)(nil),    // 9: riptik.user.v1.GetUserStatsRequest
-	(*CreateUserResponse)(nil),     // 10: riptik.user.v1.CreateUserResponse
-	(*UpdateUserResponse)(nil),     // 11: riptik.user.v1.UpdateUserResponse
-	(*GetUserResponse)(nil),        // 12: riptik.user.v1.GetUserResponse
-	(*GetUserByEmailResponse)(nil), // 13: riptik.user.v1.GetUserByEmailResponse
-	(*ListUsersResponse)(nil),      // 14: riptik.user.v1.ListUsersResponse
-	(*DeleteUserResponse)(nil),     // 15: riptik.user.v1.DeleteUserResponse
-	(*ActivateUserResponse)(nil),   // 16: riptik.user.v1.ActivateUserResponse
-	(*DeactivateUserResponse)(nil), // 17: riptik.user.v1.DeactivateUserResponse
-	(*UserStats)(nil),              // 18: riptik.user.v1.UserStats
-	(*GetUserStatsResponse)(nil),   // 19: riptik.user.v1.GetUserStatsResponse
-	(*LoginRequest)(nil),           // 20: riptik.user.v1.LoginRequest
-	(*LoginResponse)(nil),          // 21: riptik.user.v1.LoginResponse
-	(*RefreshTokenRequest)(nil),    // 22: riptik.user.v1.RefreshTokenRequest
-	(*RefreshTokenResponse)(nil),   // 23: riptik.user.v1.RefreshTokenResponse
-	(*LogoutRequest)(nil),          // 24: riptik.user.v1.LogoutRequest
-	(*LogoutResponse)(nil),         // 25: riptik.user.v1.LogoutResponse
-	(*ValidateTokenRequest)(nil),   // 26: riptik.user.v1.ValidateTokenRequest
-	(*ValidateTokenResponse)(nil),  // 27: riptik.user.v1.ValidateTokenResponse
+	(*User)(nil),                      // 0: riptik.user.v1.User
+	(*CreateUserRequest)(nil),         // 1: riptik.user.v1.CreateUserRequest
+	(*UpdateUserRequest)(nil),         // 2: riptik.user.v1.UpdateUserRequest
+	(*GetUserRequest)(nil),            // 3: riptik.user.v1.GetUserRequest
+	(*GetUserByEmailRequest)(nil),     // 4: riptik.user.v1.GetUserByEmailRequest
+	(*ListUsersRequest)(nil),          // 5: riptik.user.v1.ListUsersRequest
+	(*DeleteUserRequest)(nil),         // 6: riptik.user.v1.DeleteUserRequest
+	(*ActivateUserRequest)(nil),       // 7: riptik.user.v1.ActivateUserRequest
+	(*DeactivateUserRequest)(nil),     // 8: riptik.user.v1.DeactivateUserRequest
+	(*GetUserStatsRequest)(nil),       // 9: riptik.user.v1.GetUserStatsRequest
+	(*CreateUserResponse)(nil),        // 10: riptik.user.v1.CreateUserResponse
+	(*UpdateUserResponse)(nil),        // 11: riptik.user.v1.UpdateUserResponse
+	(*GetUserResponse)(nil),           // 12: riptik.user.v1.GetUserResponse
+	(*GetUserByEmailResponse)(nil),    // 13: riptik.user.v1.GetUserByEmailResponse
+	(*ListUsersResponse)(nil),         // 14: riptik.user.v1.ListUsersResponse
+	(*DeleteUserResponse)(nil),        // 15: riptik.user.v1.DeleteUserResponse
+	(*ActivateUserResponse)(nil),      // 16: riptik.user.v1.ActivateUserResponse
+	(*DeactivateUserResponse)(nil),    // 17: riptik.user.v1.DeactivateUserResponse
+	(*UserStats)(nil),                 // 18: riptik.user.v1.UserStats
+	(*GetUserStatsResponse)(nil),      // 19: riptik.user.v1.GetUserStatsResponse
+	(*LoginRequest)(nil),              // 20: riptik.user.v1.LoginRequest
+	(*LoginResponse)(nil),             // 21: riptik.user.v1.LoginResponse
+	(*RefreshTokenRequest)(nil),       // 22: riptik.user.v1.RefreshTokenRequest
+	(*RefreshTokenResponse)(nil),      // 23: riptik.user.v1.RefreshTokenResponse
+	(*LogoutRequest)(nil),             // 24: riptik.user.v1.LogoutRequest
+	(*LogoutResponse)(nil),            // 25: riptik.user.v1.LogoutResponse
+	(*ValidateTokenRequest)(nil),      // 26: riptik.user.v1.ValidateTokenRequest
+	(*ValidateTokenResponse)(nil),     // 27: riptik.user.v1.ValidateTokenResponse
+	(*Organization)(nil),              // 28: riptik.user.v1.Organization
+	(*ListOrganizationsRequest)(nil),  // 29: riptik.user.v1.ListOrganizationsRequest
+	(*ListOrganizationsResponse)(nil), // 30: riptik.user.v1.ListOrganizationsResponse
 }
 var file_v1_user_user_proto_depIdxs = []int32{
 	0,  // 0: riptik.user.v1.CreateUserResponse.user:type_name -> riptik.user.v1.User
@@ -2072,11 +2364,12 @@ var file_v1_user_user_proto_depIdxs = []int32{
 	18, // 7: riptik.user.v1.GetUserStatsResponse.stats:type_name -> riptik.user.v1.UserStats
 	0,  // 8: riptik.user.v1.LoginResponse.user:type_name -> riptik.user.v1.User
 	0,  // 9: riptik.user.v1.ValidateTokenResponse.user:type_name -> riptik.user.v1.User
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	28, // 10: riptik.user.v1.ListOrganizationsResponse.organizations:type_name -> riptik.user.v1.Organization
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_v1_user_user_proto_init() }
@@ -2421,6 +2714,42 @@ func file_v1_user_user_proto_init() {
 				return nil
 			}
 		}
+		file_v1_user_user_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Organization); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_user_user_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListOrganizationsRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_v1_user_user_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ListOrganizationsResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2428,7 +2757,7 @@ func file_v1_user_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_v1_user_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   28,
+			NumMessages:   31,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
