@@ -449,15 +449,20 @@ func (x *PaginationInfo) GetHasPrevious() bool {
 }
 
 type CreatePaymentRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrderId       string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`                                                              // Required
-	Provider      string                 `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`                                                                           // Required (e.g., "stripe", "paypal")
-	Amount        string                 `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`                                                                               // Required, decimal string
-	Currency      string                 `protobuf:"bytes,4,opt,name=currency,proto3" json:"currency,omitempty"`                                                                           // Optional
-	CustomerId    string                 `protobuf:"bytes,5,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                                                     // Optional
-	ReturnUrl     string                 `protobuf:"bytes,6,opt,name=return_url,json=returnUrl,proto3" json:"return_url,omitempty"`                                                        // Optional
-	CancelUrl     string                 `protobuf:"bytes,7,opt,name=cancel_url,json=cancelUrl,proto3" json:"cancel_url,omitempty"`                                                        // Optional
-	Metadata      map[string]string      `protobuf:"bytes,8,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Optional metadata
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	OrderId    string                 `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`                                                              // Required
+	Provider   string                 `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`                                                                           // Required (e.g., "stripe", "paypal")
+	Amount     string                 `protobuf:"bytes,3,opt,name=amount,proto3" json:"amount,omitempty"`                                                                               // Required, decimal string
+	Currency   string                 `protobuf:"bytes,4,opt,name=currency,proto3" json:"currency,omitempty"`                                                                           // Optional
+	CustomerId string                 `protobuf:"bytes,5,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                                                     // Optional
+	ReturnUrl  string                 `protobuf:"bytes,6,opt,name=return_url,json=returnUrl,proto3" json:"return_url,omitempty"`                                                        // Optional
+	CancelUrl  string                 `protobuf:"bytes,7,opt,name=cancel_url,json=cancelUrl,proto3" json:"cancel_url,omitempty"`                                                        // Optional
+	Metadata   map[string]string      `protobuf:"bytes,8,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Optional metadata
+	// Gateway (redirect) flow — event/ticket payments
+	OrganizerId   int64  `protobuf:"varint,9,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"` // Organizer whose gateway config to use
+	OrderCode     string `protobuf:"bytes,10,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`       // Event order code (reconciliation key)
+	EventSlug     string `protobuf:"bytes,11,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`       // Event slug
+	ClientIp      string `protobuf:"bytes,12,opt,name=client_ip,json=clientIp,proto3" json:"client_ip,omitempty"`          // Buyer IP (some gateways require it)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -548,14 +553,46 @@ func (x *CreatePaymentRequest) GetMetadata() map[string]string {
 	return nil
 }
 
+func (x *CreatePaymentRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *CreatePaymentRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *CreatePaymentRequest) GetEventSlug() string {
+	if x != nil {
+		return x.EventSlug
+	}
+	return ""
+}
+
+func (x *CreatePaymentRequest) GetClientIp() string {
+	if x != nil {
+		return x.ClientIp
+	}
+	return ""
+}
+
 type ConfirmPaymentRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	PaymentId       string                 `protobuf:"bytes,1,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                                                                                    // Required
 	ExternalId      string                 `protobuf:"bytes,2,opt,name=external_id,json=externalId,proto3" json:"external_id,omitempty"`                                                                                 // Optional external payment ID
 	ProviderData    map[string]string      `protobuf:"bytes,3,rep,name=provider_data,json=providerData,proto3" json:"provider_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Optional provider-specific data
 	VerifySignature bool                   `protobuf:"varint,4,opt,name=verify_signature,json=verifySignature,proto3" json:"verify_signature,omitempty"`                                                                 // Optional
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// Gateway callback verification flow
+	OrganizerId    int64             `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`                                                                                   // Organizer whose gateway config to use
+	Provider       string            `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`                                                                                                             // Gateway name (e.g. "onepay")
+	CallbackParams map[string]string `protobuf:"bytes,7,rep,name=callback_params,json=callbackParams,proto3" json:"callback_params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Raw gateway callback params (vpc_*)
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ConfirmPaymentRequest) Reset() {
@@ -614,6 +651,27 @@ func (x *ConfirmPaymentRequest) GetVerifySignature() bool {
 		return x.VerifySignature
 	}
 	return false
+}
+
+func (x *ConfirmPaymentRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *ConfirmPaymentRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *ConfirmPaymentRequest) GetCallbackParams() map[string]string {
+	if x != nil {
+		return x.CallbackParams
+	}
+	return nil
 }
 
 type GetPaymentRequest struct {
@@ -1032,6 +1090,85 @@ func (x *PaymentResponse) GetPayment() *Payment {
 	return nil
 }
 
+// Response for CreatePayment. Carries the gateway redirect URL (payment.payment_url)
+// on success, or no_gateway=true when the organizer has no gateway configured
+// (the caller then falls back to a pending order).
+type CreatePaymentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Payment       *Payment               `protobuf:"bytes,2,opt,name=payment,proto3" json:"payment,omitempty"`
+	NoGateway     bool                   `protobuf:"varint,3,opt,name=no_gateway,json=noGateway,proto3" json:"no_gateway,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreatePaymentResponse) Reset() {
+	*x = CreatePaymentResponse{}
+	mi := &file_v1_payment_payment_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePaymentResponse) ProtoMessage() {}
+
+func (x *CreatePaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_payment_payment_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePaymentResponse.ProtoReflect.Descriptor instead.
+func (*CreatePaymentResponse) Descriptor() ([]byte, []int) {
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreatePaymentResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreatePaymentResponse) GetPayment() *Payment {
+	if x != nil {
+		return x.Payment
+	}
+	return nil
+}
+
+func (x *CreatePaymentResponse) GetNoGateway() bool {
+	if x != nil {
+		return x.NoGateway
+	}
+	return false
+}
+
+func (x *CreatePaymentResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreatePaymentResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 type ConfirmPaymentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -1042,7 +1179,7 @@ type ConfirmPaymentResponse struct {
 
 func (x *ConfirmPaymentResponse) Reset() {
 	*x = ConfirmPaymentResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[12]
+	mi := &file_v1_payment_payment_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1054,7 +1191,7 @@ func (x *ConfirmPaymentResponse) String() string {
 func (*ConfirmPaymentResponse) ProtoMessage() {}
 
 func (x *ConfirmPaymentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[12]
+	mi := &file_v1_payment_payment_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1067,7 +1204,7 @@ func (x *ConfirmPaymentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmPaymentResponse.ProtoReflect.Descriptor instead.
 func (*ConfirmPaymentResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{12}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ConfirmPaymentResponse) GetSuccess() bool {
@@ -1094,7 +1231,7 @@ type GetPaymentResponse struct {
 
 func (x *GetPaymentResponse) Reset() {
 	*x = GetPaymentResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[13]
+	mi := &file_v1_payment_payment_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1106,7 +1243,7 @@ func (x *GetPaymentResponse) String() string {
 func (*GetPaymentResponse) ProtoMessage() {}
 
 func (x *GetPaymentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[13]
+	mi := &file_v1_payment_payment_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1119,7 +1256,7 @@ func (x *GetPaymentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPaymentResponse.ProtoReflect.Descriptor instead.
 func (*GetPaymentResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{13}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetPaymentResponse) GetSuccess() bool {
@@ -1148,7 +1285,7 @@ type ListPaymentsResponse struct {
 
 func (x *ListPaymentsResponse) Reset() {
 	*x = ListPaymentsResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[14]
+	mi := &file_v1_payment_payment_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1160,7 +1297,7 @@ func (x *ListPaymentsResponse) String() string {
 func (*ListPaymentsResponse) ProtoMessage() {}
 
 func (x *ListPaymentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[14]
+	mi := &file_v1_payment_payment_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1173,7 +1310,7 @@ func (x *ListPaymentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListPaymentsResponse.ProtoReflect.Descriptor instead.
 func (*ListPaymentsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{14}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListPaymentsResponse) GetSuccess() bool {
@@ -1214,7 +1351,7 @@ type RefundResponse struct {
 
 func (x *RefundResponse) Reset() {
 	*x = RefundResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[15]
+	mi := &file_v1_payment_payment_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1226,7 +1363,7 @@ func (x *RefundResponse) String() string {
 func (*RefundResponse) ProtoMessage() {}
 
 func (x *RefundResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[15]
+	mi := &file_v1_payment_payment_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1239,7 +1376,7 @@ func (x *RefundResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefundResponse.ProtoReflect.Descriptor instead.
 func (*RefundResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{15}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RefundResponse) GetSuccess() bool {
@@ -1266,7 +1403,7 @@ type ProcessRefundResponse struct {
 
 func (x *ProcessRefundResponse) Reset() {
 	*x = ProcessRefundResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[16]
+	mi := &file_v1_payment_payment_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1278,7 +1415,7 @@ func (x *ProcessRefundResponse) String() string {
 func (*ProcessRefundResponse) ProtoMessage() {}
 
 func (x *ProcessRefundResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[16]
+	mi := &file_v1_payment_payment_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1291,7 +1428,7 @@ func (x *ProcessRefundResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProcessRefundResponse.ProtoReflect.Descriptor instead.
 func (*ProcessRefundResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{16}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ProcessRefundResponse) GetSuccess() bool {
@@ -1322,7 +1459,7 @@ type GiftCardTransaction struct {
 
 func (x *GiftCardTransaction) Reset() {
 	*x = GiftCardTransaction{}
-	mi := &file_v1_payment_payment_proto_msgTypes[17]
+	mi := &file_v1_payment_payment_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1334,7 +1471,7 @@ func (x *GiftCardTransaction) String() string {
 func (*GiftCardTransaction) ProtoMessage() {}
 
 func (x *GiftCardTransaction) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[17]
+	mi := &file_v1_payment_payment_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1347,7 +1484,7 @@ func (x *GiftCardTransaction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GiftCardTransaction.ProtoReflect.Descriptor instead.
 func (*GiftCardTransaction) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{17}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GiftCardTransaction) GetId() string {
@@ -1414,7 +1551,7 @@ type GiftCard struct {
 
 func (x *GiftCard) Reset() {
 	*x = GiftCard{}
-	mi := &file_v1_payment_payment_proto_msgTypes[18]
+	mi := &file_v1_payment_payment_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1426,7 +1563,7 @@ func (x *GiftCard) String() string {
 func (*GiftCard) ProtoMessage() {}
 
 func (x *GiftCard) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[18]
+	mi := &file_v1_payment_payment_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1439,7 +1576,7 @@ func (x *GiftCard) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GiftCard.ProtoReflect.Descriptor instead.
 func (*GiftCard) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{18}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GiftCard) GetId() string {
@@ -1557,7 +1694,7 @@ type CreateGiftCardRequest struct {
 
 func (x *CreateGiftCardRequest) Reset() {
 	*x = CreateGiftCardRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[19]
+	mi := &file_v1_payment_payment_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1569,7 +1706,7 @@ func (x *CreateGiftCardRequest) String() string {
 func (*CreateGiftCardRequest) ProtoMessage() {}
 
 func (x *CreateGiftCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[19]
+	mi := &file_v1_payment_payment_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1582,7 +1719,7 @@ func (x *CreateGiftCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateGiftCardRequest.ProtoReflect.Descriptor instead.
 func (*CreateGiftCardRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{19}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CreateGiftCardRequest) GetValue() string {
@@ -1660,7 +1797,7 @@ type RedeemGiftCardRequest struct {
 
 func (x *RedeemGiftCardRequest) Reset() {
 	*x = RedeemGiftCardRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[20]
+	mi := &file_v1_payment_payment_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1672,7 +1809,7 @@ func (x *RedeemGiftCardRequest) String() string {
 func (*RedeemGiftCardRequest) ProtoMessage() {}
 
 func (x *RedeemGiftCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[20]
+	mi := &file_v1_payment_payment_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1685,7 +1822,7 @@ func (x *RedeemGiftCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RedeemGiftCardRequest.ProtoReflect.Descriptor instead.
 func (*RedeemGiftCardRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{20}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *RedeemGiftCardRequest) GetCode() string {
@@ -1726,7 +1863,7 @@ type GetGiftCardRequest struct {
 
 func (x *GetGiftCardRequest) Reset() {
 	*x = GetGiftCardRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[21]
+	mi := &file_v1_payment_payment_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1738,7 +1875,7 @@ func (x *GetGiftCardRequest) String() string {
 func (*GetGiftCardRequest) ProtoMessage() {}
 
 func (x *GetGiftCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[21]
+	mi := &file_v1_payment_payment_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1751,7 +1888,7 @@ func (x *GetGiftCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGiftCardRequest.ProtoReflect.Descriptor instead.
 func (*GetGiftCardRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{21}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetGiftCardRequest) GetId() string {
@@ -1782,7 +1919,7 @@ type ListGiftCardsRequest struct {
 
 func (x *ListGiftCardsRequest) Reset() {
 	*x = ListGiftCardsRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[22]
+	mi := &file_v1_payment_payment_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1794,7 +1931,7 @@ func (x *ListGiftCardsRequest) String() string {
 func (*ListGiftCardsRequest) ProtoMessage() {}
 
 func (x *ListGiftCardsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[22]
+	mi := &file_v1_payment_payment_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1807,7 +1944,7 @@ func (x *ListGiftCardsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListGiftCardsRequest.ProtoReflect.Descriptor instead.
 func (*ListGiftCardsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{22}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListGiftCardsRequest) GetPage() int32 {
@@ -1861,7 +1998,7 @@ type CheckGiftCardBalanceRequest struct {
 
 func (x *CheckGiftCardBalanceRequest) Reset() {
 	*x = CheckGiftCardBalanceRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[23]
+	mi := &file_v1_payment_payment_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1873,7 +2010,7 @@ func (x *CheckGiftCardBalanceRequest) String() string {
 func (*CheckGiftCardBalanceRequest) ProtoMessage() {}
 
 func (x *CheckGiftCardBalanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[23]
+	mi := &file_v1_payment_payment_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1886,7 +2023,7 @@ func (x *CheckGiftCardBalanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckGiftCardBalanceRequest.ProtoReflect.Descriptor instead.
 func (*CheckGiftCardBalanceRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{23}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *CheckGiftCardBalanceRequest) GetCode() string {
@@ -1907,7 +2044,7 @@ type GetGiftCardTransactionsRequest struct {
 
 func (x *GetGiftCardTransactionsRequest) Reset() {
 	*x = GetGiftCardTransactionsRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[24]
+	mi := &file_v1_payment_payment_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1919,7 +2056,7 @@ func (x *GetGiftCardTransactionsRequest) String() string {
 func (*GetGiftCardTransactionsRequest) ProtoMessage() {}
 
 func (x *GetGiftCardTransactionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[24]
+	mi := &file_v1_payment_payment_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1932,7 +2069,7 @@ func (x *GetGiftCardTransactionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGiftCardTransactionsRequest.ProtoReflect.Descriptor instead.
 func (*GetGiftCardTransactionsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{24}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetGiftCardTransactionsRequest) GetCode() string {
@@ -1966,7 +2103,7 @@ type CancelGiftCardRequest struct {
 
 func (x *CancelGiftCardRequest) Reset() {
 	*x = CancelGiftCardRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[25]
+	mi := &file_v1_payment_payment_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1978,7 +2115,7 @@ func (x *CancelGiftCardRequest) String() string {
 func (*CancelGiftCardRequest) ProtoMessage() {}
 
 func (x *CancelGiftCardRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[25]
+	mi := &file_v1_payment_payment_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1991,7 +2128,7 @@ func (x *CancelGiftCardRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelGiftCardRequest.ProtoReflect.Descriptor instead.
 func (*CancelGiftCardRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{25}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *CancelGiftCardRequest) GetId() string {
@@ -2018,7 +2155,7 @@ type CreateGiftCardResponse struct {
 
 func (x *CreateGiftCardResponse) Reset() {
 	*x = CreateGiftCardResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[26]
+	mi := &file_v1_payment_payment_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2030,7 +2167,7 @@ func (x *CreateGiftCardResponse) String() string {
 func (*CreateGiftCardResponse) ProtoMessage() {}
 
 func (x *CreateGiftCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[26]
+	mi := &file_v1_payment_payment_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2043,7 +2180,7 @@ func (x *CreateGiftCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateGiftCardResponse.ProtoReflect.Descriptor instead.
 func (*CreateGiftCardResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{26}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *CreateGiftCardResponse) GetSuccess() bool {
@@ -2075,7 +2212,7 @@ type RedeemGiftCardResponse struct {
 
 func (x *RedeemGiftCardResponse) Reset() {
 	*x = RedeemGiftCardResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[27]
+	mi := &file_v1_payment_payment_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2087,7 +2224,7 @@ func (x *RedeemGiftCardResponse) String() string {
 func (*RedeemGiftCardResponse) ProtoMessage() {}
 
 func (x *RedeemGiftCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[27]
+	mi := &file_v1_payment_payment_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2100,7 +2237,7 @@ func (x *RedeemGiftCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RedeemGiftCardResponse.ProtoReflect.Descriptor instead.
 func (*RedeemGiftCardResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{27}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *RedeemGiftCardResponse) GetSuccess() bool {
@@ -2162,7 +2299,7 @@ type GetGiftCardResponse struct {
 
 func (x *GetGiftCardResponse) Reset() {
 	*x = GetGiftCardResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[28]
+	mi := &file_v1_payment_payment_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2174,7 +2311,7 @@ func (x *GetGiftCardResponse) String() string {
 func (*GetGiftCardResponse) ProtoMessage() {}
 
 func (x *GetGiftCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[28]
+	mi := &file_v1_payment_payment_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2187,7 +2324,7 @@ func (x *GetGiftCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGiftCardResponse.ProtoReflect.Descriptor instead.
 func (*GetGiftCardResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{28}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *GetGiftCardResponse) GetSuccess() bool {
@@ -2217,7 +2354,7 @@ type ListGiftCardsResponse struct {
 
 func (x *ListGiftCardsResponse) Reset() {
 	*x = ListGiftCardsResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[29]
+	mi := &file_v1_payment_payment_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2229,7 +2366,7 @@ func (x *ListGiftCardsResponse) String() string {
 func (*ListGiftCardsResponse) ProtoMessage() {}
 
 func (x *ListGiftCardsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[29]
+	mi := &file_v1_payment_payment_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2242,7 +2379,7 @@ func (x *ListGiftCardsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListGiftCardsResponse.ProtoReflect.Descriptor instead.
 func (*ListGiftCardsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{29}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *ListGiftCardsResponse) GetSuccess() bool {
@@ -2294,7 +2431,7 @@ type CheckGiftCardBalanceResponse struct {
 
 func (x *CheckGiftCardBalanceResponse) Reset() {
 	*x = CheckGiftCardBalanceResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[30]
+	mi := &file_v1_payment_payment_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2306,7 +2443,7 @@ func (x *CheckGiftCardBalanceResponse) String() string {
 func (*CheckGiftCardBalanceResponse) ProtoMessage() {}
 
 func (x *CheckGiftCardBalanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[30]
+	mi := &file_v1_payment_payment_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2319,7 +2456,7 @@ func (x *CheckGiftCardBalanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckGiftCardBalanceResponse.ProtoReflect.Descriptor instead.
 func (*CheckGiftCardBalanceResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{30}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *CheckGiftCardBalanceResponse) GetSuccess() bool {
@@ -2374,7 +2511,7 @@ type GetGiftCardTransactionsResponse struct {
 
 func (x *GetGiftCardTransactionsResponse) Reset() {
 	*x = GetGiftCardTransactionsResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[31]
+	mi := &file_v1_payment_payment_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2386,7 +2523,7 @@ func (x *GetGiftCardTransactionsResponse) String() string {
 func (*GetGiftCardTransactionsResponse) ProtoMessage() {}
 
 func (x *GetGiftCardTransactionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[31]
+	mi := &file_v1_payment_payment_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2399,7 +2536,7 @@ func (x *GetGiftCardTransactionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGiftCardTransactionsResponse.ProtoReflect.Descriptor instead.
 func (*GetGiftCardTransactionsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{31}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *GetGiftCardTransactionsResponse) GetSuccess() bool {
@@ -2426,7 +2563,7 @@ type CancelGiftCardResponse struct {
 
 func (x *CancelGiftCardResponse) Reset() {
 	*x = CancelGiftCardResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[32]
+	mi := &file_v1_payment_payment_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2438,7 +2575,7 @@ func (x *CancelGiftCardResponse) String() string {
 func (*CancelGiftCardResponse) ProtoMessage() {}
 
 func (x *CancelGiftCardResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[32]
+	mi := &file_v1_payment_payment_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2451,7 +2588,7 @@ func (x *CancelGiftCardResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelGiftCardResponse.ProtoReflect.Descriptor instead.
 func (*CancelGiftCardResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{32}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *CancelGiftCardResponse) GetSuccess() bool {
@@ -2479,7 +2616,7 @@ type PaymentIntentData struct {
 
 func (x *PaymentIntentData) Reset() {
 	*x = PaymentIntentData{}
-	mi := &file_v1_payment_payment_proto_msgTypes[33]
+	mi := &file_v1_payment_payment_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2491,7 +2628,7 @@ func (x *PaymentIntentData) String() string {
 func (*PaymentIntentData) ProtoMessage() {}
 
 func (x *PaymentIntentData) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[33]
+	mi := &file_v1_payment_payment_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2504,7 +2641,7 @@ func (x *PaymentIntentData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PaymentIntentData.ProtoReflect.Descriptor instead.
 func (*PaymentIntentData) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{33}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *PaymentIntentData) GetAmount() string {
@@ -2537,7 +2674,7 @@ type CreatePaymentIntentRequest struct {
 
 func (x *CreatePaymentIntentRequest) Reset() {
 	*x = CreatePaymentIntentRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[34]
+	mi := &file_v1_payment_payment_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2549,7 +2686,7 @@ func (x *CreatePaymentIntentRequest) String() string {
 func (*CreatePaymentIntentRequest) ProtoMessage() {}
 
 func (x *CreatePaymentIntentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[34]
+	mi := &file_v1_payment_payment_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2562,7 +2699,7 @@ func (x *CreatePaymentIntentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePaymentIntentRequest.ProtoReflect.Descriptor instead.
 func (*CreatePaymentIntentRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{34}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *CreatePaymentIntentRequest) GetIntentData() *PaymentIntentData {
@@ -2586,7 +2723,7 @@ type CreatePaymentIntentResponse struct {
 
 func (x *CreatePaymentIntentResponse) Reset() {
 	*x = CreatePaymentIntentResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[35]
+	mi := &file_v1_payment_payment_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2598,7 +2735,7 @@ func (x *CreatePaymentIntentResponse) String() string {
 func (*CreatePaymentIntentResponse) ProtoMessage() {}
 
 func (x *CreatePaymentIntentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[35]
+	mi := &file_v1_payment_payment_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2611,7 +2748,7 @@ func (x *CreatePaymentIntentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreatePaymentIntentResponse.ProtoReflect.Descriptor instead.
 func (*CreatePaymentIntentResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{35}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *CreatePaymentIntentResponse) GetId() string {
@@ -2664,7 +2801,7 @@ type GetAvailablePaymentMethodsRequest struct {
 
 func (x *GetAvailablePaymentMethodsRequest) Reset() {
 	*x = GetAvailablePaymentMethodsRequest{}
-	mi := &file_v1_payment_payment_proto_msgTypes[36]
+	mi := &file_v1_payment_payment_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2676,7 +2813,7 @@ func (x *GetAvailablePaymentMethodsRequest) String() string {
 func (*GetAvailablePaymentMethodsRequest) ProtoMessage() {}
 
 func (x *GetAvailablePaymentMethodsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[36]
+	mi := &file_v1_payment_payment_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2689,7 +2826,7 @@ func (x *GetAvailablePaymentMethodsRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use GetAvailablePaymentMethodsRequest.ProtoReflect.Descriptor instead.
 func (*GetAvailablePaymentMethodsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{36}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{37}
 }
 
 type GetAvailablePaymentMethodsResponse struct {
@@ -2703,7 +2840,7 @@ type GetAvailablePaymentMethodsResponse struct {
 
 func (x *GetAvailablePaymentMethodsResponse) Reset() {
 	*x = GetAvailablePaymentMethodsResponse{}
-	mi := &file_v1_payment_payment_proto_msgTypes[37]
+	mi := &file_v1_payment_payment_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2715,7 +2852,7 @@ func (x *GetAvailablePaymentMethodsResponse) String() string {
 func (*GetAvailablePaymentMethodsResponse) ProtoMessage() {}
 
 func (x *GetAvailablePaymentMethodsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_payment_payment_proto_msgTypes[37]
+	mi := &file_v1_payment_payment_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2728,7 +2865,7 @@ func (x *GetAvailablePaymentMethodsResponse) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GetAvailablePaymentMethodsResponse.ProtoReflect.Descriptor instead.
 func (*GetAvailablePaymentMethodsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_payment_payment_proto_rawDescGZIP(), []int{37}
+	return file_v1_payment_payment_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *GetAvailablePaymentMethodsResponse) GetMethods() []string {
@@ -2818,7 +2955,7 @@ const file_v1_payment_payment_proto_rawDesc = "" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x03 \x01(\x05R\x06offset\x12\x19\n" +
 	"\bhas_next\x18\x04 \x01(\bR\ahasNext\x12!\n" +
-	"\fhas_previous\x18\x05 \x01(\bR\vhasPrevious\"\xf0\x02\n" +
+	"\fhas_previous\x18\x05 \x01(\bR\vhasPrevious\"\xee\x03\n" +
 	"\x14CreatePaymentRequest\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x1a\n" +
 	"\bprovider\x18\x02 \x01(\tR\bprovider\x12\x16\n" +
@@ -2830,18 +2967,31 @@ const file_v1_payment_payment_proto_rawDesc = "" +
 	"return_url\x18\x06 \x01(\tR\treturnUrl\x12\x1d\n" +
 	"\n" +
 	"cancel_url\x18\a \x01(\tR\tcancelUrl\x12Q\n" +
-	"\bmetadata\x18\b \x03(\v25.riptik.payment.v1.CreatePaymentRequest.MetadataEntryR\bmetadata\x1a;\n" +
+	"\bmetadata\x18\b \x03(\v25.riptik.payment.v1.CreatePaymentRequest.MetadataEntryR\bmetadata\x12!\n" +
+	"\forganizer_id\x18\t \x01(\x03R\vorganizerId\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\n" +
+	" \x01(\tR\torderCode\x12\x1d\n" +
+	"\n" +
+	"event_slug\x18\v \x01(\tR\teventSlug\x12\x1b\n" +
+	"\tclient_ip\x18\f \x01(\tR\bclientIp\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa4\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x8d\x04\n" +
 	"\x15ConfirmPaymentRequest\x12\x1d\n" +
 	"\n" +
 	"payment_id\x18\x01 \x01(\tR\tpaymentId\x12\x1f\n" +
 	"\vexternal_id\x18\x02 \x01(\tR\n" +
 	"externalId\x12_\n" +
 	"\rprovider_data\x18\x03 \x03(\v2:.riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntryR\fproviderData\x12)\n" +
-	"\x10verify_signature\x18\x04 \x01(\bR\x0fverifySignature\x1a?\n" +
+	"\x10verify_signature\x18\x04 \x01(\bR\x0fverifySignature\x12!\n" +
+	"\forganizer_id\x18\x05 \x01(\x03R\vorganizerId\x12\x1a\n" +
+	"\bprovider\x18\x06 \x01(\tR\bprovider\x12e\n" +
+	"\x0fcallback_params\x18\a \x03(\v2<.riptik.payment.v1.ConfirmPaymentRequest.CallbackParamsEntryR\x0ecallbackParams\x1a?\n" +
 	"\x11ProviderDataEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aA\n" +
+	"\x13CallbackParamsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"[\n" +
 	"\x11GetPaymentRequest\x12\x1d\n" +
@@ -2885,7 +3035,15 @@ const file_v1_payment_payment_proto_rawDesc = "" +
 	"\x0finclude_payment\x18\x02 \x01(\bR\x0eincludePayment\"a\n" +
 	"\x0fPaymentResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x124\n" +
-	"\apayment\x18\x02 \x01(\v2\x1a.riptik.payment.v1.PaymentR\apayment\"h\n" +
+	"\apayment\x18\x02 \x01(\v2\x1a.riptik.payment.v1.PaymentR\apayment\"\xca\x01\n" +
+	"\x15CreatePaymentResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x124\n" +
+	"\apayment\x18\x02 \x01(\v2\x1a.riptik.payment.v1.PaymentR\apayment\x12\x1d\n" +
+	"\n" +
+	"no_gateway\x18\x03 \x01(\bR\tnoGateway\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"h\n" +
 	"\x16ConfirmPaymentResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x124\n" +
 	"\apayment\x18\x02 \x01(\v2\x1a.riptik.payment.v1.PaymentR\apayment\"d\n" +
@@ -3040,7 +3198,7 @@ func file_v1_payment_payment_proto_rawDescGZIP() []byte {
 	return file_v1_payment_payment_proto_rawDescData
 }
 
-var file_v1_payment_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 47)
+var file_v1_payment_payment_proto_msgTypes = make([]protoimpl.MessageInfo, 49)
 var file_v1_payment_payment_proto_goTypes = []any{
 	(*Payment)(nil),                            // 0: riptik.payment.v1.Payment
 	(*Refund)(nil),                             // 1: riptik.payment.v1.Refund
@@ -3054,73 +3212,77 @@ var file_v1_payment_payment_proto_goTypes = []any{
 	(*ProcessRefundRequest)(nil),               // 9: riptik.payment.v1.ProcessRefundRequest
 	(*GetRefundRequest)(nil),                   // 10: riptik.payment.v1.GetRefundRequest
 	(*PaymentResponse)(nil),                    // 11: riptik.payment.v1.PaymentResponse
-	(*ConfirmPaymentResponse)(nil),             // 12: riptik.payment.v1.ConfirmPaymentResponse
-	(*GetPaymentResponse)(nil),                 // 13: riptik.payment.v1.GetPaymentResponse
-	(*ListPaymentsResponse)(nil),               // 14: riptik.payment.v1.ListPaymentsResponse
-	(*RefundResponse)(nil),                     // 15: riptik.payment.v1.RefundResponse
-	(*ProcessRefundResponse)(nil),              // 16: riptik.payment.v1.ProcessRefundResponse
-	(*GiftCardTransaction)(nil),                // 17: riptik.payment.v1.GiftCardTransaction
-	(*GiftCard)(nil),                           // 18: riptik.payment.v1.GiftCard
-	(*CreateGiftCardRequest)(nil),              // 19: riptik.payment.v1.CreateGiftCardRequest
-	(*RedeemGiftCardRequest)(nil),              // 20: riptik.payment.v1.RedeemGiftCardRequest
-	(*GetGiftCardRequest)(nil),                 // 21: riptik.payment.v1.GetGiftCardRequest
-	(*ListGiftCardsRequest)(nil),               // 22: riptik.payment.v1.ListGiftCardsRequest
-	(*CheckGiftCardBalanceRequest)(nil),        // 23: riptik.payment.v1.CheckGiftCardBalanceRequest
-	(*GetGiftCardTransactionsRequest)(nil),     // 24: riptik.payment.v1.GetGiftCardTransactionsRequest
-	(*CancelGiftCardRequest)(nil),              // 25: riptik.payment.v1.CancelGiftCardRequest
-	(*CreateGiftCardResponse)(nil),             // 26: riptik.payment.v1.CreateGiftCardResponse
-	(*RedeemGiftCardResponse)(nil),             // 27: riptik.payment.v1.RedeemGiftCardResponse
-	(*GetGiftCardResponse)(nil),                // 28: riptik.payment.v1.GetGiftCardResponse
-	(*ListGiftCardsResponse)(nil),              // 29: riptik.payment.v1.ListGiftCardsResponse
-	(*CheckGiftCardBalanceResponse)(nil),       // 30: riptik.payment.v1.CheckGiftCardBalanceResponse
-	(*GetGiftCardTransactionsResponse)(nil),    // 31: riptik.payment.v1.GetGiftCardTransactionsResponse
-	(*CancelGiftCardResponse)(nil),             // 32: riptik.payment.v1.CancelGiftCardResponse
-	(*PaymentIntentData)(nil),                  // 33: riptik.payment.v1.PaymentIntentData
-	(*CreatePaymentIntentRequest)(nil),         // 34: riptik.payment.v1.CreatePaymentIntentRequest
-	(*CreatePaymentIntentResponse)(nil),        // 35: riptik.payment.v1.CreatePaymentIntentResponse
-	(*GetAvailablePaymentMethodsRequest)(nil),  // 36: riptik.payment.v1.GetAvailablePaymentMethodsRequest
-	(*GetAvailablePaymentMethodsResponse)(nil), // 37: riptik.payment.v1.GetAvailablePaymentMethodsResponse
-	nil, // 38: riptik.payment.v1.Payment.MetadataEntry
-	nil, // 39: riptik.payment.v1.Refund.MetadataEntry
-	nil, // 40: riptik.payment.v1.PaymentSummary.ByStatusEntry
-	nil, // 41: riptik.payment.v1.PaymentSummary.ByProviderEntry
-	nil, // 42: riptik.payment.v1.CreatePaymentRequest.MetadataEntry
-	nil, // 43: riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
-	nil, // 44: riptik.payment.v1.CreateRefundRequest.MetadataEntry
-	nil, // 45: riptik.payment.v1.ProcessRefundRequest.MetadataEntry
-	nil, // 46: riptik.payment.v1.GiftCardTransaction.InfoEntry
+	(*CreatePaymentResponse)(nil),              // 12: riptik.payment.v1.CreatePaymentResponse
+	(*ConfirmPaymentResponse)(nil),             // 13: riptik.payment.v1.ConfirmPaymentResponse
+	(*GetPaymentResponse)(nil),                 // 14: riptik.payment.v1.GetPaymentResponse
+	(*ListPaymentsResponse)(nil),               // 15: riptik.payment.v1.ListPaymentsResponse
+	(*RefundResponse)(nil),                     // 16: riptik.payment.v1.RefundResponse
+	(*ProcessRefundResponse)(nil),              // 17: riptik.payment.v1.ProcessRefundResponse
+	(*GiftCardTransaction)(nil),                // 18: riptik.payment.v1.GiftCardTransaction
+	(*GiftCard)(nil),                           // 19: riptik.payment.v1.GiftCard
+	(*CreateGiftCardRequest)(nil),              // 20: riptik.payment.v1.CreateGiftCardRequest
+	(*RedeemGiftCardRequest)(nil),              // 21: riptik.payment.v1.RedeemGiftCardRequest
+	(*GetGiftCardRequest)(nil),                 // 22: riptik.payment.v1.GetGiftCardRequest
+	(*ListGiftCardsRequest)(nil),               // 23: riptik.payment.v1.ListGiftCardsRequest
+	(*CheckGiftCardBalanceRequest)(nil),        // 24: riptik.payment.v1.CheckGiftCardBalanceRequest
+	(*GetGiftCardTransactionsRequest)(nil),     // 25: riptik.payment.v1.GetGiftCardTransactionsRequest
+	(*CancelGiftCardRequest)(nil),              // 26: riptik.payment.v1.CancelGiftCardRequest
+	(*CreateGiftCardResponse)(nil),             // 27: riptik.payment.v1.CreateGiftCardResponse
+	(*RedeemGiftCardResponse)(nil),             // 28: riptik.payment.v1.RedeemGiftCardResponse
+	(*GetGiftCardResponse)(nil),                // 29: riptik.payment.v1.GetGiftCardResponse
+	(*ListGiftCardsResponse)(nil),              // 30: riptik.payment.v1.ListGiftCardsResponse
+	(*CheckGiftCardBalanceResponse)(nil),       // 31: riptik.payment.v1.CheckGiftCardBalanceResponse
+	(*GetGiftCardTransactionsResponse)(nil),    // 32: riptik.payment.v1.GetGiftCardTransactionsResponse
+	(*CancelGiftCardResponse)(nil),             // 33: riptik.payment.v1.CancelGiftCardResponse
+	(*PaymentIntentData)(nil),                  // 34: riptik.payment.v1.PaymentIntentData
+	(*CreatePaymentIntentRequest)(nil),         // 35: riptik.payment.v1.CreatePaymentIntentRequest
+	(*CreatePaymentIntentResponse)(nil),        // 36: riptik.payment.v1.CreatePaymentIntentResponse
+	(*GetAvailablePaymentMethodsRequest)(nil),  // 37: riptik.payment.v1.GetAvailablePaymentMethodsRequest
+	(*GetAvailablePaymentMethodsResponse)(nil), // 38: riptik.payment.v1.GetAvailablePaymentMethodsResponse
+	nil, // 39: riptik.payment.v1.Payment.MetadataEntry
+	nil, // 40: riptik.payment.v1.Refund.MetadataEntry
+	nil, // 41: riptik.payment.v1.PaymentSummary.ByStatusEntry
+	nil, // 42: riptik.payment.v1.PaymentSummary.ByProviderEntry
+	nil, // 43: riptik.payment.v1.CreatePaymentRequest.MetadataEntry
+	nil, // 44: riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
+	nil, // 45: riptik.payment.v1.ConfirmPaymentRequest.CallbackParamsEntry
+	nil, // 46: riptik.payment.v1.CreateRefundRequest.MetadataEntry
+	nil, // 47: riptik.payment.v1.ProcessRefundRequest.MetadataEntry
+	nil, // 48: riptik.payment.v1.GiftCardTransaction.InfoEntry
 }
 var file_v1_payment_payment_proto_depIdxs = []int32{
-	38, // 0: riptik.payment.v1.Payment.metadata:type_name -> riptik.payment.v1.Payment.MetadataEntry
+	39, // 0: riptik.payment.v1.Payment.metadata:type_name -> riptik.payment.v1.Payment.MetadataEntry
 	1,  // 1: riptik.payment.v1.Payment.refunds:type_name -> riptik.payment.v1.Refund
-	39, // 2: riptik.payment.v1.Refund.metadata:type_name -> riptik.payment.v1.Refund.MetadataEntry
-	40, // 3: riptik.payment.v1.PaymentSummary.by_status:type_name -> riptik.payment.v1.PaymentSummary.ByStatusEntry
-	41, // 4: riptik.payment.v1.PaymentSummary.by_provider:type_name -> riptik.payment.v1.PaymentSummary.ByProviderEntry
-	42, // 5: riptik.payment.v1.CreatePaymentRequest.metadata:type_name -> riptik.payment.v1.CreatePaymentRequest.MetadataEntry
-	43, // 6: riptik.payment.v1.ConfirmPaymentRequest.provider_data:type_name -> riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
-	44, // 7: riptik.payment.v1.CreateRefundRequest.metadata:type_name -> riptik.payment.v1.CreateRefundRequest.MetadataEntry
-	45, // 8: riptik.payment.v1.ProcessRefundRequest.metadata:type_name -> riptik.payment.v1.ProcessRefundRequest.MetadataEntry
-	0,  // 9: riptik.payment.v1.PaymentResponse.payment:type_name -> riptik.payment.v1.Payment
-	0,  // 10: riptik.payment.v1.ConfirmPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
-	0,  // 11: riptik.payment.v1.GetPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
-	0,  // 12: riptik.payment.v1.ListPaymentsResponse.payments:type_name -> riptik.payment.v1.Payment
-	3,  // 13: riptik.payment.v1.ListPaymentsResponse.pagination:type_name -> riptik.payment.v1.PaginationInfo
-	2,  // 14: riptik.payment.v1.ListPaymentsResponse.summary:type_name -> riptik.payment.v1.PaymentSummary
-	1,  // 15: riptik.payment.v1.RefundResponse.refund:type_name -> riptik.payment.v1.Refund
-	1,  // 16: riptik.payment.v1.ProcessRefundResponse.refund:type_name -> riptik.payment.v1.Refund
-	46, // 17: riptik.payment.v1.GiftCardTransaction.info:type_name -> riptik.payment.v1.GiftCardTransaction.InfoEntry
-	17, // 18: riptik.payment.v1.GiftCard.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
-	18, // 19: riptik.payment.v1.CreateGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
-	18, // 20: riptik.payment.v1.GetGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
-	18, // 21: riptik.payment.v1.ListGiftCardsResponse.results:type_name -> riptik.payment.v1.GiftCard
-	17, // 22: riptik.payment.v1.GetGiftCardTransactionsResponse.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
-	18, // 23: riptik.payment.v1.CancelGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
-	33, // 24: riptik.payment.v1.CreatePaymentIntentRequest.intent_data:type_name -> riptik.payment.v1.PaymentIntentData
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	40, // 2: riptik.payment.v1.Refund.metadata:type_name -> riptik.payment.v1.Refund.MetadataEntry
+	41, // 3: riptik.payment.v1.PaymentSummary.by_status:type_name -> riptik.payment.v1.PaymentSummary.ByStatusEntry
+	42, // 4: riptik.payment.v1.PaymentSummary.by_provider:type_name -> riptik.payment.v1.PaymentSummary.ByProviderEntry
+	43, // 5: riptik.payment.v1.CreatePaymentRequest.metadata:type_name -> riptik.payment.v1.CreatePaymentRequest.MetadataEntry
+	44, // 6: riptik.payment.v1.ConfirmPaymentRequest.provider_data:type_name -> riptik.payment.v1.ConfirmPaymentRequest.ProviderDataEntry
+	45, // 7: riptik.payment.v1.ConfirmPaymentRequest.callback_params:type_name -> riptik.payment.v1.ConfirmPaymentRequest.CallbackParamsEntry
+	46, // 8: riptik.payment.v1.CreateRefundRequest.metadata:type_name -> riptik.payment.v1.CreateRefundRequest.MetadataEntry
+	47, // 9: riptik.payment.v1.ProcessRefundRequest.metadata:type_name -> riptik.payment.v1.ProcessRefundRequest.MetadataEntry
+	0,  // 10: riptik.payment.v1.PaymentResponse.payment:type_name -> riptik.payment.v1.Payment
+	0,  // 11: riptik.payment.v1.CreatePaymentResponse.payment:type_name -> riptik.payment.v1.Payment
+	0,  // 12: riptik.payment.v1.ConfirmPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
+	0,  // 13: riptik.payment.v1.GetPaymentResponse.payment:type_name -> riptik.payment.v1.Payment
+	0,  // 14: riptik.payment.v1.ListPaymentsResponse.payments:type_name -> riptik.payment.v1.Payment
+	3,  // 15: riptik.payment.v1.ListPaymentsResponse.pagination:type_name -> riptik.payment.v1.PaginationInfo
+	2,  // 16: riptik.payment.v1.ListPaymentsResponse.summary:type_name -> riptik.payment.v1.PaymentSummary
+	1,  // 17: riptik.payment.v1.RefundResponse.refund:type_name -> riptik.payment.v1.Refund
+	1,  // 18: riptik.payment.v1.ProcessRefundResponse.refund:type_name -> riptik.payment.v1.Refund
+	48, // 19: riptik.payment.v1.GiftCardTransaction.info:type_name -> riptik.payment.v1.GiftCardTransaction.InfoEntry
+	18, // 20: riptik.payment.v1.GiftCard.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
+	19, // 21: riptik.payment.v1.CreateGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
+	19, // 22: riptik.payment.v1.GetGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
+	19, // 23: riptik.payment.v1.ListGiftCardsResponse.results:type_name -> riptik.payment.v1.GiftCard
+	18, // 24: riptik.payment.v1.GetGiftCardTransactionsResponse.transactions:type_name -> riptik.payment.v1.GiftCardTransaction
+	19, // 25: riptik.payment.v1.CancelGiftCardResponse.gift_card:type_name -> riptik.payment.v1.GiftCard
+	34, // 26: riptik.payment.v1.CreatePaymentIntentRequest.intent_data:type_name -> riptik.payment.v1.PaymentIntentData
+	27, // [27:27] is the sub-list for method output_type
+	27, // [27:27] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_v1_payment_payment_proto_init() }
@@ -3134,7 +3296,7 @@ func file_v1_payment_payment_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_payment_payment_proto_rawDesc), len(file_v1_payment_payment_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   47,
+			NumMessages:   49,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
