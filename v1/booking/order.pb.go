@@ -434,6 +434,7 @@ type OrderCreatePosition struct {
 	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`                                      // Unit price as decimal string (optional)
 	AttendeeName  string                 `protobuf:"bytes,5,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`    // Attendee name (optional)
 	AttendeeEmail string                 `protobuf:"bytes,6,opt,name=attendee_email,json=attendeeEmail,proto3" json:"attendee_email,omitempty"` // Attendee email (optional)
+	SubeventId    int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`         // Sub-event ID for date-selection tickets (0 = event-wide)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -508,6 +509,13 @@ func (x *OrderCreatePosition) GetAttendeeEmail() string {
 		return x.AttendeeEmail
 	}
 	return ""
+}
+
+func (x *OrderCreatePosition) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
 }
 
 // Request: Cancel order
@@ -1967,14 +1975,16 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xcf\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf0\x01\n" +
 	"\x13OrderCreatePosition\x12\x17\n" +
 	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
 	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
 	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x14\n" +
 	"\x05price\x18\x04 \x01(\tR\x05price\x12#\n" +
 	"\rattendee_name\x18\x05 \x01(\tR\fattendeeName\x12%\n" +
-	"\x0eattendee_email\x18\x06 \x01(\tR\rattendeeEmail\"v\n" +
+	"\x0eattendee_email\x18\x06 \x01(\tR\rattendeeEmail\x12\x1f\n" +
+	"\vsubevent_id\x18\a \x01(\x03R\n" +
+	"subeventId\"v\n" +
 	"\x12CancelOrderRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
