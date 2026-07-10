@@ -599,6 +599,7 @@ type CreateItemRequest struct {
 	AllowCancel        bool                   `protobuf:"varint,19,opt,name=allow_cancel,json=allowCancel,proto3" json:"allow_cancel,omitempty"`                                                      // Allow cancellation
 	MinPerOrder        int32                  `protobuf:"varint,20,opt,name=min_per_order,json=minPerOrder,proto3" json:"min_per_order,omitempty"`                                                    // Min per order
 	MaxPerOrder        int32                  `protobuf:"varint,21,opt,name=max_per_order,json=maxPerOrder,proto3" json:"max_per_order,omitempty"`                                                    // Max per order
+	Picture            string                 `protobuf:"bytes,22,opt,name=picture,proto3" json:"picture,omitempty"`                                                                                  // Picture URL
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -780,6 +781,13 @@ func (x *CreateItemRequest) GetMaxPerOrder() int32 {
 	return 0
 }
 
+func (x *CreateItemRequest) GetPicture() string {
+	if x != nil {
+		return x.Picture
+	}
+	return ""
+}
+
 type UpdateItemRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Organizer          string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                                                               // Organizer slug (required)
@@ -804,6 +812,7 @@ type UpdateItemRequest struct {
 	MaxPerOrder        int32                  `protobuf:"varint,20,opt,name=max_per_order,json=maxPerOrder,proto3" json:"max_per_order,omitempty"`                                                    // Max per order
 	Personalization    bool                   `protobuf:"varint,21,opt,name=personalization,proto3" json:"personalization,omitempty"`                                                                 // Allow personalization
 	GenerateTickets    bool                   `protobuf:"varint,22,opt,name=generate_tickets,json=generateTickets,proto3" json:"generate_tickets,omitempty"`                                          // Generate tickets
+	Picture            string                 `protobuf:"bytes,23,opt,name=picture,proto3" json:"picture,omitempty"`                                                                                  // Picture URL
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -990,6 +999,13 @@ func (x *UpdateItemRequest) GetGenerateTickets() bool {
 		return x.GenerateTickets
 	}
 	return false
+}
+
+func (x *UpdateItemRequest) GetPicture() string {
+	if x != nil {
+		return x.Picture
+	}
+	return ""
 }
 
 type DeleteItemRequest struct {
@@ -1896,7 +1912,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x0eGetItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
-	"\aitem_id\x18\x03 \x01(\x03R\x06itemId\"\xbc\a\n" +
+	"\aitem_id\x18\x03 \x01(\x03R\x06itemId\"\xd6\a\n" +
 	"\x11CreateItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12@\n" +
@@ -1920,13 +1936,14 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x14hide_without_voucher\x18\x12 \x01(\bR\x12hideWithoutVoucher\x12!\n" +
 	"\fallow_cancel\x18\x13 \x01(\bR\vallowCancel\x12\"\n" +
 	"\rmin_per_order\x18\x14 \x01(\x05R\vminPerOrder\x12\"\n" +
-	"\rmax_per_order\x18\x15 \x01(\x05R\vmaxPerOrder\x1a7\n" +
+	"\rmax_per_order\x18\x15 \x01(\x05R\vmaxPerOrder\x12\x18\n" +
+	"\apicture\x18\x16 \x01(\tR\apicture\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xd5\a\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xef\a\n" +
 	"\x11UpdateItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -1951,7 +1968,8 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\rmin_per_order\x18\x13 \x01(\x05R\vminPerOrder\x12\"\n" +
 	"\rmax_per_order\x18\x14 \x01(\x05R\vmaxPerOrder\x12(\n" +
 	"\x0fpersonalization\x18\x15 \x01(\bR\x0fpersonalization\x12)\n" +
-	"\x10generate_tickets\x18\x16 \x01(\bR\x0fgenerateTickets\x1a7\n" +
+	"\x10generate_tickets\x18\x16 \x01(\bR\x0fgenerateTickets\x12\x18\n" +
+	"\apicture\x18\x17 \x01(\tR\apicture\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
