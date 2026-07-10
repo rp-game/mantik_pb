@@ -241,7 +241,7 @@ type SubEvent struct {
 	PresaleEnd    string                 `protobuf:"bytes,8,opt,name=presale_end,json=presaleEnd,proto3" json:"presale_end,omitempty"`                                             // ISO datetime (optional)
 	Active        bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
 	Location      map[string]string      `protobuf:"bytes,10,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Location fields (optional)
-	SeatCapacity  int32                  `protobuf:"varint,11,opt,name=seat_capacity,json=seatCapacity,proto3" json:"seat_capacity,omitempty"`                                              // Seat capacity (optional)
+	SeatCapacity  *int32                 `protobuf:"varint,11,opt,name=seat_capacity,json=seatCapacity,proto3,oneof" json:"seat_capacity,omitempty"`                                        // null = unlimited, 0 = closed, N = capacity
 	Created       string                 `protobuf:"bytes,12,opt,name=created,proto3" json:"created,omitempty"`                                                                             // ISO datetime
 	LastModified  string                 `protobuf:"bytes,13,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`                                               // ISO datetime
 	unknownFields protoimpl.UnknownFields
@@ -349,8 +349,8 @@ func (x *SubEvent) GetLocation() map[string]string {
 }
 
 func (x *SubEvent) GetSeatCapacity() int32 {
-	if x != nil {
-		return x.SeatCapacity
+	if x != nil && x.SeatCapacity != nil {
+		return *x.SeatCapacity
 	}
 	return 0
 }
@@ -1375,6 +1375,992 @@ func (x *ListSubEventsResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Writable fields for creating a subevent (reused by create + create-many).
+type SubEventDraft struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          map[string]string      `protobuf:"bytes,1,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // i18n subevent name (optional; defaults to event)
+	DateFrom      string                 `protobuf:"bytes,2,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`                                                   // ISO datetime (required)
+	DateTo        string                 `protobuf:"bytes,3,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`                                                         // ISO datetime (optional)
+	DateAdmission string                 `protobuf:"bytes,4,opt,name=date_admission,json=dateAdmission,proto3" json:"date_admission,omitempty"`                                    // ISO datetime (optional)
+	PresaleStart  string                 `protobuf:"bytes,5,opt,name=presale_start,json=presaleStart,proto3" json:"presale_start,omitempty"`                                       // ISO datetime (optional)
+	PresaleEnd    string                 `protobuf:"bytes,6,opt,name=presale_end,json=presaleEnd,proto3" json:"presale_end,omitempty"`                                             // ISO datetime (optional)
+	Active        bool                   `protobuf:"varint,7,opt,name=active,proto3" json:"active,omitempty"`
+	Location      map[string]string      `protobuf:"bytes,8,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Location fields (optional)
+	SeatCapacity  *int32                 `protobuf:"varint,9,opt,name=seat_capacity,json=seatCapacity,proto3,oneof" json:"seat_capacity,omitempty"`                                        // null = unlimited, 0 = closed, N = capacity
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubEventDraft) Reset() {
+	*x = SubEventDraft{}
+	mi := &file_v1_event_event_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubEventDraft) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubEventDraft) ProtoMessage() {}
+
+func (x *SubEventDraft) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubEventDraft.ProtoReflect.Descriptor instead.
+func (*SubEventDraft) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *SubEventDraft) GetName() map[string]string {
+	if x != nil {
+		return x.Name
+	}
+	return nil
+}
+
+func (x *SubEventDraft) GetDateFrom() string {
+	if x != nil {
+		return x.DateFrom
+	}
+	return ""
+}
+
+func (x *SubEventDraft) GetDateTo() string {
+	if x != nil {
+		return x.DateTo
+	}
+	return ""
+}
+
+func (x *SubEventDraft) GetDateAdmission() string {
+	if x != nil {
+		return x.DateAdmission
+	}
+	return ""
+}
+
+func (x *SubEventDraft) GetPresaleStart() string {
+	if x != nil {
+		return x.PresaleStart
+	}
+	return ""
+}
+
+func (x *SubEventDraft) GetPresaleEnd() string {
+	if x != nil {
+		return x.PresaleEnd
+	}
+	return ""
+}
+
+func (x *SubEventDraft) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *SubEventDraft) GetLocation() map[string]string {
+	if x != nil {
+		return x.Location
+	}
+	return nil
+}
+
+func (x *SubEventDraft) GetSeatCapacity() int32 {
+	if x != nil && x.SeatCapacity != nil {
+		return *x.SeatCapacity
+	}
+	return 0
+}
+
+// Per-subevent price override for an item (or item variation).
+type SubEventItemPrice struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ItemId         int64                  `protobuf:"varint,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	VariationId    int64                  `protobuf:"varint,2,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`         // 0 = item-level (no variation)
+	Price          string                 `protobuf:"bytes,3,opt,name=price,proto3" json:"price,omitempty"`                                         // decimal string; empty = use item base price
+	Disabled       bool                   `protobuf:"varint,4,opt,name=disabled,proto3" json:"disabled,omitempty"`                                  // true = item not sellable on this date
+	AvailableFrom  string                 `protobuf:"bytes,5,opt,name=available_from,json=availableFrom,proto3" json:"available_from,omitempty"`    // ISO datetime (optional)
+	AvailableUntil string                 `protobuf:"bytes,6,opt,name=available_until,json=availableUntil,proto3" json:"available_until,omitempty"` // ISO datetime (optional)
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *SubEventItemPrice) Reset() {
+	*x = SubEventItemPrice{}
+	mi := &file_v1_event_event_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubEventItemPrice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubEventItemPrice) ProtoMessage() {}
+
+func (x *SubEventItemPrice) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubEventItemPrice.ProtoReflect.Descriptor instead.
+func (*SubEventItemPrice) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *SubEventItemPrice) GetItemId() int64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *SubEventItemPrice) GetVariationId() int64 {
+	if x != nil {
+		return x.VariationId
+	}
+	return 0
+}
+
+func (x *SubEventItemPrice) GetPrice() string {
+	if x != nil {
+		return x.Price
+	}
+	return ""
+}
+
+func (x *SubEventItemPrice) GetDisabled() bool {
+	if x != nil {
+		return x.Disabled
+	}
+	return false
+}
+
+func (x *SubEventItemPrice) GetAvailableFrom() string {
+	if x != nil {
+		return x.AvailableFrom
+	}
+	return ""
+}
+
+func (x *SubEventItemPrice) GetAvailableUntil() string {
+	if x != nil {
+		return x.AvailableUntil
+	}
+	return ""
+}
+
+type CreateSubEventRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	Subevent      *SubEventDraft         `protobuf:"bytes,3,opt,name=subevent,proto3" json:"subevent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSubEventRequest) Reset() {
+	*x = CreateSubEventRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSubEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSubEventRequest) ProtoMessage() {}
+
+func (x *CreateSubEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSubEventRequest.ProtoReflect.Descriptor instead.
+func (*CreateSubEventRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *CreateSubEventRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CreateSubEventRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *CreateSubEventRequest) GetSubevent() *SubEventDraft {
+	if x != nil {
+		return x.Subevent
+	}
+	return nil
+}
+
+type CreateSubEventResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Subevent      *SubEvent              `protobuf:"bytes,2,opt,name=subevent,proto3" json:"subevent,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSubEventResponse) Reset() {
+	*x = CreateSubEventResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSubEventResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSubEventResponse) ProtoMessage() {}
+
+func (x *CreateSubEventResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSubEventResponse.ProtoReflect.Descriptor instead.
+func (*CreateSubEventResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CreateSubEventResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateSubEventResponse) GetSubevent() *SubEvent {
+	if x != nil {
+		return x.Subevent
+	}
+	return nil
+}
+
+func (x *CreateSubEventResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateSubEventResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type GetSubEventRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSubEventRequest) Reset() {
+	*x = GetSubEventRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSubEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSubEventRequest) ProtoMessage() {}
+
+func (x *GetSubEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSubEventRequest.ProtoReflect.Descriptor instead.
+func (*GetSubEventRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetSubEventRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *GetSubEventRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *GetSubEventRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+type GetSubEventResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Success        bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Subevent       *SubEvent              `protobuf:"bytes,2,opt,name=subevent,proto3" json:"subevent,omitempty"`
+	PriceOverrides []*SubEventItemPrice   `protobuf:"bytes,3,rep,name=price_overrides,json=priceOverrides,proto3" json:"price_overrides,omitempty"`
+	ErrorCode      string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage   string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetSubEventResponse) Reset() {
+	*x = GetSubEventResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSubEventResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSubEventResponse) ProtoMessage() {}
+
+func (x *GetSubEventResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSubEventResponse.ProtoReflect.Descriptor instead.
+func (*GetSubEventResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *GetSubEventResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetSubEventResponse) GetSubevent() *SubEvent {
+	if x != nil {
+		return x.Subevent
+	}
+	return nil
+}
+
+func (x *GetSubEventResponse) GetPriceOverrides() []*SubEventItemPrice {
+	if x != nil {
+		return x.PriceOverrides
+	}
+	return nil
+}
+
+func (x *GetSubEventResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetSubEventResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type UpdateSubEventRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	Subevent      *SubEventDraft         `protobuf:"bytes,4,opt,name=subevent,proto3" json:"subevent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSubEventRequest) Reset() {
+	*x = UpdateSubEventRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSubEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSubEventRequest) ProtoMessage() {}
+
+func (x *UpdateSubEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSubEventRequest.ProtoReflect.Descriptor instead.
+func (*UpdateSubEventRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UpdateSubEventRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *UpdateSubEventRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *UpdateSubEventRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *UpdateSubEventRequest) GetSubevent() *SubEventDraft {
+	if x != nil {
+		return x.Subevent
+	}
+	return nil
+}
+
+type UpdateSubEventResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Subevent      *SubEvent              `protobuf:"bytes,2,opt,name=subevent,proto3" json:"subevent,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateSubEventResponse) Reset() {
+	*x = UpdateSubEventResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateSubEventResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateSubEventResponse) ProtoMessage() {}
+
+func (x *UpdateSubEventResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateSubEventResponse.ProtoReflect.Descriptor instead.
+func (*UpdateSubEventResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *UpdateSubEventResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateSubEventResponse) GetSubevent() *SubEvent {
+	if x != nil {
+		return x.Subevent
+	}
+	return nil
+}
+
+func (x *UpdateSubEventResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *UpdateSubEventResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type DeleteSubEventRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSubEventRequest) Reset() {
+	*x = DeleteSubEventRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSubEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSubEventRequest) ProtoMessage() {}
+
+func (x *DeleteSubEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSubEventRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSubEventRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *DeleteSubEventRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *DeleteSubEventRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *DeleteSubEventRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+type DeleteSubEventResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSubEventResponse) Reset() {
+	*x = DeleteSubEventResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSubEventResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSubEventResponse) ProtoMessage() {}
+
+func (x *DeleteSubEventResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSubEventResponse.ProtoReflect.Descriptor instead.
+func (*DeleteSubEventResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *DeleteSubEventResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteSubEventResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *DeleteSubEventResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type CreateManySubEventsRequest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Organizer        string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event            string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	Subevents        []*SubEventDraft       `protobuf:"bytes,3,rep,name=subevents,proto3" json:"subevents,omitempty"`                                          // expanded client-side from a recurrence rule (cap enforced server-side)
+	DefaultQuotaSize int64                  `protobuf:"varint,4,opt,name=default_quota_size,json=defaultQuotaSize,proto3" json:"default_quota_size,omitempty"` // >0 = create one quota (this size) per subevent, linking all items; 0 = none
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *CreateManySubEventsRequest) Reset() {
+	*x = CreateManySubEventsRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateManySubEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateManySubEventsRequest) ProtoMessage() {}
+
+func (x *CreateManySubEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateManySubEventsRequest.ProtoReflect.Descriptor instead.
+func (*CreateManySubEventsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *CreateManySubEventsRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CreateManySubEventsRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *CreateManySubEventsRequest) GetSubevents() []*SubEventDraft {
+	if x != nil {
+		return x.Subevents
+	}
+	return nil
+}
+
+func (x *CreateManySubEventsRequest) GetDefaultQuotaSize() int64 {
+	if x != nil {
+		return x.DefaultQuotaSize
+	}
+	return 0
+}
+
+type CreateManySubEventsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	CreatedCount  int32                  `protobuf:"varint,2,opt,name=created_count,json=createdCount,proto3" json:"created_count,omitempty"`
+	Results       []*SubEvent            `protobuf:"bytes,3,rep,name=results,proto3" json:"results,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateManySubEventsResponse) Reset() {
+	*x = CreateManySubEventsResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateManySubEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateManySubEventsResponse) ProtoMessage() {}
+
+func (x *CreateManySubEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateManySubEventsResponse.ProtoReflect.Descriptor instead.
+func (*CreateManySubEventsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *CreateManySubEventsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateManySubEventsResponse) GetCreatedCount() int32 {
+	if x != nil {
+		return x.CreatedCount
+	}
+	return 0
+}
+
+func (x *CreateManySubEventsResponse) GetResults() []*SubEvent {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *CreateManySubEventsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateManySubEventsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type SetSubEventPricesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	Prices        []*SubEventItemPrice   `protobuf:"bytes,4,rep,name=prices,proto3" json:"prices,omitempty"` // full replace of this subevent's override set
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetSubEventPricesRequest) Reset() {
+	*x = SetSubEventPricesRequest{}
+	mi := &file_v1_event_event_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetSubEventPricesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSubEventPricesRequest) ProtoMessage() {}
+
+func (x *SetSubEventPricesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetSubEventPricesRequest.ProtoReflect.Descriptor instead.
+func (*SetSubEventPricesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *SetSubEventPricesRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *SetSubEventPricesRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *SetSubEventPricesRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *SetSubEventPricesRequest) GetPrices() []*SubEventItemPrice {
+	if x != nil {
+		return x.Prices
+	}
+	return nil
+}
+
+type SetSubEventPricesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetSubEventPricesResponse) Reset() {
+	*x = SetSubEventPricesResponse{}
+	mi := &file_v1_event_event_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetSubEventPricesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetSubEventPricesResponse) ProtoMessage() {}
+
+func (x *SetSubEventPricesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_event_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetSubEventPricesResponse.ProtoReflect.Descriptor instead.
+func (*SetSubEventPricesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_event_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SetSubEventPricesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SetSubEventPricesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SetSubEventPricesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 type CreateEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -1387,7 +2373,7 @@ type CreateEventResponse struct {
 
 func (x *CreateEventResponse) Reset() {
 	*x = CreateEventResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[13]
+	mi := &file_v1_event_event_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1399,7 +2385,7 @@ func (x *CreateEventResponse) String() string {
 func (*CreateEventResponse) ProtoMessage() {}
 
 func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[13]
+	mi := &file_v1_event_event_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1412,7 +2398,7 @@ func (x *CreateEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateEventResponse.ProtoReflect.Descriptor instead.
 func (*CreateEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{13}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *CreateEventResponse) GetSuccess() bool {
@@ -1455,7 +2441,7 @@ type UpdateEventResponse struct {
 
 func (x *UpdateEventResponse) Reset() {
 	*x = UpdateEventResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[14]
+	mi := &file_v1_event_event_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1467,7 +2453,7 @@ func (x *UpdateEventResponse) String() string {
 func (*UpdateEventResponse) ProtoMessage() {}
 
 func (x *UpdateEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[14]
+	mi := &file_v1_event_event_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1480,7 +2466,7 @@ func (x *UpdateEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateEventResponse.ProtoReflect.Descriptor instead.
 func (*UpdateEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{14}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *UpdateEventResponse) GetSuccess() bool {
@@ -1525,7 +2511,7 @@ type DeleteEventResponse struct {
 
 func (x *DeleteEventResponse) Reset() {
 	*x = DeleteEventResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[15]
+	mi := &file_v1_event_event_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1537,7 +2523,7 @@ func (x *DeleteEventResponse) String() string {
 func (*DeleteEventResponse) ProtoMessage() {}
 
 func (x *DeleteEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[15]
+	mi := &file_v1_event_event_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1550,7 +2536,7 @@ func (x *DeleteEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteEventResponse.ProtoReflect.Descriptor instead.
 func (*DeleteEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{15}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *DeleteEventResponse) GetSuccess() bool {
@@ -1609,7 +2595,7 @@ type PublishEventResponse struct {
 
 func (x *PublishEventResponse) Reset() {
 	*x = PublishEventResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[16]
+	mi := &file_v1_event_event_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1621,7 +2607,7 @@ func (x *PublishEventResponse) String() string {
 func (*PublishEventResponse) ProtoMessage() {}
 
 func (x *PublishEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[16]
+	mi := &file_v1_event_event_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1634,7 +2620,7 @@ func (x *PublishEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PublishEventResponse.ProtoReflect.Descriptor instead.
 func (*PublishEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{16}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *PublishEventResponse) GetSuccess() bool {
@@ -1693,7 +2679,7 @@ type UnpublishEventResponse struct {
 
 func (x *UnpublishEventResponse) Reset() {
 	*x = UnpublishEventResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[17]
+	mi := &file_v1_event_event_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1705,7 +2691,7 @@ func (x *UnpublishEventResponse) String() string {
 func (*UnpublishEventResponse) ProtoMessage() {}
 
 func (x *UnpublishEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[17]
+	mi := &file_v1_event_event_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1718,7 +2704,7 @@ func (x *UnpublishEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnpublishEventResponse.ProtoReflect.Descriptor instead.
 func (*UnpublishEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{17}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *UnpublishEventResponse) GetSuccess() bool {
@@ -1780,7 +2766,7 @@ type OrderPositionFulfillRequest struct {
 
 func (x *OrderPositionFulfillRequest) Reset() {
 	*x = OrderPositionFulfillRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[18]
+	mi := &file_v1_event_event_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1792,7 +2778,7 @@ func (x *OrderPositionFulfillRequest) String() string {
 func (*OrderPositionFulfillRequest) ProtoMessage() {}
 
 func (x *OrderPositionFulfillRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[18]
+	mi := &file_v1_event_event_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1805,7 +2791,7 @@ func (x *OrderPositionFulfillRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderPositionFulfillRequest.ProtoReflect.Descriptor instead.
 func (*OrderPositionFulfillRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{18}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *OrderPositionFulfillRequest) GetOrderId() int64 {
@@ -1881,7 +2867,7 @@ type OrderPositionRefundRequest struct {
 
 func (x *OrderPositionRefundRequest) Reset() {
 	*x = OrderPositionRefundRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[19]
+	mi := &file_v1_event_event_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1893,7 +2879,7 @@ func (x *OrderPositionRefundRequest) String() string {
 func (*OrderPositionRefundRequest) ProtoMessage() {}
 
 func (x *OrderPositionRefundRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[19]
+	mi := &file_v1_event_event_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1906,7 +2892,7 @@ func (x *OrderPositionRefundRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderPositionRefundRequest.ProtoReflect.Descriptor instead.
 func (*OrderPositionRefundRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{19}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *OrderPositionRefundRequest) GetOrderId() int64 {
@@ -1981,7 +2967,7 @@ type OrderPositionCancelRequest struct {
 
 func (x *OrderPositionCancelRequest) Reset() {
 	*x = OrderPositionCancelRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[20]
+	mi := &file_v1_event_event_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1993,7 +2979,7 @@ func (x *OrderPositionCancelRequest) String() string {
 func (*OrderPositionCancelRequest) ProtoMessage() {}
 
 func (x *OrderPositionCancelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[20]
+	mi := &file_v1_event_event_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2006,7 +2992,7 @@ func (x *OrderPositionCancelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderPositionCancelRequest.ProtoReflect.Descriptor instead.
 func (*OrderPositionCancelRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{20}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *OrderPositionCancelRequest) GetOrderId() int64 {
@@ -2080,7 +3066,7 @@ type Organizer struct {
 
 func (x *Organizer) Reset() {
 	*x = Organizer{}
-	mi := &file_v1_event_event_proto_msgTypes[21]
+	mi := &file_v1_event_event_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2092,7 +3078,7 @@ func (x *Organizer) String() string {
 func (*Organizer) ProtoMessage() {}
 
 func (x *Organizer) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[21]
+	mi := &file_v1_event_event_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2105,7 +3091,7 @@ func (x *Organizer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Organizer.ProtoReflect.Descriptor instead.
 func (*Organizer) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{21}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *Organizer) GetId() int64 {
@@ -2161,7 +3147,7 @@ type CreateOrganizerRequest struct {
 
 func (x *CreateOrganizerRequest) Reset() {
 	*x = CreateOrganizerRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[22]
+	mi := &file_v1_event_event_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2173,7 +3159,7 @@ func (x *CreateOrganizerRequest) String() string {
 func (*CreateOrganizerRequest) ProtoMessage() {}
 
 func (x *CreateOrganizerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[22]
+	mi := &file_v1_event_event_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2186,7 +3172,7 @@ func (x *CreateOrganizerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizerRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrganizerRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{22}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *CreateOrganizerRequest) GetName() string {
@@ -2216,7 +3202,7 @@ type CreateOrganizerResponse struct {
 
 func (x *CreateOrganizerResponse) Reset() {
 	*x = CreateOrganizerResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[23]
+	mi := &file_v1_event_event_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2228,7 +3214,7 @@ func (x *CreateOrganizerResponse) String() string {
 func (*CreateOrganizerResponse) ProtoMessage() {}
 
 func (x *CreateOrganizerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[23]
+	mi := &file_v1_event_event_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2241,7 +3227,7 @@ func (x *CreateOrganizerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrganizerResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrganizerResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{23}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *CreateOrganizerResponse) GetSuccess() bool {
@@ -2282,7 +3268,7 @@ type GetOrganizerRequest struct {
 
 func (x *GetOrganizerRequest) Reset() {
 	*x = GetOrganizerRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[24]
+	mi := &file_v1_event_event_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2294,7 +3280,7 @@ func (x *GetOrganizerRequest) String() string {
 func (*GetOrganizerRequest) ProtoMessage() {}
 
 func (x *GetOrganizerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[24]
+	mi := &file_v1_event_event_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2307,7 +3293,7 @@ func (x *GetOrganizerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizerRequest.ProtoReflect.Descriptor instead.
 func (*GetOrganizerRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{24}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *GetOrganizerRequest) GetSlug() string {
@@ -2330,7 +3316,7 @@ type GetOrganizerResponse struct {
 
 func (x *GetOrganizerResponse) Reset() {
 	*x = GetOrganizerResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[25]
+	mi := &file_v1_event_event_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2342,7 +3328,7 @@ func (x *GetOrganizerResponse) String() string {
 func (*GetOrganizerResponse) ProtoMessage() {}
 
 func (x *GetOrganizerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[25]
+	mi := &file_v1_event_event_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2355,7 +3341,7 @@ func (x *GetOrganizerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrganizerResponse.ProtoReflect.Descriptor instead.
 func (*GetOrganizerResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{25}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *GetOrganizerResponse) GetSuccess() bool {
@@ -2399,7 +3385,7 @@ type Language struct {
 
 func (x *Language) Reset() {
 	*x = Language{}
-	mi := &file_v1_event_event_proto_msgTypes[26]
+	mi := &file_v1_event_event_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2411,7 +3397,7 @@ func (x *Language) String() string {
 func (*Language) ProtoMessage() {}
 
 func (x *Language) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[26]
+	mi := &file_v1_event_event_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2424,7 +3410,7 @@ func (x *Language) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Language.ProtoReflect.Descriptor instead.
 func (*Language) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{26}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *Language) GetCode() string {
@@ -2464,7 +3450,7 @@ type ListLanguagesRequest struct {
 
 func (x *ListLanguagesRequest) Reset() {
 	*x = ListLanguagesRequest{}
-	mi := &file_v1_event_event_proto_msgTypes[27]
+	mi := &file_v1_event_event_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2476,7 +3462,7 @@ func (x *ListLanguagesRequest) String() string {
 func (*ListLanguagesRequest) ProtoMessage() {}
 
 func (x *ListLanguagesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[27]
+	mi := &file_v1_event_event_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2489,7 +3475,7 @@ func (x *ListLanguagesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLanguagesRequest.ProtoReflect.Descriptor instead.
 func (*ListLanguagesRequest) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{27}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{41}
 }
 
 // List Languages Response
@@ -2505,7 +3491,7 @@ type ListLanguagesResponse struct {
 
 func (x *ListLanguagesResponse) Reset() {
 	*x = ListLanguagesResponse{}
-	mi := &file_v1_event_event_proto_msgTypes[28]
+	mi := &file_v1_event_event_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2517,7 +3503,7 @@ func (x *ListLanguagesResponse) String() string {
 func (*ListLanguagesResponse) ProtoMessage() {}
 
 func (x *ListLanguagesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_event_event_proto_msgTypes[28]
+	mi := &file_v1_event_event_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2530,7 +3516,7 @@ func (x *ListLanguagesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListLanguagesResponse.ProtoReflect.Descriptor instead.
 func (*ListLanguagesResponse) Descriptor() ([]byte, []int) {
-	return file_v1_event_event_proto_rawDescGZIP(), []int{28}
+	return file_v1_event_event_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *ListLanguagesResponse) GetSuccess() bool {
@@ -2604,7 +3590,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc8\x04\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xdf\x04\n" +
 	"\bSubEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\bevent_id\x18\x02 \x01(\x03R\aeventId\x127\n" +
@@ -2617,8 +3603,8 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"presaleEnd\x12\x16\n" +
 	"\x06active\x18\t \x01(\bR\x06active\x12C\n" +
 	"\blocation\x18\n" +
-	" \x03(\v2'.riptik.event.v1.SubEvent.LocationEntryR\blocation\x12#\n" +
-	"\rseat_capacity\x18\v \x01(\x05R\fseatCapacity\x12\x18\n" +
+	" \x03(\v2'.riptik.event.v1.SubEvent.LocationEntryR\blocation\x12(\n" +
+	"\rseat_capacity\x18\v \x01(\x05H\x00R\fseatCapacity\x88\x01\x01\x12\x18\n" +
 	"\acreated\x18\f \x01(\tR\acreated\x12#\n" +
 	"\rlast_modified\x18\r \x01(\tR\flastModified\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
@@ -2626,7 +3612,8 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rLocationEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xe7\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x10\n" +
+	"\x0e_seat_capacity\"\xe7\x02\n" +
 	"\x11ListEventsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\x05R\x04page\x12\x1a\n" +
@@ -2738,7 +3725,99 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\aresults\x18\x05 \x03(\v2\x19.riptik.event.v1.SubEventR\aresults\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\xa1\x01\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\x84\x04\n" +
+	"\rSubEventDraft\x12<\n" +
+	"\x04name\x18\x01 \x03(\v2(.riptik.event.v1.SubEventDraft.NameEntryR\x04name\x12\x1b\n" +
+	"\tdate_from\x18\x02 \x01(\tR\bdateFrom\x12\x17\n" +
+	"\adate_to\x18\x03 \x01(\tR\x06dateTo\x12%\n" +
+	"\x0edate_admission\x18\x04 \x01(\tR\rdateAdmission\x12#\n" +
+	"\rpresale_start\x18\x05 \x01(\tR\fpresaleStart\x12\x1f\n" +
+	"\vpresale_end\x18\x06 \x01(\tR\n" +
+	"presaleEnd\x12\x16\n" +
+	"\x06active\x18\a \x01(\bR\x06active\x12H\n" +
+	"\blocation\x18\b \x03(\v2,.riptik.event.v1.SubEventDraft.LocationEntryR\blocation\x12(\n" +
+	"\rseat_capacity\x18\t \x01(\x05H\x00R\fseatCapacity\x88\x01\x01\x1a7\n" +
+	"\tNameEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
+	"\rLocationEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x10\n" +
+	"\x0e_seat_capacity\"\xd1\x01\n" +
+	"\x11SubEventItemPrice\x12\x17\n" +
+	"\aitem_id\x18\x01 \x01(\x03R\x06itemId\x12!\n" +
+	"\fvariation_id\x18\x02 \x01(\x03R\vvariationId\x12\x14\n" +
+	"\x05price\x18\x03 \x01(\tR\x05price\x12\x1a\n" +
+	"\bdisabled\x18\x04 \x01(\bR\bdisabled\x12%\n" +
+	"\x0eavailable_from\x18\x05 \x01(\tR\ravailableFrom\x12'\n" +
+	"\x0favailable_until\x18\x06 \x01(\tR\x0eavailableUntil\"\x87\x01\n" +
+	"\x15CreateSubEventRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12:\n" +
+	"\bsubevent\x18\x03 \x01(\v2\x1e.riptik.event.v1.SubEventDraftR\bsubevent\"\xad\x01\n" +
+	"\x16CreateSubEventResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x125\n" +
+	"\bsubevent\x18\x02 \x01(\v2\x19.riptik.event.v1.SubEventR\bsubevent\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"i\n" +
+	"\x12GetSubEventRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\"\xf7\x01\n" +
+	"\x13GetSubEventResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x125\n" +
+	"\bsubevent\x18\x02 \x01(\v2\x19.riptik.event.v1.SubEventR\bsubevent\x12K\n" +
+	"\x0fprice_overrides\x18\x03 \x03(\v2\".riptik.event.v1.SubEventItemPriceR\x0epriceOverrides\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\xa8\x01\n" +
+	"\x15UpdateSubEventRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\x12:\n" +
+	"\bsubevent\x18\x04 \x01(\v2\x1e.riptik.event.v1.SubEventDraftR\bsubevent\"\xad\x01\n" +
+	"\x16UpdateSubEventResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x125\n" +
+	"\bsubevent\x18\x02 \x01(\v2\x19.riptik.event.v1.SubEventR\bsubevent\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"l\n" +
+	"\x15DeleteSubEventRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\"v\n" +
+	"\x16DeleteSubEventResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\xbc\x01\n" +
+	"\x1aCreateManySubEventsRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12<\n" +
+	"\tsubevents\x18\x03 \x03(\v2\x1e.riptik.event.v1.SubEventDraftR\tsubevents\x12,\n" +
+	"\x12default_quota_size\x18\x04 \x01(\x03R\x10defaultQuotaSize\"\xd5\x01\n" +
+	"\x1bCreateManySubEventsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rcreated_count\x18\x02 \x01(\x05R\fcreatedCount\x123\n" +
+	"\aresults\x18\x03 \x03(\v2\x19.riptik.event.v1.SubEventR\aresults\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\xab\x01\n" +
+	"\x18SetSubEventPricesRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\x12:\n" +
+	"\x06prices\x18\x04 \x03(\v2\".riptik.event.v1.SubEventItemPriceR\x06prices\"y\n" +
+	"\x19SetSubEventPricesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\xa1\x01\n" +
 	"\x13CreateEventResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12,\n" +
 	"\x05event\x18\x02 \x01(\v2\x16.riptik.event.v1.EventR\x05event\x12\x1d\n" +
@@ -2861,7 +3940,7 @@ func file_v1_event_event_proto_rawDescGZIP() []byte {
 	return file_v1_event_event_proto_rawDescData
 }
 
-var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
+var file_v1_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 59)
 var file_v1_event_event_proto_goTypes = []any{
 	(*Event)(nil),                       // 0: riptik.event.v1.Event
 	(*SubEvent)(nil),                    // 1: riptik.event.v1.SubEvent
@@ -2876,71 +3955,98 @@ var file_v1_event_event_proto_goTypes = []any{
 	(*ListEventsResponse)(nil),          // 10: riptik.event.v1.ListEventsResponse
 	(*GetEventResponse)(nil),            // 11: riptik.event.v1.GetEventResponse
 	(*ListSubEventsResponse)(nil),       // 12: riptik.event.v1.ListSubEventsResponse
-	(*CreateEventResponse)(nil),         // 13: riptik.event.v1.CreateEventResponse
-	(*UpdateEventResponse)(nil),         // 14: riptik.event.v1.UpdateEventResponse
-	(*DeleteEventResponse)(nil),         // 15: riptik.event.v1.DeleteEventResponse
-	(*PublishEventResponse)(nil),        // 16: riptik.event.v1.PublishEventResponse
-	(*UnpublishEventResponse)(nil),      // 17: riptik.event.v1.UnpublishEventResponse
-	(*OrderPositionFulfillRequest)(nil), // 18: riptik.event.v1.OrderPositionFulfillRequest
-	(*OrderPositionRefundRequest)(nil),  // 19: riptik.event.v1.OrderPositionRefundRequest
-	(*OrderPositionCancelRequest)(nil),  // 20: riptik.event.v1.OrderPositionCancelRequest
-	(*Organizer)(nil),                   // 21: riptik.event.v1.Organizer
-	(*CreateOrganizerRequest)(nil),      // 22: riptik.event.v1.CreateOrganizerRequest
-	(*CreateOrganizerResponse)(nil),     // 23: riptik.event.v1.CreateOrganizerResponse
-	(*GetOrganizerRequest)(nil),         // 24: riptik.event.v1.GetOrganizerRequest
-	(*GetOrganizerResponse)(nil),        // 25: riptik.event.v1.GetOrganizerResponse
-	(*Language)(nil),                    // 26: riptik.event.v1.Language
-	(*ListLanguagesRequest)(nil),        // 27: riptik.event.v1.ListLanguagesRequest
-	(*ListLanguagesResponse)(nil),       // 28: riptik.event.v1.ListLanguagesResponse
-	nil,                                 // 29: riptik.event.v1.Event.NameEntry
-	nil,                                 // 30: riptik.event.v1.Event.LocationEntry
-	nil,                                 // 31: riptik.event.v1.Event.ContactAddressEntry
-	nil,                                 // 32: riptik.event.v1.Event.SalesChannelsEntry
-	nil,                                 // 33: riptik.event.v1.Event.SettingsEntry
-	nil,                                 // 34: riptik.event.v1.SubEvent.NameEntry
-	nil,                                 // 35: riptik.event.v1.SubEvent.LocationEntry
-	nil,                                 // 36: riptik.event.v1.CreateEventRequest.NameEntry
-	nil,                                 // 37: riptik.event.v1.CreateEventRequest.LocationEntry
-	nil,                                 // 38: riptik.event.v1.CreateEventRequest.SettingsEntry
-	nil,                                 // 39: riptik.event.v1.CreateEventRequest.MetaDataEntry
-	nil,                                 // 40: riptik.event.v1.UpdateEventRequest.LocationEntry
-	nil,                                 // 41: riptik.event.v1.UpdateEventRequest.SettingsEntry
-	nil,                                 // 42: riptik.event.v1.Organizer.SettingsEntry
-	(*timestamppb.Timestamp)(nil),       // 43: google.protobuf.Timestamp
-	(*anypb.Any)(nil),                   // 44: google.protobuf.Any
+	(*SubEventDraft)(nil),               // 13: riptik.event.v1.SubEventDraft
+	(*SubEventItemPrice)(nil),           // 14: riptik.event.v1.SubEventItemPrice
+	(*CreateSubEventRequest)(nil),       // 15: riptik.event.v1.CreateSubEventRequest
+	(*CreateSubEventResponse)(nil),      // 16: riptik.event.v1.CreateSubEventResponse
+	(*GetSubEventRequest)(nil),          // 17: riptik.event.v1.GetSubEventRequest
+	(*GetSubEventResponse)(nil),         // 18: riptik.event.v1.GetSubEventResponse
+	(*UpdateSubEventRequest)(nil),       // 19: riptik.event.v1.UpdateSubEventRequest
+	(*UpdateSubEventResponse)(nil),      // 20: riptik.event.v1.UpdateSubEventResponse
+	(*DeleteSubEventRequest)(nil),       // 21: riptik.event.v1.DeleteSubEventRequest
+	(*DeleteSubEventResponse)(nil),      // 22: riptik.event.v1.DeleteSubEventResponse
+	(*CreateManySubEventsRequest)(nil),  // 23: riptik.event.v1.CreateManySubEventsRequest
+	(*CreateManySubEventsResponse)(nil), // 24: riptik.event.v1.CreateManySubEventsResponse
+	(*SetSubEventPricesRequest)(nil),    // 25: riptik.event.v1.SetSubEventPricesRequest
+	(*SetSubEventPricesResponse)(nil),   // 26: riptik.event.v1.SetSubEventPricesResponse
+	(*CreateEventResponse)(nil),         // 27: riptik.event.v1.CreateEventResponse
+	(*UpdateEventResponse)(nil),         // 28: riptik.event.v1.UpdateEventResponse
+	(*DeleteEventResponse)(nil),         // 29: riptik.event.v1.DeleteEventResponse
+	(*PublishEventResponse)(nil),        // 30: riptik.event.v1.PublishEventResponse
+	(*UnpublishEventResponse)(nil),      // 31: riptik.event.v1.UnpublishEventResponse
+	(*OrderPositionFulfillRequest)(nil), // 32: riptik.event.v1.OrderPositionFulfillRequest
+	(*OrderPositionRefundRequest)(nil),  // 33: riptik.event.v1.OrderPositionRefundRequest
+	(*OrderPositionCancelRequest)(nil),  // 34: riptik.event.v1.OrderPositionCancelRequest
+	(*Organizer)(nil),                   // 35: riptik.event.v1.Organizer
+	(*CreateOrganizerRequest)(nil),      // 36: riptik.event.v1.CreateOrganizerRequest
+	(*CreateOrganizerResponse)(nil),     // 37: riptik.event.v1.CreateOrganizerResponse
+	(*GetOrganizerRequest)(nil),         // 38: riptik.event.v1.GetOrganizerRequest
+	(*GetOrganizerResponse)(nil),        // 39: riptik.event.v1.GetOrganizerResponse
+	(*Language)(nil),                    // 40: riptik.event.v1.Language
+	(*ListLanguagesRequest)(nil),        // 41: riptik.event.v1.ListLanguagesRequest
+	(*ListLanguagesResponse)(nil),       // 42: riptik.event.v1.ListLanguagesResponse
+	nil,                                 // 43: riptik.event.v1.Event.NameEntry
+	nil,                                 // 44: riptik.event.v1.Event.LocationEntry
+	nil,                                 // 45: riptik.event.v1.Event.ContactAddressEntry
+	nil,                                 // 46: riptik.event.v1.Event.SalesChannelsEntry
+	nil,                                 // 47: riptik.event.v1.Event.SettingsEntry
+	nil,                                 // 48: riptik.event.v1.SubEvent.NameEntry
+	nil,                                 // 49: riptik.event.v1.SubEvent.LocationEntry
+	nil,                                 // 50: riptik.event.v1.CreateEventRequest.NameEntry
+	nil,                                 // 51: riptik.event.v1.CreateEventRequest.LocationEntry
+	nil,                                 // 52: riptik.event.v1.CreateEventRequest.SettingsEntry
+	nil,                                 // 53: riptik.event.v1.CreateEventRequest.MetaDataEntry
+	nil,                                 // 54: riptik.event.v1.UpdateEventRequest.LocationEntry
+	nil,                                 // 55: riptik.event.v1.UpdateEventRequest.SettingsEntry
+	nil,                                 // 56: riptik.event.v1.SubEventDraft.NameEntry
+	nil,                                 // 57: riptik.event.v1.SubEventDraft.LocationEntry
+	nil,                                 // 58: riptik.event.v1.Organizer.SettingsEntry
+	(*timestamppb.Timestamp)(nil),       // 59: google.protobuf.Timestamp
+	(*anypb.Any)(nil),                   // 60: google.protobuf.Any
 }
 var file_v1_event_event_proto_depIdxs = []int32{
-	29, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
-	30, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
-	31, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
-	32, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
-	33, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
-	34, // 5: riptik.event.v1.SubEvent.name:type_name -> riptik.event.v1.SubEvent.NameEntry
-	35, // 6: riptik.event.v1.SubEvent.location:type_name -> riptik.event.v1.SubEvent.LocationEntry
-	36, // 7: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
-	37, // 8: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
-	38, // 9: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
-	39, // 10: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
-	43, // 11: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
-	43, // 12: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
-	40, // 13: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
-	41, // 14: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
+	43, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
+	44, // 1: riptik.event.v1.Event.location:type_name -> riptik.event.v1.Event.LocationEntry
+	45, // 2: riptik.event.v1.Event.contact_address:type_name -> riptik.event.v1.Event.ContactAddressEntry
+	46, // 3: riptik.event.v1.Event.sales_channels:type_name -> riptik.event.v1.Event.SalesChannelsEntry
+	47, // 4: riptik.event.v1.Event.settings:type_name -> riptik.event.v1.Event.SettingsEntry
+	48, // 5: riptik.event.v1.SubEvent.name:type_name -> riptik.event.v1.SubEvent.NameEntry
+	49, // 6: riptik.event.v1.SubEvent.location:type_name -> riptik.event.v1.SubEvent.LocationEntry
+	50, // 7: riptik.event.v1.CreateEventRequest.name:type_name -> riptik.event.v1.CreateEventRequest.NameEntry
+	51, // 8: riptik.event.v1.CreateEventRequest.location:type_name -> riptik.event.v1.CreateEventRequest.LocationEntry
+	52, // 9: riptik.event.v1.CreateEventRequest.settings:type_name -> riptik.event.v1.CreateEventRequest.SettingsEntry
+	53, // 10: riptik.event.v1.CreateEventRequest.meta_data:type_name -> riptik.event.v1.CreateEventRequest.MetaDataEntry
+	59, // 11: riptik.event.v1.UpdateEventRequest.date_from:type_name -> google.protobuf.Timestamp
+	59, // 12: riptik.event.v1.UpdateEventRequest.date_to:type_name -> google.protobuf.Timestamp
+	54, // 13: riptik.event.v1.UpdateEventRequest.location:type_name -> riptik.event.v1.UpdateEventRequest.LocationEntry
+	55, // 14: riptik.event.v1.UpdateEventRequest.settings:type_name -> riptik.event.v1.UpdateEventRequest.SettingsEntry
 	0,  // 15: riptik.event.v1.ListEventsResponse.results:type_name -> riptik.event.v1.Event
 	0,  // 16: riptik.event.v1.GetEventResponse.event:type_name -> riptik.event.v1.Event
 	1,  // 17: riptik.event.v1.ListSubEventsResponse.results:type_name -> riptik.event.v1.SubEvent
-	0,  // 18: riptik.event.v1.CreateEventResponse.event:type_name -> riptik.event.v1.Event
-	0,  // 19: riptik.event.v1.UpdateEventResponse.event:type_name -> riptik.event.v1.Event
-	42, // 20: riptik.event.v1.Organizer.settings:type_name -> riptik.event.v1.Organizer.SettingsEntry
-	21, // 21: riptik.event.v1.CreateOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
-	21, // 22: riptik.event.v1.GetOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
-	26, // 23: riptik.event.v1.ListLanguagesResponse.languages:type_name -> riptik.event.v1.Language
-	44, // 24: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
-	44, // 25: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
-	26, // [26:26] is the sub-list for method output_type
-	26, // [26:26] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	56, // 18: riptik.event.v1.SubEventDraft.name:type_name -> riptik.event.v1.SubEventDraft.NameEntry
+	57, // 19: riptik.event.v1.SubEventDraft.location:type_name -> riptik.event.v1.SubEventDraft.LocationEntry
+	13, // 20: riptik.event.v1.CreateSubEventRequest.subevent:type_name -> riptik.event.v1.SubEventDraft
+	1,  // 21: riptik.event.v1.CreateSubEventResponse.subevent:type_name -> riptik.event.v1.SubEvent
+	1,  // 22: riptik.event.v1.GetSubEventResponse.subevent:type_name -> riptik.event.v1.SubEvent
+	14, // 23: riptik.event.v1.GetSubEventResponse.price_overrides:type_name -> riptik.event.v1.SubEventItemPrice
+	13, // 24: riptik.event.v1.UpdateSubEventRequest.subevent:type_name -> riptik.event.v1.SubEventDraft
+	1,  // 25: riptik.event.v1.UpdateSubEventResponse.subevent:type_name -> riptik.event.v1.SubEvent
+	13, // 26: riptik.event.v1.CreateManySubEventsRequest.subevents:type_name -> riptik.event.v1.SubEventDraft
+	1,  // 27: riptik.event.v1.CreateManySubEventsResponse.results:type_name -> riptik.event.v1.SubEvent
+	14, // 28: riptik.event.v1.SetSubEventPricesRequest.prices:type_name -> riptik.event.v1.SubEventItemPrice
+	0,  // 29: riptik.event.v1.CreateEventResponse.event:type_name -> riptik.event.v1.Event
+	0,  // 30: riptik.event.v1.UpdateEventResponse.event:type_name -> riptik.event.v1.Event
+	58, // 31: riptik.event.v1.Organizer.settings:type_name -> riptik.event.v1.Organizer.SettingsEntry
+	35, // 32: riptik.event.v1.CreateOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
+	35, // 33: riptik.event.v1.GetOrganizerResponse.organizer:type_name -> riptik.event.v1.Organizer
+	40, // 34: riptik.event.v1.ListLanguagesResponse.languages:type_name -> riptik.event.v1.Language
+	60, // 35: riptik.event.v1.UpdateEventRequest.LocationEntry.value:type_name -> google.protobuf.Any
+	60, // 36: riptik.event.v1.UpdateEventRequest.SettingsEntry.value:type_name -> google.protobuf.Any
+	37, // [37:37] is the sub-list for method output_type
+	37, // [37:37] is the sub-list for method input_type
+	37, // [37:37] is the sub-list for extension type_name
+	37, // [37:37] is the sub-list for extension extendee
+	0,  // [0:37] is the sub-list for field type_name
 }
 
 func init() { file_v1_event_event_proto_init() }
@@ -2948,13 +4054,15 @@ func file_v1_event_event_proto_init() {
 	if File_v1_event_event_proto != nil {
 		return
 	}
+	file_v1_event_event_proto_msgTypes[1].OneofWrappers = []any{}
+	file_v1_event_event_proto_msgTypes[13].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_event_event_proto_rawDesc), len(file_v1_event_event_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   43,
+			NumMessages:   59,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
