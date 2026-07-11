@@ -335,6 +335,7 @@ type OrderCreateData struct {
 	InvoiceAddress map[string]string      `protobuf:"bytes,6,rep,name=invoice_address,json=invoiceAddress,proto3" json:"invoice_address,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Invoice address fields
 	MetaData       map[string]string      `protobuf:"bytes,7,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`                   // Custom metadata
 	Positions      []*OrderCreatePosition `protobuf:"bytes,8,rep,name=positions,proto3" json:"positions,omitempty"`                                                                                                           // Order positions (required)
+	CartId         string                 `protobuf:"bytes,9,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`                                                                                                   // Client cart/session id for seat-hold ownership (optional; set only for seated orders)
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -425,6 +426,13 @@ func (x *OrderCreateData) GetPositions() []*OrderCreatePosition {
 	return nil
 }
 
+func (x *OrderCreateData) GetCartId() string {
+	if x != nil {
+		return x.CartId
+	}
+	return ""
+}
+
 // Position for order creation
 type OrderCreatePosition struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -435,6 +443,7 @@ type OrderCreatePosition struct {
 	AttendeeName  string                 `protobuf:"bytes,5,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`    // Attendee name (optional)
 	AttendeeEmail string                 `protobuf:"bytes,6,opt,name=attendee_email,json=attendeeEmail,proto3" json:"attendee_email,omitempty"` // Attendee email (optional)
 	SubeventId    int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`         // Sub-event ID for date-selection tickets (0 = event-wide)
+	SeatId        int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                     // Assigned seat ID for seated events (0 = no seat). One seat per position (quantity=1).
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -514,6 +523,13 @@ func (x *OrderCreatePosition) GetAttendeeEmail() string {
 func (x *OrderCreatePosition) GetSubeventId() int64 {
 	if x != nil {
 		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *OrderCreatePosition) GetSeatId() int64 {
+	if x != nil {
+		return x.SeatId
 	}
 	return 0
 }
@@ -1960,7 +1976,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12A\n" +
 	"\n" +
-	"order_data\x18\x03 \x01(\v2\".riptik.booking.v1.OrderCreateDataR\torderData\"\x81\x04\n" +
+	"order_data\x18\x03 \x01(\v2\".riptik.booking.v1.OrderCreateDataR\torderData\"\x9a\x04\n" +
 	"\x0fOrderCreateData\x12\x14\n" +
 	"\x05email\x18\x01 \x01(\tR\x05email\x12\x14\n" +
 	"\x05phone\x18\x02 \x01(\tR\x05phone\x12\x16\n" +
@@ -1969,13 +1985,14 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\btestmode\x18\x05 \x01(\bR\btestmode\x12_\n" +
 	"\x0finvoice_address\x18\x06 \x03(\v26.riptik.booking.v1.OrderCreateData.InvoiceAddressEntryR\x0einvoiceAddress\x12M\n" +
 	"\tmeta_data\x18\a \x03(\v20.riptik.booking.v1.OrderCreateData.MetaDataEntryR\bmetaData\x12D\n" +
-	"\tpositions\x18\b \x03(\v2&.riptik.booking.v1.OrderCreatePositionR\tpositions\x1aA\n" +
+	"\tpositions\x18\b \x03(\v2&.riptik.booking.v1.OrderCreatePositionR\tpositions\x12\x17\n" +
+	"\acart_id\x18\t \x01(\tR\x06cartId\x1aA\n" +
 	"\x13InvoiceAddressEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf0\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x89\x02\n" +
 	"\x13OrderCreatePosition\x12\x17\n" +
 	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
 	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
@@ -1984,7 +2001,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\rattendee_name\x18\x05 \x01(\tR\fattendeeName\x12%\n" +
 	"\x0eattendee_email\x18\x06 \x01(\tR\rattendeeEmail\x12\x1f\n" +
 	"\vsubevent_id\x18\a \x01(\x03R\n" +
-	"subeventId\"v\n" +
+	"subeventId\x12\x17\n" +
+	"\aseat_id\x18\b \x01(\x03R\x06seatId\"v\n" +
 	"\x12CancelOrderRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
