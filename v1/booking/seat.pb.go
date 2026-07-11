@@ -126,6 +126,7 @@ type SeatAvailabilityRequest struct {
 	EventId       int64                  `protobuf:"varint,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"` // 0 = event-wide (no subevent)
 	CartId        string                 `protobuf:"bytes,3,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`              // marks the caller's own holds as "mine"
+	ZoneName      string                 `protobuf:"bytes,4,opt,name=zone_name,json=zoneName,proto3" json:"zone_name,omitempty"`        // "" = all zones; set to scope availability to one zone (drill-in render)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -177,6 +178,13 @@ func (x *SeatAvailabilityRequest) GetSubeventId() int64 {
 func (x *SeatAvailabilityRequest) GetCartId() string {
 	if x != nil {
 		return x.CartId
+	}
+	return ""
+}
+
+func (x *SeatAvailabilityRequest) GetZoneName() string {
+	if x != nil {
+		return x.ZoneName
 	}
 	return ""
 }
@@ -641,12 +649,13 @@ const file_v1_booking_seat_proto_rawDesc = "" +
 	"\tzone_name\x18\x06 \x01(\tR\bzoneName\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\a \x01(\x03R\tproductId\x12\x16\n" +
-	"\x06status\x18\b \x01(\tR\x06status\"n\n" +
+	"\x06status\x18\b \x01(\tR\x06status\"\x8b\x01\n" +
 	"\x17SeatAvailabilityRequest\x12\x19\n" +
 	"\bevent_id\x18\x01 \x01(\x03R\aeventId\x12\x1f\n" +
 	"\vsubevent_id\x18\x02 \x01(\x03R\n" +
 	"subeventId\x12\x17\n" +
-	"\acart_id\x18\x03 \x01(\tR\x06cartId\"\xad\x01\n" +
+	"\acart_id\x18\x03 \x01(\tR\x06cartId\x12\x1b\n" +
+	"\tzone_name\x18\x04 \x01(\tR\bzoneName\"\xad\x01\n" +
 	"\x18SeatAvailabilityResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x123\n" +
 	"\x05seats\x18\x02 \x03(\v2\x1d.riptik.booking.v1.SeatStatusR\x05seats\x12\x1d\n" +

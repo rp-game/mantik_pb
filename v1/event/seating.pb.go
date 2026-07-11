@@ -1609,6 +1609,161 @@ func (x *ListSeatplansResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Resolve the active seatplan layout for a specific event/subevent (webshop render entry point).
+// Walks scope -> active_version -> layout artifact. success=false when the event has no active
+// version (uploaded but never activated) so the client falls back to general admission cleanly.
+type SeatplanLayoutForEventRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"` // 0 = event-level; >0 = subevent override
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatplanLayoutForEventRequest) Reset() {
+	*x = SeatplanLayoutForEventRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatplanLayoutForEventRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatplanLayoutForEventRequest) ProtoMessage() {}
+
+func (x *SeatplanLayoutForEventRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatplanLayoutForEventRequest.ProtoReflect.Descriptor instead.
+func (*SeatplanLayoutForEventRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *SeatplanLayoutForEventRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *SeatplanLayoutForEventRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *SeatplanLayoutForEventRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+type SeatplanLayoutForEventResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	S3Prefix      string                 `protobuf:"bytes,2,opt,name=s3_prefix,json=s3Prefix,proto3" json:"s3_prefix,omitempty"`    // versioned bundle prefix (server-side only; webshop reconstructs fetch URLs)
+	LayoutUrl     string                 `protobuf:"bytes,3,opt,name=layout_url,json=layoutUrl,proto3" json:"layout_url,omitempty"` // public index.json URL (informational)
+	VersionId     int64                  `protobuf:"varint,4,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	PlanId        int64                  `protobuf:"varint,5,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatplanLayoutForEventResponse) Reset() {
+	*x = SeatplanLayoutForEventResponse{}
+	mi := &file_v1_event_seating_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatplanLayoutForEventResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatplanLayoutForEventResponse) ProtoMessage() {}
+
+func (x *SeatplanLayoutForEventResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatplanLayoutForEventResponse.ProtoReflect.Descriptor instead.
+func (*SeatplanLayoutForEventResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *SeatplanLayoutForEventResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SeatplanLayoutForEventResponse) GetS3Prefix() string {
+	if x != nil {
+		return x.S3Prefix
+	}
+	return ""
+}
+
+func (x *SeatplanLayoutForEventResponse) GetLayoutUrl() string {
+	if x != nil {
+		return x.LayoutUrl
+	}
+	return ""
+}
+
+func (x *SeatplanLayoutForEventResponse) GetVersionId() int64 {
+	if x != nil {
+		return x.VersionId
+	}
+	return 0
+}
+
+func (x *SeatplanLayoutForEventResponse) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *SeatplanLayoutForEventResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SeatplanLayoutForEventResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_event_seating_proto protoreflect.FileDescriptor
 
 const file_v1_event_seating_proto_rawDesc = "" +
@@ -1749,7 +1904,23 @@ const file_v1_event_seating_proto_rawDesc = "" +
 	"\x15ListSeatplansResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
 	"\x05plans\x18\x02 \x03(\v2 .riptik.event.v1.SeatplanSummaryR\x05plans\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB(Z&github.com/riptik/services/pb/v1/eventb\x06proto3"
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"t\n" +
+	"\x1dSeatplanLayoutForEventRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\"\xf2\x01\n" +
+	"\x1eSeatplanLayoutForEventResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1b\n" +
+	"\ts3_prefix\x18\x02 \x01(\tR\bs3Prefix\x12\x1d\n" +
+	"\n" +
+	"layout_url\x18\x03 \x01(\tR\tlayoutUrl\x12\x1d\n" +
+	"\n" +
+	"version_id\x18\x04 \x01(\x03R\tversionId\x12\x17\n" +
+	"\aplan_id\x18\x05 \x01(\x03R\x06planId\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessageB(Z&github.com/riptik/services/pb/v1/eventb\x06proto3"
 
 var (
 	file_v1_event_seating_proto_rawDescOnce sync.Once
@@ -1763,7 +1934,7 @@ func file_v1_event_seating_proto_rawDescGZIP() []byte {
 	return file_v1_event_seating_proto_rawDescData
 }
 
-var file_v1_event_seating_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_v1_event_seating_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_v1_event_seating_proto_goTypes = []any{
 	(*SeatingPlan)(nil),                     // 0: riptik.event.v1.SeatingPlan
 	(*CreateSeatingPlanRequest)(nil),        // 1: riptik.event.v1.CreateSeatingPlanRequest
@@ -1789,6 +1960,8 @@ var file_v1_event_seating_proto_goTypes = []any{
 	(*SeatplanSummary)(nil),                 // 21: riptik.event.v1.SeatplanSummary
 	(*ListSeatplansRequest)(nil),            // 22: riptik.event.v1.ListSeatplansRequest
 	(*ListSeatplansResponse)(nil),           // 23: riptik.event.v1.ListSeatplansResponse
+	(*SeatplanLayoutForEventRequest)(nil),   // 24: riptik.event.v1.SeatplanLayoutForEventRequest
+	(*SeatplanLayoutForEventResponse)(nil),  // 25: riptik.event.v1.SeatplanLayoutForEventResponse
 }
 var file_v1_event_seating_proto_depIdxs = []int32{
 	0,  // 0: riptik.event.v1.SeatingPlanResponse.plan:type_name -> riptik.event.v1.SeatingPlan
@@ -1815,7 +1988,7 @@ func file_v1_event_seating_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_event_seating_proto_rawDesc), len(file_v1_event_seating_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
