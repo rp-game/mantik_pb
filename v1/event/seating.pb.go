@@ -849,6 +849,766 @@ func (x *AssignSeatingPlanResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Upload a bundle ZIP = a new VERSION of an organizer-level plan (artifact only; no seats yet).
+type UploadSeatplanVersionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	PlanName      string                 `protobuf:"bytes,2,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty"` // used when creating a new plan (plan_id = 0)
+	PlanId        int64                  `protobuf:"varint,3,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`      // 0 = create new plan; else add a version to this plan
+	Bundle        []byte                 `protobuf:"bytes,4,opt,name=bundle,proto3" json:"bundle,omitempty"`                     // the ZIP bytes
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadSeatplanVersionRequest) Reset() {
+	*x = UploadSeatplanVersionRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadSeatplanVersionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadSeatplanVersionRequest) ProtoMessage() {}
+
+func (x *UploadSeatplanVersionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadSeatplanVersionRequest.ProtoReflect.Descriptor instead.
+func (*UploadSeatplanVersionRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *UploadSeatplanVersionRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *UploadSeatplanVersionRequest) GetPlanName() string {
+	if x != nil {
+		return x.PlanName
+	}
+	return ""
+}
+
+func (x *UploadSeatplanVersionRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *UploadSeatplanVersionRequest) GetBundle() []byte {
+	if x != nil {
+		return x.Bundle
+	}
+	return nil
+}
+
+type UploadSeatplanVersionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	PlanId        int64                  `protobuf:"varint,2,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	VersionId     int64                  `protobuf:"varint,3,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	VersionNo     int32                  `protobuf:"varint,4,opt,name=version_no,json=versionNo,proto3" json:"version_no,omitempty"`
+	SeatsCount    int32                  `protobuf:"varint,5,opt,name=seats_count,json=seatsCount,proto3" json:"seats_count,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UploadSeatplanVersionResponse) Reset() {
+	*x = UploadSeatplanVersionResponse{}
+	mi := &file_v1_event_seating_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UploadSeatplanVersionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UploadSeatplanVersionResponse) ProtoMessage() {}
+
+func (x *UploadSeatplanVersionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UploadSeatplanVersionResponse.ProtoReflect.Descriptor instead.
+func (*UploadSeatplanVersionResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *UploadSeatplanVersionResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UploadSeatplanVersionResponse) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *UploadSeatplanVersionResponse) GetVersionId() int64 {
+	if x != nil {
+		return x.VersionId
+	}
+	return 0
+}
+
+func (x *UploadSeatplanVersionResponse) GetVersionNo() int32 {
+	if x != nil {
+		return x.VersionNo
+	}
+	return 0
+}
+
+func (x *UploadSeatplanVersionResponse) GetSeatsCount() int32 {
+	if x != nil {
+		return x.SeatsCount
+	}
+	return 0
+}
+
+func (x *UploadSeatplanVersionResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *UploadSeatplanVersionResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Result of materializing seats into a scope (assign / activate).
+type MaterializeSeatplanResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	SeatsImported int32                  `protobuf:"varint,2,opt,name=seats_imported,json=seatsImported,proto3" json:"seats_imported,omitempty"`
+	SeatsDeleted  int32                  `protobuf:"varint,3,opt,name=seats_deleted,json=seatsDeleted,proto3" json:"seats_deleted,omitempty"`
+	ItemsCreated  int32                  `protobuf:"varint,4,opt,name=items_created,json=itemsCreated,proto3" json:"items_created,omitempty"`
+	Warnings      []string               `protobuf:"bytes,5,rep,name=warnings,proto3" json:"warnings,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MaterializeSeatplanResponse) Reset() {
+	*x = MaterializeSeatplanResponse{}
+	mi := &file_v1_event_seating_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MaterializeSeatplanResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MaterializeSeatplanResponse) ProtoMessage() {}
+
+func (x *MaterializeSeatplanResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MaterializeSeatplanResponse.ProtoReflect.Descriptor instead.
+func (*MaterializeSeatplanResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *MaterializeSeatplanResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *MaterializeSeatplanResponse) GetSeatsImported() int32 {
+	if x != nil {
+		return x.SeatsImported
+	}
+	return 0
+}
+
+func (x *MaterializeSeatplanResponse) GetSeatsDeleted() int32 {
+	if x != nil {
+		return x.SeatsDeleted
+	}
+	return 0
+}
+
+func (x *MaterializeSeatplanResponse) GetItemsCreated() int32 {
+	if x != nil {
+		return x.ItemsCreated
+	}
+	return 0
+}
+
+func (x *MaterializeSeatplanResponse) GetWarnings() []string {
+	if x != nil {
+		return x.Warnings
+	}
+	return nil
+}
+
+func (x *MaterializeSeatplanResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *MaterializeSeatplanResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Assign an org-level plan to an event/subevent (materializes seats from the plan's active version).
+type AssignSeatplanRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	SubeventId    int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"` // 0 = event-level; >0 = subevent override
+	PlanId        int64                  `protobuf:"varint,4,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AssignSeatplanRequest) Reset() {
+	*x = AssignSeatplanRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AssignSeatplanRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AssignSeatplanRequest) ProtoMessage() {}
+
+func (x *AssignSeatplanRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AssignSeatplanRequest.ProtoReflect.Descriptor instead.
+func (*AssignSeatplanRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *AssignSeatplanRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *AssignSeatplanRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *AssignSeatplanRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *AssignSeatplanRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+// Rollback: set active version then re-materialize every scope using the plan.
+type ActivateSeatplanVersionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	PlanId        int64                  `protobuf:"varint,2,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	VersionId     int64                  `protobuf:"varint,3,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActivateSeatplanVersionRequest) Reset() {
+	*x = ActivateSeatplanVersionRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActivateSeatplanVersionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActivateSeatplanVersionRequest) ProtoMessage() {}
+
+func (x *ActivateSeatplanVersionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActivateSeatplanVersionRequest.ProtoReflect.Descriptor instead.
+func (*ActivateSeatplanVersionRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ActivateSeatplanVersionRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *ActivateSeatplanVersionRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *ActivateSeatplanVersionRequest) GetVersionId() int64 {
+	if x != nil {
+		return x.VersionId
+	}
+	return 0
+}
+
+type DeleteSeatplanVersionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	PlanId        int64                  `protobuf:"varint,2,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	VersionId     int64                  `protobuf:"varint,3,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteSeatplanVersionRequest) Reset() {
+	*x = DeleteSeatplanVersionRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteSeatplanVersionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteSeatplanVersionRequest) ProtoMessage() {}
+
+func (x *DeleteSeatplanVersionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteSeatplanVersionRequest.ProtoReflect.Descriptor instead.
+func (*DeleteSeatplanVersionRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *DeleteSeatplanVersionRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *DeleteSeatplanVersionRequest) GetPlanId() int64 {
+	if x != nil {
+		return x.PlanId
+	}
+	return 0
+}
+
+func (x *DeleteSeatplanVersionRequest) GetVersionId() int64 {
+	if x != nil {
+		return x.VersionId
+	}
+	return 0
+}
+
+type SeatplanOpResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatplanOpResponse) Reset() {
+	*x = SeatplanOpResponse{}
+	mi := &file_v1_event_seating_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatplanOpResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatplanOpResponse) ProtoMessage() {}
+
+func (x *SeatplanOpResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatplanOpResponse.ProtoReflect.Descriptor instead.
+func (*SeatplanOpResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *SeatplanOpResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SeatplanOpResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SeatplanOpResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type SeatplanVersion struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	VersionNo     int32                  `protobuf:"varint,2,opt,name=version_no,json=versionNo,proto3" json:"version_no,omitempty"`
+	LayoutUrl     string                 `protobuf:"bytes,3,opt,name=layout_url,json=layoutUrl,proto3" json:"layout_url,omitempty"`
+	BundleUrl     string                 `protobuf:"bytes,4,opt,name=bundle_url,json=bundleUrl,proto3" json:"bundle_url,omitempty"`
+	SeatsCount    int32                  `protobuf:"varint,5,opt,name=seats_count,json=seatsCount,proto3" json:"seats_count,omitempty"`
+	Active        bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatplanVersion) Reset() {
+	*x = SeatplanVersion{}
+	mi := &file_v1_event_seating_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatplanVersion) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatplanVersion) ProtoMessage() {}
+
+func (x *SeatplanVersion) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatplanVersion.ProtoReflect.Descriptor instead.
+func (*SeatplanVersion) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *SeatplanVersion) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *SeatplanVersion) GetVersionNo() int32 {
+	if x != nil {
+		return x.VersionNo
+	}
+	return 0
+}
+
+func (x *SeatplanVersion) GetLayoutUrl() string {
+	if x != nil {
+		return x.LayoutUrl
+	}
+	return ""
+}
+
+func (x *SeatplanVersion) GetBundleUrl() string {
+	if x != nil {
+		return x.BundleUrl
+	}
+	return ""
+}
+
+func (x *SeatplanVersion) GetSeatsCount() int32 {
+	if x != nil {
+		return x.SeatsCount
+	}
+	return 0
+}
+
+func (x *SeatplanVersion) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+type SeatplanSummary struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	ActiveVersionId int64                  `protobuf:"varint,3,opt,name=active_version_id,json=activeVersionId,proto3" json:"active_version_id,omitempty"`
+	Versions        []*SeatplanVersion     `protobuf:"bytes,4,rep,name=versions,proto3" json:"versions,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SeatplanSummary) Reset() {
+	*x = SeatplanSummary{}
+	mi := &file_v1_event_seating_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatplanSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatplanSummary) ProtoMessage() {}
+
+func (x *SeatplanSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatplanSummary.ProtoReflect.Descriptor instead.
+func (*SeatplanSummary) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *SeatplanSummary) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *SeatplanSummary) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *SeatplanSummary) GetActiveVersionId() int64 {
+	if x != nil {
+		return x.ActiveVersionId
+	}
+	return 0
+}
+
+func (x *SeatplanSummary) GetVersions() []*SeatplanVersion {
+	if x != nil {
+		return x.Versions
+	}
+	return nil
+}
+
+type ListSeatplansRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSeatplansRequest) Reset() {
+	*x = ListSeatplansRequest{}
+	mi := &file_v1_event_seating_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSeatplansRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSeatplansRequest) ProtoMessage() {}
+
+func (x *ListSeatplansRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSeatplansRequest.ProtoReflect.Descriptor instead.
+func (*ListSeatplansRequest) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *ListSeatplansRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+type ListSeatplansResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Plans         []*SeatplanSummary     `protobuf:"bytes,2,rep,name=plans,proto3" json:"plans,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSeatplansResponse) Reset() {
+	*x = ListSeatplansResponse{}
+	mi := &file_v1_event_seating_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSeatplansResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSeatplansResponse) ProtoMessage() {}
+
+func (x *ListSeatplansResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_event_seating_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSeatplansResponse.ProtoReflect.Descriptor instead.
+func (*ListSeatplansResponse) Descriptor() ([]byte, []int) {
+	return file_v1_event_seating_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ListSeatplansResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListSeatplansResponse) GetPlans() []*SeatplanSummary {
+	if x != nil {
+		return x.Plans
+	}
+	return nil
+}
+
+func (x *ListSeatplansResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_event_seating_proto protoreflect.FileDescriptor
 
 const file_v1_event_seating_proto_rawDesc = "" +
@@ -920,7 +1680,76 @@ const file_v1_event_seating_proto_rawDesc = "" +
 	"\x0fseating_plan_id\x18\x03 \x01(\x03R\rseatingPlanId\"Z\n" +
 	"\x19AssignSeatingPlanResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
-	"\rerror_message\x18\x02 \x01(\tR\ferrorMessageB(Z&github.com/riptik/services/pb/v1/eventb\x06proto3"
+	"\rerror_message\x18\x02 \x01(\tR\ferrorMessage\"\x8a\x01\n" +
+	"\x1cUploadSeatplanVersionRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x1b\n" +
+	"\tplan_name\x18\x02 \x01(\tR\bplanName\x12\x17\n" +
+	"\aplan_id\x18\x03 \x01(\x03R\x06planId\x12\x16\n" +
+	"\x06bundle\x18\x04 \x01(\fR\x06bundle\"\xf5\x01\n" +
+	"\x1dUploadSeatplanVersionResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x17\n" +
+	"\aplan_id\x18\x02 \x01(\x03R\x06planId\x12\x1d\n" +
+	"\n" +
+	"version_id\x18\x03 \x01(\x03R\tversionId\x12\x1d\n" +
+	"\n" +
+	"version_no\x18\x04 \x01(\x05R\tversionNo\x12\x1f\n" +
+	"\vseats_count\x18\x05 \x01(\x05R\n" +
+	"seatsCount\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\x88\x02\n" +
+	"\x1bMaterializeSeatplanResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12%\n" +
+	"\x0eseats_imported\x18\x02 \x01(\x05R\rseatsImported\x12#\n" +
+	"\rseats_deleted\x18\x03 \x01(\x05R\fseatsDeleted\x12#\n" +
+	"\ritems_created\x18\x04 \x01(\x05R\fitemsCreated\x12\x1a\n" +
+	"\bwarnings\x18\x05 \x03(\tR\bwarnings\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\x85\x01\n" +
+	"\x15AssignSeatplanRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1f\n" +
+	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
+	"subeventId\x12\x17\n" +
+	"\aplan_id\x18\x04 \x01(\x03R\x06planId\"v\n" +
+	"\x1eActivateSeatplanVersionRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x17\n" +
+	"\aplan_id\x18\x02 \x01(\x03R\x06planId\x12\x1d\n" +
+	"\n" +
+	"version_id\x18\x03 \x01(\x03R\tversionId\"t\n" +
+	"\x1cDeleteSeatplanVersionRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x17\n" +
+	"\aplan_id\x18\x02 \x01(\x03R\x06planId\x12\x1d\n" +
+	"\n" +
+	"version_id\x18\x03 \x01(\x03R\tversionId\"r\n" +
+	"\x12SeatplanOpResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\xb7\x01\n" +
+	"\x0fSeatplanVersion\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1d\n" +
+	"\n" +
+	"version_no\x18\x02 \x01(\x05R\tversionNo\x12\x1d\n" +
+	"\n" +
+	"layout_url\x18\x03 \x01(\tR\tlayoutUrl\x12\x1d\n" +
+	"\n" +
+	"bundle_url\x18\x04 \x01(\tR\tbundleUrl\x12\x1f\n" +
+	"\vseats_count\x18\x05 \x01(\x05R\n" +
+	"seatsCount\x12\x16\n" +
+	"\x06active\x18\x06 \x01(\bR\x06active\"\x9f\x01\n" +
+	"\x0fSeatplanSummary\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12*\n" +
+	"\x11active_version_id\x18\x03 \x01(\x03R\x0factiveVersionId\x12<\n" +
+	"\bversions\x18\x04 \x03(\v2 .riptik.event.v1.SeatplanVersionR\bversions\"4\n" +
+	"\x14ListSeatplansRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\"\x8e\x01\n" +
+	"\x15ListSeatplansResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x05plans\x18\x02 \x03(\v2 .riptik.event.v1.SeatplanSummaryR\x05plans\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB(Z&github.com/riptik/services/pb/v1/eventb\x06proto3"
 
 var (
 	file_v1_event_seating_proto_rawDescOnce sync.Once
@@ -934,7 +1763,7 @@ func file_v1_event_seating_proto_rawDescGZIP() []byte {
 	return file_v1_event_seating_proto_rawDescData
 }
 
-var file_v1_event_seating_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_v1_event_seating_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_v1_event_seating_proto_goTypes = []any{
 	(*SeatingPlan)(nil),                     // 0: riptik.event.v1.SeatingPlan
 	(*CreateSeatingPlanRequest)(nil),        // 1: riptik.event.v1.CreateSeatingPlanRequest
@@ -949,17 +1778,30 @@ var file_v1_event_seating_proto_goTypes = []any{
 	(*SetSeatCategoryMappingsResponse)(nil), // 10: riptik.event.v1.SetSeatCategoryMappingsResponse
 	(*AssignSeatingPlanRequest)(nil),        // 11: riptik.event.v1.AssignSeatingPlanRequest
 	(*AssignSeatingPlanResponse)(nil),       // 12: riptik.event.v1.AssignSeatingPlanResponse
+	(*UploadSeatplanVersionRequest)(nil),    // 13: riptik.event.v1.UploadSeatplanVersionRequest
+	(*UploadSeatplanVersionResponse)(nil),   // 14: riptik.event.v1.UploadSeatplanVersionResponse
+	(*MaterializeSeatplanResponse)(nil),     // 15: riptik.event.v1.MaterializeSeatplanResponse
+	(*AssignSeatplanRequest)(nil),           // 16: riptik.event.v1.AssignSeatplanRequest
+	(*ActivateSeatplanVersionRequest)(nil),  // 17: riptik.event.v1.ActivateSeatplanVersionRequest
+	(*DeleteSeatplanVersionRequest)(nil),    // 18: riptik.event.v1.DeleteSeatplanVersionRequest
+	(*SeatplanOpResponse)(nil),              // 19: riptik.event.v1.SeatplanOpResponse
+	(*SeatplanVersion)(nil),                 // 20: riptik.event.v1.SeatplanVersion
+	(*SeatplanSummary)(nil),                 // 21: riptik.event.v1.SeatplanSummary
+	(*ListSeatplansRequest)(nil),            // 22: riptik.event.v1.ListSeatplansRequest
+	(*ListSeatplansResponse)(nil),           // 23: riptik.event.v1.ListSeatplansResponse
 }
 var file_v1_event_seating_proto_depIdxs = []int32{
-	0, // 0: riptik.event.v1.SeatingPlanResponse.plan:type_name -> riptik.event.v1.SeatingPlan
-	0, // 1: riptik.event.v1.ListSeatingPlansResponse.plans:type_name -> riptik.event.v1.SeatingPlan
-	5, // 2: riptik.event.v1.ImportSeatsRequest.seats:type_name -> riptik.event.v1.SeatImport
-	8, // 3: riptik.event.v1.SetSeatCategoryMappingsRequest.mappings:type_name -> riptik.event.v1.SeatCategoryMappingInput
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0,  // 0: riptik.event.v1.SeatingPlanResponse.plan:type_name -> riptik.event.v1.SeatingPlan
+	0,  // 1: riptik.event.v1.ListSeatingPlansResponse.plans:type_name -> riptik.event.v1.SeatingPlan
+	5,  // 2: riptik.event.v1.ImportSeatsRequest.seats:type_name -> riptik.event.v1.SeatImport
+	8,  // 3: riptik.event.v1.SetSeatCategoryMappingsRequest.mappings:type_name -> riptik.event.v1.SeatCategoryMappingInput
+	20, // 4: riptik.event.v1.SeatplanSummary.versions:type_name -> riptik.event.v1.SeatplanVersion
+	21, // 5: riptik.event.v1.ListSeatplansResponse.plans:type_name -> riptik.event.v1.SeatplanSummary
+	6,  // [6:6] is the sub-list for method output_type
+	6,  // [6:6] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_v1_event_seating_proto_init() }
@@ -973,7 +1815,7 @@ func file_v1_event_seating_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_event_seating_proto_rawDesc), len(file_v1_event_seating_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
