@@ -1328,8 +1328,11 @@ type Order struct {
 	Refunds        []*OrderRefund    `protobuf:"bytes,18,rep,name=refunds,proto3" json:"refunds,omitempty"`                                                                                                               // Refunds
 	InvoiceAddress map[string]string `protobuf:"bytes,19,rep,name=invoice_address,json=invoiceAddress,proto3" json:"invoice_address,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Invoice address
 	MetaData       map[string]string `protobuf:"bytes,20,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`                   // Custom metadata
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Group order (set when this order is a child of a group)
+	GroupId       int64  `protobuf:"varint,21,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`      // Parent order-group id (0 = standalone order)
+	GroupCode     string `protobuf:"bytes,22,opt,name=group_code,json=groupCode,proto3" json:"group_code,omitempty"` // Parent order-group code (empty = standalone)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Order) Reset() {
@@ -1500,6 +1503,20 @@ func (x *Order) GetMetaData() map[string]string {
 		return x.MetaData
 	}
 	return nil
+}
+
+func (x *Order) GetGroupId() int64 {
+	if x != nil {
+		return x.GroupId
+	}
+	return 0
+}
+
+func (x *Order) GetGroupCode() string {
+	if x != nil {
+		return x.GroupCode
+	}
+	return ""
 }
 
 // Order position
@@ -1943,6 +1960,784 @@ func (x *OrderRefund) GetState() string {
 	return ""
 }
 
+// Request: Create a group order (one child per distinct event)
+type CreateOrderGroupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                  // Organizer slug (required); all children share it
+	GroupData     *OrderGroupData        `protobuf:"bytes,2,opt,name=group_data,json=groupData,proto3" json:"group_data,omitempty"` // Group creation payload (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateOrderGroupRequest) Reset() {
+	*x = CreateOrderGroupRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateOrderGroupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOrderGroupRequest) ProtoMessage() {}
+
+func (x *CreateOrderGroupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOrderGroupRequest.ProtoReflect.Descriptor instead.
+func (*CreateOrderGroupRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *CreateOrderGroupRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CreateOrderGroupRequest) GetGroupData() *OrderGroupData {
+	if x != nil {
+		return x.GroupData
+	}
+	return nil
+}
+
+// Group order creation payload
+type OrderGroupData struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`                                                                                                 // Customer email (required)
+	FirstName     string                 `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`                                                                        // Customer first name (optional)
+	LastName      string                 `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`                                                                           // Customer last name (optional)
+	Phone         string                 `protobuf:"bytes,4,opt,name=phone,proto3" json:"phone,omitempty"`                                                                                                 // Customer phone (optional)
+	Locale        string                 `protobuf:"bytes,5,opt,name=locale,proto3" json:"locale,omitempty"`                                                                                               // Locale (default "en")
+	CartId        string                 `protobuf:"bytes,6,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`                                                                                 // Client cart id (owns seat holds; idempotency key)
+	Currency      string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`                                                                                           // Currency code (e.g. VND)
+	Testmode      bool                   `protobuf:"varint,8,opt,name=testmode,proto3" json:"testmode,omitempty"`                                                                                          // Test mode flag
+	MetaData      map[string]string      `protobuf:"bytes,9,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Custom metadata
+	Children      []*OrderGroupChild     `protobuf:"bytes,10,rep,name=children,proto3" json:"children,omitempty"`                                                                                          // One child per distinct event (required, >=2)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderGroupData) Reset() {
+	*x = OrderGroupData{}
+	mi := &file_v1_booking_order_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderGroupData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderGroupData) ProtoMessage() {}
+
+func (x *OrderGroupData) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderGroupData.ProtoReflect.Descriptor instead.
+func (*OrderGroupData) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *OrderGroupData) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetFirstName() string {
+	if x != nil {
+		return x.FirstName
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetLastName() string {
+	if x != nil {
+		return x.LastName
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetLocale() string {
+	if x != nil {
+		return x.Locale
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetCartId() string {
+	if x != nil {
+		return x.CartId
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *OrderGroupData) GetTestmode() bool {
+	if x != nil {
+		return x.Testmode
+	}
+	return false
+}
+
+func (x *OrderGroupData) GetMetaData() map[string]string {
+	if x != nil {
+		return x.MetaData
+	}
+	return nil
+}
+
+func (x *OrderGroupData) GetChildren() []*OrderGroupChild {
+	if x != nil {
+		return x.Children
+	}
+	return nil
+}
+
+// One child of a group: an event slug + its positions
+type OrderGroupChild struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Event         string                 `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`         // Event slug for this child order (required)
+	Positions     []*OrderCreatePosition `protobuf:"bytes,2,rep,name=positions,proto3" json:"positions,omitempty"` // Positions for this event (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderGroupChild) Reset() {
+	*x = OrderGroupChild{}
+	mi := &file_v1_booking_order_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderGroupChild) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderGroupChild) ProtoMessage() {}
+
+func (x *OrderGroupChild) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderGroupChild.ProtoReflect.Descriptor instead.
+func (*OrderGroupChild) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *OrderGroupChild) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *OrderGroupChild) GetPositions() []*OrderCreatePosition {
+	if x != nil {
+		return x.Positions
+	}
+	return nil
+}
+
+// Response: Create group order
+type CreateOrderGroupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                              // Whether the group was created
+	GroupCode     string                 `protobuf:"bytes,2,opt,name=group_code,json=groupCode,proto3" json:"group_code,omitempty"`          // Parent group code
+	Total         string                 `protobuf:"bytes,3,opt,name=total,proto3" json:"total,omitempty"`                                   // Group total as decimal string (sum of children)
+	Children      []*Order               `protobuf:"bytes,4,rep,name=children,proto3" json:"children,omitempty"`                             // Created child orders (one per event)
+	ErrorCode     string                 `protobuf:"bytes,5,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`          // Machine error code
+	ErrorMessage  string                 `protobuf:"bytes,6,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // Human error message
+	GroupError    *OrderGroupError       `protobuf:"bytes,7,opt,name=group_error,json=groupError,proto3" json:"group_error,omitempty"`       // Structured child failure (which event + why)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateOrderGroupResponse) Reset() {
+	*x = CreateOrderGroupResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateOrderGroupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOrderGroupResponse) ProtoMessage() {}
+
+func (x *CreateOrderGroupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOrderGroupResponse.ProtoReflect.Descriptor instead.
+func (*CreateOrderGroupResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *CreateOrderGroupResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateOrderGroupResponse) GetGroupCode() string {
+	if x != nil {
+		return x.GroupCode
+	}
+	return ""
+}
+
+func (x *CreateOrderGroupResponse) GetTotal() string {
+	if x != nil {
+		return x.Total
+	}
+	return ""
+}
+
+func (x *CreateOrderGroupResponse) GetChildren() []*Order {
+	if x != nil {
+		return x.Children
+	}
+	return nil
+}
+
+func (x *CreateOrderGroupResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateOrderGroupResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *CreateOrderGroupResponse) GetGroupError() *OrderGroupError {
+	if x != nil {
+		return x.GroupError
+	}
+	return nil
+}
+
+// Structured failure for a group create (identifies the offending child)
+type OrderGroupError struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	FailedEventSlug string                 `protobuf:"bytes,1,opt,name=failed_event_slug,json=failedEventSlug,proto3" json:"failed_event_slug,omitempty"` // Event slug that could not be ordered
+	FailedEventName string                 `protobuf:"bytes,2,opt,name=failed_event_name,json=failedEventName,proto3" json:"failed_event_name,omitempty"` // Event name for a friendly message
+	Reason          string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`                                            // SOLD_OUT | SEAT_TAKEN | DATE_UNAVAILABLE | PRICE_CHANGED
+	PositionRef     string                 `protobuf:"bytes,4,opt,name=position_ref,json=positionRef,proto3" json:"position_ref,omitempty"`               // Offending position reference (item/seat), optional
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *OrderGroupError) Reset() {
+	*x = OrderGroupError{}
+	mi := &file_v1_booking_order_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderGroupError) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderGroupError) ProtoMessage() {}
+
+func (x *OrderGroupError) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderGroupError.ProtoReflect.Descriptor instead.
+func (*OrderGroupError) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *OrderGroupError) GetFailedEventSlug() string {
+	if x != nil {
+		return x.FailedEventSlug
+	}
+	return ""
+}
+
+func (x *OrderGroupError) GetFailedEventName() string {
+	if x != nil {
+		return x.FailedEventName
+	}
+	return ""
+}
+
+func (x *OrderGroupError) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *OrderGroupError) GetPositionRef() string {
+	if x != nil {
+		return x.PositionRef
+	}
+	return ""
+}
+
+// Request: Get a group order by code
+type GetOrderGroupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                  // Organizer slug (required)
+	GroupCode     string                 `protobuf:"bytes,2,opt,name=group_code,json=groupCode,proto3" json:"group_code,omitempty"` // Group code (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOrderGroupRequest) Reset() {
+	*x = GetOrderGroupRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOrderGroupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrderGroupRequest) ProtoMessage() {}
+
+func (x *GetOrderGroupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrderGroupRequest.ProtoReflect.Descriptor instead.
+func (*GetOrderGroupRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *GetOrderGroupRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *GetOrderGroupRequest) GetGroupCode() string {
+	if x != nil {
+		return x.GroupCode
+	}
+	return ""
+}
+
+// Domain model: a group order (parent of N child orders)
+type OrderGroup struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GroupCode     string                 `protobuf:"bytes,1,opt,name=group_code,json=groupCode,proto3" json:"group_code,omitempty"` // Group code
+	Organizer     string                 `protobuf:"bytes,2,opt,name=organizer,proto3" json:"organizer,omitempty"`                  // Organizer slug
+	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`                        // pending | paid | canceled | expired | refunded
+	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`                          // Customer email
+	Phone         string                 `protobuf:"bytes,5,opt,name=phone,proto3" json:"phone,omitempty"`                          // Customer phone
+	Total         string                 `protobuf:"bytes,6,opt,name=total,proto3" json:"total,omitempty"`                          // Total as decimal string
+	Currency      string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`                    // Currency code
+	Datetime      string                 `protobuf:"bytes,8,opt,name=datetime,proto3" json:"datetime,omitempty"`                    // ISO datetime (created)
+	Expires       string                 `protobuf:"bytes,9,opt,name=expires,proto3" json:"expires,omitempty"`                      // ISO datetime (expiration)
+	Testmode      bool                   `protobuf:"varint,10,opt,name=testmode,proto3" json:"testmode,omitempty"`                  // Is test group
+	Children      []*Order               `protobuf:"bytes,11,rep,name=children,proto3" json:"children,omitempty"`                   // Child orders (one per event)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrderGroup) Reset() {
+	*x = OrderGroup{}
+	mi := &file_v1_booking_order_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrderGroup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrderGroup) ProtoMessage() {}
+
+func (x *OrderGroup) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrderGroup.ProtoReflect.Descriptor instead.
+func (*OrderGroup) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *OrderGroup) GetGroupCode() string {
+	if x != nil {
+		return x.GroupCode
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetPhone() string {
+	if x != nil {
+		return x.Phone
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetTotal() string {
+	if x != nil {
+		return x.Total
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetDatetime() string {
+	if x != nil {
+		return x.Datetime
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetExpires() string {
+	if x != nil {
+		return x.Expires
+	}
+	return ""
+}
+
+func (x *OrderGroup) GetTestmode() bool {
+	if x != nil {
+		return x.Testmode
+	}
+	return false
+}
+
+func (x *OrderGroup) GetChildren() []*Order {
+	if x != nil {
+		return x.Children
+	}
+	return nil
+}
+
+// Response: Get group order
+type GetOrderGroupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                              // Whether found
+	Group         *OrderGroup            `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`                                   // The group + its children
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`          // Machine error code
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // Human error message
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOrderGroupResponse) Reset() {
+	*x = GetOrderGroupResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOrderGroupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOrderGroupResponse) ProtoMessage() {}
+
+func (x *GetOrderGroupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOrderGroupResponse.ProtoReflect.Descriptor instead.
+func (*GetOrderGroupResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *GetOrderGroupResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetOrderGroupResponse) GetGroup() *OrderGroup {
+	if x != nil {
+		return x.Group
+	}
+	return nil
+}
+
+func (x *GetOrderGroupResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetOrderGroupResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Request: List group orders for an organizer (backoffice)
+type ListOrderGroupsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // Organizer slug (required)
+	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`        // Page size (default 20)
+	Offset        int32                  `protobuf:"varint,3,opt,name=offset,proto3" json:"offset,omitempty"`      // Page offset
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`       // Optional status filter
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrderGroupsRequest) Reset() {
+	*x = ListOrderGroupsRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrderGroupsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrderGroupsRequest) ProtoMessage() {}
+
+func (x *ListOrderGroupsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrderGroupsRequest.ProtoReflect.Descriptor instead.
+func (*ListOrderGroupsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *ListOrderGroupsRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *ListOrderGroupsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListOrderGroupsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+func (x *ListOrderGroupsRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+// Response: List group orders
+type ListOrderGroupsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                              // Whether the query succeeded
+	Count         int32                  `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`                                  // Total count
+	Results       []*OrderGroup          `protobuf:"bytes,3,rep,name=results,proto3" json:"results,omitempty"`                               // Group orders
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`          // Machine error code
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // Human error message
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrderGroupsResponse) Reset() {
+	*x = ListOrderGroupsResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrderGroupsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrderGroupsResponse) ProtoMessage() {}
+
+func (x *ListOrderGroupsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrderGroupsResponse.ProtoReflect.Descriptor instead.
+func (*ListOrderGroupsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ListOrderGroupsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListOrderGroupsResponse) GetCount() int32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+func (x *ListOrderGroupsResponse) GetResults() []*OrderGroup {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *ListOrderGroupsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListOrderGroupsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_order_proto protoreflect.FileDescriptor
 
 const file_v1_booking_order_proto_rawDesc = "" +
@@ -2069,7 +2864,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\bposition\x18\x02 \x01(\v2&.riptik.booking.v1.OrderPositionDetailR\bposition\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xd6\x06\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x90\a\n" +
 	"\x05Order\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x16\n" +
@@ -2091,7 +2886,10 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\bpayments\x18\x11 \x03(\v2\x1f.riptik.booking.v1.OrderPaymentR\bpayments\x128\n" +
 	"\arefunds\x18\x12 \x03(\v2\x1e.riptik.booking.v1.OrderRefundR\arefunds\x12U\n" +
 	"\x0finvoice_address\x18\x13 \x03(\v2,.riptik.booking.v1.Order.InvoiceAddressEntryR\x0einvoiceAddress\x12C\n" +
-	"\tmeta_data\x18\x14 \x03(\v2&.riptik.booking.v1.Order.MetaDataEntryR\bmetaData\x1aA\n" +
+	"\tmeta_data\x18\x14 \x03(\v2&.riptik.booking.v1.Order.MetaDataEntryR\bmetaData\x12\x19\n" +
+	"\bgroup_id\x18\x15 \x01(\x03R\agroupId\x12\x1d\n" +
+	"\n" +
+	"group_code\x18\x16 \x01(\tR\tgroupCode\x1aA\n" +
 	"\x13InvoiceAddressEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
@@ -2140,7 +2938,83 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\vOrderRefund\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
 	"\x06amount\x18\x02 \x01(\tR\x06amount\x12\x14\n" +
-	"\x05state\x18\x03 \x01(\tR\x05stateB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\x05state\x18\x03 \x01(\tR\x05state\"y\n" +
+	"\x17CreateOrderGroupRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12@\n" +
+	"\n" +
+	"group_data\x18\x02 \x01(\v2!.riptik.booking.v1.OrderGroupDataR\tgroupData\"\xac\x03\n" +
+	"\x0eOrderGroupData\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\x12\x1d\n" +
+	"\n" +
+	"first_name\x18\x02 \x01(\tR\tfirstName\x12\x1b\n" +
+	"\tlast_name\x18\x03 \x01(\tR\blastName\x12\x14\n" +
+	"\x05phone\x18\x04 \x01(\tR\x05phone\x12\x16\n" +
+	"\x06locale\x18\x05 \x01(\tR\x06locale\x12\x17\n" +
+	"\acart_id\x18\x06 \x01(\tR\x06cartId\x12\x1a\n" +
+	"\bcurrency\x18\a \x01(\tR\bcurrency\x12\x1a\n" +
+	"\btestmode\x18\b \x01(\bR\btestmode\x12L\n" +
+	"\tmeta_data\x18\t \x03(\v2/.riptik.booking.v1.OrderGroupData.MetaDataEntryR\bmetaData\x12>\n" +
+	"\bchildren\x18\n" +
+	" \x03(\v2\".riptik.booking.v1.OrderGroupChildR\bchildren\x1a;\n" +
+	"\rMetaDataEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"m\n" +
+	"\x0fOrderGroupChild\x12\x14\n" +
+	"\x05event\x18\x01 \x01(\tR\x05event\x12D\n" +
+	"\tpositions\x18\x02 \x03(\v2&.riptik.booking.v1.OrderCreatePositionR\tpositions\"\xa8\x02\n" +
+	"\x18CreateOrderGroupResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"group_code\x18\x02 \x01(\tR\tgroupCode\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\tR\x05total\x124\n" +
+	"\bchildren\x18\x04 \x03(\v2\x18.riptik.booking.v1.OrderR\bchildren\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x05 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x06 \x01(\tR\ferrorMessage\x12C\n" +
+	"\vgroup_error\x18\a \x01(\v2\".riptik.booking.v1.OrderGroupErrorR\n" +
+	"groupError\"\xa4\x01\n" +
+	"\x0fOrderGroupError\x12*\n" +
+	"\x11failed_event_slug\x18\x01 \x01(\tR\x0ffailedEventSlug\x12*\n" +
+	"\x11failed_event_name\x18\x02 \x01(\tR\x0ffailedEventName\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\x12!\n" +
+	"\fposition_ref\x18\x04 \x01(\tR\vpositionRef\"S\n" +
+	"\x14GetOrderGroupRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x1d\n" +
+	"\n" +
+	"group_code\x18\x02 \x01(\tR\tgroupCode\"\xc7\x02\n" +
+	"\n" +
+	"OrderGroup\x12\x1d\n" +
+	"\n" +
+	"group_code\x18\x01 \x01(\tR\tgroupCode\x12\x1c\n" +
+	"\torganizer\x18\x02 \x01(\tR\torganizer\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\x12\x14\n" +
+	"\x05email\x18\x04 \x01(\tR\x05email\x12\x14\n" +
+	"\x05phone\x18\x05 \x01(\tR\x05phone\x12\x14\n" +
+	"\x05total\x18\x06 \x01(\tR\x05total\x12\x1a\n" +
+	"\bcurrency\x18\a \x01(\tR\bcurrency\x12\x1a\n" +
+	"\bdatetime\x18\b \x01(\tR\bdatetime\x12\x18\n" +
+	"\aexpires\x18\t \x01(\tR\aexpires\x12\x1a\n" +
+	"\btestmode\x18\n" +
+	" \x01(\bR\btestmode\x124\n" +
+	"\bchildren\x18\v \x03(\v2\x18.riptik.booking.v1.OrderR\bchildren\"\xaa\x01\n" +
+	"\x15GetOrderGroupResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x123\n" +
+	"\x05group\x18\x02 \x01(\v2\x1d.riptik.booking.v1.OrderGroupR\x05group\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"|\n" +
+	"\x16ListOrderGroupsRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x03 \x01(\x05R\x06offset\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\"\xc6\x01\n" +
+	"\x17ListOrderGroupsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05count\x18\x02 \x01(\x05R\x05count\x127\n" +
+	"\aresults\x18\x03 \x03(\v2\x1d.riptik.booking.v1.OrderGroupR\aresults\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_order_proto_rawDescOnce sync.Once
@@ -2154,7 +3028,7 @@ func file_v1_booking_order_proto_rawDescGZIP() []byte {
 	return file_v1_booking_order_proto_rawDescData
 }
 
-var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
 var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),                 // 0: riptik.booking.v1.ListOrdersRequest
 	(*GetOrderRequest)(nil),                   // 1: riptik.booking.v1.GetOrderRequest
@@ -2178,18 +3052,29 @@ var file_v1_booking_order_proto_goTypes = []any{
 	(*PositionAnswer)(nil),                    // 19: riptik.booking.v1.PositionAnswer
 	(*OrderPayment)(nil),                      // 20: riptik.booking.v1.OrderPayment
 	(*OrderRefund)(nil),                       // 21: riptik.booking.v1.OrderRefund
-	nil,                                       // 22: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	nil,                                       // 23: riptik.booking.v1.OrderCreateData.MetaDataEntry
-	nil,                                       // 24: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	nil,                                       // 25: riptik.booking.v1.Order.InvoiceAddressEntry
-	nil,                                       // 26: riptik.booking.v1.Order.MetaDataEntry
+	(*CreateOrderGroupRequest)(nil),           // 22: riptik.booking.v1.CreateOrderGroupRequest
+	(*OrderGroupData)(nil),                    // 23: riptik.booking.v1.OrderGroupData
+	(*OrderGroupChild)(nil),                   // 24: riptik.booking.v1.OrderGroupChild
+	(*CreateOrderGroupResponse)(nil),          // 25: riptik.booking.v1.CreateOrderGroupResponse
+	(*OrderGroupError)(nil),                   // 26: riptik.booking.v1.OrderGroupError
+	(*GetOrderGroupRequest)(nil),              // 27: riptik.booking.v1.GetOrderGroupRequest
+	(*OrderGroup)(nil),                        // 28: riptik.booking.v1.OrderGroup
+	(*GetOrderGroupResponse)(nil),             // 29: riptik.booking.v1.GetOrderGroupResponse
+	(*ListOrderGroupsRequest)(nil),            // 30: riptik.booking.v1.ListOrderGroupsRequest
+	(*ListOrderGroupsResponse)(nil),           // 31: riptik.booking.v1.ListOrderGroupsResponse
+	nil,                                       // 32: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	nil,                                       // 33: riptik.booking.v1.OrderCreateData.MetaDataEntry
+	nil,                                       // 34: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	nil,                                       // 35: riptik.booking.v1.Order.InvoiceAddressEntry
+	nil,                                       // 36: riptik.booking.v1.Order.MetaDataEntry
+	nil,                                       // 37: riptik.booking.v1.OrderGroupData.MetaDataEntry
 }
 var file_v1_booking_order_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateOrderRequest.order_data:type_name -> riptik.booking.v1.OrderCreateData
-	22, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	23, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
+	32, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	33, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
 	4,  // 3: riptik.booking.v1.OrderCreateData.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	24, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	34, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
 	16, // 5: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
 	16, // 6: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
 	16, // 7: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
@@ -2198,14 +3083,23 @@ var file_v1_booking_order_proto_depIdxs = []int32{
 	17, // 10: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
 	20, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
 	21, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
-	25, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
-	26, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
+	35, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
+	36, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
 	19, // 15: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
-	16, // [16:16] is the sub-list for method output_type
-	16, // [16:16] is the sub-list for method input_type
-	16, // [16:16] is the sub-list for extension type_name
-	16, // [16:16] is the sub-list for extension extendee
-	0,  // [0:16] is the sub-list for field type_name
+	23, // 16: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
+	37, // 17: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
+	24, // 18: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
+	4,  // 19: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
+	16, // 20: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
+	26, // 21: riptik.booking.v1.CreateOrderGroupResponse.group_error:type_name -> riptik.booking.v1.OrderGroupError
+	16, // 22: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
+	28, // 23: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	28, // 24: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
+	25, // [25:25] is the sub-list for method output_type
+	25, // [25:25] is the sub-list for method input_type
+	25, // [25:25] is the sub-list for extension type_name
+	25, // [25:25] is the sub-list for extension extendee
+	0,  // [0:25] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_order_proto_init() }
@@ -2219,7 +3113,7 @@ func file_v1_booking_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_order_proto_rawDesc), len(file_v1_booking_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   27,
+			NumMessages:   38,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
