@@ -3926,6 +3926,7 @@ func (x *Fulfillment) GetMetadata() map[string]string {
 type GetFulfillmentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3963,6 +3964,13 @@ func (*GetFulfillmentRequest) Descriptor() ([]byte, []int) {
 func (x *GetFulfillmentRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *GetFulfillmentRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -7169,9 +7177,10 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\bmetadata\x18\t \x03(\v2,.riptik.booking.v1.Fulfillment.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"'\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"J\n" +
 	"\x15GetFulfillmentRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xe8\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xe8\x01\n" +
 	"\x17ListFulfillmentsRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x02 \x01(\x05R\x06offset\x12N\n" +
