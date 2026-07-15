@@ -5547,6 +5547,7 @@ type ListReconciliationHistoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ProductId     int64                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5591,6 +5592,13 @@ func (x *ListReconciliationHistoryRequest) GetProductId() int64 {
 func (x *ListReconciliationHistoryRequest) GetLimit() int32 {
 	if x != nil {
 		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListReconciliationHistoryRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -7238,11 +7246,12 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x0ereconciliation\x18\x02 \x01(\v2&.riptik.booking.v1.StockReconciliationR\x0ereconciliation\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"W\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"z\n" +
 	" ListReconciliationHistoryRequest\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x01 \x01(\x03R\tproductId\x12\x14\n" +
-	"\x05limit\x18\x02 \x01(\x05R\x05limit\"\xc3\x01\n" +
+	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\"\xc3\x01\n" +
 	"!ListReconciliationHistoryResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12@\n" +
 	"\arecords\x18\x02 \x03(\v2&.riptik.booking.v1.StockReconciliationR\arecords\x12\x1d\n" +
