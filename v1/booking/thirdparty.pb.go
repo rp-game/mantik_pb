@@ -184,6 +184,7 @@ type CreateSupplierRequest struct {
 	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,9,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active         bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
+	OrganizerId    int64                  `protobuf:"varint,12,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -293,6 +294,13 @@ func (x *CreateSupplierRequest) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *CreateSupplierRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
 }
 
 type UpdateSupplierRequest struct {
@@ -6637,7 +6645,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x89\x05\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xac\x05\n" +
 	"\x15CreateSupplierRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\x12#\n" +
@@ -6652,7 +6660,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"csv_config\x18\n" +
 	" \x03(\v27.riptik.booking.v1.CreateSupplierRequest.CsvConfigEntryR\tcsvConfig\x12\x16\n" +
-	"\x06active\x18\v \x01(\bR\x06active\x1aR\n" +
+	"\x06active\x18\v \x01(\bR\x06active\x12!\n" +
+	"\forganizer_id\x18\f \x01(\x03R\vorganizerId\x1aR\n" +
 	"\x0eApiConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
