@@ -1785,6 +1785,7 @@ type CreateProductRequest struct {
 	ResponseMapping   map[string]*anypb.Any  `protobuf:"bytes,12,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	MetaData          map[string]*anypb.Any  `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active            bool                   `protobuf:"varint,14,opt,name=active,proto3" json:"active,omitempty"`
+	OrganizerId       int64                  `protobuf:"varint,15,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1917,6 +1918,13 @@ func (x *CreateProductRequest) GetActive() bool {
 	return false
 }
 
+func (x *CreateProductRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type UpdateProductRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -1929,6 +1937,7 @@ type UpdateProductRequest struct {
 	CostPrice        float64                `protobuf:"fixed64,8,opt,name=cost_price,json=costPrice,proto3" json:"cost_price,omitempty"`
 	MarkupPercentage float64                `protobuf:"fixed64,9,opt,name=markup_percentage,json=markupPercentage,proto3" json:"markup_percentage,omitempty"`
 	Active           bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
+	OrganizerId      int64                  `protobuf:"varint,11,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -2033,9 +2042,17 @@ func (x *UpdateProductRequest) GetActive() bool {
 	return false
 }
 
+func (x *UpdateProductRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type GetProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2073,6 +2090,13 @@ func (*GetProductRequest) Descriptor() ([]byte, []int) {
 func (x *GetProductRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *GetProductRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -2437,6 +2461,7 @@ func (x *ListProductsResponse) GetErrorMessage() string {
 type DeleteProductRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // Product ID to delete
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2474,6 +2499,13 @@ func (*DeleteProductRequest) Descriptor() ([]byte, []int) {
 func (x *DeleteProductRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *DeleteProductRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -6858,7 +6890,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xdc\a\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xff\a\n" +
 	"\x14CreateProductRequest\x12\x1f\n" +
 	"\vsupplier_id\x18\x01 \x01(\x03R\n" +
 	"supplierId\x12.\n" +
@@ -6876,7 +6908,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x0frequest_mapping\x18\v \x03(\v2;.riptik.booking.v1.CreateProductRequest.RequestMappingEntryR\x0erequestMapping\x12g\n" +
 	"\x10response_mapping\x18\f \x03(\v2<.riptik.booking.v1.CreateProductRequest.ResponseMappingEntryR\x0fresponseMapping\x12R\n" +
 	"\tmeta_data\x18\r \x03(\v25.riptik.booking.v1.CreateProductRequest.MetaDataEntryR\bmetaData\x12\x16\n" +
-	"\x06active\x18\x0e \x01(\bR\x06active\x1aW\n" +
+	"\x06active\x18\x0e \x01(\bR\x06active\x12!\n" +
+	"\forganizer_id\x18\x0f \x01(\x03R\vorganizerId\x1aW\n" +
 	"\x13RequestMappingEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aX\n" +
@@ -6885,7 +6918,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xf2\x02\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x95\x03\n" +
 	"\x14UpdateProductRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\fexternal_sku\x18\x02 \x01(\tR\vexternalSku\x12!\n" +
@@ -6898,9 +6931,11 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"cost_price\x18\b \x01(\x01R\tcostPrice\x12+\n" +
 	"\x11markup_percentage\x18\t \x01(\x01R\x10markupPercentage\x12\x16\n" +
 	"\x06active\x18\n" +
-	" \x01(\bR\x06active\"#\n" +
+	" \x01(\bR\x06active\x12!\n" +
+	"\forganizer_id\x18\v \x01(\x03R\vorganizerId\"F\n" +
 	"\x11GetProductRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xe0\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xe0\x01\n" +
 	"\x13ListProductsRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x02 \x01(\x05R\x06offset\x12J\n" +
@@ -6934,9 +6969,10 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06offset\x18\x05 \x01(\x05R\x06offset\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"&\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"I\n" +
 	"\x14DeleteProductRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\x9f\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\x9f\x01\n" +
 	"\x15DeleteProductResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\adeleted\x18\x02 \x01(\bR\adeleted\x12\x0e\n" +
