@@ -1521,19 +1521,27 @@ func (x *Order) GetGroupCode() string {
 
 // Order position
 type OrderPosition struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                        // Position ID
-	Order         string                 `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`                                   // Order code
-	Positionid    int64                  `protobuf:"varint,3,opt,name=positionid,proto3" json:"positionid,omitempty"`                        // Position ID (duplicate for Pretix compat)
-	Canceled      bool                   `protobuf:"varint,4,opt,name=canceled,proto3" json:"canceled,omitempty"`                            // Is canceled
-	Item          int64                  `protobuf:"varint,5,opt,name=item,proto3" json:"item,omitempty"`                                    // Item ID
-	Variation     int64                  `protobuf:"varint,6,opt,name=variation,proto3" json:"variation,omitempty"`                          // Variation ID (optional, use 0 if not set)
-	Price         string                 `protobuf:"bytes,7,opt,name=price,proto3" json:"price,omitempty"`                                   // Price as decimal string
-	AttendeeName  string                 `protobuf:"bytes,8,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"` // Attendee name
-	Secret        string                 `protobuf:"bytes,9,opt,name=secret,proto3" json:"secret,omitempty"`                                 // Position secret
-	Answers       []*PositionAnswer      `protobuf:"bytes,10,rep,name=answers,proto3" json:"answers,omitempty"`                              // Question answers
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Id           int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                        // Position ID
+	Order        string                 `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`                                   // Order code
+	Positionid   int64                  `protobuf:"varint,3,opt,name=positionid,proto3" json:"positionid,omitempty"`                        // Position ID (duplicate for Pretix compat)
+	Canceled     bool                   `protobuf:"varint,4,opt,name=canceled,proto3" json:"canceled,omitempty"`                            // Is canceled
+	Item         int64                  `protobuf:"varint,5,opt,name=item,proto3" json:"item,omitempty"`                                    // Item ID
+	Variation    int64                  `protobuf:"varint,6,opt,name=variation,proto3" json:"variation,omitempty"`                          // Variation ID (optional, use 0 if not set)
+	Price        string                 `protobuf:"bytes,7,opt,name=price,proto3" json:"price,omitempty"`                                   // Price as decimal string
+	AttendeeName string                 `protobuf:"bytes,8,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"` // Attendee name
+	Secret       string                 `protobuf:"bytes,9,opt,name=secret,proto3" json:"secret,omitempty"`                                 // Position secret
+	Answers      []*PositionAnswer      `protobuf:"bytes,10,rep,name=answers,proto3" json:"answers,omitempty"`                              // Question answers
+	// Third-party (offline/CSV-imported) voucher fields — empty for normal seat/GA items.
+	// See booking-core internal/models/order.go's TicketCode/TicketBarcode/TicketQRCode/
+	// FulfillmentStatus columns, populated by internal/nats/thirdparty_handlers.go's
+	// fulfillOrderWithCSV/fulfillOrderWithAPI after payment confirmation (async).
+	TicketCode        string `protobuf:"bytes,11,opt,name=ticket_code,json=ticketCode,proto3" json:"ticket_code,omitempty"`                      // Third-party voucher code (empty if not applicable/not yet fulfilled)
+	TicketBarcode     string `protobuf:"bytes,12,opt,name=ticket_barcode,json=ticketBarcode,proto3" json:"ticket_barcode,omitempty"`             // Third-party voucher barcode payload (may equal ticket_code)
+	TicketQr          string `protobuf:"bytes,13,opt,name=ticket_qr,json=ticketQr,proto3" json:"ticket_qr,omitempty"`                            // Third-party voucher QR payload (may equal ticket_code)
+	FulfillmentStatus string `protobuf:"bytes,14,opt,name=fulfillment_status,json=fulfillmentStatus,proto3" json:"fulfillment_status,omitempty"` // "", "pending", "fulfilled", "failed", "refunded" — check before showing ticket_code
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *OrderPosition) Reset() {
@@ -1634,6 +1642,34 @@ func (x *OrderPosition) GetAnswers() []*PositionAnswer {
 		return x.Answers
 	}
 	return nil
+}
+
+func (x *OrderPosition) GetTicketCode() string {
+	if x != nil {
+		return x.TicketCode
+	}
+	return ""
+}
+
+func (x *OrderPosition) GetTicketBarcode() string {
+	if x != nil {
+		return x.TicketBarcode
+	}
+	return ""
+}
+
+func (x *OrderPosition) GetTicketQr() string {
+	if x != nil {
+		return x.TicketQr
+	}
+	return ""
+}
+
+func (x *OrderPosition) GetFulfillmentStatus() string {
+	if x != nil {
+		return x.FulfillmentStatus
+	}
+	return ""
 }
 
 // Order position detail (for findBySecret response)
@@ -2895,7 +2931,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb3\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc7\x03\n" +
 	"\rOrderPosition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05order\x18\x02 \x01(\tR\x05order\x12\x1e\n" +
@@ -2909,7 +2945,12 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\rattendee_name\x18\b \x01(\tR\fattendeeName\x12\x16\n" +
 	"\x06secret\x18\t \x01(\tR\x06secret\x12;\n" +
 	"\aanswers\x18\n" +
-	" \x03(\v2!.riptik.booking.v1.PositionAnswerR\aanswers\"\x80\x03\n" +
+	" \x03(\v2!.riptik.booking.v1.PositionAnswerR\aanswers\x12\x1f\n" +
+	"\vticket_code\x18\v \x01(\tR\n" +
+	"ticketCode\x12%\n" +
+	"\x0eticket_barcode\x18\f \x01(\tR\rticketBarcode\x12\x1b\n" +
+	"\tticket_qr\x18\r \x01(\tR\bticketQr\x12-\n" +
+	"\x12fulfillment_status\x18\x0e \x01(\tR\x11fulfillmentStatus\"\x80\x03\n" +
 	"\x13OrderPositionDetail\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x17\n" +
