@@ -314,6 +314,7 @@ type UpdateSupplierRequest struct {
 	Currency       string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
 	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	OrganizerId    int64                  `protobuf:"varint,10,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -411,9 +412,17 @@ func (x *UpdateSupplierRequest) GetCsvConfig() map[string]*anypb.Any {
 	return nil
 }
 
+func (x *UpdateSupplierRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type GetSupplierRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -451,6 +460,13 @@ func (*GetSupplierRequest) Descriptor() ([]byte, []int) {
 func (x *GetSupplierRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *GetSupplierRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -815,6 +831,7 @@ func (x *ListSuppliersResponse) GetErrorMessage() string {
 type DeleteSupplierRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"` // Supplier ID to delete
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -852,6 +869,13 @@ func (*DeleteSupplierRequest) Descriptor() ([]byte, []int) {
 func (x *DeleteSupplierRequest) GetId() int64 {
 	if x != nil {
 		return x.Id
+	}
+	return 0
+}
+
+func (x *DeleteSupplierRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -6667,7 +6691,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xad\x04\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd0\x04\n" +
 	"\x15UpdateSupplierRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -6679,15 +6703,18 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"api_config\x18\b \x03(\v27.riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntryR\tapiConfig\x12V\n" +
 	"\n" +
-	"csv_config\x18\t \x03(\v27.riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntryR\tcsvConfig\x1aR\n" +
+	"csv_config\x18\t \x03(\v27.riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntryR\tcsvConfig\x12!\n" +
+	"\forganizer_id\x18\n" +
+	" \x01(\x03R\vorganizerId\x1aR\n" +
 	"\x0eApiConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"$\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"G\n" +
 	"\x12GetSupplierRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xe2\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xe2\x01\n" +
 	"\x14ListSuppliersRequest\x12\x14\n" +
 	"\x05limit\x18\x01 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x02 \x01(\x05R\x06offset\x12K\n" +
@@ -6721,9 +6748,10 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06offset\x18\x05 \x01(\x05R\x06offset\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"'\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"J\n" +
 	"\x15DeleteSupplierRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xa0\x01\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xa0\x01\n" +
 	"\x16DeleteSupplierResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\adeleted\x18\x02 \x01(\bR\adeleted\x12\x0e\n" +
