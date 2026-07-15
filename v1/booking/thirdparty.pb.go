@@ -1241,6 +1241,7 @@ type BulkUpdateSuppliersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
 	Updates       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1287,6 +1288,13 @@ func (x *BulkUpdateSuppliersRequest) GetUpdates() map[string]*anypb.Any {
 		return x.Updates
 	}
 	return nil
+}
+
+func (x *BulkUpdateSuppliersRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
 }
 
 // Bulk update response
@@ -1386,6 +1394,7 @@ func (x *BulkUpdateSuppliersResponse) GetErrorMessage() string {
 type BulkDeleteSuppliersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1425,6 +1434,13 @@ func (x *BulkDeleteSuppliersRequest) GetIds() []int64 {
 		return x.Ids
 	}
 	return nil
+}
+
+func (x *BulkDeleteSuppliersRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
 }
 
 // Bulk delete response
@@ -2895,6 +2911,7 @@ type BulkUpdateProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
 	Updates       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2941,6 +2958,13 @@ func (x *BulkUpdateProductsRequest) GetUpdates() map[string]*anypb.Any {
 		return x.Updates
 	}
 	return nil
+}
+
+func (x *BulkUpdateProductsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
 }
 
 // Bulk update response
@@ -3040,6 +3064,7 @@ func (x *BulkUpdateProductsResponse) GetErrorMessage() string {
 type BulkDeleteProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3079,6 +3104,13 @@ func (x *BulkDeleteProductsRequest) GetIds() []int64 {
 		return x.Ids
 	}
 	return nil
+}
+
+func (x *BulkDeleteProductsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
 }
 
 // Bulk delete response
@@ -6824,10 +6856,11 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06errors\x18\x05 \x03(\v2$.riptik.booking.v1.BulkSupplierErrorR\x06errors\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\xd6\x01\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\xf9\x01\n" +
 	"\x1aBulkUpdateSuppliersRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12T\n" +
-	"\aupdates\x18\x02 \x03(\v2:.riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntryR\aupdates\x1aP\n" +
+	"\aupdates\x18\x02 \x03(\v2:.riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntryR\aupdates\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\x1aP\n" +
 	"\fUpdatesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x89\x02\n" +
@@ -6839,9 +6872,10 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06errors\x18\x05 \x03(\v2$.riptik.booking.v1.BulkSupplierErrorR\x06errors\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\".\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"Q\n" +
 	"\x1aBulkDeleteSuppliersRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\x03R\x03ids\"\x89\x02\n" +
+	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\x89\x02\n" +
 	"\x1bBulkDeleteSuppliersResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1c\n" +
 	"\tprocessed\x18\x02 \x01(\x05R\tprocessed\x12\x18\n" +
@@ -7019,10 +7053,11 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06errors\x18\x05 \x03(\v2#.riptik.booking.v1.BulkProductErrorR\x06errors\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\xd4\x01\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"\xf7\x01\n" +
 	"\x19BulkUpdateProductsRequest\x12\x10\n" +
 	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12S\n" +
-	"\aupdates\x18\x02 \x03(\v29.riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntryR\aupdates\x1aP\n" +
+	"\aupdates\x18\x02 \x03(\v29.riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntryR\aupdates\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\x1aP\n" +
 	"\fUpdatesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x87\x02\n" +
@@ -7034,9 +7069,10 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06errors\x18\x05 \x03(\v2#.riptik.booking.v1.BulkProductErrorR\x06errors\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"-\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"P\n" +
 	"\x19BulkDeleteProductsRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\x03R\x03ids\"\x87\x02\n" +
+	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\x87\x02\n" +
 	"\x1aBulkDeleteProductsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1c\n" +
 	"\tprocessed\x18\x02 \x01(\x05R\tprocessed\x12\x18\n" +
