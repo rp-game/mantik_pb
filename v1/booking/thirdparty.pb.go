@@ -3389,6 +3389,7 @@ type ImportInventoryRequest struct {
 	CsvData        []byte                 `protobuf:"bytes,2,opt,name=csv_data,json=csvData,proto3" json:"csv_data,omitempty"`
 	BatchReference string                 `protobuf:"bytes,3,opt,name=batch_reference,json=batchReference,proto3" json:"batch_reference,omitempty"`
 	Config         map[string]bool        `protobuf:"bytes,4,rep,name=config,proto3" json:"config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	OrganizerId    int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -3451,12 +3452,20 @@ func (x *ImportInventoryRequest) GetConfig() map[string]bool {
 	return nil
 }
 
+func (x *ImportInventoryRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type ListInventoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ProductId     int64                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,3,opt,name=offset,proto3" json:"offset,omitempty"`
 	Filter        map[string]*anypb.Any  `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	OrganizerId   int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3519,9 +3528,17 @@ func (x *ListInventoryRequest) GetFilter() map[string]*anypb.Any {
 	return nil
 }
 
+func (x *ListInventoryRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type GetInventoryStatsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ProductId     int64                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3559,6 +3576,13 @@ func (*GetInventoryStatsRequest) Descriptor() ([]byte, []int) {
 func (x *GetInventoryStatsRequest) GetProductId() int64 {
 	if x != nil {
 		return x.ProductId
+	}
+	return 0
+}
+
+func (x *GetInventoryStatsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -7110,28 +7134,31 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\vredeemed_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"redeemedAt\x129\n" +
 	"\n" +
-	"expired_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\texpiredAt\"\x85\x02\n" +
+	"expired_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\texpiredAt\"\xa8\x02\n" +
 	"\x16ImportInventoryRequest\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x01 \x01(\x03R\tproductId\x12\x19\n" +
 	"\bcsv_data\x18\x02 \x01(\fR\acsvData\x12'\n" +
 	"\x0fbatch_reference\x18\x03 \x01(\tR\x0ebatchReference\x12M\n" +
-	"\x06config\x18\x04 \x03(\v25.riptik.booking.v1.ImportInventoryRequest.ConfigEntryR\x06config\x1a9\n" +
+	"\x06config\x18\x04 \x03(\v25.riptik.booking.v1.ImportInventoryRequest.ConfigEntryR\x06config\x12!\n" +
+	"\forganizer_id\x18\x05 \x01(\x03R\vorganizerId\x1a9\n" +
 	"\vConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01\"\x81\x02\n" +
+	"\x05value\x18\x02 \x01(\bR\x05value:\x028\x01\"\xa4\x02\n" +
 	"\x14ListInventoryRequest\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x01 \x01(\x03R\tproductId\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x03 \x01(\x05R\x06offset\x12K\n" +
-	"\x06filter\x18\x04 \x03(\v23.riptik.booking.v1.ListInventoryRequest.FilterEntryR\x06filter\x1aO\n" +
+	"\x06filter\x18\x04 \x03(\v23.riptik.booking.v1.ListInventoryRequest.FilterEntryR\x06filter\x12!\n" +
+	"\forganizer_id\x18\x05 \x01(\x03R\vorganizerId\x1aO\n" +
 	"\vFilterEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"9\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\\\n" +
 	"\x18GetInventoryStatsRequest\x12\x1d\n" +
 	"\n" +
-	"product_id\x18\x01 \x01(\x03R\tproductId\"\xd5\x01\n" +
+	"product_id\x18\x01 \x01(\x03R\tproductId\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xd5\x01\n" +
 	"\x17ImportInventoryResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
 	"\rsuccess_count\x18\x02 \x01(\x05R\fsuccessCount\x12\x1f\n" +
