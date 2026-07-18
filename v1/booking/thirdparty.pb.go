@@ -4063,6 +4063,7 @@ type GetFulfillmentStatsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SupplierId    int64                  `protobuf:"varint,1,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
 	Days          int32                  `protobuf:"varint,2,opt,name=days,proto3" json:"days,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4107,6 +4108,13 @@ func (x *GetFulfillmentStatsRequest) GetSupplierId() int64 {
 func (x *GetFulfillmentStatsRequest) GetDays() int32 {
 	if x != nil {
 		return x.Days
+	}
+	return 0
+}
+
+func (x *GetFulfillmentStatsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -7262,11 +7270,12 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x06filter\x18\x03 \x03(\v26.riptik.booking.v1.ListFulfillmentsRequest.FilterEntryR\x06filter\x1aO\n" +
 	"\vFilterEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"Q\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"t\n" +
 	"\x1aGetFulfillmentStatsRequest\x12\x1f\n" +
 	"\vsupplier_id\x18\x01 \x01(\x03R\n" +
 	"supplierId\x12\x12\n" +
-	"\x04days\x18\x02 \x01(\x05R\x04days\"\xb8\x01\n" +
+	"\x04days\x18\x02 \x01(\x05R\x04days\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\"\xb8\x01\n" +
 	"\x16GetFulfillmentResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12@\n" +
 	"\vfulfillment\x18\x02 \x01(\v2\x1e.riptik.booking.v1.FulfillmentR\vfulfillment\x12\x1d\n" +
