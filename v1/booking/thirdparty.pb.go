@@ -4373,6 +4373,7 @@ type AssignProductToEventRequest struct {
 	EventPricing  map[string]*anypb.Any  `protobuf:"bytes,6,rep,name=event_pricing,json=eventPricing,proto3" json:"event_pricing,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	EventQuota    int32                  `protobuf:"varint,7,opt,name=event_quota,json=eventQuota,proto3" json:"event_quota,omitempty"`
 	EventSettings map[string]*anypb.Any  `protobuf:"bytes,8,rep,name=event_settings,json=eventSettings,proto3" json:"event_settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	OrganizerId   int64                  `protobuf:"varint,9,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4463,10 +4464,18 @@ func (x *AssignProductToEventRequest) GetEventSettings() map[string]*anypb.Any {
 	return nil
 }
 
+func (x *AssignProductToEventRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type UnassignProductFromEventRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	AssignmentId  int64                  `protobuf:"varint,2,opt,name=assignment_id,json=assignmentId,proto3" json:"assignment_id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4515,12 +4524,20 @@ func (x *UnassignProductFromEventRequest) GetAssignmentId() int64 {
 	return 0
 }
 
+func (x *UnassignProductFromEventRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type UpdateEventProductAssignmentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	AssignmentId  int64                  `protobuf:"varint,2,opt,name=assignment_id,json=assignmentId,proto3" json:"assignment_id,omitempty"`
 	PriceOverride float64                `protobuf:"fixed64,3,opt,name=price_override,json=priceOverride,proto3" json:"price_override,omitempty"`
 	SupplierId    int64                  `protobuf:"varint,4,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4583,12 +4600,20 @@ func (x *UpdateEventProductAssignmentRequest) GetSupplierId() int64 {
 	return 0
 }
 
+func (x *UpdateEventProductAssignmentRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type GetEventProductAssignmentsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	Filters       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4651,9 +4676,17 @@ func (x *GetEventProductAssignmentsRequest) GetOffset() int32 {
 	return 0
 }
 
+func (x *GetEventProductAssignmentsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type GetEventInventoryStatsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4695,11 +4728,19 @@ func (x *GetEventInventoryStatsRequest) GetEventSlug() string {
 	return ""
 }
 
+func (x *GetEventInventoryStatsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
 type AllocateEventInventoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	ProductId     int64                  `protobuf:"varint,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,4,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4751,6 +4792,13 @@ func (x *AllocateEventInventoryRequest) GetProductId() int64 {
 func (x *AllocateEventInventoryRequest) GetQuantity() int32 {
 	if x != nil {
 		return x.Quantity
+	}
+	return 0
+}
+
+func (x *AllocateEventInventoryRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
 	}
 	return 0
 }
@@ -7247,7 +7295,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"StatsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xcb\x05\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xee\x05\n" +
 	"\x1bAssignProductToEventRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12\x1d\n" +
@@ -7260,7 +7308,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\revent_pricing\x18\x06 \x03(\v2@.riptik.booking.v1.AssignProductToEventRequest.EventPricingEntryR\feventPricing\x12\x1f\n" +
 	"\vevent_quota\x18\a \x01(\x05R\n" +
 	"eventQuota\x12h\n" +
-	"\x0eevent_settings\x18\b \x03(\v2A.riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntryR\reventSettings\x1a7\n" +
+	"\x0eevent_settings\x18\b \x03(\v2A.riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntryR\reventSettings\x12!\n" +
+	"\forganizer_id\x18\t \x01(\x03R\vorganizerId\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aU\n" +
@@ -7269,36 +7318,41 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aV\n" +
 	"\x12EventSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"e\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x88\x01\n" +
 	"\x1fUnassignProductFromEventRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12#\n" +
-	"\rassignment_id\x18\x02 \x01(\x03R\fassignmentId\"\xb1\x01\n" +
+	"\rassignment_id\x18\x02 \x01(\x03R\fassignmentId\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\"\xd4\x01\n" +
 	"#UpdateEventProductAssignmentRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12#\n" +
 	"\rassignment_id\x18\x02 \x01(\x03R\fassignmentId\x12%\n" +
 	"\x0eprice_override\x18\x03 \x01(\x01R\rpriceOverride\x12\x1f\n" +
 	"\vsupplier_id\x18\x04 \x01(\x03R\n" +
-	"supplierId\"\x9f\x02\n" +
+	"supplierId\x12!\n" +
+	"\forganizer_id\x18\x05 \x01(\x03R\vorganizerId\"\xc2\x02\n" +
 	"!GetEventProductAssignmentsRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12[\n" +
 	"\afilters\x18\x02 \x03(\v2A.riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntryR\afilters\x12\x14\n" +
 	"\x05limit\x18\x03 \x01(\x05R\x05limit\x12\x16\n" +
-	"\x06offset\x18\x04 \x01(\x05R\x06offset\x1aP\n" +
+	"\x06offset\x18\x04 \x01(\x05R\x06offset\x12!\n" +
+	"\forganizer_id\x18\x05 \x01(\x03R\vorganizerId\x1aP\n" +
 	"\fFiltersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\">\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"a\n" +
 	"\x1dGetEventInventoryStatsRequest\x12\x1d\n" +
 	"\n" +
-	"event_slug\x18\x01 \x01(\tR\teventSlug\"y\n" +
+	"event_slug\x18\x01 \x01(\tR\teventSlug\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\x9c\x01\n" +
 	"\x1dAllocateEventInventoryRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12\x1d\n" +
 	"\n" +
 	"product_id\x18\x02 \x01(\x03R\tproductId\x12\x1a\n" +
-	"\bquantity\x18\x03 \x01(\x05R\bquantity\"\xa1\x01\n" +
+	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12!\n" +
+	"\forganizer_id\x18\x04 \x01(\x03R\vorganizerId\"\xa1\x01\n" +
 	"\x1cAssignProductToEventResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
 	"\rassignment_id\x18\x02 \x01(\x03R\fassignmentId\x12\x1d\n" +
