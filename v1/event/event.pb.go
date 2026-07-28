@@ -7,10 +7,10 @@
 package event
 
 import (
+	any1 "github.com/golang/protobuf/ptypes/any"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	anypb "google.golang.org/protobuf/types/known/anypb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -565,8 +565,11 @@ type ListSubEventsRequest struct {
 	DateFromAfter  string                 `protobuf:"bytes,7,opt,name=date_from_after,json=dateFromAfter,proto3" json:"date_from_after,omitempty"`
 	DateFromBefore string                 `protobuf:"bytes,8,opt,name=date_from_before,json=dateFromBefore,proto3" json:"date_from_before,omitempty"`
 	ModifiedSince  string                 `protobuf:"bytes,9,opt,name=modified_since,json=modifiedSince,proto3" json:"modified_since,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// tag_ids (G9-18, mantik-cinema-chain.md §5B) — lọc suất theo tag (booking-core.tag, vd type='film').
+	// Ngữ nghĩa AND: suất phải có ĐỦ mọi tag trong danh sách mới khớp. Rỗng = không lọc (hành vi cũ).
+	TagIds        []int64 `protobuf:"varint,10,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ListSubEventsRequest) Reset() {
@@ -660,6 +663,13 @@ func (x *ListSubEventsRequest) GetModifiedSince() string {
 		return x.ModifiedSince
 	}
 	return ""
+}
+
+func (x *ListSubEventsRequest) GetTagIds() []int64 {
+	if x != nil {
+		return x.TagIds
+	}
+	return nil
 }
 
 type CreateEventRequest struct {
@@ -849,13 +859,13 @@ type UpdateEventRequest struct {
 	NameEn        string                 `protobuf:"bytes,3,opt,name=name_en,json=nameEn,proto3" json:"name_en,omitempty"`
 	NameVi        string                 `protobuf:"bytes,4,opt,name=name_vi,json=nameVi,proto3" json:"name_vi,omitempty"`
 	Currency      string                 `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
-	DateFrom      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
-	DateTo        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
+	DateFrom      *timestamp.Timestamp   `protobuf:"bytes,6,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
+	DateTo        *timestamp.Timestamp   `protobuf:"bytes,7,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
 	IsPublic      bool                   `protobuf:"varint,8,opt,name=is_public,json=isPublic,proto3" json:"is_public,omitempty"`
 	LiveMode      bool                   `protobuf:"varint,9,opt,name=live_mode,json=liveMode,proto3" json:"live_mode,omitempty"`
 	TestMode      bool                   `protobuf:"varint,10,opt,name=test_mode,json=testMode,proto3" json:"test_mode,omitempty"`
-	Location      map[string]*anypb.Any  `protobuf:"bytes,11,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	Settings      map[string]*anypb.Any  `protobuf:"bytes,12,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Location      map[string]*any1.Any   `protobuf:"bytes,11,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Settings      map[string]*any1.Any   `protobuf:"bytes,12,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -925,14 +935,14 @@ func (x *UpdateEventRequest) GetCurrency() string {
 	return ""
 }
 
-func (x *UpdateEventRequest) GetDateFrom() *timestamppb.Timestamp {
+func (x *UpdateEventRequest) GetDateFrom() *timestamp.Timestamp {
 	if x != nil {
 		return x.DateFrom
 	}
 	return nil
 }
 
-func (x *UpdateEventRequest) GetDateTo() *timestamppb.Timestamp {
+func (x *UpdateEventRequest) GetDateTo() *timestamp.Timestamp {
 	if x != nil {
 		return x.DateTo
 	}
@@ -960,14 +970,14 @@ func (x *UpdateEventRequest) GetTestMode() bool {
 	return false
 }
 
-func (x *UpdateEventRequest) GetLocation() map[string]*anypb.Any {
+func (x *UpdateEventRequest) GetLocation() map[string]*any1.Any {
 	if x != nil {
 		return x.Location
 	}
 	return nil
 }
 
-func (x *UpdateEventRequest) GetSettings() map[string]*anypb.Any {
+func (x *UpdateEventRequest) GetSettings() map[string]*any1.Any {
 	if x != nil {
 		return x.Settings
 	}
@@ -4064,7 +4074,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x0ecreated_before\x18\v \x01(\tR\rcreatedBefore\"C\n" +
 	"\x0fGetEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
-	"\x04slug\x18\x02 \x01(\tR\x04slug\"\xa3\x02\n" +
+	"\x04slug\x18\x02 \x01(\tR\x04slug\"\xbc\x02\n" +
 	"\x14ListSubEventsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -4074,7 +4084,9 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12&\n" +
 	"\x0fdate_from_after\x18\a \x01(\tR\rdateFromAfter\x12(\n" +
 	"\x10date_from_before\x18\b \x01(\tR\x0edateFromBefore\x12%\n" +
-	"\x0emodified_since\x18\t \x01(\tR\rmodifiedSince\"\xd3\a\n" +
+	"\x0emodified_since\x18\t \x01(\tR\rmodifiedSince\x12\x17\n" +
+	"\atag_ids\x18\n" +
+	" \x03(\x03R\x06tagIds\"\xd3\a\n" +
 	"\x12CreateEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12A\n" +
 	"\x04name\x18\x02 \x03(\v2-.riptik.event.v1.CreateEventRequest.NameEntryR\x04name\x12\x12\n" +
@@ -4476,8 +4488,8 @@ var file_v1_event_event_proto_goTypes = []any{
 	nil,                                   // 63: riptik.event.v1.SubEventDraft.NameEntry
 	nil,                                   // 64: riptik.event.v1.SubEventDraft.LocationEntry
 	nil,                                   // 65: riptik.event.v1.Organizer.SettingsEntry
-	(*timestamppb.Timestamp)(nil),         // 66: google.protobuf.Timestamp
-	(*anypb.Any)(nil),                     // 67: google.protobuf.Any
+	(*timestamp.Timestamp)(nil),           // 66: google.protobuf.Timestamp
+	(*any1.Any)(nil),                      // 67: google.protobuf.Any
 }
 var file_v1_event_event_proto_depIdxs = []int32{
 	50, // 0: riptik.event.v1.Event.name:type_name -> riptik.event.v1.Event.NameEntry
