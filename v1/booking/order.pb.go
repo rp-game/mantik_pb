@@ -2798,6 +2798,139 @@ func (x *ListOrderGroupsResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Request: Cancel a group order (cancels the group AND every pending child in one
+// transaction; releases quota + seats for all children). Rejected if the group is
+// already paid/canceled/expired — mirrors CancelOrderRequest's single-order semantics
+// at the group level (§mantik.pos.md TicketingPort saga compensation).
+type CancelOrderGroupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                  // Organizer slug (required)
+	GroupCode     string                 `protobuf:"bytes,2,opt,name=group_code,json=groupCode,proto3" json:"group_code,omitempty"` // Group code (required)
+	Comment       string                 `protobuf:"bytes,3,opt,name=comment,proto3" json:"comment,omitempty"`                      // Cancellation reason (optional)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelOrderGroupRequest) Reset() {
+	*x = CancelOrderGroupRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelOrderGroupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelOrderGroupRequest) ProtoMessage() {}
+
+func (x *CancelOrderGroupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelOrderGroupRequest.ProtoReflect.Descriptor instead.
+func (*CancelOrderGroupRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *CancelOrderGroupRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CancelOrderGroupRequest) GetGroupCode() string {
+	if x != nil {
+		return x.GroupCode
+	}
+	return ""
+}
+
+func (x *CancelOrderGroupRequest) GetComment() string {
+	if x != nil {
+		return x.Comment
+	}
+	return ""
+}
+
+// Response: Cancel group order
+type CancelOrderGroupResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                              // Whether the group was canceled
+	Group         *OrderGroup            `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`                                   // The canceled group + its children (post-cancel state)
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`          // Machine error code (e.g. NOT_FOUND, ALREADY_PAID)
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // Human error message
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelOrderGroupResponse) Reset() {
+	*x = CancelOrderGroupResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelOrderGroupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelOrderGroupResponse) ProtoMessage() {}
+
+func (x *CancelOrderGroupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelOrderGroupResponse.ProtoReflect.Descriptor instead.
+func (*CancelOrderGroupResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *CancelOrderGroupResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CancelOrderGroupResponse) GetGroup() *OrderGroup {
+	if x != nil {
+		return x.Group
+	}
+	return nil
+}
+
+func (x *CancelOrderGroupResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CancelOrderGroupResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_order_proto protoreflect.FileDescriptor
 
 const file_v1_booking_order_proto_rawDesc = "" +
@@ -3082,7 +3215,18 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\aresults\x18\x03 \x03(\v2\x1d.riptik.booking.v1.OrderGroupR\aresults\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x05 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"p\n" +
+	"\x17CancelOrderGroupRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x1d\n" +
+	"\n" +
+	"group_code\x18\x02 \x01(\tR\tgroupCode\x12\x18\n" +
+	"\acomment\x18\x03 \x01(\tR\acomment\"\xad\x01\n" +
+	"\x18CancelOrderGroupResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x123\n" +
+	"\x05group\x18\x02 \x01(\v2\x1d.riptik.booking.v1.OrderGroupR\x05group\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_order_proto_rawDescOnce sync.Once
@@ -3096,7 +3240,7 @@ func file_v1_booking_order_proto_rawDescGZIP() []byte {
 	return file_v1_booking_order_proto_rawDescData
 }
 
-var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 38)
+var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
 var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),                 // 0: riptik.booking.v1.ListOrdersRequest
 	(*GetOrderRequest)(nil),                   // 1: riptik.booking.v1.GetOrderRequest
@@ -3130,19 +3274,21 @@ var file_v1_booking_order_proto_goTypes = []any{
 	(*GetOrderGroupResponse)(nil),             // 29: riptik.booking.v1.GetOrderGroupResponse
 	(*ListOrderGroupsRequest)(nil),            // 30: riptik.booking.v1.ListOrderGroupsRequest
 	(*ListOrderGroupsResponse)(nil),           // 31: riptik.booking.v1.ListOrderGroupsResponse
-	nil,                                       // 32: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	nil,                                       // 33: riptik.booking.v1.OrderCreateData.MetaDataEntry
-	nil,                                       // 34: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	nil,                                       // 35: riptik.booking.v1.Order.InvoiceAddressEntry
-	nil,                                       // 36: riptik.booking.v1.Order.MetaDataEntry
-	nil,                                       // 37: riptik.booking.v1.OrderGroupData.MetaDataEntry
+	(*CancelOrderGroupRequest)(nil),           // 32: riptik.booking.v1.CancelOrderGroupRequest
+	(*CancelOrderGroupResponse)(nil),          // 33: riptik.booking.v1.CancelOrderGroupResponse
+	nil,                                       // 34: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	nil,                                       // 35: riptik.booking.v1.OrderCreateData.MetaDataEntry
+	nil,                                       // 36: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	nil,                                       // 37: riptik.booking.v1.Order.InvoiceAddressEntry
+	nil,                                       // 38: riptik.booking.v1.Order.MetaDataEntry
+	nil,                                       // 39: riptik.booking.v1.OrderGroupData.MetaDataEntry
 }
 var file_v1_booking_order_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateOrderRequest.order_data:type_name -> riptik.booking.v1.OrderCreateData
-	32, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	33, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
+	34, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	35, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
 	4,  // 3: riptik.booking.v1.OrderCreateData.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	34, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	36, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
 	16, // 5: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
 	16, // 6: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
 	16, // 7: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
@@ -3151,11 +3297,11 @@ var file_v1_booking_order_proto_depIdxs = []int32{
 	17, // 10: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
 	20, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
 	21, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
-	35, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
-	36, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
+	37, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
+	38, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
 	19, // 15: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
 	23, // 16: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
-	37, // 17: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
+	39, // 17: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
 	24, // 18: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
 	4,  // 19: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
 	16, // 20: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
@@ -3163,11 +3309,12 @@ var file_v1_booking_order_proto_depIdxs = []int32{
 	16, // 22: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
 	28, // 23: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
 	28, // 24: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	28, // 25: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_order_proto_init() }
@@ -3181,7 +3328,7 @@ func file_v1_booking_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_order_proto_rawDesc), len(file_v1_booking_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   38,
+			NumMessages:   40,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
