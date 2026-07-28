@@ -117,10 +117,13 @@ func (x *Tag) GetUpdatedAt() *timestamp.Timestamp {
 	return nil
 }
 
-// Requests
+// Requests — `organizer` là SLUG (khớp convention gọi qua NATS hiện có, vd `events.list`/
+// `subevents.list` dùng `organizer` slug string, không phải id nội bộ) — handler tự resolve slug→id
+// qua `organizers.get_by_slug` đã có sẵn (`EventRepository.GetOrganizerBySlug`), rồi mới lưu
+// `Tag.organizer_id` (int64, FK `organizers(id)`) trong DB.
 type ListTagsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
 	Type          string                 `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"` // rỗng = mọi type
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -156,11 +159,11 @@ func (*ListTagsRequest) Descriptor() ([]byte, []int) {
 	return file_v1_booking_tag_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ListTagsRequest) GetOrganizerId() int64 {
+func (x *ListTagsRequest) GetOrganizer() string {
 	if x != nil {
-		return x.OrganizerId
+		return x.Organizer
 	}
-	return 0
+	return ""
 }
 
 func (x *ListTagsRequest) GetType() string {
@@ -216,7 +219,7 @@ func (x *GetTagRequest) GetTagId() int64 {
 
 type CreateTagRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
 	Type          string                 `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
 	Name          map[string]string      `protobuf:"bytes,3,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	MetaData      map[string]string      `protobuf:"bytes,4,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -254,11 +257,11 @@ func (*CreateTagRequest) Descriptor() ([]byte, []int) {
 	return file_v1_booking_tag_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *CreateTagRequest) GetOrganizerId() int64 {
+func (x *CreateTagRequest) GetOrganizer() string {
 	if x != nil {
-		return x.OrganizerId
+		return x.Organizer
 	}
-	return 0
+	return ""
 }
 
 func (x *CreateTagRequest) GetType() string {
@@ -988,14 +991,14 @@ const file_v1_booking_tag_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"H\n" +
-	"\x0fListTagsRequest\x12!\n" +
-	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x12\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"C\n" +
+	"\x0fListTagsRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\tR\x04type\"&\n" +
 	"\rGetTagRequest\x12\x15\n" +
-	"\x06tag_id\x18\x01 \x01(\x03R\x05tagId\"\xd2\x02\n" +
-	"\x10CreateTagRequest\x12!\n" +
-	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x12\n" +
+	"\x06tag_id\x18\x01 \x01(\x03R\x05tagId\"\xcd\x02\n" +
+	"\x10CreateTagRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\tR\x04type\x12A\n" +
 	"\x04name\x18\x03 \x03(\v2-.riptik.booking.v1.CreateTagRequest.NameEntryR\x04name\x12N\n" +
 	"\tmeta_data\x18\x04 \x03(\v21.riptik.booking.v1.CreateTagRequest.MetaDataEntryR\bmetaData\x1a7\n" +
