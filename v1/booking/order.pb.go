@@ -1890,6 +1890,182 @@ func (x *PositionAnswer) GetAnswer() string {
 	return ""
 }
 
+// G9-21b/G9-23 — lưu câu trả lời SAU KHI order/position đã tạo thật (OrderCreatePosition KHÔNG có field
+// answers — proto gốc chỉ hỗ trợ đọc lại (OrderPosition.answers), chưa hỗ trợ ghi lúc tạo. Model DB
+// QuestionAnswer(order_position_id) đã tồn tại sẵn (Pretix-compatible), chỉ chưa có API nào ghi vào).
+// 1 request gộp NHIỀU answer thuộc NHIỀU position khác nhau (1 giỏ hàng có thể có nhiều dòng vé).
+type PositionAnswerInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PositionId    int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	QuestionId    int64                  `protobuf:"varint,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
+	Answer        string                 `protobuf:"bytes,3,opt,name=answer,proto3" json:"answer,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PositionAnswerInput) Reset() {
+	*x = PositionAnswerInput{}
+	mi := &file_v1_booking_order_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PositionAnswerInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PositionAnswerInput) ProtoMessage() {}
+
+func (x *PositionAnswerInput) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PositionAnswerInput.ProtoReflect.Descriptor instead.
+func (*PositionAnswerInput) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *PositionAnswerInput) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *PositionAnswerInput) GetQuestionId() int64 {
+	if x != nil {
+		return x.QuestionId
+	}
+	return 0
+}
+
+func (x *PositionAnswerInput) GetAnswer() string {
+	if x != nil {
+		return x.Answer
+	}
+	return ""
+}
+
+type SetPositionAnswersRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Answers       []*PositionAnswerInput `protobuf:"bytes,1,rep,name=answers,proto3" json:"answers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetPositionAnswersRequest) Reset() {
+	*x = SetPositionAnswersRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetPositionAnswersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetPositionAnswersRequest) ProtoMessage() {}
+
+func (x *SetPositionAnswersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetPositionAnswersRequest.ProtoReflect.Descriptor instead.
+func (*SetPositionAnswersRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *SetPositionAnswersRequest) GetAnswers() []*PositionAnswerInput {
+	if x != nil {
+		return x.Answers
+	}
+	return nil
+}
+
+type SetPositionAnswersResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	SavedCount    int32                  `protobuf:"varint,2,opt,name=saved_count,json=savedCount,proto3" json:"saved_count,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetPositionAnswersResponse) Reset() {
+	*x = SetPositionAnswersResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetPositionAnswersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetPositionAnswersResponse) ProtoMessage() {}
+
+func (x *SetPositionAnswersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetPositionAnswersResponse.ProtoReflect.Descriptor instead.
+func (*SetPositionAnswersResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SetPositionAnswersResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SetPositionAnswersResponse) GetSavedCount() int32 {
+	if x != nil {
+		return x.SavedCount
+	}
+	return 0
+}
+
+func (x *SetPositionAnswersResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SetPositionAnswersResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 // Order payment
 type OrderPayment struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1903,7 +2079,7 @@ type OrderPayment struct {
 
 func (x *OrderPayment) Reset() {
 	*x = OrderPayment{}
-	mi := &file_v1_booking_order_proto_msgTypes[20]
+	mi := &file_v1_booking_order_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1915,7 +2091,7 @@ func (x *OrderPayment) String() string {
 func (*OrderPayment) ProtoMessage() {}
 
 func (x *OrderPayment) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[20]
+	mi := &file_v1_booking_order_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1928,7 +2104,7 @@ func (x *OrderPayment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderPayment.ProtoReflect.Descriptor instead.
 func (*OrderPayment) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{20}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *OrderPayment) GetId() int64 {
@@ -1971,7 +2147,7 @@ type OrderRefund struct {
 
 func (x *OrderRefund) Reset() {
 	*x = OrderRefund{}
-	mi := &file_v1_booking_order_proto_msgTypes[21]
+	mi := &file_v1_booking_order_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1983,7 +2159,7 @@ func (x *OrderRefund) String() string {
 func (*OrderRefund) ProtoMessage() {}
 
 func (x *OrderRefund) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[21]
+	mi := &file_v1_booking_order_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1996,7 +2172,7 @@ func (x *OrderRefund) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderRefund.ProtoReflect.Descriptor instead.
 func (*OrderRefund) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{21}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *OrderRefund) GetId() int64 {
@@ -2031,7 +2207,7 @@ type CreateOrderGroupRequest struct {
 
 func (x *CreateOrderGroupRequest) Reset() {
 	*x = CreateOrderGroupRequest{}
-	mi := &file_v1_booking_order_proto_msgTypes[22]
+	mi := &file_v1_booking_order_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2043,7 +2219,7 @@ func (x *CreateOrderGroupRequest) String() string {
 func (*CreateOrderGroupRequest) ProtoMessage() {}
 
 func (x *CreateOrderGroupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[22]
+	mi := &file_v1_booking_order_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2056,7 +2232,7 @@ func (x *CreateOrderGroupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderGroupRequest.ProtoReflect.Descriptor instead.
 func (*CreateOrderGroupRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{22}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *CreateOrderGroupRequest) GetOrganizer() string {
@@ -2092,7 +2268,7 @@ type OrderGroupData struct {
 
 func (x *OrderGroupData) Reset() {
 	*x = OrderGroupData{}
-	mi := &file_v1_booking_order_proto_msgTypes[23]
+	mi := &file_v1_booking_order_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2104,7 +2280,7 @@ func (x *OrderGroupData) String() string {
 func (*OrderGroupData) ProtoMessage() {}
 
 func (x *OrderGroupData) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[23]
+	mi := &file_v1_booking_order_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2117,7 +2293,7 @@ func (x *OrderGroupData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderGroupData.ProtoReflect.Descriptor instead.
 func (*OrderGroupData) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{23}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *OrderGroupData) GetEmail() string {
@@ -2201,7 +2377,7 @@ type OrderGroupChild struct {
 
 func (x *OrderGroupChild) Reset() {
 	*x = OrderGroupChild{}
-	mi := &file_v1_booking_order_proto_msgTypes[24]
+	mi := &file_v1_booking_order_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2213,7 +2389,7 @@ func (x *OrderGroupChild) String() string {
 func (*OrderGroupChild) ProtoMessage() {}
 
 func (x *OrderGroupChild) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[24]
+	mi := &file_v1_booking_order_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2226,7 +2402,7 @@ func (x *OrderGroupChild) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderGroupChild.ProtoReflect.Descriptor instead.
 func (*OrderGroupChild) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{24}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *OrderGroupChild) GetEvent() string {
@@ -2259,7 +2435,7 @@ type CreateOrderGroupResponse struct {
 
 func (x *CreateOrderGroupResponse) Reset() {
 	*x = CreateOrderGroupResponse{}
-	mi := &file_v1_booking_order_proto_msgTypes[25]
+	mi := &file_v1_booking_order_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2271,7 +2447,7 @@ func (x *CreateOrderGroupResponse) String() string {
 func (*CreateOrderGroupResponse) ProtoMessage() {}
 
 func (x *CreateOrderGroupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[25]
+	mi := &file_v1_booking_order_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2284,7 +2460,7 @@ func (x *CreateOrderGroupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateOrderGroupResponse.ProtoReflect.Descriptor instead.
 func (*CreateOrderGroupResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{25}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *CreateOrderGroupResponse) GetSuccess() bool {
@@ -2349,7 +2525,7 @@ type OrderGroupError struct {
 
 func (x *OrderGroupError) Reset() {
 	*x = OrderGroupError{}
-	mi := &file_v1_booking_order_proto_msgTypes[26]
+	mi := &file_v1_booking_order_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2361,7 +2537,7 @@ func (x *OrderGroupError) String() string {
 func (*OrderGroupError) ProtoMessage() {}
 
 func (x *OrderGroupError) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[26]
+	mi := &file_v1_booking_order_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2374,7 +2550,7 @@ func (x *OrderGroupError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderGroupError.ProtoReflect.Descriptor instead.
 func (*OrderGroupError) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{26}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *OrderGroupError) GetFailedEventSlug() string {
@@ -2416,7 +2592,7 @@ type GetOrderGroupRequest struct {
 
 func (x *GetOrderGroupRequest) Reset() {
 	*x = GetOrderGroupRequest{}
-	mi := &file_v1_booking_order_proto_msgTypes[27]
+	mi := &file_v1_booking_order_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2428,7 +2604,7 @@ func (x *GetOrderGroupRequest) String() string {
 func (*GetOrderGroupRequest) ProtoMessage() {}
 
 func (x *GetOrderGroupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[27]
+	mi := &file_v1_booking_order_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2441,7 +2617,7 @@ func (x *GetOrderGroupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrderGroupRequest.ProtoReflect.Descriptor instead.
 func (*GetOrderGroupRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{27}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *GetOrderGroupRequest) GetOrganizer() string {
@@ -2478,7 +2654,7 @@ type OrderGroup struct {
 
 func (x *OrderGroup) Reset() {
 	*x = OrderGroup{}
-	mi := &file_v1_booking_order_proto_msgTypes[28]
+	mi := &file_v1_booking_order_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2490,7 +2666,7 @@ func (x *OrderGroup) String() string {
 func (*OrderGroup) ProtoMessage() {}
 
 func (x *OrderGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[28]
+	mi := &file_v1_booking_order_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2503,7 +2679,7 @@ func (x *OrderGroup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OrderGroup.ProtoReflect.Descriptor instead.
 func (*OrderGroup) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{28}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *OrderGroup) GetGroupCode() string {
@@ -2596,7 +2772,7 @@ type GetOrderGroupResponse struct {
 
 func (x *GetOrderGroupResponse) Reset() {
 	*x = GetOrderGroupResponse{}
-	mi := &file_v1_booking_order_proto_msgTypes[29]
+	mi := &file_v1_booking_order_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2608,7 +2784,7 @@ func (x *GetOrderGroupResponse) String() string {
 func (*GetOrderGroupResponse) ProtoMessage() {}
 
 func (x *GetOrderGroupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[29]
+	mi := &file_v1_booking_order_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2621,7 +2797,7 @@ func (x *GetOrderGroupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOrderGroupResponse.ProtoReflect.Descriptor instead.
 func (*GetOrderGroupResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{29}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *GetOrderGroupResponse) GetSuccess() bool {
@@ -2665,7 +2841,7 @@ type ListOrderGroupsRequest struct {
 
 func (x *ListOrderGroupsRequest) Reset() {
 	*x = ListOrderGroupsRequest{}
-	mi := &file_v1_booking_order_proto_msgTypes[30]
+	mi := &file_v1_booking_order_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2677,7 +2853,7 @@ func (x *ListOrderGroupsRequest) String() string {
 func (*ListOrderGroupsRequest) ProtoMessage() {}
 
 func (x *ListOrderGroupsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[30]
+	mi := &file_v1_booking_order_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2690,7 +2866,7 @@ func (x *ListOrderGroupsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrderGroupsRequest.ProtoReflect.Descriptor instead.
 func (*ListOrderGroupsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{30}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *ListOrderGroupsRequest) GetOrganizer() string {
@@ -2735,7 +2911,7 @@ type ListOrderGroupsResponse struct {
 
 func (x *ListOrderGroupsResponse) Reset() {
 	*x = ListOrderGroupsResponse{}
-	mi := &file_v1_booking_order_proto_msgTypes[31]
+	mi := &file_v1_booking_order_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2747,7 +2923,7 @@ func (x *ListOrderGroupsResponse) String() string {
 func (*ListOrderGroupsResponse) ProtoMessage() {}
 
 func (x *ListOrderGroupsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[31]
+	mi := &file_v1_booking_order_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2760,7 +2936,7 @@ func (x *ListOrderGroupsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOrderGroupsResponse.ProtoReflect.Descriptor instead.
 func (*ListOrderGroupsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{31}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *ListOrderGroupsResponse) GetSuccess() bool {
@@ -2813,7 +2989,7 @@ type CancelOrderGroupRequest struct {
 
 func (x *CancelOrderGroupRequest) Reset() {
 	*x = CancelOrderGroupRequest{}
-	mi := &file_v1_booking_order_proto_msgTypes[32]
+	mi := &file_v1_booking_order_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2825,7 +3001,7 @@ func (x *CancelOrderGroupRequest) String() string {
 func (*CancelOrderGroupRequest) ProtoMessage() {}
 
 func (x *CancelOrderGroupRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[32]
+	mi := &file_v1_booking_order_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2838,7 +3014,7 @@ func (x *CancelOrderGroupRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelOrderGroupRequest.ProtoReflect.Descriptor instead.
 func (*CancelOrderGroupRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{32}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *CancelOrderGroupRequest) GetOrganizer() string {
@@ -2875,7 +3051,7 @@ type CancelOrderGroupResponse struct {
 
 func (x *CancelOrderGroupResponse) Reset() {
 	*x = CancelOrderGroupResponse{}
-	mi := &file_v1_booking_order_proto_msgTypes[33]
+	mi := &file_v1_booking_order_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2887,7 +3063,7 @@ func (x *CancelOrderGroupResponse) String() string {
 func (*CancelOrderGroupResponse) ProtoMessage() {}
 
 func (x *CancelOrderGroupResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_order_proto_msgTypes[33]
+	mi := &file_v1_booking_order_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2900,7 +3076,7 @@ func (x *CancelOrderGroupResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelOrderGroupResponse.ProtoReflect.Descriptor instead.
 func (*CancelOrderGroupResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_order_proto_rawDescGZIP(), []int{33}
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *CancelOrderGroupResponse) GetSuccess() bool {
@@ -3130,7 +3306,22 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
-	"\x06answer\x18\x02 \x01(\tR\x06answer\"h\n" +
+	"\x06answer\x18\x02 \x01(\tR\x06answer\"o\n" +
+	"\x13PositionAnswerInput\x12\x1f\n" +
+	"\vposition_id\x18\x01 \x01(\x03R\n" +
+	"positionId\x12\x1f\n" +
+	"\vquestion_id\x18\x02 \x01(\x03R\n" +
+	"questionId\x12\x16\n" +
+	"\x06answer\x18\x03 \x01(\tR\x06answer\"]\n" +
+	"\x19SetPositionAnswersRequest\x12@\n" +
+	"\aanswers\x18\x01 \x03(\v2&.riptik.booking.v1.PositionAnswerInputR\aanswers\"\x9b\x01\n" +
+	"\x1aSetPositionAnswersResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1f\n" +
+	"\vsaved_count\x18\x02 \x01(\x05R\n" +
+	"savedCount\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"h\n" +
 	"\fOrderPayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
 	"\bprovider\x18\x02 \x01(\tR\bprovider\x12\x14\n" +
@@ -3240,7 +3431,7 @@ func file_v1_booking_order_proto_rawDescGZIP() []byte {
 	return file_v1_booking_order_proto_rawDescData
 }
 
-var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
+var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
 var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),                 // 0: riptik.booking.v1.ListOrdersRequest
 	(*GetOrderRequest)(nil),                   // 1: riptik.booking.v1.GetOrderRequest
@@ -3262,59 +3453,63 @@ var file_v1_booking_order_proto_goTypes = []any{
 	(*OrderPosition)(nil),                     // 17: riptik.booking.v1.OrderPosition
 	(*OrderPositionDetail)(nil),               // 18: riptik.booking.v1.OrderPositionDetail
 	(*PositionAnswer)(nil),                    // 19: riptik.booking.v1.PositionAnswer
-	(*OrderPayment)(nil),                      // 20: riptik.booking.v1.OrderPayment
-	(*OrderRefund)(nil),                       // 21: riptik.booking.v1.OrderRefund
-	(*CreateOrderGroupRequest)(nil),           // 22: riptik.booking.v1.CreateOrderGroupRequest
-	(*OrderGroupData)(nil),                    // 23: riptik.booking.v1.OrderGroupData
-	(*OrderGroupChild)(nil),                   // 24: riptik.booking.v1.OrderGroupChild
-	(*CreateOrderGroupResponse)(nil),          // 25: riptik.booking.v1.CreateOrderGroupResponse
-	(*OrderGroupError)(nil),                   // 26: riptik.booking.v1.OrderGroupError
-	(*GetOrderGroupRequest)(nil),              // 27: riptik.booking.v1.GetOrderGroupRequest
-	(*OrderGroup)(nil),                        // 28: riptik.booking.v1.OrderGroup
-	(*GetOrderGroupResponse)(nil),             // 29: riptik.booking.v1.GetOrderGroupResponse
-	(*ListOrderGroupsRequest)(nil),            // 30: riptik.booking.v1.ListOrderGroupsRequest
-	(*ListOrderGroupsResponse)(nil),           // 31: riptik.booking.v1.ListOrderGroupsResponse
-	(*CancelOrderGroupRequest)(nil),           // 32: riptik.booking.v1.CancelOrderGroupRequest
-	(*CancelOrderGroupResponse)(nil),          // 33: riptik.booking.v1.CancelOrderGroupResponse
-	nil,                                       // 34: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	nil,                                       // 35: riptik.booking.v1.OrderCreateData.MetaDataEntry
-	nil,                                       // 36: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	nil,                                       // 37: riptik.booking.v1.Order.InvoiceAddressEntry
-	nil,                                       // 38: riptik.booking.v1.Order.MetaDataEntry
-	nil,                                       // 39: riptik.booking.v1.OrderGroupData.MetaDataEntry
+	(*PositionAnswerInput)(nil),               // 20: riptik.booking.v1.PositionAnswerInput
+	(*SetPositionAnswersRequest)(nil),         // 21: riptik.booking.v1.SetPositionAnswersRequest
+	(*SetPositionAnswersResponse)(nil),        // 22: riptik.booking.v1.SetPositionAnswersResponse
+	(*OrderPayment)(nil),                      // 23: riptik.booking.v1.OrderPayment
+	(*OrderRefund)(nil),                       // 24: riptik.booking.v1.OrderRefund
+	(*CreateOrderGroupRequest)(nil),           // 25: riptik.booking.v1.CreateOrderGroupRequest
+	(*OrderGroupData)(nil),                    // 26: riptik.booking.v1.OrderGroupData
+	(*OrderGroupChild)(nil),                   // 27: riptik.booking.v1.OrderGroupChild
+	(*CreateOrderGroupResponse)(nil),          // 28: riptik.booking.v1.CreateOrderGroupResponse
+	(*OrderGroupError)(nil),                   // 29: riptik.booking.v1.OrderGroupError
+	(*GetOrderGroupRequest)(nil),              // 30: riptik.booking.v1.GetOrderGroupRequest
+	(*OrderGroup)(nil),                        // 31: riptik.booking.v1.OrderGroup
+	(*GetOrderGroupResponse)(nil),             // 32: riptik.booking.v1.GetOrderGroupResponse
+	(*ListOrderGroupsRequest)(nil),            // 33: riptik.booking.v1.ListOrderGroupsRequest
+	(*ListOrderGroupsResponse)(nil),           // 34: riptik.booking.v1.ListOrderGroupsResponse
+	(*CancelOrderGroupRequest)(nil),           // 35: riptik.booking.v1.CancelOrderGroupRequest
+	(*CancelOrderGroupResponse)(nil),          // 36: riptik.booking.v1.CancelOrderGroupResponse
+	nil,                                       // 37: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	nil,                                       // 38: riptik.booking.v1.OrderCreateData.MetaDataEntry
+	nil,                                       // 39: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	nil,                                       // 40: riptik.booking.v1.Order.InvoiceAddressEntry
+	nil,                                       // 41: riptik.booking.v1.Order.MetaDataEntry
+	nil,                                       // 42: riptik.booking.v1.OrderGroupData.MetaDataEntry
 }
 var file_v1_booking_order_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateOrderRequest.order_data:type_name -> riptik.booking.v1.OrderCreateData
-	34, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	35, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
+	37, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	38, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
 	4,  // 3: riptik.booking.v1.OrderCreateData.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	36, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	39, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
 	16, // 5: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
 	16, // 6: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
 	16, // 7: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
 	16, // 8: riptik.booking.v1.OrderActionResponse.order:type_name -> riptik.booking.v1.Order
 	18, // 9: riptik.booking.v1.FindOrderPositionBySecretResponse.position:type_name -> riptik.booking.v1.OrderPositionDetail
 	17, // 10: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
-	20, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
-	21, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
-	37, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
-	38, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
+	23, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
+	24, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
+	40, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
+	41, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
 	19, // 15: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
-	23, // 16: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
-	39, // 17: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
-	24, // 18: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
-	4,  // 19: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	16, // 20: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
-	26, // 21: riptik.booking.v1.CreateOrderGroupResponse.group_error:type_name -> riptik.booking.v1.OrderGroupError
-	16, // 22: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
-	28, // 23: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
-	28, // 24: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
-	28, // 25: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
-	26, // [26:26] is the sub-list for method output_type
-	26, // [26:26] is the sub-list for method input_type
-	26, // [26:26] is the sub-list for extension type_name
-	26, // [26:26] is the sub-list for extension extendee
-	0,  // [0:26] is the sub-list for field type_name
+	20, // 16: riptik.booking.v1.SetPositionAnswersRequest.answers:type_name -> riptik.booking.v1.PositionAnswerInput
+	26, // 17: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
+	42, // 18: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
+	27, // 19: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
+	4,  // 20: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
+	16, // 21: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
+	29, // 22: riptik.booking.v1.CreateOrderGroupResponse.group_error:type_name -> riptik.booking.v1.OrderGroupError
+	16, // 23: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
+	31, // 24: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	31, // 25: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
+	31, // 26: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	27, // [27:27] is the sub-list for method output_type
+	27, // [27:27] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_order_proto_init() }
@@ -3328,7 +3523,7 @@ func file_v1_booking_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_order_proto_rawDesc), len(file_v1_booking_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   40,
+			NumMessages:   43,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
