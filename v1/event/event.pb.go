@@ -47,6 +47,7 @@ type Event struct {
 	Settings       map[string]string      `protobuf:"bytes,19,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`                                   // Settings
 	Created        string                 `protobuf:"bytes,20,opt,name=created,proto3" json:"created,omitempty"`                                                                                                               // ISO datetime
 	LastModified   string                 `protobuf:"bytes,21,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`                                                                                 // ISO datetime
+	EventType      string                 `protobuf:"bytes,22,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`                                                                                          // G9-28: "cinema" | "show" | "playground" | "" (chưa set) —
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -224,6 +225,13 @@ func (x *Event) GetCreated() string {
 func (x *Event) GetLastModified() string {
 	if x != nil {
 		return x.LastModified
+	}
+	return ""
+}
+
+func (x *Event) GetEventType() string {
+	if x != nil {
+		return x.EventType
 	}
 	return ""
 }
@@ -692,6 +700,7 @@ type CreateEventRequest struct {
 	HasSubevents  bool                   `protobuf:"varint,16,opt,name=has_subevents,json=hasSubevents,proto3" json:"has_subevents,omitempty"`                                                              // Has subevents flag
 	Settings      map[string]string      `protobuf:"bytes,17,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`                 // Event settings
 	MetaData      map[string]string      `protobuf:"bytes,18,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Custom metadata
+	EventType     string                 `protobuf:"bytes,19,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`                                                                        // G9-28 — xem Event.event_type
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -852,6 +861,13 @@ func (x *CreateEventRequest) GetMetaData() map[string]string {
 	return nil
 }
 
+func (x *CreateEventRequest) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
+}
+
 type UpdateEventRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
@@ -866,6 +882,7 @@ type UpdateEventRequest struct {
 	TestMode      bool                   `protobuf:"varint,10,opt,name=test_mode,json=testMode,proto3" json:"test_mode,omitempty"`
 	Location      map[string]*any1.Any   `protobuf:"bytes,11,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Settings      map[string]*any1.Any   `protobuf:"bytes,12,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	EventType     string                 `protobuf:"bytes,13,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"` // G9-28 — xem Event.event_type
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -982,6 +999,13 @@ func (x *UpdateEventRequest) GetSettings() map[string]*any1.Any {
 		return x.Settings
 	}
 	return nil
+}
+
+func (x *UpdateEventRequest) GetEventType() string {
+	if x != nil {
+		return x.EventType
+	}
+	return ""
 }
 
 type DeleteEventRequest struct {
@@ -3995,7 +4019,7 @@ var File_v1_event_event_proto protoreflect.FileDescriptor
 
 const file_v1_event_event_proto_rawDesc = "" +
 	"\n" +
-	"\x14v1/event/event.proto\x12\x0friptik.event.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xe6\b\n" +
+	"\x14v1/event/event.proto\x12\x0friptik.event.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\x85\t\n" +
 	"\x05Event\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\x124\n" +
@@ -4019,7 +4043,9 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x0esales_channels\x18\x12 \x03(\v2).riptik.event.v1.Event.SalesChannelsEntryR\rsalesChannels\x12@\n" +
 	"\bsettings\x18\x13 \x03(\v2$.riptik.event.v1.Event.SettingsEntryR\bsettings\x12\x18\n" +
 	"\acreated\x18\x14 \x01(\tR\acreated\x12#\n" +
-	"\rlast_modified\x18\x15 \x01(\tR\flastModified\x1a7\n" +
+	"\rlast_modified\x18\x15 \x01(\tR\flastModified\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\x16 \x01(\tR\teventType\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
@@ -4086,7 +4112,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x10date_from_before\x18\b \x01(\tR\x0edateFromBefore\x12%\n" +
 	"\x0emodified_since\x18\t \x01(\tR\rmodifiedSince\x12\x17\n" +
 	"\atag_ids\x18\n" +
-	" \x03(\x03R\x06tagIds\"\xd3\a\n" +
+	" \x03(\x03R\x06tagIds\"\xf2\a\n" +
 	"\x12CreateEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12A\n" +
 	"\x04name\x18\x02 \x03(\v2-.riptik.event.v1.CreateEventRequest.NameEntryR\x04name\x12\x12\n" +
@@ -4107,7 +4133,9 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\ageo_lon\x18\x0f \x01(\tR\x06geoLon\x12#\n" +
 	"\rhas_subevents\x18\x10 \x01(\bR\fhasSubevents\x12M\n" +
 	"\bsettings\x18\x11 \x03(\v21.riptik.event.v1.CreateEventRequest.SettingsEntryR\bsettings\x12N\n" +
-	"\tmeta_data\x18\x12 \x03(\v21.riptik.event.v1.CreateEventRequest.MetaDataEntryR\bmetaData\x1a7\n" +
+	"\tmeta_data\x18\x12 \x03(\v21.riptik.event.v1.CreateEventRequest.MetaDataEntryR\bmetaData\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\x13 \x01(\tR\teventType\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
@@ -4119,7 +4147,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x9f\x05\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbe\x05\n" +
 	"\x12UpdateEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -4133,7 +4161,9 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\ttest_mode\x18\n" +
 	" \x01(\bR\btestMode\x12M\n" +
 	"\blocation\x18\v \x03(\v21.riptik.event.v1.UpdateEventRequest.LocationEntryR\blocation\x12M\n" +
-	"\bsettings\x18\f \x03(\v21.riptik.event.v1.UpdateEventRequest.SettingsEntryR\bsettings\x1aQ\n" +
+	"\bsettings\x18\f \x03(\v21.riptik.event.v1.UpdateEventRequest.SettingsEntryR\bsettings\x12\x1d\n" +
+	"\n" +
+	"event_type\x18\r \x01(\tR\teventType\x1aQ\n" +
 	"\rLocationEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
