@@ -3107,6 +3107,273 @@ func (x *CancelOrderGroupResponse) GetErrorMessage() string {
 	return ""
 }
 
+// G9-25 — public ticket display (webshop /tickets/{position_id}/{secret}, no tenant/org context in
+// URL by design — the secret itself is the bearer token, matching FindOrderPositionBySecretRequest's
+// existing model but WITHOUT requiring event_id since position_id already narrows to exactly 1 row;
+// OrderPositionDetail (used for checkin) is too lean for a customer-facing page — no event/venue/item
+// display names. Secret MUST be verified server-side against the row found by position_id (never trust
+// position_id alone) — NOT_FOUND is returned for both "no such position" and "secret mismatch" so a
+// guess-the-id attack can't distinguish a wrong secret from a wrong id.
+type GetPublicTicketRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PositionId    int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	Secret        string                 `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublicTicketRequest) Reset() {
+	*x = GetPublicTicketRequest{}
+	mi := &file_v1_booking_order_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublicTicketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublicTicketRequest) ProtoMessage() {}
+
+func (x *GetPublicTicketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublicTicketRequest.ProtoReflect.Descriptor instead.
+func (*GetPublicTicketRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *GetPublicTicketRequest) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *GetPublicTicketRequest) GetSecret() string {
+	if x != nil {
+		return x.Secret
+	}
+	return ""
+}
+
+type PublicTicketInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PositionId    int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	EventName     string                 `protobuf:"bytes,2,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"` // Resolved display name (event's default/first locale — server picks, no i18n negotiation yet)
+	EventDate     string                 `protobuf:"bytes,3,opt,name=event_date,json=eventDate,proto3" json:"event_date,omitempty"` // ISO date (YYYY-MM-DD) — subevent date_from if seated/dated, else event date_from
+	EventTime     string                 `protobuf:"bytes,4,opt,name=event_time,json=eventTime,proto3" json:"event_time,omitempty"` // HH:MM (24h), same source as event_date
+	Venue         string                 `protobuf:"bytes,5,opt,name=venue,proto3" json:"venue,omitempty"`                          // Resolved location string ("" if event has none set)
+	AttendeeName  string                 `protobuf:"bytes,6,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`
+	OrderCode     string                 `protobuf:"bytes,7,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	TicketType    string                 `protobuf:"bytes,8,opt,name=ticket_type,json=ticketType,proto3" json:"ticket_type,omitempty"` // Item name, "Item — Variation" if a variation is set
+	Price         string                 `protobuf:"bytes,9,opt,name=price,proto3" json:"price,omitempty"`                             // Decimal string, tax-inclusive (task 001 convention)
+	Currency      string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
+	SeatLabel     string                 `protobuf:"bytes,11,opt,name=seat_label,json=seatLabel,proto3" json:"seat_label,omitempty"`       // "" for general-admission (no seat_id)
+	Canceled      bool                   `protobuf:"varint,12,opt,name=canceled,proto3" json:"canceled,omitempty"`                         // Position OR parent order canceled
+	OrderStatus   string                 `protobuf:"bytes,13,opt,name=order_status,json=orderStatus,proto3" json:"order_status,omitempty"` // Order.Status ("n"|"p"|"e"|"c"|"r" — Pretix convention)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublicTicketInfo) Reset() {
+	*x = PublicTicketInfo{}
+	mi := &file_v1_booking_order_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublicTicketInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublicTicketInfo) ProtoMessage() {}
+
+func (x *PublicTicketInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublicTicketInfo.ProtoReflect.Descriptor instead.
+func (*PublicTicketInfo) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *PublicTicketInfo) GetPositionId() int64 {
+	if x != nil {
+		return x.PositionId
+	}
+	return 0
+}
+
+func (x *PublicTicketInfo) GetEventName() string {
+	if x != nil {
+		return x.EventName
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetEventDate() string {
+	if x != nil {
+		return x.EventDate
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetEventTime() string {
+	if x != nil {
+		return x.EventTime
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetVenue() string {
+	if x != nil {
+		return x.Venue
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetAttendeeName() string {
+	if x != nil {
+		return x.AttendeeName
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetTicketType() string {
+	if x != nil {
+		return x.TicketType
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetPrice() string {
+	if x != nil {
+		return x.Price
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetSeatLabel() string {
+	if x != nil {
+		return x.SeatLabel
+	}
+	return ""
+}
+
+func (x *PublicTicketInfo) GetCanceled() bool {
+	if x != nil {
+		return x.Canceled
+	}
+	return false
+}
+
+func (x *PublicTicketInfo) GetOrderStatus() string {
+	if x != nil {
+		return x.OrderStatus
+	}
+	return ""
+}
+
+type GetPublicTicketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Ticket        *PublicTicketInfo      `protobuf:"bytes,2,opt,name=ticket,proto3" json:"ticket,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"` // NOT_FOUND | INTERNAL_ERROR
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPublicTicketResponse) Reset() {
+	*x = GetPublicTicketResponse{}
+	mi := &file_v1_booking_order_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPublicTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPublicTicketResponse) ProtoMessage() {}
+
+func (x *GetPublicTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_order_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPublicTicketResponse.ProtoReflect.Descriptor instead.
+func (*GetPublicTicketResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_order_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *GetPublicTicketResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetPublicTicketResponse) GetTicket() *PublicTicketInfo {
+	if x != nil {
+		return x.Ticket
+	}
+	return nil
+}
+
+func (x *GetPublicTicketResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetPublicTicketResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_order_proto protoreflect.FileDescriptor
 
 const file_v1_booking_order_proto_rawDesc = "" +
@@ -3417,6 +3684,38 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05group\x18\x02 \x01(\v2\x1d.riptik.booking.v1.OrderGroupR\x05group\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"Q\n" +
+	"\x16GetPublicTicketRequest\x12\x1f\n" +
+	"\vposition_id\x18\x01 \x01(\x03R\n" +
+	"positionId\x12\x16\n" +
+	"\x06secret\x18\x02 \x01(\tR\x06secret\"\x9b\x03\n" +
+	"\x10PublicTicketInfo\x12\x1f\n" +
+	"\vposition_id\x18\x01 \x01(\x03R\n" +
+	"positionId\x12\x1d\n" +
+	"\n" +
+	"event_name\x18\x02 \x01(\tR\teventName\x12\x1d\n" +
+	"\n" +
+	"event_date\x18\x03 \x01(\tR\teventDate\x12\x1d\n" +
+	"\n" +
+	"event_time\x18\x04 \x01(\tR\teventTime\x12\x14\n" +
+	"\x05venue\x18\x05 \x01(\tR\x05venue\x12#\n" +
+	"\rattendee_name\x18\x06 \x01(\tR\fattendeeName\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\a \x01(\tR\torderCode\x12\x1f\n" +
+	"\vticket_type\x18\b \x01(\tR\n" +
+	"ticketType\x12\x14\n" +
+	"\x05price\x18\t \x01(\tR\x05price\x12\x1a\n" +
+	"\bcurrency\x18\n" +
+	" \x01(\tR\bcurrency\x12\x1d\n" +
+	"\n" +
+	"seat_label\x18\v \x01(\tR\tseatLabel\x12\x1a\n" +
+	"\bcanceled\x18\f \x01(\bR\bcanceled\x12!\n" +
+	"\forder_status\x18\r \x01(\tR\vorderStatus\"\xb4\x01\n" +
+	"\x17GetPublicTicketResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12;\n" +
+	"\x06ticket\x18\x02 \x01(\v2#.riptik.booking.v1.PublicTicketInfoR\x06ticket\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
@@ -3431,7 +3730,7 @@ func file_v1_booking_order_proto_rawDescGZIP() []byte {
 	return file_v1_booking_order_proto_rawDescData
 }
 
-var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 43)
+var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 46)
 var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),                 // 0: riptik.booking.v1.ListOrdersRequest
 	(*GetOrderRequest)(nil),                   // 1: riptik.booking.v1.GetOrderRequest
@@ -3470,19 +3769,22 @@ var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrderGroupsResponse)(nil),           // 34: riptik.booking.v1.ListOrderGroupsResponse
 	(*CancelOrderGroupRequest)(nil),           // 35: riptik.booking.v1.CancelOrderGroupRequest
 	(*CancelOrderGroupResponse)(nil),          // 36: riptik.booking.v1.CancelOrderGroupResponse
-	nil,                                       // 37: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	nil,                                       // 38: riptik.booking.v1.OrderCreateData.MetaDataEntry
-	nil,                                       // 39: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	nil,                                       // 40: riptik.booking.v1.Order.InvoiceAddressEntry
-	nil,                                       // 41: riptik.booking.v1.Order.MetaDataEntry
-	nil,                                       // 42: riptik.booking.v1.OrderGroupData.MetaDataEntry
+	(*GetPublicTicketRequest)(nil),            // 37: riptik.booking.v1.GetPublicTicketRequest
+	(*PublicTicketInfo)(nil),                  // 38: riptik.booking.v1.PublicTicketInfo
+	(*GetPublicTicketResponse)(nil),           // 39: riptik.booking.v1.GetPublicTicketResponse
+	nil,                                       // 40: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	nil,                                       // 41: riptik.booking.v1.OrderCreateData.MetaDataEntry
+	nil,                                       // 42: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	nil,                                       // 43: riptik.booking.v1.Order.InvoiceAddressEntry
+	nil,                                       // 44: riptik.booking.v1.Order.MetaDataEntry
+	nil,                                       // 45: riptik.booking.v1.OrderGroupData.MetaDataEntry
 }
 var file_v1_booking_order_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateOrderRequest.order_data:type_name -> riptik.booking.v1.OrderCreateData
-	37, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
-	38, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
+	40, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
+	41, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
 	4,  // 3: riptik.booking.v1.OrderCreateData.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	39, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	42, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
 	16, // 5: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
 	16, // 6: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
 	16, // 7: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
@@ -3491,12 +3793,12 @@ var file_v1_booking_order_proto_depIdxs = []int32{
 	17, // 10: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
 	23, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
 	24, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
-	40, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
-	41, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
+	43, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
+	44, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
 	19, // 15: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
 	20, // 16: riptik.booking.v1.SetPositionAnswersRequest.answers:type_name -> riptik.booking.v1.PositionAnswerInput
 	26, // 17: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
-	42, // 18: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
+	45, // 18: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
 	27, // 19: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
 	4,  // 20: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
 	16, // 21: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
@@ -3505,11 +3807,12 @@ var file_v1_booking_order_proto_depIdxs = []int32{
 	31, // 24: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
 	31, // 25: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
 	31, // 26: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
-	27, // [27:27] is the sub-list for method output_type
-	27, // [27:27] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	38, // 27: riptik.booking.v1.GetPublicTicketResponse.ticket:type_name -> riptik.booking.v1.PublicTicketInfo
+	28, // [28:28] is the sub-list for method output_type
+	28, // [28:28] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_order_proto_init() }
@@ -3523,7 +3826,7 @@ func file_v1_booking_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_order_proto_rawDesc), len(file_v1_booking_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   43,
+			NumMessages:   46,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
