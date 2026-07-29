@@ -443,7 +443,8 @@ type OrderCreatePosition struct {
 	AttendeeName  string                 `protobuf:"bytes,5,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`    // Attendee name (optional)
 	AttendeeEmail string                 `protobuf:"bytes,6,opt,name=attendee_email,json=attendeeEmail,proto3" json:"attendee_email,omitempty"` // Attendee email (optional)
 	SubeventId    int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`         // Sub-event ID for date-selection tickets (0 = event-wide)
-	SeatId        int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                     // Assigned seat ID for seated events (0 = no seat). One seat per position (quantity=1).
+	SeatId        int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                     // legacy — deprecated, prefer seat_guid (G9-24, mantik-cinema-chain.md §7C)
+	SeatGuid      string                 `protobuf:"bytes,9,opt,name=seat_guid,json=seatGuid,proto3" json:"seat_guid,omitempty"`                // Assigned seat guid for seated events ("" = no seat). One seat per position (quantity=1).
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -532,6 +533,13 @@ func (x *OrderCreatePosition) GetSeatId() int64 {
 		return x.SeatId
 	}
 	return 0
+}
+
+func (x *OrderCreatePosition) GetSeatGuid() string {
+	if x != nil {
+		return x.SeatGuid
+	}
+	return ""
 }
 
 // Request: Cancel order
@@ -1705,6 +1713,7 @@ type OrderPositionDetail struct {
 	Status        string                 `protobuf:"bytes,12,opt,name=status,proto3" json:"status,omitempty"`                                    // Position status (derived from order status)
 	Created       string                 `protobuf:"bytes,13,opt,name=created,proto3" json:"created,omitempty"`                                  // ISO datetime (created)
 	Tax           string                 `protobuf:"bytes,14,opt,name=tax,proto3" json:"tax,omitempty"`                                          // Tax already included in price, as decimal string (task 001 — informational, tax-inclusive pricing)
+	SeatLabel     string                 `protobuf:"bytes,15,opt,name=seat_label,json=seatLabel,proto3" json:"seat_label,omitempty"`             // "" for general-admission — G9-24e: check-in previously had NO seat field at all
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1833,6 +1842,13 @@ func (x *OrderPositionDetail) GetCreated() string {
 func (x *OrderPositionDetail) GetTax() string {
 	if x != nil {
 		return x.Tax
+	}
+	return ""
+}
+
+func (x *OrderPositionDetail) GetSeatLabel() string {
+	if x != nil {
+		return x.SeatLabel
 	}
 	return ""
 }
@@ -3423,7 +3439,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x89\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa6\x02\n" +
 	"\x13OrderCreatePosition\x12\x17\n" +
 	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
 	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
@@ -3433,7 +3449,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0eattendee_email\x18\x06 \x01(\tR\rattendeeEmail\x12\x1f\n" +
 	"\vsubevent_id\x18\a \x01(\x03R\n" +
 	"subeventId\x12\x17\n" +
-	"\aseat_id\x18\b \x01(\x03R\x06seatId\"v\n" +
+	"\aseat_id\x18\b \x01(\x03R\x06seatId\x12\x1b\n" +
+	"\tseat_guid\x18\t \x01(\tR\bseatGuid\"v\n" +
 	"\x12CancelOrderRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -3552,7 +3569,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0eticket_barcode\x18\f \x01(\tR\rticketBarcode\x12\x1b\n" +
 	"\tticket_qr\x18\r \x01(\tR\bticketQr\x12-\n" +
 	"\x12fulfillment_status\x18\x0e \x01(\tR\x11fulfillmentStatus\x12\x10\n" +
-	"\x03tax\x18\x0f \x01(\tR\x03tax\"\x92\x03\n" +
+	"\x03tax\x18\x0f \x01(\tR\x03tax\"\xb1\x03\n" +
 	"\x13OrderPositionDetail\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x17\n" +
@@ -3569,7 +3586,9 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\bcanceled\x18\v \x01(\bR\bcanceled\x12\x16\n" +
 	"\x06status\x18\f \x01(\tR\x06status\x12\x18\n" +
 	"\acreated\x18\r \x01(\tR\acreated\x12\x10\n" +
-	"\x03tax\x18\x0e \x01(\tR\x03tax\"I\n" +
+	"\x03tax\x18\x0e \x01(\tR\x03tax\x12\x1d\n" +
+	"\n" +
+	"seat_label\x18\x0f \x01(\tR\tseatLabel\"I\n" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
