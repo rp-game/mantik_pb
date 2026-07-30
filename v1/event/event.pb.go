@@ -255,7 +255,10 @@ type SubEvent struct {
 	SeatingPlanId int64                  `protobuf:"varint,14,opt,name=seating_plan_id,json=seatingPlanId,proto3" json:"seating_plan_id,omitempty"`                                         // 0 = no plan assigned to THIS subevent (task 003 — does
 	// NOT fall back to the event's plan; see SeatingService.
 	// LayoutForEvent's "Series constraint (F)")
-	GroupId       int64 `protobuf:"varint,15,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"` // G9-29: 0 = chưa gán phòng. FK -> EventGroup.id (khác event's
+	GroupId int64 `protobuf:"varint,15,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"` // G9-29: 0 = chưa gán phòng. FK -> EventGroup.id (khác event's
+	// seating_plan_id: đây là quan hệ CẤU TRÚC 1 suất - 1 phòng,
+	// không phải tag nhiều-nhiều).
+	TagIds        []int64 `protobuf:"varint,16,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"` // G9-30: tag THẬT của suất này (phim/format/ngôn ngữ...), gộp
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -393,6 +396,13 @@ func (x *SubEvent) GetGroupId() int64 {
 		return x.GroupId
 	}
 	return 0
+}
+
+func (x *SubEvent) GetTagIds() []int64 {
+	if x != nil {
+		return x.TagIds
+	}
+	return nil
 }
 
 // EventGroup (G9-29, mantik-cinema-chain.md §5B) — "phòng chiếu" của 1 rạp (Event = RẠP, có thể nhiều
@@ -4703,7 +4713,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa2\x05\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbb\x05\n" +
 	"\bSubEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\bevent_id\x18\x02 \x01(\x03R\aeventId\x127\n" +
@@ -4721,7 +4731,8 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\acreated\x18\f \x01(\tR\acreated\x12#\n" +
 	"\rlast_modified\x18\r \x01(\tR\flastModified\x12&\n" +
 	"\x0fseating_plan_id\x18\x0e \x01(\x03R\rseatingPlanId\x12\x19\n" +
-	"\bgroup_id\x18\x0f \x01(\x03R\agroupId\x1a7\n" +
+	"\bgroup_id\x18\x0f \x01(\x03R\agroupId\x12\x17\n" +
+	"\atag_ids\x18\x10 \x03(\x03R\x06tagIds\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
