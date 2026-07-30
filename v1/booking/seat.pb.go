@@ -665,6 +665,191 @@ func (x *SeatRenewResponse) GetTotal() int32 {
 	return 0
 }
 
+// SeatCounts — bulk held/sold/capacity summary for MANY subevents at once (G9-31). Purpose-built
+// separate from SeatAvailability: that one always loads the FULL per-seat layout for a SINGLE subevent
+// (SeatStatus per seat) — too expensive to call once per session on a list screen showing 10-30 sessions.
+// This is summary-only (3 ints per subevent), backed by ZCARD on the held ZSET + a grouped COUNT query,
+// never touches seat bundle/layout geometry.
+type SeatCountsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SubeventIds   []int64                `protobuf:"varint,1,rep,packed,name=subevent_ids,json=subeventIds,proto3" json:"subevent_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatCountsRequest) Reset() {
+	*x = SeatCountsRequest{}
+	mi := &file_v1_booking_seat_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatCountsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatCountsRequest) ProtoMessage() {}
+
+func (x *SeatCountsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_seat_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatCountsRequest.ProtoReflect.Descriptor instead.
+func (*SeatCountsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_seat_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SeatCountsRequest) GetSubeventIds() []int64 {
+	if x != nil {
+		return x.SubeventIds
+	}
+	return nil
+}
+
+type SubEventSeatCount struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SubeventId    int64                  `protobuf:"varint,1,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	Held          int64                  `protobuf:"varint,2,opt,name=held,proto3" json:"held,omitempty"`         // currently in the held: ZSET (not yet paid, may still expire)
+	Sold          int64                  `protobuf:"varint,3,opt,name=sold,proto3" json:"sold,omitempty"`         // order_positions with a non-null seat_guid, not canceled
+	Capacity      int64                  `protobuf:"varint,4,opt,name=capacity,proto3" json:"capacity,omitempty"` // 0 = unknown (subevent has no seating_plan_id, or plan not yet resolved)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubEventSeatCount) Reset() {
+	*x = SubEventSeatCount{}
+	mi := &file_v1_booking_seat_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubEventSeatCount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubEventSeatCount) ProtoMessage() {}
+
+func (x *SubEventSeatCount) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_seat_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubEventSeatCount.ProtoReflect.Descriptor instead.
+func (*SubEventSeatCount) Descriptor() ([]byte, []int) {
+	return file_v1_booking_seat_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SubEventSeatCount) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *SubEventSeatCount) GetHeld() int64 {
+	if x != nil {
+		return x.Held
+	}
+	return 0
+}
+
+func (x *SubEventSeatCount) GetSold() int64 {
+	if x != nil {
+		return x.Sold
+	}
+	return 0
+}
+
+func (x *SubEventSeatCount) GetCapacity() int64 {
+	if x != nil {
+		return x.Capacity
+	}
+	return 0
+}
+
+type SeatCountsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Counts        []*SubEventSeatCount   `protobuf:"bytes,2,rep,name=counts,proto3" json:"counts,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SeatCountsResponse) Reset() {
+	*x = SeatCountsResponse{}
+	mi := &file_v1_booking_seat_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SeatCountsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SeatCountsResponse) ProtoMessage() {}
+
+func (x *SeatCountsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_seat_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SeatCountsResponse.ProtoReflect.Descriptor instead.
+func (*SeatCountsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_seat_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SeatCountsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SeatCountsResponse) GetCounts() []*SubEventSeatCount {
+	if x != nil {
+		return x.Counts
+	}
+	return nil
+}
+
+func (x *SeatCountsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SeatCountsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_seat_proto protoreflect.FileDescriptor
 
 const file_v1_booking_seat_proto_rawDesc = "" +
@@ -731,7 +916,21 @@ const file_v1_booking_seat_proto_rawDesc = "" +
 	"\x11SeatRenewResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\arenewed\x18\x02 \x01(\x05R\arenewed\x12\x14\n" +
-	"\x05total\x18\x03 \x01(\x05R\x05totalB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\x05total\x18\x03 \x01(\x05R\x05total\"6\n" +
+	"\x11SeatCountsRequest\x12!\n" +
+	"\fsubevent_ids\x18\x01 \x03(\x03R\vsubeventIds\"x\n" +
+	"\x11SubEventSeatCount\x12\x1f\n" +
+	"\vsubevent_id\x18\x01 \x01(\x03R\n" +
+	"subeventId\x12\x12\n" +
+	"\x04held\x18\x02 \x01(\x03R\x04held\x12\x12\n" +
+	"\x04sold\x18\x03 \x01(\x03R\x04sold\x12\x1a\n" +
+	"\bcapacity\x18\x04 \x01(\x03R\bcapacity\"\xb0\x01\n" +
+	"\x12SeatCountsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12<\n" +
+	"\x06counts\x18\x02 \x03(\v2$.riptik.booking.v1.SubEventSeatCountR\x06counts\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_seat_proto_rawDescOnce sync.Once
@@ -745,7 +944,7 @@ func file_v1_booking_seat_proto_rawDescGZIP() []byte {
 	return file_v1_booking_seat_proto_rawDescData
 }
 
-var file_v1_booking_seat_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_v1_booking_seat_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_v1_booking_seat_proto_goTypes = []any{
 	(*SeatStatus)(nil),               // 0: riptik.booking.v1.SeatStatus
 	(*SeatAvailabilityRequest)(nil),  // 1: riptik.booking.v1.SeatAvailabilityRequest
@@ -756,14 +955,18 @@ var file_v1_booking_seat_proto_goTypes = []any{
 	(*SeatOpResponse)(nil),           // 6: riptik.booking.v1.SeatOpResponse
 	(*SeatRenewRequest)(nil),         // 7: riptik.booking.v1.SeatRenewRequest
 	(*SeatRenewResponse)(nil),        // 8: riptik.booking.v1.SeatRenewResponse
+	(*SeatCountsRequest)(nil),        // 9: riptik.booking.v1.SeatCountsRequest
+	(*SubEventSeatCount)(nil),        // 10: riptik.booking.v1.SubEventSeatCount
+	(*SeatCountsResponse)(nil),       // 11: riptik.booking.v1.SeatCountsResponse
 }
 var file_v1_booking_seat_proto_depIdxs = []int32{
-	0, // 0: riptik.booking.v1.SeatAvailabilityResponse.seats:type_name -> riptik.booking.v1.SeatStatus
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0,  // 0: riptik.booking.v1.SeatAvailabilityResponse.seats:type_name -> riptik.booking.v1.SeatStatus
+	10, // 1: riptik.booking.v1.SeatCountsResponse.counts:type_name -> riptik.booking.v1.SubEventSeatCount
+	2,  // [2:2] is the sub-list for method output_type
+	2,  // [2:2] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_seat_proto_init() }
@@ -777,7 +980,7 @@ func file_v1_booking_seat_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_seat_proto_rawDesc), len(file_v1_booking_seat_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
