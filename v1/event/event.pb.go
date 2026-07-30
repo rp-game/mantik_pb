@@ -48,8 +48,12 @@ type Event struct {
 	Created        string                 `protobuf:"bytes,20,opt,name=created,proto3" json:"created,omitempty"`                                                                                                               // ISO datetime
 	LastModified   string                 `protobuf:"bytes,21,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`                                                                                 // ISO datetime
 	EventType      string                 `protobuf:"bytes,22,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`                                                                                          // G9-28: "cinema" | "show" | "playground" | "" (chưa set) —
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// rạp chiếu phim / show diễn / khu vui chơi. Free string (không
+	// proto enum) để backoffice/pos-app validate danh sách hiển thị
+	// riêng, dễ thêm loại mới không cần bump proto lần nữa.
+	SeatingPlanId int64 `protobuf:"varint,23,opt,name=seating_plan_id,json=seatingPlanId,proto3" json:"seating_plan_id,omitempty"` // G9-33: 0 = event này không có seatmap CẤP EVENT. CHỈ áp dụng
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Event) Reset() {
@@ -234,6 +238,13 @@ func (x *Event) GetEventType() string {
 		return x.EventType
 	}
 	return ""
+}
+
+func (x *Event) GetSeatingPlanId() int64 {
+	if x != nil {
+		return x.SeatingPlanId
+	}
+	return 0
 }
 
 // Domain model: SubEvent
@@ -4672,7 +4683,7 @@ var File_v1_event_event_proto protoreflect.FileDescriptor
 
 const file_v1_event_event_proto_rawDesc = "" +
 	"\n" +
-	"\x14v1/event/event.proto\x12\x0friptik.event.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\x85\t\n" +
+	"\x14v1/event/event.proto\x12\x0friptik.event.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xad\t\n" +
 	"\x05Event\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\x124\n" +
@@ -4698,7 +4709,8 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\acreated\x18\x14 \x01(\tR\acreated\x12#\n" +
 	"\rlast_modified\x18\x15 \x01(\tR\flastModified\x12\x1d\n" +
 	"\n" +
-	"event_type\x18\x16 \x01(\tR\teventType\x1a7\n" +
+	"event_type\x18\x16 \x01(\tR\teventType\x12&\n" +
+	"\x0fseating_plan_id\x18\x17 \x01(\x03R\rseatingPlanId\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
