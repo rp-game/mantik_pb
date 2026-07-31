@@ -539,8 +539,13 @@ type UpdateCheckinListRequest struct {
 	AllowMultipleEntries bool                   `protobuf:"varint,6,opt,name=allow_multiple_entries,json=allowMultipleEntries,proto3" json:"allow_multiple_entries,omitempty"`
 	AllowEntryAfterExit  bool                   `protobuf:"varint,7,opt,name=allow_entry_after_exit,json=allowEntryAfterExit,proto3" json:"allow_entry_after_exit,omitempty"`
 	Rules                map[string]*anypb.Any  `protobuf:"bytes,8,rep,name=rules,proto3" json:"rules,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// field_mask — tên các field THẬT SỰ có trong request PATCH gốc (vd "name", "all_products",
+	// "allow_multiple_entries"...). BẮT BUỘC dùng để phân biệt "field không gửi" với "field gửi = giá trị
+	// rỗng/false" — proto3 scalar (bool/string) không tự phân biệt được 2 trường hợp này, nên thiếu
+	// field_mask sẽ khiến PATCH 1 field ghi đè rỗng TẤT CẢ field khác (bug thật đã gặp, G10-13 review).
+	FieldMask     []string `protobuf:"bytes,9,rep,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateCheckinListRequest) Reset() {
@@ -625,6 +630,13 @@ func (x *UpdateCheckinListRequest) GetAllowEntryAfterExit() bool {
 func (x *UpdateCheckinListRequest) GetRules() map[string]*anypb.Any {
 	if x != nil {
 		return x.Rules
+	}
+	return nil
+}
+
+func (x *UpdateCheckinListRequest) GetFieldMask() []string {
+	if x != nil {
+		return x.FieldMask
 	}
 	return nil
 }
@@ -1915,7 +1927,7 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xba\x03\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd9\x03\n" +
 	"\x18UpdateCheckinListRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
@@ -1924,7 +1936,9 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\x0finclude_pending\x18\x05 \x01(\bR\x0eincludePending\x124\n" +
 	"\x16allow_multiple_entries\x18\x06 \x01(\bR\x14allowMultipleEntries\x123\n" +
 	"\x16allow_entry_after_exit\x18\a \x01(\bR\x13allowEntryAfterExit\x12L\n" +
-	"\x05rules\x18\b \x03(\v26.riptik.checkin.v1.UpdateCheckinListRequest.RulesEntryR\x05rules\x1aN\n" +
+	"\x05rules\x18\b \x03(\v26.riptik.checkin.v1.UpdateCheckinListRequest.RulesEntryR\x05rules\x12\x1d\n" +
+	"\n" +
+	"field_mask\x18\t \x03(\tR\tfieldMask\x1aN\n" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
