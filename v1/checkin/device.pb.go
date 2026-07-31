@@ -26,6 +26,12 @@ type CreateDevicePairingRequest struct {
 	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	CheckinListId int64                  `protobuf:"varint,3,opt,name=checkin_list_id,json=checkinListId,proto3" json:"checkin_list_id,omitempty"` // list mặc định gán cho thiết bị lúc tạo
+	// organizer_slug/event_slug (G10-09) — checkin-service KHÔNG sở hữu dữ liệu organizer/event, không có
+	// đường tra cross-service (chưa có RPC "get by ID"). bo-gateway/backoffice ĐÃ BIẾT 2 slug này lúc tạo
+	// (organizer_slug = path param sẵn có, event_slug = chọn từ dropdown event lúc admin tạo thiết bị) —
+	// lưu LẠI NGAY lúc tạo, trả lại y nguyên lúc confirm, tránh phải tra cứu chéo service lúc app pair.
+	OrganizerSlug string `protobuf:"bytes,4,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	EventSlug     string `protobuf:"bytes,5,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -79,6 +85,20 @@ func (x *CreateDevicePairingRequest) GetCheckinListId() int64 {
 		return x.CheckinListId
 	}
 	return 0
+}
+
+func (x *CreateDevicePairingRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *CreateDevicePairingRequest) GetEventSlug() string {
+	if x != nil {
+		return x.EventSlug
+	}
+	return ""
 }
 
 type CreateDevicePairingResponse struct {
@@ -220,6 +240,8 @@ type ConfirmDevicePairingResponse struct {
 	CheckinListName string                 `protobuf:"bytes,7,opt,name=checkin_list_name,json=checkinListName,proto3" json:"checkin_list_name,omitempty"`
 	ErrorCode       string                 `protobuf:"bytes,8,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
 	ErrorMessage    string                 `protobuf:"bytes,9,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	OrganizerSlug   string                 `protobuf:"bytes,10,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"` // G10-09 — app cần slug để gọi route bo-gateway (/organizers/{slug}/...)
+	EventSlug       string                 `protobuf:"bytes,11,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -313,6 +335,20 @@ func (x *ConfirmDevicePairingResponse) GetErrorCode() string {
 func (x *ConfirmDevicePairingResponse) GetErrorMessage() string {
 	if x != nil {
 		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *ConfirmDevicePairingResponse) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *ConfirmDevicePairingResponse) GetEventSlug() string {
+	if x != nil {
+		return x.EventSlug
 	}
 	return ""
 }
@@ -887,11 +923,14 @@ var File_v1_checkin_device_proto protoreflect.FileDescriptor
 
 const file_v1_checkin_device_proto_rawDesc = "" +
 	"\n" +
-	"\x17v1/checkin/device.proto\x12\x11riptik.checkin.v1\"{\n" +
+	"\x17v1/checkin/device.proto\x12\x11riptik.checkin.v1\"\xc1\x01\n" +
 	"\x1aCreateDevicePairingRequest\x12!\n" +
 	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12&\n" +
-	"\x0fcheckin_list_id\x18\x03 \x01(\x03R\rcheckinListId\"\xda\x01\n" +
+	"\x0fcheckin_list_id\x18\x03 \x01(\x03R\rcheckinListId\x12%\n" +
+	"\x0eorganizer_slug\x18\x04 \x01(\tR\rorganizerSlug\x12\x1d\n" +
+	"\n" +
+	"event_slug\x18\x05 \x01(\tR\teventSlug\"\xda\x01\n" +
 	"\x1bCreateDevicePairingResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1b\n" +
 	"\tdevice_id\x18\x02 \x01(\x03R\bdeviceId\x12!\n" +
@@ -902,7 +941,7 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"error_code\x18\x05 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x06 \x01(\tR\ferrorMessage\"@\n" +
 	"\x1bConfirmDevicePairingRequest\x12!\n" +
-	"\fpairing_code\x18\x01 \x01(\tR\vpairingCode\"\xce\x02\n" +
+	"\fpairing_code\x18\x01 \x01(\tR\vpairingCode\"\x94\x03\n" +
 	"\x1cConfirmDevicePairingResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x1b\n" +
@@ -913,7 +952,11 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"\x11checkin_list_name\x18\a \x01(\tR\x0fcheckinListName\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\b \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\t \x01(\tR\ferrorMessage\"2\n" +
+	"\rerror_message\x18\t \x01(\tR\ferrorMessage\x12%\n" +
+	"\x0eorganizer_slug\x18\n" +
+	" \x01(\tR\rorganizerSlug\x12\x1d\n" +
+	"\n" +
+	"event_slug\x18\v \x01(\tR\teventSlug\"2\n" +
 	"\x13RevokeDeviceRequest\x12\x1b\n" +
 	"\tdevice_id\x18\x01 \x01(\x03R\bdeviceId\"t\n" +
 	"\x14RevokeDeviceResponse\x12\x18\n" +
