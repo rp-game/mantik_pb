@@ -148,14 +148,21 @@ func (x *Checkin) GetCreatedAt() string {
 
 // Domain model: CheckinPosition
 type CheckinPosition struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	PositionId    int64                  `protobuf:"varint,2,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
-	ListId        int64                  `protobuf:"varint,3,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
-	Secret        string                 `protobuf:"bytes,4,opt,name=secret,proto3" json:"secret,omitempty"`
-	CheckinCount  int32                  `protobuf:"varint,5,opt,name=checkin_count,json=checkinCount,proto3" json:"checkin_count,omitempty"`
-	Checkins      []*Checkin             `protobuf:"bytes,6,rep,name=checkins,proto3" json:"checkins,omitempty"`
-	IsInside      bool                   `protobuf:"varint,7,opt,name=is_inside,json=isInside,proto3" json:"is_inside,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Id           int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	PositionId   int64                  `protobuf:"varint,2,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	ListId       int64                  `protobuf:"varint,3,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
+	Secret       string                 `protobuf:"bytes,4,opt,name=secret,proto3" json:"secret,omitempty"`
+	CheckinCount int32                  `protobuf:"varint,5,opt,name=checkin_count,json=checkinCount,proto3" json:"checkin_count,omitempty"`
+	Checkins     []*Checkin             `protobuf:"bytes,6,rep,name=checkins,proto3" json:"checkins,omitempty"`
+	IsInside     bool                   `protobuf:"varint,7,opt,name=is_inside,json=isInside,proto3" json:"is_inside,omitempty"`
+	// G10-12 P4 review: RedeemCheckinResponse.position (dùng field CheckinPosition này) chưa từng trả tên
+	// khách/hạng vé — màn quét (scan.tsx) luôn hiện trống dù redeem online pass. CheckinListPosition (dùng
+	// cho prefetch offline) đã có sẵn các field này, CheckinPosition thì chưa — thêm cho khớp.
+	AttendeeName  string `protobuf:"bytes,8,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`
+	ItemName      string `protobuf:"bytes,9,opt,name=item_name,json=itemName,proto3" json:"item_name,omitempty"`
+	OrderStatus   string `protobuf:"bytes,10,opt,name=order_status,json=orderStatus,proto3" json:"order_status,omitempty"`
+	Blocked       bool   `protobuf:"varint,11,opt,name=blocked,proto3" json:"blocked,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -235,6 +242,34 @@ func (x *CheckinPosition) GetCheckins() []*Checkin {
 func (x *CheckinPosition) GetIsInside() bool {
 	if x != nil {
 		return x.IsInside
+	}
+	return false
+}
+
+func (x *CheckinPosition) GetAttendeeName() string {
+	if x != nil {
+		return x.AttendeeName
+	}
+	return ""
+}
+
+func (x *CheckinPosition) GetItemName() string {
+	if x != nil {
+		return x.ItemName
+	}
+	return ""
+}
+
+func (x *CheckinPosition) GetOrderStatus() string {
+	if x != nil {
+		return x.OrderStatus
+	}
+	return ""
+}
+
+func (x *CheckinPosition) GetBlocked() bool {
+	if x != nil {
+		return x.Blocked
 	}
 	return false
 }
@@ -1617,7 +1652,7 @@ const file_v1_checkin_checkin_proto_rawDesc = "" +
 	"created_at\x18\v \x01(\tR\tcreatedAt\x1a:\n" +
 	"\fAnswersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xed\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xec\x02\n" +
 	"\x0fCheckinPosition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
 	"\vposition_id\x18\x02 \x01(\x03R\n" +
@@ -1626,7 +1661,12 @@ const file_v1_checkin_checkin_proto_rawDesc = "" +
 	"\x06secret\x18\x04 \x01(\tR\x06secret\x12#\n" +
 	"\rcheckin_count\x18\x05 \x01(\x05R\fcheckinCount\x126\n" +
 	"\bcheckins\x18\x06 \x03(\v2\x1a.riptik.checkin.v1.CheckinR\bcheckins\x12\x1b\n" +
-	"\tis_inside\x18\a \x01(\bR\bisInside\"\xd5\x03\n" +
+	"\tis_inside\x18\a \x01(\bR\bisInside\x12#\n" +
+	"\rattendee_name\x18\b \x01(\tR\fattendeeName\x12\x1b\n" +
+	"\titem_name\x18\t \x01(\tR\bitemName\x12!\n" +
+	"\forder_status\x18\n" +
+	" \x01(\tR\vorderStatus\x12\x18\n" +
+	"\ablocked\x18\v \x01(\bR\ablocked\"\xd5\x03\n" +
 	"\x14RedeemCheckinRequest\x12\x16\n" +
 	"\x06secret\x18\x01 \x01(\tR\x06secret\x12\x17\n" +
 	"\alist_id\x18\x02 \x01(\x03R\x06listId\x12\x1a\n" +

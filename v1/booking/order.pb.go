@@ -1715,6 +1715,7 @@ type OrderPositionDetail struct {
 	Tax           string                 `protobuf:"bytes,14,opt,name=tax,proto3" json:"tax,omitempty"`                                          // Tax already included in price, as decimal string (task 001 — informational, tax-inclusive pricing)
 	SeatLabel     string                 `protobuf:"bytes,15,opt,name=seat_label,json=seatLabel,proto3" json:"seat_label,omitempty"`             // "" for general-admission — G9-24e: check-in previously had NO seat field at all
 	Blocked       bool                   `protobuf:"varint,16,opt,name=blocked,proto3" json:"blocked,omitempty"`                                 // true if OrderPosition.Blocked (jsonb) is non-empty — checkin-app.md §0 mục 2/§6.0 A2
+	ItemName      string                 `protobuf:"bytes,17,opt,name=item_name,json=itemName,proto3" json:"item_name,omitempty"`                // OrderPosition.ItemName (denormalized, đã có sẵn ở model — G10-12 P4 review: redeem online chưa từng trả tên hạng vé, chỉ CheckinListPosition (prefetch) có
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1859,6 +1860,13 @@ func (x *OrderPositionDetail) GetBlocked() bool {
 		return x.Blocked
 	}
 	return false
+}
+
+func (x *OrderPositionDetail) GetItemName() string {
+	if x != nil {
+		return x.ItemName
+	}
+	return ""
 }
 
 // Position answer to a question
@@ -3577,7 +3585,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0eticket_barcode\x18\f \x01(\tR\rticketBarcode\x12\x1b\n" +
 	"\tticket_qr\x18\r \x01(\tR\bticketQr\x12-\n" +
 	"\x12fulfillment_status\x18\x0e \x01(\tR\x11fulfillmentStatus\x12\x10\n" +
-	"\x03tax\x18\x0f \x01(\tR\x03tax\"\xcb\x03\n" +
+	"\x03tax\x18\x0f \x01(\tR\x03tax\"\xe8\x03\n" +
 	"\x13OrderPositionDetail\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x17\n" +
@@ -3597,7 +3605,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x03tax\x18\x0e \x01(\tR\x03tax\x12\x1d\n" +
 	"\n" +
 	"seat_label\x18\x0f \x01(\tR\tseatLabel\x12\x18\n" +
-	"\ablocked\x18\x10 \x01(\bR\ablocked\"I\n" +
+	"\ablocked\x18\x10 \x01(\bR\ablocked\x12\x1b\n" +
+	"\titem_name\x18\x11 \x01(\tR\bitemName\"I\n" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
