@@ -317,6 +317,227 @@ func (x *ConfirmDevicePairingResponse) GetErrorMessage() string {
 	return ""
 }
 
+// RevokeDeviceRequest — admin thu hồi thiết bị khi mất máy (Active=false). Gọi bằng device_id, xác
+// thực admin (JWT) làm ở tầng HTTP gateway (bo-gateway, G10-05) — NATS handler này không tự xác thực.
+type RevokeDeviceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DeviceId      int64                  `protobuf:"varint,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeDeviceRequest) Reset() {
+	*x = RevokeDeviceRequest{}
+	mi := &file_v1_checkin_device_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeDeviceRequest) ProtoMessage() {}
+
+func (x *RevokeDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeDeviceRequest.ProtoReflect.Descriptor instead.
+func (*RevokeDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RevokeDeviceRequest) GetDeviceId() int64 {
+	if x != nil {
+		return x.DeviceId
+	}
+	return 0
+}
+
+type RevokeDeviceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeDeviceResponse) Reset() {
+	*x = RevokeDeviceResponse{}
+	mi := &file_v1_checkin_device_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeDeviceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeDeviceResponse) ProtoMessage() {}
+
+func (x *RevokeDeviceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeDeviceResponse.ProtoReflect.Descriptor instead.
+func (*RevokeDeviceResponse) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RevokeDeviceResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RevokeDeviceResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *RevokeDeviceResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// RollDeviceTokenRequest — THIẾT BỊ tự đổi token khi nghi bị lộ (KHÔNG cần backoffice, giống Pretix
+// POST /device/roll) — thiết bị phải trình token HIỆN TẠI để chứng minh danh tính, đổi lấy token mới,
+// token cũ mất hiệu lực ngay.
+type RollDeviceTokenRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	CurrentToken  string                 `protobuf:"bytes,1,opt,name=current_token,json=currentToken,proto3" json:"current_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RollDeviceTokenRequest) Reset() {
+	*x = RollDeviceTokenRequest{}
+	mi := &file_v1_checkin_device_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RollDeviceTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RollDeviceTokenRequest) ProtoMessage() {}
+
+func (x *RollDeviceTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RollDeviceTokenRequest.ProtoReflect.Descriptor instead.
+func (*RollDeviceTokenRequest) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *RollDeviceTokenRequest) GetCurrentToken() string {
+	if x != nil {
+		return x.CurrentToken
+	}
+	return ""
+}
+
+type RollDeviceTokenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	UniqueToken   string                 `protobuf:"bytes,2,opt,name=unique_token,json=uniqueToken,proto3" json:"unique_token,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RollDeviceTokenResponse) Reset() {
+	*x = RollDeviceTokenResponse{}
+	mi := &file_v1_checkin_device_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RollDeviceTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RollDeviceTokenResponse) ProtoMessage() {}
+
+func (x *RollDeviceTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RollDeviceTokenResponse.ProtoReflect.Descriptor instead.
+func (*RollDeviceTokenResponse) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *RollDeviceTokenResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RollDeviceTokenResponse) GetUniqueToken() string {
+	if x != nil {
+		return x.UniqueToken
+	}
+	return ""
+}
+
+func (x *RollDeviceTokenResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *RollDeviceTokenResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_checkin_device_proto protoreflect.FileDescriptor
 
 const file_v1_checkin_device_proto_rawDesc = "" +
@@ -347,7 +568,22 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"\x11checkin_list_name\x18\a \x01(\tR\x0fcheckinListName\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\b \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\t \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
+	"\rerror_message\x18\t \x01(\tR\ferrorMessage\"2\n" +
+	"\x13RevokeDeviceRequest\x12\x1b\n" +
+	"\tdevice_id\x18\x01 \x01(\x03R\bdeviceId\"t\n" +
+	"\x14RevokeDeviceResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"=\n" +
+	"\x16RollDeviceTokenRequest\x12#\n" +
+	"\rcurrent_token\x18\x01 \x01(\tR\fcurrentToken\"\x9a\x01\n" +
+	"\x17RollDeviceTokenResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12!\n" +
+	"\funique_token\x18\x02 \x01(\tR\vuniqueToken\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
 
 var (
 	file_v1_checkin_device_proto_rawDescOnce sync.Once
@@ -361,12 +597,16 @@ func file_v1_checkin_device_proto_rawDescGZIP() []byte {
 	return file_v1_checkin_device_proto_rawDescData
 }
 
-var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_v1_checkin_device_proto_goTypes = []any{
 	(*CreateDevicePairingRequest)(nil),   // 0: riptik.checkin.v1.CreateDevicePairingRequest
 	(*CreateDevicePairingResponse)(nil),  // 1: riptik.checkin.v1.CreateDevicePairingResponse
 	(*ConfirmDevicePairingRequest)(nil),  // 2: riptik.checkin.v1.ConfirmDevicePairingRequest
 	(*ConfirmDevicePairingResponse)(nil), // 3: riptik.checkin.v1.ConfirmDevicePairingResponse
+	(*RevokeDeviceRequest)(nil),          // 4: riptik.checkin.v1.RevokeDeviceRequest
+	(*RevokeDeviceResponse)(nil),         // 5: riptik.checkin.v1.RevokeDeviceResponse
+	(*RollDeviceTokenRequest)(nil),       // 6: riptik.checkin.v1.RollDeviceTokenRequest
+	(*RollDeviceTokenResponse)(nil),      // 7: riptik.checkin.v1.RollDeviceTokenResponse
 }
 var file_v1_checkin_device_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -387,7 +627,7 @@ func file_v1_checkin_device_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_checkin_device_proto_rawDesc), len(file_v1_checkin_device_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
