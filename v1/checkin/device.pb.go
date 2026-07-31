@@ -718,6 +718,7 @@ func (x *AuthenticateDeviceResponse) GetErrorMessage() string {
 type ListDevicesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	EventSlug     string                 `protobuf:"bytes,2,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"` // lọc theo event — "" = mọi event (tương thích ngược, không bắt buộc)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -757,6 +758,13 @@ func (x *ListDevicesRequest) GetOrganizerId() int64 {
 		return x.OrganizerId
 	}
 	return 0
+}
+
+func (x *ListDevicesRequest) GetEventSlug() string {
+	if x != nil {
+		return x.EventSlug
+	}
+	return ""
 }
 
 type DeviceSummary struct {
@@ -982,9 +990,11 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"\x0fcheckin_list_id\x18\x05 \x01(\x03R\rcheckinListId\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"7\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"V\n" +
 	"\x12ListDevicesRequest\x12!\n" +
-	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\"\xdb\x01\n" +
+	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x1d\n" +
+	"\n" +
+	"event_slug\x18\x02 \x01(\tR\teventSlug\"\xdb\x01\n" +
 	"\rDeviceSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
