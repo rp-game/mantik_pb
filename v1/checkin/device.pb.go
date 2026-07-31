@@ -538,6 +538,145 @@ func (x *RollDeviceTokenResponse) GetErrorMessage() string {
 	return ""
 }
 
+// AuthenticateDevice (G10-05, checkin-app.md §3.5) — bo-gateway gọi mỗi request có header
+// `Authorization: Device <token>` để tra danh tính + phạm vi cho phép của thiết bị. Plumbing thiếu ở
+// G10-03/G10-04 (chỉ có repo.GetByUniqueToken, chưa expose qua NATS) — bổ sung ở đây vì middleware cần.
+type AuthenticateDeviceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UniqueToken   string                 `protobuf:"bytes,1,opt,name=unique_token,json=uniqueToken,proto3" json:"unique_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthenticateDeviceRequest) Reset() {
+	*x = AuthenticateDeviceRequest{}
+	mi := &file_v1_checkin_device_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthenticateDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthenticateDeviceRequest) ProtoMessage() {}
+
+func (x *AuthenticateDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthenticateDeviceRequest.ProtoReflect.Descriptor instead.
+func (*AuthenticateDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *AuthenticateDeviceRequest) GetUniqueToken() string {
+	if x != nil {
+		return x.UniqueToken
+	}
+	return ""
+}
+
+type AuthenticateDeviceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"` // false = token không hợp lệ/đã revoke — KHÔNG phân biệt lý do (chống dò)
+	DeviceId      int64                  `protobuf:"varint,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	EventId       int64                  `protobuf:"varint,4,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"` // suy ra từ default_checkin_list_id -> checkin_lists.event_id
+	CheckinListId int64                  `protobuf:"varint,5,opt,name=checkin_list_id,json=checkinListId,proto3" json:"checkin_list_id,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AuthenticateDeviceResponse) Reset() {
+	*x = AuthenticateDeviceResponse{}
+	mi := &file_v1_checkin_device_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AuthenticateDeviceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthenticateDeviceResponse) ProtoMessage() {}
+
+func (x *AuthenticateDeviceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthenticateDeviceResponse.ProtoReflect.Descriptor instead.
+func (*AuthenticateDeviceResponse) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AuthenticateDeviceResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AuthenticateDeviceResponse) GetDeviceId() int64 {
+	if x != nil {
+		return x.DeviceId
+	}
+	return 0
+}
+
+func (x *AuthenticateDeviceResponse) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *AuthenticateDeviceResponse) GetEventId() int64 {
+	if x != nil {
+		return x.EventId
+	}
+	return 0
+}
+
+func (x *AuthenticateDeviceResponse) GetCheckinListId() int64 {
+	if x != nil {
+		return x.CheckinListId
+	}
+	return 0
+}
+
+func (x *AuthenticateDeviceResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *AuthenticateDeviceResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_checkin_device_proto protoreflect.FileDescriptor
 
 const file_v1_checkin_device_proto_rawDesc = "" +
@@ -583,7 +722,18 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"\funique_token\x18\x02 \x01(\tR\vuniqueToken\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\">\n" +
+	"\x19AuthenticateDeviceRequest\x12!\n" +
+	"\funique_token\x18\x01 \x01(\tR\vuniqueToken\"\xfd\x01\n" +
+	"\x1aAuthenticateDeviceResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1b\n" +
+	"\tdevice_id\x18\x02 \x01(\x03R\bdeviceId\x12!\n" +
+	"\forganizer_id\x18\x03 \x01(\x03R\vorganizerId\x12\x19\n" +
+	"\bevent_id\x18\x04 \x01(\x03R\aeventId\x12&\n" +
+	"\x0fcheckin_list_id\x18\x05 \x01(\x03R\rcheckinListId\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
 
 var (
 	file_v1_checkin_device_proto_rawDescOnce sync.Once
@@ -597,7 +747,7 @@ func file_v1_checkin_device_proto_rawDescGZIP() []byte {
 	return file_v1_checkin_device_proto_rawDescData
 }
 
-var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_v1_checkin_device_proto_goTypes = []any{
 	(*CreateDevicePairingRequest)(nil),   // 0: riptik.checkin.v1.CreateDevicePairingRequest
 	(*CreateDevicePairingResponse)(nil),  // 1: riptik.checkin.v1.CreateDevicePairingResponse
@@ -607,6 +757,8 @@ var file_v1_checkin_device_proto_goTypes = []any{
 	(*RevokeDeviceResponse)(nil),         // 5: riptik.checkin.v1.RevokeDeviceResponse
 	(*RollDeviceTokenRequest)(nil),       // 6: riptik.checkin.v1.RollDeviceTokenRequest
 	(*RollDeviceTokenResponse)(nil),      // 7: riptik.checkin.v1.RollDeviceTokenResponse
+	(*AuthenticateDeviceRequest)(nil),    // 8: riptik.checkin.v1.AuthenticateDeviceRequest
+	(*AuthenticateDeviceResponse)(nil),   // 9: riptik.checkin.v1.AuthenticateDeviceResponse
 }
 var file_v1_checkin_device_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -627,7 +779,7 @@ func file_v1_checkin_device_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_checkin_device_proto_rawDesc), len(file_v1_checkin_device_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
