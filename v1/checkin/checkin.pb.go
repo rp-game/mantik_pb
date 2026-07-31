@@ -274,6 +274,145 @@ func (x *CheckinPosition) GetBlocked() bool {
 	return false
 }
 
+// QuestionOptionInfo/QuestionInfo — P1 (checkin-app.md §6.2): câu hỏi bắt buộc CHƯA trả lời lúc check-in
+// (status "incomplete"). Định nghĩa riêng trong checkin.proto (không import event.proto để tránh phụ
+// thuộc chéo service) — chỉ mang đủ dữ liệu để checkin-app render 1 form hỏi/đáp tối thiểu.
+type QuestionOptionInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Answer        map[string]string      `protobuf:"bytes,2,rep,name=answer,proto3" json:"answer,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // i18n
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuestionOptionInfo) Reset() {
+	*x = QuestionOptionInfo{}
+	mi := &file_v1_checkin_checkin_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestionOptionInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestionOptionInfo) ProtoMessage() {}
+
+func (x *QuestionOptionInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_checkin_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestionOptionInfo.ProtoReflect.Descriptor instead.
+func (*QuestionOptionInfo) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *QuestionOptionInfo) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *QuestionOptionInfo) GetAnswer() map[string]string {
+	if x != nil {
+		return x.Answer
+	}
+	return nil
+}
+
+type QuestionInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Identifier    string                 `protobuf:"bytes,2,opt,name=identifier,proto3" json:"identifier,omitempty"`
+	Question      map[string]string      `protobuf:"bytes,3,rep,name=question,proto3" json:"question,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // i18n
+	Type          string                 `protobuf:"bytes,4,opt,name=type,proto3" json:"type,omitempty"`                                                                                   // "N","S","T","B","C","M","F","D","H","TEL" (QuestionType)
+	Required      bool                   `protobuf:"varint,5,opt,name=required,proto3" json:"required,omitempty"`
+	Options       []*QuestionOptionInfo  `protobuf:"bytes,6,rep,name=options,proto3" json:"options,omitempty"` // Cho type "C"/"M"
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuestionInfo) Reset() {
+	*x = QuestionInfo{}
+	mi := &file_v1_checkin_checkin_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuestionInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuestionInfo) ProtoMessage() {}
+
+func (x *QuestionInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_checkin_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuestionInfo.ProtoReflect.Descriptor instead.
+func (*QuestionInfo) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *QuestionInfo) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *QuestionInfo) GetIdentifier() string {
+	if x != nil {
+		return x.Identifier
+	}
+	return ""
+}
+
+func (x *QuestionInfo) GetQuestion() map[string]string {
+	if x != nil {
+		return x.Question
+	}
+	return nil
+}
+
+func (x *QuestionInfo) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *QuestionInfo) GetRequired() bool {
+	if x != nil {
+		return x.Required
+	}
+	return false
+}
+
+func (x *QuestionInfo) GetOptions() []*QuestionOptionInfo {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
 // Requests
 type RedeemCheckinRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
@@ -295,7 +434,7 @@ type RedeemCheckinRequest struct {
 
 func (x *RedeemCheckinRequest) Reset() {
 	*x = RedeemCheckinRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[2]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -307,7 +446,7 @@ func (x *RedeemCheckinRequest) String() string {
 func (*RedeemCheckinRequest) ProtoMessage() {}
 
 func (x *RedeemCheckinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[2]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -320,7 +459,7 @@ func (x *RedeemCheckinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RedeemCheckinRequest.ProtoReflect.Descriptor instead.
 func (*RedeemCheckinRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{2}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *RedeemCheckinRequest) GetSecret() string {
@@ -419,7 +558,7 @@ type ValidateCheckinRequest struct {
 
 func (x *ValidateCheckinRequest) Reset() {
 	*x = ValidateCheckinRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[3]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -431,7 +570,7 @@ func (x *ValidateCheckinRequest) String() string {
 func (*ValidateCheckinRequest) ProtoMessage() {}
 
 func (x *ValidateCheckinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[3]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -444,7 +583,7 @@ func (x *ValidateCheckinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateCheckinRequest.ProtoReflect.Descriptor instead.
 func (*ValidateCheckinRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{3}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ValidateCheckinRequest) GetSecret() string {
@@ -486,7 +625,7 @@ type GetCheckinStatusRequest struct {
 
 func (x *GetCheckinStatusRequest) Reset() {
 	*x = GetCheckinStatusRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[4]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -498,7 +637,7 @@ func (x *GetCheckinStatusRequest) String() string {
 func (*GetCheckinStatusRequest) ProtoMessage() {}
 
 func (x *GetCheckinStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[4]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -511,7 +650,7 @@ func (x *GetCheckinStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCheckinStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetCheckinStatusRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{4}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetCheckinStatusRequest) GetPositionId() int64 {
@@ -552,7 +691,7 @@ type ListCheckinsRequest struct {
 
 func (x *ListCheckinsRequest) Reset() {
 	*x = ListCheckinsRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[5]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -564,7 +703,7 @@ func (x *ListCheckinsRequest) String() string {
 func (*ListCheckinsRequest) ProtoMessage() {}
 
 func (x *ListCheckinsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[5]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,7 +716,7 @@ func (x *ListCheckinsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCheckinsRequest.ProtoReflect.Descriptor instead.
 func (*ListCheckinsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{5}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ListCheckinsRequest) GetListId() int64 {
@@ -659,7 +798,7 @@ type BulkCheckinItem struct {
 
 func (x *BulkCheckinItem) Reset() {
 	*x = BulkCheckinItem{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[6]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -671,7 +810,7 @@ func (x *BulkCheckinItem) String() string {
 func (*BulkCheckinItem) ProtoMessage() {}
 
 func (x *BulkCheckinItem) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[6]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -684,7 +823,7 @@ func (x *BulkCheckinItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkCheckinItem.ProtoReflect.Descriptor instead.
 func (*BulkCheckinItem) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{6}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *BulkCheckinItem) GetSecret() string {
@@ -734,7 +873,7 @@ type BulkCheckinRequest struct {
 
 func (x *BulkCheckinRequest) Reset() {
 	*x = BulkCheckinRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[7]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -746,7 +885,7 @@ func (x *BulkCheckinRequest) String() string {
 func (*BulkCheckinRequest) ProtoMessage() {}
 
 func (x *BulkCheckinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[7]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -759,7 +898,7 @@ func (x *BulkCheckinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkCheckinRequest.ProtoReflect.Descriptor instead.
 func (*BulkCheckinRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{7}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *BulkCheckinRequest) GetListId() int64 {
@@ -806,7 +945,7 @@ type SearchCheckinsRequest struct {
 
 func (x *SearchCheckinsRequest) Reset() {
 	*x = SearchCheckinsRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[8]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -818,7 +957,7 @@ func (x *SearchCheckinsRequest) String() string {
 func (*SearchCheckinsRequest) ProtoMessage() {}
 
 func (x *SearchCheckinsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[8]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -831,7 +970,7 @@ func (x *SearchCheckinsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchCheckinsRequest.ProtoReflect.Descriptor instead.
 func (*SearchCheckinsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{8}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *SearchCheckinsRequest) GetQuery() string {
@@ -902,7 +1041,7 @@ type UndoCheckinRequest struct {
 
 func (x *UndoCheckinRequest) Reset() {
 	*x = UndoCheckinRequest{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[9]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -914,7 +1053,7 @@ func (x *UndoCheckinRequest) String() string {
 func (*UndoCheckinRequest) ProtoMessage() {}
 
 func (x *UndoCheckinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[9]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -927,7 +1066,7 @@ func (x *UndoCheckinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UndoCheckinRequest.ProtoReflect.Descriptor instead.
 func (*UndoCheckinRequest) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{9}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UndoCheckinRequest) GetCheckinId() int64 {
@@ -953,13 +1092,16 @@ type RedeemCheckinResponse struct {
 	RequireAttention  bool                   `protobuf:"varint,4,opt,name=require_attention,json=requireAttention,proto3" json:"require_attention,omitempty"`
 	Reason            string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`                                                // Optional error reason
 	ReasonExplanation string                 `protobuf:"bytes,6,opt,name=reason_explanation,json=reasonExplanation,proto3" json:"reason_explanation,omitempty"` // Optional error explanation
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// P1 (checkin-app.md §6.2): khi status = "incomplete", danh sách câu hỏi bắt buộc còn thiếu câu trả lời —
+	// client hỏi lại rồi gửi lại request với questions_supported=true + answers đã điền.
+	PendingQuestions []*QuestionInfo `protobuf:"bytes,7,rep,name=pending_questions,json=pendingQuestions,proto3" json:"pending_questions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *RedeemCheckinResponse) Reset() {
 	*x = RedeemCheckinResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[10]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -971,7 +1113,7 @@ func (x *RedeemCheckinResponse) String() string {
 func (*RedeemCheckinResponse) ProtoMessage() {}
 
 func (x *RedeemCheckinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[10]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -984,7 +1126,7 @@ func (x *RedeemCheckinResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RedeemCheckinResponse.ProtoReflect.Descriptor instead.
 func (*RedeemCheckinResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{10}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *RedeemCheckinResponse) GetSuccess() bool {
@@ -1029,6 +1171,13 @@ func (x *RedeemCheckinResponse) GetReasonExplanation() string {
 	return ""
 }
 
+func (x *RedeemCheckinResponse) GetPendingQuestions() []*QuestionInfo {
+	if x != nil {
+		return x.PendingQuestions
+	}
+	return nil
+}
+
 type ValidateCheckinResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Success          bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -1042,7 +1191,7 @@ type ValidateCheckinResponse struct {
 
 func (x *ValidateCheckinResponse) Reset() {
 	*x = ValidateCheckinResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[11]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1054,7 +1203,7 @@ func (x *ValidateCheckinResponse) String() string {
 func (*ValidateCheckinResponse) ProtoMessage() {}
 
 func (x *ValidateCheckinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[11]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1067,7 +1216,7 @@ func (x *ValidateCheckinResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ValidateCheckinResponse.ProtoReflect.Descriptor instead.
 func (*ValidateCheckinResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{11}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ValidateCheckinResponse) GetSuccess() bool {
@@ -1118,7 +1267,7 @@ type GetCheckinStatusResponse struct {
 
 func (x *GetCheckinStatusResponse) Reset() {
 	*x = GetCheckinStatusResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[12]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1130,7 +1279,7 @@ func (x *GetCheckinStatusResponse) String() string {
 func (*GetCheckinStatusResponse) ProtoMessage() {}
 
 func (x *GetCheckinStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[12]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1143,7 +1292,7 @@ func (x *GetCheckinStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCheckinStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetCheckinStatusResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{12}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetCheckinStatusResponse) GetSuccess() bool {
@@ -1192,7 +1341,7 @@ type ListCheckinsResponse struct {
 
 func (x *ListCheckinsResponse) Reset() {
 	*x = ListCheckinsResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[13]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1204,7 +1353,7 @@ func (x *ListCheckinsResponse) String() string {
 func (*ListCheckinsResponse) ProtoMessage() {}
 
 func (x *ListCheckinsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[13]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1217,7 +1366,7 @@ func (x *ListCheckinsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCheckinsResponse.ProtoReflect.Descriptor instead.
 func (*ListCheckinsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{13}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListCheckinsResponse) GetSuccess() bool {
@@ -1254,7 +1403,7 @@ type BulkCheckinResponse struct {
 
 func (x *BulkCheckinResponse) Reset() {
 	*x = BulkCheckinResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[14]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1266,7 +1415,7 @@ func (x *BulkCheckinResponse) String() string {
 func (*BulkCheckinResponse) ProtoMessage() {}
 
 func (x *BulkCheckinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[14]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1279,7 +1428,7 @@ func (x *BulkCheckinResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkCheckinResponse.ProtoReflect.Descriptor instead.
 func (*BulkCheckinResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{14}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *BulkCheckinResponse) GetSuccess() bool {
@@ -1331,7 +1480,7 @@ type BulkCheckinResult struct {
 
 func (x *BulkCheckinResult) Reset() {
 	*x = BulkCheckinResult{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[15]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1343,7 +1492,7 @@ func (x *BulkCheckinResult) String() string {
 func (*BulkCheckinResult) ProtoMessage() {}
 
 func (x *BulkCheckinResult) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[15]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1356,7 +1505,7 @@ func (x *BulkCheckinResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkCheckinResult.ProtoReflect.Descriptor instead.
 func (*BulkCheckinResult) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{15}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *BulkCheckinResult) GetSecret() string {
@@ -1412,7 +1561,7 @@ type SearchCheckinsResponse struct {
 
 func (x *SearchCheckinsResponse) Reset() {
 	*x = SearchCheckinsResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[16]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1424,7 +1573,7 @@ func (x *SearchCheckinsResponse) String() string {
 func (*SearchCheckinsResponse) ProtoMessage() {}
 
 func (x *SearchCheckinsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[16]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1437,7 +1586,7 @@ func (x *SearchCheckinsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchCheckinsResponse.ProtoReflect.Descriptor instead.
 func (*SearchCheckinsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{16}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *SearchCheckinsResponse) GetSuccess() bool {
@@ -1473,7 +1622,7 @@ type UndoCheckinResponse struct {
 
 func (x *UndoCheckinResponse) Reset() {
 	*x = UndoCheckinResponse{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[17]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1485,7 +1634,7 @@ func (x *UndoCheckinResponse) String() string {
 func (*UndoCheckinResponse) ProtoMessage() {}
 
 func (x *UndoCheckinResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[17]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1498,7 +1647,7 @@ func (x *UndoCheckinResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UndoCheckinResponse.ProtoReflect.Descriptor instead.
 func (*UndoCheckinResponse) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{17}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UndoCheckinResponse) GetSuccess() bool {
@@ -1549,7 +1698,7 @@ type CheckinProcessedEvent struct {
 
 func (x *CheckinProcessedEvent) Reset() {
 	*x = CheckinProcessedEvent{}
-	mi := &file_v1_checkin_checkin_proto_msgTypes[18]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1561,7 +1710,7 @@ func (x *CheckinProcessedEvent) String() string {
 func (*CheckinProcessedEvent) ProtoMessage() {}
 
 func (x *CheckinProcessedEvent) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_checkin_checkin_proto_msgTypes[18]
+	mi := &file_v1_checkin_checkin_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1574,7 +1723,7 @@ func (x *CheckinProcessedEvent) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckinProcessedEvent.ProtoReflect.Descriptor instead.
 func (*CheckinProcessedEvent) Descriptor() ([]byte, []int) {
-	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{18}
+	return file_v1_checkin_checkin_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CheckinProcessedEvent) GetCheckinId() int64 {
@@ -1676,7 +1825,25 @@ const file_v1_checkin_checkin_proto_rawDesc = "" +
 	"\titem_name\x18\t \x01(\tR\bitemName\x12!\n" +
 	"\forder_status\x18\n" +
 	" \x01(\tR\vorderStatus\x12\x18\n" +
-	"\ablocked\x18\v \x01(\bR\ablocked\"\xd5\x03\n" +
+	"\ablocked\x18\v \x01(\bR\ablocked\"\xaa\x01\n" +
+	"\x12QuestionOptionInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12I\n" +
+	"\x06answer\x18\x02 \x03(\v21.riptik.checkin.v1.QuestionOptionInfo.AnswerEntryR\x06answer\x1a9\n" +
+	"\vAnswerEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb7\x02\n" +
+	"\fQuestionInfo\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1e\n" +
+	"\n" +
+	"identifier\x18\x02 \x01(\tR\n" +
+	"identifier\x12I\n" +
+	"\bquestion\x18\x03 \x03(\v2-.riptik.checkin.v1.QuestionInfo.QuestionEntryR\bquestion\x12\x12\n" +
+	"\x04type\x18\x04 \x01(\tR\x04type\x12\x1a\n" +
+	"\brequired\x18\x05 \x01(\bR\brequired\x12?\n" +
+	"\aoptions\x18\x06 \x03(\v2%.riptik.checkin.v1.QuestionOptionInfoR\aoptions\x1a;\n" +
+	"\rQuestionEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xd5\x03\n" +
 	"\x14RedeemCheckinRequest\x12\x16\n" +
 	"\x06secret\x18\x01 \x01(\tR\x06secret\x12\x17\n" +
 	"\alist_id\x18\x02 \x01(\x03R\x06listId\x12\x1a\n" +
@@ -1744,14 +1911,15 @@ const file_v1_checkin_checkin_proto_rawDesc = "" +
 	"\x12UndoCheckinRequest\x12\x1d\n" +
 	"\n" +
 	"checkin_id\x18\x01 \x01(\x03R\tcheckinId\x12\x1b\n" +
-	"\tdevice_id\x18\x02 \x01(\x03R\bdeviceId\"\xfd\x01\n" +
+	"\tdevice_id\x18\x02 \x01(\x03R\bdeviceId\"\xcb\x02\n" +
 	"\x15RedeemCheckinResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12>\n" +
 	"\bposition\x18\x03 \x01(\v2\".riptik.checkin.v1.CheckinPositionR\bposition\x12+\n" +
 	"\x11require_attention\x18\x04 \x01(\bR\x10requireAttention\x12\x16\n" +
 	"\x06reason\x18\x05 \x01(\tR\x06reason\x12-\n" +
-	"\x12reason_explanation\x18\x06 \x01(\tR\x11reasonExplanation\"\xf6\x01\n" +
+	"\x12reason_explanation\x18\x06 \x01(\tR\x11reasonExplanation\x12L\n" +
+	"\x11pending_questions\x18\a \x03(\v2\x1f.riptik.checkin.v1.QuestionInfoR\x10pendingQuestions\"\xf6\x01\n" +
 	"\x17ValidateCheckinResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05valid\x18\x02 \x01(\bR\x05valid\x12>\n" +
@@ -1819,52 +1987,60 @@ func file_v1_checkin_checkin_proto_rawDescGZIP() []byte {
 	return file_v1_checkin_checkin_proto_rawDescData
 }
 
-var file_v1_checkin_checkin_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_v1_checkin_checkin_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_v1_checkin_checkin_proto_goTypes = []any{
 	(*Checkin)(nil),                  // 0: riptik.checkin.v1.Checkin
 	(*CheckinPosition)(nil),          // 1: riptik.checkin.v1.CheckinPosition
-	(*RedeemCheckinRequest)(nil),     // 2: riptik.checkin.v1.RedeemCheckinRequest
-	(*ValidateCheckinRequest)(nil),   // 3: riptik.checkin.v1.ValidateCheckinRequest
-	(*GetCheckinStatusRequest)(nil),  // 4: riptik.checkin.v1.GetCheckinStatusRequest
-	(*ListCheckinsRequest)(nil),      // 5: riptik.checkin.v1.ListCheckinsRequest
-	(*BulkCheckinItem)(nil),          // 6: riptik.checkin.v1.BulkCheckinItem
-	(*BulkCheckinRequest)(nil),       // 7: riptik.checkin.v1.BulkCheckinRequest
-	(*SearchCheckinsRequest)(nil),    // 8: riptik.checkin.v1.SearchCheckinsRequest
-	(*UndoCheckinRequest)(nil),       // 9: riptik.checkin.v1.UndoCheckinRequest
-	(*RedeemCheckinResponse)(nil),    // 10: riptik.checkin.v1.RedeemCheckinResponse
-	(*ValidateCheckinResponse)(nil),  // 11: riptik.checkin.v1.ValidateCheckinResponse
-	(*GetCheckinStatusResponse)(nil), // 12: riptik.checkin.v1.GetCheckinStatusResponse
-	(*ListCheckinsResponse)(nil),     // 13: riptik.checkin.v1.ListCheckinsResponse
-	(*BulkCheckinResponse)(nil),      // 14: riptik.checkin.v1.BulkCheckinResponse
-	(*BulkCheckinResult)(nil),        // 15: riptik.checkin.v1.BulkCheckinResult
-	(*SearchCheckinsResponse)(nil),   // 16: riptik.checkin.v1.SearchCheckinsResponse
-	(*UndoCheckinResponse)(nil),      // 17: riptik.checkin.v1.UndoCheckinResponse
-	(*CheckinProcessedEvent)(nil),    // 18: riptik.checkin.v1.CheckinProcessedEvent
-	nil,                              // 19: riptik.checkin.v1.Checkin.AnswersEntry
-	nil,                              // 20: riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
-	nil,                              // 21: riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
-	nil,                              // 22: riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
+	(*QuestionOptionInfo)(nil),       // 2: riptik.checkin.v1.QuestionOptionInfo
+	(*QuestionInfo)(nil),             // 3: riptik.checkin.v1.QuestionInfo
+	(*RedeemCheckinRequest)(nil),     // 4: riptik.checkin.v1.RedeemCheckinRequest
+	(*ValidateCheckinRequest)(nil),   // 5: riptik.checkin.v1.ValidateCheckinRequest
+	(*GetCheckinStatusRequest)(nil),  // 6: riptik.checkin.v1.GetCheckinStatusRequest
+	(*ListCheckinsRequest)(nil),      // 7: riptik.checkin.v1.ListCheckinsRequest
+	(*BulkCheckinItem)(nil),          // 8: riptik.checkin.v1.BulkCheckinItem
+	(*BulkCheckinRequest)(nil),       // 9: riptik.checkin.v1.BulkCheckinRequest
+	(*SearchCheckinsRequest)(nil),    // 10: riptik.checkin.v1.SearchCheckinsRequest
+	(*UndoCheckinRequest)(nil),       // 11: riptik.checkin.v1.UndoCheckinRequest
+	(*RedeemCheckinResponse)(nil),    // 12: riptik.checkin.v1.RedeemCheckinResponse
+	(*ValidateCheckinResponse)(nil),  // 13: riptik.checkin.v1.ValidateCheckinResponse
+	(*GetCheckinStatusResponse)(nil), // 14: riptik.checkin.v1.GetCheckinStatusResponse
+	(*ListCheckinsResponse)(nil),     // 15: riptik.checkin.v1.ListCheckinsResponse
+	(*BulkCheckinResponse)(nil),      // 16: riptik.checkin.v1.BulkCheckinResponse
+	(*BulkCheckinResult)(nil),        // 17: riptik.checkin.v1.BulkCheckinResult
+	(*SearchCheckinsResponse)(nil),   // 18: riptik.checkin.v1.SearchCheckinsResponse
+	(*UndoCheckinResponse)(nil),      // 19: riptik.checkin.v1.UndoCheckinResponse
+	(*CheckinProcessedEvent)(nil),    // 20: riptik.checkin.v1.CheckinProcessedEvent
+	nil,                              // 21: riptik.checkin.v1.Checkin.AnswersEntry
+	nil,                              // 22: riptik.checkin.v1.QuestionOptionInfo.AnswerEntry
+	nil,                              // 23: riptik.checkin.v1.QuestionInfo.QuestionEntry
+	nil,                              // 24: riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
+	nil,                              // 25: riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
+	nil,                              // 26: riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
 }
 var file_v1_checkin_checkin_proto_depIdxs = []int32{
-	19, // 0: riptik.checkin.v1.Checkin.answers:type_name -> riptik.checkin.v1.Checkin.AnswersEntry
+	21, // 0: riptik.checkin.v1.Checkin.answers:type_name -> riptik.checkin.v1.Checkin.AnswersEntry
 	0,  // 1: riptik.checkin.v1.CheckinPosition.checkins:type_name -> riptik.checkin.v1.Checkin
-	20, // 2: riptik.checkin.v1.RedeemCheckinRequest.answers:type_name -> riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
-	21, // 3: riptik.checkin.v1.ListCheckinsRequest.filters:type_name -> riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
-	6,  // 4: riptik.checkin.v1.BulkCheckinRequest.items:type_name -> riptik.checkin.v1.BulkCheckinItem
-	22, // 5: riptik.checkin.v1.SearchCheckinsRequest.filters:type_name -> riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
-	1,  // 6: riptik.checkin.v1.RedeemCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
-	1,  // 7: riptik.checkin.v1.ValidateCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
-	0,  // 8: riptik.checkin.v1.ValidateCheckinResponse.last_checkin:type_name -> riptik.checkin.v1.Checkin
-	0,  // 9: riptik.checkin.v1.GetCheckinStatusResponse.checkins:type_name -> riptik.checkin.v1.Checkin
-	0,  // 10: riptik.checkin.v1.GetCheckinStatusResponse.last_checkin:type_name -> riptik.checkin.v1.Checkin
-	0,  // 11: riptik.checkin.v1.ListCheckinsResponse.results:type_name -> riptik.checkin.v1.Checkin
-	15, // 12: riptik.checkin.v1.BulkCheckinResponse.results:type_name -> riptik.checkin.v1.BulkCheckinResult
-	0,  // 13: riptik.checkin.v1.SearchCheckinsResponse.results:type_name -> riptik.checkin.v1.Checkin
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	22, // 2: riptik.checkin.v1.QuestionOptionInfo.answer:type_name -> riptik.checkin.v1.QuestionOptionInfo.AnswerEntry
+	23, // 3: riptik.checkin.v1.QuestionInfo.question:type_name -> riptik.checkin.v1.QuestionInfo.QuestionEntry
+	2,  // 4: riptik.checkin.v1.QuestionInfo.options:type_name -> riptik.checkin.v1.QuestionOptionInfo
+	24, // 5: riptik.checkin.v1.RedeemCheckinRequest.answers:type_name -> riptik.checkin.v1.RedeemCheckinRequest.AnswersEntry
+	25, // 6: riptik.checkin.v1.ListCheckinsRequest.filters:type_name -> riptik.checkin.v1.ListCheckinsRequest.FiltersEntry
+	8,  // 7: riptik.checkin.v1.BulkCheckinRequest.items:type_name -> riptik.checkin.v1.BulkCheckinItem
+	26, // 8: riptik.checkin.v1.SearchCheckinsRequest.filters:type_name -> riptik.checkin.v1.SearchCheckinsRequest.FiltersEntry
+	1,  // 9: riptik.checkin.v1.RedeemCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
+	3,  // 10: riptik.checkin.v1.RedeemCheckinResponse.pending_questions:type_name -> riptik.checkin.v1.QuestionInfo
+	1,  // 11: riptik.checkin.v1.ValidateCheckinResponse.position:type_name -> riptik.checkin.v1.CheckinPosition
+	0,  // 12: riptik.checkin.v1.ValidateCheckinResponse.last_checkin:type_name -> riptik.checkin.v1.Checkin
+	0,  // 13: riptik.checkin.v1.GetCheckinStatusResponse.checkins:type_name -> riptik.checkin.v1.Checkin
+	0,  // 14: riptik.checkin.v1.GetCheckinStatusResponse.last_checkin:type_name -> riptik.checkin.v1.Checkin
+	0,  // 15: riptik.checkin.v1.ListCheckinsResponse.results:type_name -> riptik.checkin.v1.Checkin
+	17, // 16: riptik.checkin.v1.BulkCheckinResponse.results:type_name -> riptik.checkin.v1.BulkCheckinResult
+	0,  // 17: riptik.checkin.v1.SearchCheckinsResponse.results:type_name -> riptik.checkin.v1.Checkin
+	18, // [18:18] is the sub-list for method output_type
+	18, // [18:18] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_v1_checkin_checkin_proto_init() }
@@ -1878,7 +2054,7 @@ func file_v1_checkin_checkin_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_checkin_checkin_proto_rawDesc), len(file_v1_checkin_checkin_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
