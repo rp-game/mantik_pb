@@ -677,6 +677,212 @@ func (x *AuthenticateDeviceResponse) GetErrorMessage() string {
 	return ""
 }
 
+// ListDevices (G10-06, checkin-app.md — backoffice trang "Thiết bị check-in", phần "xem danh sách" chưa
+// có route nào ở G10-03/G10-04/G10-05).
+type ListDevicesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDevicesRequest) Reset() {
+	*x = ListDevicesRequest{}
+	mi := &file_v1_checkin_device_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDevicesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDevicesRequest) ProtoMessage() {}
+
+func (x *ListDevicesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDevicesRequest.ProtoReflect.Descriptor instead.
+func (*ListDevicesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *ListDevicesRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+type DeviceSummary struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Id                   int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Active               bool                   `protobuf:"varint,3,opt,name=active,proto3" json:"active,omitempty"`
+	Initialized          bool                   `protobuf:"varint,4,opt,name=initialized,proto3" json:"initialized,omitempty"` // false = đã tạo mã pairing nhưng chưa có thiết bị nào confirm
+	DefaultCheckinListId int64                  `protobuf:"varint,5,opt,name=default_checkin_list_id,json=defaultCheckinListId,proto3" json:"default_checkin_list_id,omitempty"`
+	LastSeen             string                 `protobuf:"bytes,6,opt,name=last_seen,json=lastSeen,proto3" json:"last_seen,omitempty"` // ISO datetime, "" nếu chưa từng gọi request nào
+	Created              string                 `protobuf:"bytes,7,opt,name=created,proto3" json:"created,omitempty"`                   // ISO datetime
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *DeviceSummary) Reset() {
+	*x = DeviceSummary{}
+	mi := &file_v1_checkin_device_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceSummary) ProtoMessage() {}
+
+func (x *DeviceSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceSummary.ProtoReflect.Descriptor instead.
+func (*DeviceSummary) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DeviceSummary) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *DeviceSummary) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *DeviceSummary) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *DeviceSummary) GetInitialized() bool {
+	if x != nil {
+		return x.Initialized
+	}
+	return false
+}
+
+func (x *DeviceSummary) GetDefaultCheckinListId() int64 {
+	if x != nil {
+		return x.DefaultCheckinListId
+	}
+	return 0
+}
+
+func (x *DeviceSummary) GetLastSeen() string {
+	if x != nil {
+		return x.LastSeen
+	}
+	return ""
+}
+
+func (x *DeviceSummary) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+type ListDevicesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Results       []*DeviceSummary       `protobuf:"bytes,2,rep,name=results,proto3" json:"results,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDevicesResponse) Reset() {
+	*x = ListDevicesResponse{}
+	mi := &file_v1_checkin_device_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDevicesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDevicesResponse) ProtoMessage() {}
+
+func (x *ListDevicesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_checkin_device_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDevicesResponse.ProtoReflect.Descriptor instead.
+func (*ListDevicesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_checkin_device_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ListDevicesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListDevicesResponse) GetResults() []*DeviceSummary {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *ListDevicesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListDevicesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_checkin_device_proto protoreflect.FileDescriptor
 
 const file_v1_checkin_device_proto_rawDesc = "" +
@@ -733,7 +939,23 @@ const file_v1_checkin_device_proto_rawDesc = "" +
 	"\x0fcheckin_list_id\x18\x05 \x01(\x03R\rcheckinListId\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"7\n" +
+	"\x12ListDevicesRequest\x12!\n" +
+	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\"\xdb\x01\n" +
+	"\rDeviceSummary\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
+	"\x06active\x18\x03 \x01(\bR\x06active\x12 \n" +
+	"\vinitialized\x18\x04 \x01(\bR\vinitialized\x125\n" +
+	"\x17default_checkin_list_id\x18\x05 \x01(\x03R\x14defaultCheckinListId\x12\x1b\n" +
+	"\tlast_seen\x18\x06 \x01(\tR\blastSeen\x12\x18\n" +
+	"\acreated\x18\a \x01(\tR\acreated\"\xaf\x01\n" +
+	"\x13ListDevicesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12:\n" +
+	"\aresults\x18\x02 \x03(\v2 .riptik.checkin.v1.DeviceSummaryR\aresults\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/checkinb\x06proto3"
 
 var (
 	file_v1_checkin_device_proto_rawDescOnce sync.Once
@@ -747,7 +969,7 @@ func file_v1_checkin_device_proto_rawDescGZIP() []byte {
 	return file_v1_checkin_device_proto_rawDescData
 }
 
-var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_v1_checkin_device_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_v1_checkin_device_proto_goTypes = []any{
 	(*CreateDevicePairingRequest)(nil),   // 0: riptik.checkin.v1.CreateDevicePairingRequest
 	(*CreateDevicePairingResponse)(nil),  // 1: riptik.checkin.v1.CreateDevicePairingResponse
@@ -759,13 +981,17 @@ var file_v1_checkin_device_proto_goTypes = []any{
 	(*RollDeviceTokenResponse)(nil),      // 7: riptik.checkin.v1.RollDeviceTokenResponse
 	(*AuthenticateDeviceRequest)(nil),    // 8: riptik.checkin.v1.AuthenticateDeviceRequest
 	(*AuthenticateDeviceResponse)(nil),   // 9: riptik.checkin.v1.AuthenticateDeviceResponse
+	(*ListDevicesRequest)(nil),           // 10: riptik.checkin.v1.ListDevicesRequest
+	(*DeviceSummary)(nil),                // 11: riptik.checkin.v1.DeviceSummary
+	(*ListDevicesResponse)(nil),          // 12: riptik.checkin.v1.ListDevicesResponse
 }
 var file_v1_checkin_device_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	11, // 0: riptik.checkin.v1.ListDevicesResponse.results:type_name -> riptik.checkin.v1.DeviceSummary
+	1,  // [1:1] is the sub-list for method output_type
+	1,  // [1:1] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_v1_checkin_device_proto_init() }
@@ -779,7 +1005,7 @@ func file_v1_checkin_device_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_checkin_device_proto_rawDesc), len(file_v1_checkin_device_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   10,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
