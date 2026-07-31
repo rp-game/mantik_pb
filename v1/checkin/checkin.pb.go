@@ -891,8 +891,11 @@ func (x *SearchCheckinsRequest) GetFilters() map[string]string {
 }
 
 type UndoCheckinRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	CheckinId     int64                  `protobuf:"varint,1,opt,name=checkin_id,json=checkinId,proto3" json:"checkin_id,omitempty"` // Required
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	CheckinId int64                  `protobuf:"varint,1,opt,name=checkin_id,json=checkinId,proto3" json:"checkin_id,omitempty"` // Required
+	// P3 (checkin-app.md §6.2): annul CHỈ cho phép nếu device_id khớp đúng thiết bị đã tạo lượt quét đó —
+	// trước đây route xoá thẳng không điều kiện gì (ai gọi cũng annul được bất kỳ lượt quét nào).
+	DeviceId      int64 `protobuf:"varint,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"` // Required
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -930,6 +933,13 @@ func (*UndoCheckinRequest) Descriptor() ([]byte, []int) {
 func (x *UndoCheckinRequest) GetCheckinId() int64 {
 	if x != nil {
 		return x.CheckinId
+	}
+	return 0
+}
+
+func (x *UndoCheckinRequest) GetDeviceId() int64 {
+	if x != nil {
+		return x.DeviceId
 	}
 	return 0
 }
@@ -1730,10 +1740,11 @@ const file_v1_checkin_checkin_proto_rawDesc = "" +
 	"\afilters\x18\b \x03(\v25.riptik.checkin.v1.SearchCheckinsRequest.FiltersEntryR\afilters\x1a:\n" +
 	"\fFiltersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"3\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"P\n" +
 	"\x12UndoCheckinRequest\x12\x1d\n" +
 	"\n" +
-	"checkin_id\x18\x01 \x01(\x03R\tcheckinId\"\xfd\x01\n" +
+	"checkin_id\x18\x01 \x01(\x03R\tcheckinId\x12\x1b\n" +
+	"\tdevice_id\x18\x02 \x01(\x03R\bdeviceId\"\xfd\x01\n" +
 	"\x15RedeemCheckinResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12>\n" +
