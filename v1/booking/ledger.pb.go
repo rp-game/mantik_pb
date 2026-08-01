@@ -503,8 +503,10 @@ type UnitPairSettlementConfig struct {
 	UnitB         string                 `protobuf:"bytes,4,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
 	ApprovalMode  string                 `protobuf:"bytes,5,opt,name=approval_mode,json=approvalMode,proto3" json:"approval_mode,omitempty"` // "single" | "dual"
 	CreatedBy     string                 `protobuf:"bytes,6,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
-	Created       string                 `protobuf:"bytes,7,opt,name=created,proto3" json:"created,omitempty"`                               // ISO datetime
-	LastModified  string                 `protobuf:"bytes,8,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"` // ISO datetime
+	Created       string                 `protobuf:"bytes,7,opt,name=created,proto3" json:"created,omitempty"`                                  // ISO datetime
+	LastModified  string                 `protobuf:"bytes,8,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`    // ISO datetime
+	NotifyEmailA  string                 `protobuf:"bytes,9,opt,name=notify_email_a,json=notifyEmailA,proto3" json:"notify_email_a,omitempty"`  // G9-32h — rỗng = không gửi thông báo dual-mode cho bên A
+	NotifyEmailB  string                 `protobuf:"bytes,10,opt,name=notify_email_b,json=notifyEmailB,proto3" json:"notify_email_b,omitempty"` // G9-32h — rỗng = không gửi thông báo dual-mode cho bên B
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -595,6 +597,20 @@ func (x *UnitPairSettlementConfig) GetLastModified() string {
 	return ""
 }
 
+func (x *UnitPairSettlementConfig) GetNotifyEmailA() string {
+	if x != nil {
+		return x.NotifyEmailA
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetNotifyEmailB() string {
+	if x != nil {
+		return x.NotifyEmailB
+	}
+	return ""
+}
+
 // UpsertUnitPairConfigRequest — tạo mới hoặc đổi approval_mode cho 1 cặp unit (idempotent theo cặp,
 // unit_x/unit_y không cần theo đúng thứ tự — server tự chuẩn hoá).
 type UpsertUnitPairConfigRequest struct {
@@ -604,6 +620,8 @@ type UpsertUnitPairConfigRequest struct {
 	UnitY         string                 `protobuf:"bytes,3,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
 	ApprovalMode  string                 `protobuf:"bytes,4,opt,name=approval_mode,json=approvalMode,proto3" json:"approval_mode,omitempty"`
 	CreatedBy     string                 `protobuf:"bytes,5,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	NotifyEmailX  string                 `protobuf:"bytes,6,opt,name=notify_email_x,json=notifyEmailX,proto3" json:"notify_email_x,omitempty"` // G9-32h — email nhận thông báo dual-mode cho unit_x, rỗng = không gửi
+	NotifyEmailY  string                 `protobuf:"bytes,7,opt,name=notify_email_y,json=notifyEmailY,proto3" json:"notify_email_y,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -669,6 +687,20 @@ func (x *UpsertUnitPairConfigRequest) GetApprovalMode() string {
 func (x *UpsertUnitPairConfigRequest) GetCreatedBy() string {
 	if x != nil {
 		return x.CreatedBy
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetNotifyEmailX() string {
+	if x != nil {
+		return x.NotifyEmailX
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetNotifyEmailY() string {
+	if x != nil {
+		return x.NotifyEmailY
 	}
 	return ""
 }
@@ -1776,7 +1808,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xfe\x01\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xca\x02\n" +
 	"\x18UnitPairSettlementConfig\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
@@ -1786,14 +1818,19 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\n" +
 	"created_by\x18\x06 \x01(\tR\tcreatedBy\x12\x18\n" +
 	"\acreated\x18\a \x01(\tR\acreated\x12#\n" +
-	"\rlast_modified\x18\b \x01(\tR\flastModified\"\xb6\x01\n" +
+	"\rlast_modified\x18\b \x01(\tR\flastModified\x12$\n" +
+	"\x0enotify_email_a\x18\t \x01(\tR\fnotifyEmailA\x12$\n" +
+	"\x0enotify_email_b\x18\n" +
+	" \x01(\tR\fnotifyEmailB\"\x82\x02\n" +
 	"\x1bUpsertUnitPairConfigRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
 	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
 	"\x06unit_y\x18\x03 \x01(\tR\x05unitY\x12#\n" +
 	"\rapproval_mode\x18\x04 \x01(\tR\fapprovalMode\x12\x1d\n" +
 	"\n" +
-	"created_by\x18\x05 \x01(\tR\tcreatedBy\"\xc1\x01\n" +
+	"created_by\x18\x05 \x01(\tR\tcreatedBy\x12$\n" +
+	"\x0enotify_email_x\x18\x06 \x01(\tR\fnotifyEmailX\x12$\n" +
+	"\x0enotify_email_y\x18\a \x01(\tR\fnotifyEmailY\"\xc1\x01\n" +
 	"\x1cUpsertUnitPairConfigResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12C\n" +
 	"\x06config\x18\x02 \x01(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\x06config\x12\x1d\n" +
