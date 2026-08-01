@@ -495,6 +495,1235 @@ func (x *CreateLedgerEntryPairResponse) GetErrorMessage() string {
 	return ""
 }
 
+type UnitPairSettlementConfig struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId   int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	UnitA         string                 `protobuf:"bytes,3,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
+	UnitB         string                 `protobuf:"bytes,4,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
+	ApprovalMode  string                 `protobuf:"bytes,5,opt,name=approval_mode,json=approvalMode,proto3" json:"approval_mode,omitempty"` // "single" | "dual"
+	CreatedBy     string                 `protobuf:"bytes,6,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	Created       string                 `protobuf:"bytes,7,opt,name=created,proto3" json:"created,omitempty"`                               // ISO datetime
+	LastModified  string                 `protobuf:"bytes,8,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"` // ISO datetime
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnitPairSettlementConfig) Reset() {
+	*x = UnitPairSettlementConfig{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnitPairSettlementConfig) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnitPairSettlementConfig) ProtoMessage() {}
+
+func (x *UnitPairSettlementConfig) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnitPairSettlementConfig.ProtoReflect.Descriptor instead.
+func (*UnitPairSettlementConfig) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UnitPairSettlementConfig) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UnitPairSettlementConfig) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *UnitPairSettlementConfig) GetUnitA() string {
+	if x != nil {
+		return x.UnitA
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetUnitB() string {
+	if x != nil {
+		return x.UnitB
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetApprovalMode() string {
+	if x != nil {
+		return x.ApprovalMode
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+func (x *UnitPairSettlementConfig) GetLastModified() string {
+	if x != nil {
+		return x.LastModified
+	}
+	return ""
+}
+
+// UpsertUnitPairConfigRequest — tạo mới hoặc đổi approval_mode cho 1 cặp unit (idempotent theo cặp,
+// unit_x/unit_y không cần theo đúng thứ tự — server tự chuẩn hoá).
+type UpsertUnitPairConfigRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	UnitX         string                 `protobuf:"bytes,2,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"`
+	UnitY         string                 `protobuf:"bytes,3,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	ApprovalMode  string                 `protobuf:"bytes,4,opt,name=approval_mode,json=approvalMode,proto3" json:"approval_mode,omitempty"`
+	CreatedBy     string                 `protobuf:"bytes,5,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpsertUnitPairConfigRequest) Reset() {
+	*x = UpsertUnitPairConfigRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpsertUnitPairConfigRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpsertUnitPairConfigRequest) ProtoMessage() {}
+
+func (x *UpsertUnitPairConfigRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpsertUnitPairConfigRequest.ProtoReflect.Descriptor instead.
+func (*UpsertUnitPairConfigRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpsertUnitPairConfigRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetApprovalMode() string {
+	if x != nil {
+		return x.ApprovalMode
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+type UpsertUnitPairConfigResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Success       bool                      `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Config        *UnitPairSettlementConfig `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	ErrorCode     string                    `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                    `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpsertUnitPairConfigResponse) Reset() {
+	*x = UpsertUnitPairConfigResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpsertUnitPairConfigResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpsertUnitPairConfigResponse) ProtoMessage() {}
+
+func (x *UpsertUnitPairConfigResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpsertUnitPairConfigResponse.ProtoReflect.Descriptor instead.
+func (*UpsertUnitPairConfigResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpsertUnitPairConfigResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpsertUnitPairConfigResponse) GetConfig() *UnitPairSettlementConfig {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+func (x *UpsertUnitPairConfigResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *UpsertUnitPairConfigResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type ListUnitPairConfigsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListUnitPairConfigsRequest) Reset() {
+	*x = ListUnitPairConfigsRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUnitPairConfigsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUnitPairConfigsRequest) ProtoMessage() {}
+
+func (x *ListUnitPairConfigsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUnitPairConfigsRequest.ProtoReflect.Descriptor instead.
+func (*ListUnitPairConfigsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListUnitPairConfigsRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+type ListUnitPairConfigsResponse struct {
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Success       bool                        `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Configs       []*UnitPairSettlementConfig `protobuf:"bytes,2,rep,name=configs,proto3" json:"configs,omitempty"`
+	ErrorCode     string                      `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                      `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListUnitPairConfigsResponse) Reset() {
+	*x = ListUnitPairConfigsResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListUnitPairConfigsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListUnitPairConfigsResponse) ProtoMessage() {}
+
+func (x *ListUnitPairConfigsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListUnitPairConfigsResponse.ProtoReflect.Descriptor instead.
+func (*ListUnitPairConfigsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListUnitPairConfigsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListUnitPairConfigsResponse) GetConfigs() []*UnitPairSettlementConfig {
+	if x != nil {
+		return x.Configs
+	}
+	return nil
+}
+
+func (x *ListUnitPairConfigsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListUnitPairConfigsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type UnitSettlementRun struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId     int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	UnitA           string                 `protobuf:"bytes,3,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
+	UnitB           string                 `protobuf:"bytes,4,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
+	PeriodStart     string                 `protobuf:"bytes,5,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`    // ISO datetime
+	PeriodEnd       string                 `protobuf:"bytes,6,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`          // ISO datetime
+	ApprovalMode    string                 `protobuf:"bytes,7,opt,name=approval_mode,json=approvalMode,proto3" json:"approval_mode,omitempty"` // snapshot lúc tạo run — "single" | "dual"
+	Status          string                 `protobuf:"bytes,8,opt,name=status,proto3" json:"status,omitempty"`                                 // "draft" | "confirmed" | "paid"
+	Currency        string                 `protobuf:"bytes,9,opt,name=currency,proto3" json:"currency,omitempty"`
+	TotalAOwesMinor int64                  `protobuf:"varint,10,opt,name=total_a_owes_minor,json=totalAOwesMinor,proto3" json:"total_a_owes_minor,omitempty"`
+	TotalBOwesMinor int64                  `protobuf:"varint,11,opt,name=total_b_owes_minor,json=totalBOwesMinor,proto3" json:"total_b_owes_minor,omitempty"`
+	ConfirmedAAt    string                 `protobuf:"bytes,12,opt,name=confirmed_a_at,json=confirmedAAt,proto3" json:"confirmed_a_at,omitempty"` // ISO datetime, rỗng nếu chưa confirm
+	ConfirmedABy    string                 `protobuf:"bytes,13,opt,name=confirmed_a_by,json=confirmedABy,proto3" json:"confirmed_a_by,omitempty"`
+	ConfirmedBAt    string                 `protobuf:"bytes,14,opt,name=confirmed_b_at,json=confirmedBAt,proto3" json:"confirmed_b_at,omitempty"`
+	ConfirmedBBy    string                 `protobuf:"bytes,15,opt,name=confirmed_b_by,json=confirmedBBy,proto3" json:"confirmed_b_by,omitempty"`
+	PaidAt          string                 `protobuf:"bytes,16,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"` // ISO datetime, rỗng nếu chưa paid
+	CreatedBy       string                 `protobuf:"bytes,17,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	Created         string                 `protobuf:"bytes,18,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UnitSettlementRun) Reset() {
+	*x = UnitSettlementRun{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnitSettlementRun) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnitSettlementRun) ProtoMessage() {}
+
+func (x *UnitSettlementRun) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnitSettlementRun.ProtoReflect.Descriptor instead.
+func (*UnitSettlementRun) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UnitSettlementRun) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetUnitA() string {
+	if x != nil {
+		return x.UnitA
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetUnitB() string {
+	if x != nil {
+		return x.UnitB
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetApprovalMode() string {
+	if x != nil {
+		return x.ApprovalMode
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetTotalAOwesMinor() int64 {
+	if x != nil {
+		return x.TotalAOwesMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetTotalBOwesMinor() int64 {
+	if x != nil {
+		return x.TotalBOwesMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetConfirmedAAt() string {
+	if x != nil {
+		return x.ConfirmedAAt
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetConfirmedABy() string {
+	if x != nil {
+		return x.ConfirmedABy
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetConfirmedBAt() string {
+	if x != nil {
+		return x.ConfirmedBAt
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetConfirmedBBy() string {
+	if x != nil {
+		return x.ConfirmedBBy
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetPaidAt() string {
+	if x != nil {
+		return x.PaidAt
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+type CreateSettlementRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	UnitX         string                 `protobuf:"bytes,2,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"`
+	UnitY         string                 `protobuf:"bytes,3,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	PeriodStart   string                 `protobuf:"bytes,4,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"` // ISO datetime
+	PeriodEnd     string                 `protobuf:"bytes,5,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	CreatedBy     string                 `protobuf:"bytes,6,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSettlementRunRequest) Reset() {
+	*x = CreateSettlementRunRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSettlementRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSettlementRunRequest) ProtoMessage() {}
+
+func (x *CreateSettlementRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSettlementRunRequest.ProtoReflect.Descriptor instead.
+func (*CreateSettlementRunRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CreateSettlementRunRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunRequest) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunRequest) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunRequest) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunRequest) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunRequest) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+type CreateSettlementRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,2,opt,name=run,proto3" json:"run,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateSettlementRunResponse) Reset() {
+	*x = CreateSettlementRunResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateSettlementRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateSettlementRunResponse) ProtoMessage() {}
+
+func (x *CreateSettlementRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateSettlementRunResponse.ProtoReflect.Descriptor instead.
+func (*CreateSettlementRunResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreateSettlementRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateSettlementRunResponse) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *CreateSettlementRunResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateSettlementRunResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type GetSettlementRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSettlementRunRequest) Reset() {
+	*x = GetSettlementRunRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSettlementRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSettlementRunRequest) ProtoMessage() {}
+
+func (x *GetSettlementRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSettlementRunRequest.ProtoReflect.Descriptor instead.
+func (*GetSettlementRunRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetSettlementRunRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *GetSettlementRunRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetSettlementRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,2,opt,name=run,proto3" json:"run,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSettlementRunResponse) Reset() {
+	*x = GetSettlementRunResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSettlementRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSettlementRunResponse) ProtoMessage() {}
+
+func (x *GetSettlementRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSettlementRunResponse.ProtoReflect.Descriptor instead.
+func (*GetSettlementRunResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetSettlementRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetSettlementRunResponse) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *GetSettlementRunResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetSettlementRunResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type ListSettlementRunsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	UnitX         string                 `protobuf:"bytes,2,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"` // rỗng = không lọc theo cặp (cần cả unit_x lẫn unit_y để lọc)
+	UnitY         string                 `protobuf:"bytes,3,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"` // rỗng = mọi status
+	Limit         int32                  `protobuf:"varint,5,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset        int32                  `protobuf:"varint,6,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSettlementRunsRequest) Reset() {
+	*x = ListSettlementRunsRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSettlementRunsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSettlementRunsRequest) ProtoMessage() {}
+
+func (x *ListSettlementRunsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSettlementRunsRequest.ProtoReflect.Descriptor instead.
+func (*ListSettlementRunsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListSettlementRunsRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *ListSettlementRunsRequest) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *ListSettlementRunsRequest) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+func (x *ListSettlementRunsRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *ListSettlementRunsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListSettlementRunsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ListSettlementRunsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Runs          []*UnitSettlementRun   `protobuf:"bytes,2,rep,name=runs,proto3" json:"runs,omitempty"`
+	Total         int64                  `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListSettlementRunsResponse) Reset() {
+	*x = ListSettlementRunsResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListSettlementRunsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListSettlementRunsResponse) ProtoMessage() {}
+
+func (x *ListSettlementRunsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListSettlementRunsResponse.ProtoReflect.Descriptor instead.
+func (*ListSettlementRunsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ListSettlementRunsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListSettlementRunsResponse) GetRuns() []*UnitSettlementRun {
+	if x != nil {
+		return x.Runs
+	}
+	return nil
+}
+
+func (x *ListSettlementRunsResponse) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ListSettlementRunsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListSettlementRunsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// ConfirmSettlementRunRequest — xác nhận từ 1 BÊN của cặp ("a" | "b", xem UnitSettlementRun.unit_a/b).
+// single mode: 1 lần confirm (từ bên nào cũng được) là đủ để chuyển 'confirmed'. dual mode: cần cả 2
+// bên confirm riêng.
+type ConfirmSettlementRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Side          string                 `protobuf:"bytes,3,opt,name=side,proto3" json:"side,omitempty"` // "a" | "b"
+	ConfirmedBy   string                 `protobuf:"bytes,4,opt,name=confirmed_by,json=confirmedBy,proto3" json:"confirmed_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConfirmSettlementRunRequest) Reset() {
+	*x = ConfirmSettlementRunRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConfirmSettlementRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConfirmSettlementRunRequest) ProtoMessage() {}
+
+func (x *ConfirmSettlementRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConfirmSettlementRunRequest.ProtoReflect.Descriptor instead.
+func (*ConfirmSettlementRunRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ConfirmSettlementRunRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *ConfirmSettlementRunRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *ConfirmSettlementRunRequest) GetSide() string {
+	if x != nil {
+		return x.Side
+	}
+	return ""
+}
+
+func (x *ConfirmSettlementRunRequest) GetConfirmedBy() string {
+	if x != nil {
+		return x.ConfirmedBy
+	}
+	return ""
+}
+
+type ConfirmSettlementRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,2,opt,name=run,proto3" json:"run,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConfirmSettlementRunResponse) Reset() {
+	*x = ConfirmSettlementRunResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConfirmSettlementRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConfirmSettlementRunResponse) ProtoMessage() {}
+
+func (x *ConfirmSettlementRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConfirmSettlementRunResponse.ProtoReflect.Descriptor instead.
+func (*ConfirmSettlementRunResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ConfirmSettlementRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ConfirmSettlementRunResponse) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *ConfirmSettlementRunResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ConfirmSettlementRunResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type MarkSettlementRunPaidRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkSettlementRunPaidRequest) Reset() {
+	*x = MarkSettlementRunPaidRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkSettlementRunPaidRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkSettlementRunPaidRequest) ProtoMessage() {}
+
+func (x *MarkSettlementRunPaidRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkSettlementRunPaidRequest.ProtoReflect.Descriptor instead.
+func (*MarkSettlementRunPaidRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *MarkSettlementRunPaidRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *MarkSettlementRunPaidRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type MarkSettlementRunPaidResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,2,opt,name=run,proto3" json:"run,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkSettlementRunPaidResponse) Reset() {
+	*x = MarkSettlementRunPaidResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkSettlementRunPaidResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkSettlementRunPaidResponse) ProtoMessage() {}
+
+func (x *MarkSettlementRunPaidResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkSettlementRunPaidResponse.ProtoReflect.Descriptor instead.
+func (*MarkSettlementRunPaidResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *MarkSettlementRunPaidResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *MarkSettlementRunPaidResponse) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *MarkSettlementRunPaidResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *MarkSettlementRunPaidResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
@@ -547,6 +1776,117 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xfe\x01\n" +
+	"\x18UnitPairSettlementConfig\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
+	"\x06unit_a\x18\x03 \x01(\tR\x05unitA\x12\x15\n" +
+	"\x06unit_b\x18\x04 \x01(\tR\x05unitB\x12#\n" +
+	"\rapproval_mode\x18\x05 \x01(\tR\fapprovalMode\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x06 \x01(\tR\tcreatedBy\x12\x18\n" +
+	"\acreated\x18\a \x01(\tR\acreated\x12#\n" +
+	"\rlast_modified\x18\b \x01(\tR\flastModified\"\xb6\x01\n" +
+	"\x1bUpsertUnitPairConfigRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
+	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x03 \x01(\tR\x05unitY\x12#\n" +
+	"\rapproval_mode\x18\x04 \x01(\tR\fapprovalMode\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x05 \x01(\tR\tcreatedBy\"\xc1\x01\n" +
+	"\x1cUpsertUnitPairConfigResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12C\n" +
+	"\x06config\x18\x02 \x01(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\x06config\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"C\n" +
+	"\x1aListUnitPairConfigsRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\"\xc2\x01\n" +
+	"\x1bListUnitPairConfigsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12E\n" +
+	"\aconfigs\x18\x02 \x03(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\aconfigs\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xd3\x04\n" +
+	"\x11UnitSettlementRun\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
+	"\x06unit_a\x18\x03 \x01(\tR\x05unitA\x12\x15\n" +
+	"\x06unit_b\x18\x04 \x01(\tR\x05unitB\x12!\n" +
+	"\fperiod_start\x18\x05 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x06 \x01(\tR\tperiodEnd\x12#\n" +
+	"\rapproval_mode\x18\a \x01(\tR\fapprovalMode\x12\x16\n" +
+	"\x06status\x18\b \x01(\tR\x06status\x12\x1a\n" +
+	"\bcurrency\x18\t \x01(\tR\bcurrency\x12+\n" +
+	"\x12total_a_owes_minor\x18\n" +
+	" \x01(\x03R\x0ftotalAOwesMinor\x12+\n" +
+	"\x12total_b_owes_minor\x18\v \x01(\x03R\x0ftotalBOwesMinor\x12$\n" +
+	"\x0econfirmed_a_at\x18\f \x01(\tR\fconfirmedAAt\x12$\n" +
+	"\x0econfirmed_a_by\x18\r \x01(\tR\fconfirmedABy\x12$\n" +
+	"\x0econfirmed_b_at\x18\x0e \x01(\tR\fconfirmedBAt\x12$\n" +
+	"\x0econfirmed_b_by\x18\x0f \x01(\tR\fconfirmedBBy\x12\x17\n" +
+	"\apaid_at\x18\x10 \x01(\tR\x06paidAt\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x11 \x01(\tR\tcreatedBy\x12\x18\n" +
+	"\acreated\x18\x12 \x01(\tR\acreated\"\xd2\x01\n" +
+	"\x1aCreateSettlementRunRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
+	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x03 \x01(\tR\x05unitY\x12!\n" +
+	"\fperiod_start\x18\x04 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x05 \x01(\tR\tperiodEnd\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x06 \x01(\tR\tcreatedBy\"\xb3\x01\n" +
+	"\x1bCreateSettlementRunResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"P\n" +
+	"\x17GetSettlementRunRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\"\xb0\x01\n" +
+	"\x18GetSettlementRunResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xb6\x01\n" +
+	"\x19ListSettlementRunsRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
+	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x03 \x01(\tR\x05unitY\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\x12\x14\n" +
+	"\x05limit\x18\x05 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x06 \x01(\x05R\x06offset\"\xca\x01\n" +
+	"\x1aListSettlementRunsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x128\n" +
+	"\x04runs\x18\x02 \x03(\v2$.riptik.booking.v1.UnitSettlementRunR\x04runs\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\x8b\x01\n" +
+	"\x1bConfirmSettlementRunRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\x12\x12\n" +
+	"\x04side\x18\x03 \x01(\tR\x04side\x12!\n" +
+	"\fconfirmed_by\x18\x04 \x01(\tR\vconfirmedBy\"\xb4\x01\n" +
+	"\x1cConfirmSettlementRunResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"U\n" +
+	"\x1cMarkSettlementRunPaidRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\"\xb5\x01\n" +
+	"\x1dMarkSettlementRunPaidResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
@@ -561,22 +1901,45 @@ func file_v1_booking_ledger_proto_rawDescGZIP() []byte {
 	return file_v1_booking_ledger_proto_rawDescData
 }
 
-var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_v1_booking_ledger_proto_goTypes = []any{
 	(*UnitLedgerEntry)(nil),                     // 0: riptik.booking.v1.UnitLedgerEntry
 	(*ListLedgerEntriesByOrderRefRequest)(nil),  // 1: riptik.booking.v1.ListLedgerEntriesByOrderRefRequest
 	(*ListLedgerEntriesByOrderRefResponse)(nil), // 2: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse
 	(*CreateLedgerEntryPairRequest)(nil),        // 3: riptik.booking.v1.CreateLedgerEntryPairRequest
 	(*CreateLedgerEntryPairResponse)(nil),       // 4: riptik.booking.v1.CreateLedgerEntryPairResponse
+	(*UnitPairSettlementConfig)(nil),            // 5: riptik.booking.v1.UnitPairSettlementConfig
+	(*UpsertUnitPairConfigRequest)(nil),         // 6: riptik.booking.v1.UpsertUnitPairConfigRequest
+	(*UpsertUnitPairConfigResponse)(nil),        // 7: riptik.booking.v1.UpsertUnitPairConfigResponse
+	(*ListUnitPairConfigsRequest)(nil),          // 8: riptik.booking.v1.ListUnitPairConfigsRequest
+	(*ListUnitPairConfigsResponse)(nil),         // 9: riptik.booking.v1.ListUnitPairConfigsResponse
+	(*UnitSettlementRun)(nil),                   // 10: riptik.booking.v1.UnitSettlementRun
+	(*CreateSettlementRunRequest)(nil),          // 11: riptik.booking.v1.CreateSettlementRunRequest
+	(*CreateSettlementRunResponse)(nil),         // 12: riptik.booking.v1.CreateSettlementRunResponse
+	(*GetSettlementRunRequest)(nil),             // 13: riptik.booking.v1.GetSettlementRunRequest
+	(*GetSettlementRunResponse)(nil),            // 14: riptik.booking.v1.GetSettlementRunResponse
+	(*ListSettlementRunsRequest)(nil),           // 15: riptik.booking.v1.ListSettlementRunsRequest
+	(*ListSettlementRunsResponse)(nil),          // 16: riptik.booking.v1.ListSettlementRunsResponse
+	(*ConfirmSettlementRunRequest)(nil),         // 17: riptik.booking.v1.ConfirmSettlementRunRequest
+	(*ConfirmSettlementRunResponse)(nil),        // 18: riptik.booking.v1.ConfirmSettlementRunResponse
+	(*MarkSettlementRunPaidRequest)(nil),        // 19: riptik.booking.v1.MarkSettlementRunPaidRequest
+	(*MarkSettlementRunPaidResponse)(nil),       // 20: riptik.booking.v1.MarkSettlementRunPaidResponse
 }
 var file_v1_booking_ledger_proto_depIdxs = []int32{
-	0, // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
-	0, // 1: riptik.booking.v1.CreateLedgerEntryPairResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0,  // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
+	0,  // 1: riptik.booking.v1.CreateLedgerEntryPairResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
+	5,  // 2: riptik.booking.v1.UpsertUnitPairConfigResponse.config:type_name -> riptik.booking.v1.UnitPairSettlementConfig
+	5,  // 3: riptik.booking.v1.ListUnitPairConfigsResponse.configs:type_name -> riptik.booking.v1.UnitPairSettlementConfig
+	10, // 4: riptik.booking.v1.CreateSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	10, // 5: riptik.booking.v1.GetSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	10, // 6: riptik.booking.v1.ListSettlementRunsResponse.runs:type_name -> riptik.booking.v1.UnitSettlementRun
+	10, // 7: riptik.booking.v1.ConfirmSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	10, // 8: riptik.booking.v1.MarkSettlementRunPaidResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	9,  // [9:9] is the sub-list for method output_type
+	9,  // [9:9] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_ledger_proto_init() }
@@ -590,7 +1953,7 @@ func file_v1_booking_ledger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_ledger_proto_rawDesc), len(file_v1_booking_ledger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
