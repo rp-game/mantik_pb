@@ -42,8 +42,12 @@ type UnitLedgerEntry struct {
 	SettlementPeriodStart string `protobuf:"bytes,15,opt,name=settlement_period_start,json=settlementPeriodStart,proto3" json:"settlement_period_start,omitempty"` // ISO datetime, rỗng nếu chưa thuộc run nào
 	SettlementPeriodEnd   string `protobuf:"bytes,16,opt,name=settlement_period_end,json=settlementPeriodEnd,proto3" json:"settlement_period_end,omitempty"`
 	SettlementPaidAt      string `protobuf:"bytes,17,opt,name=settlement_paid_at,json=settlementPaidAt,proto3" json:"settlement_paid_at,omitempty"` // ISO datetime, rỗng nếu run chưa 'paid'
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// G9-32L2 — origin thay entry_type (entry_type DEPRECATED, giữ một nhịp cho consumer cũ).
+	Origin                  string `protobuf:"bytes,18,opt,name=origin,proto3" json:"origin,omitempty"`                                                                      // "sale" | "manual" | "reversal"
+	OccurredAt              string `protobuf:"bytes,19,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`                                            // ISO datetime — giờ BÁN (khác `created` là giờ ghi sổ)
+	ReversalOfTransactionId string `protobuf:"bytes,20,opt,name=reversal_of_transaction_id,json=reversalOfTransactionId,proto3" json:"reversal_of_transaction_id,omitempty"` // chỉ có giá trị khi origin="reversal"
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *UnitLedgerEntry) Reset() {
@@ -191,6 +195,27 @@ func (x *UnitLedgerEntry) GetSettlementPeriodEnd() string {
 func (x *UnitLedgerEntry) GetSettlementPaidAt() string {
 	if x != nil {
 		return x.SettlementPaidAt
+	}
+	return ""
+}
+
+func (x *UnitLedgerEntry) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *UnitLedgerEntry) GetOccurredAt() string {
+	if x != nil {
+		return x.OccurredAt
+	}
+	return ""
+}
+
+func (x *UnitLedgerEntry) GetReversalOfTransactionId() string {
+	if x != nil {
+		return x.ReversalOfTransactionId
 	}
 	return ""
 }
@@ -450,10 +475,15 @@ type CreateLedgerEntryPairRequest struct {
 	OrderRef       string                 `protobuf:"bytes,5,opt,name=order_ref,json=orderRef,proto3" json:"order_ref,omitempty"`
 	AmountMinor    int64                  `protobuf:"varint,6,opt,name=amount_minor,json=amountMinor,proto3" json:"amount_minor,omitempty"`
 	Currency       string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`                    // rỗng = "VND"
-	EntryType      string                 `protobuf:"bytes,8,opt,name=entry_type,json=entryType,proto3" json:"entry_type,omitempty"` // rỗng = "payable"
+	EntryType      string                 `protobuf:"bytes,8,opt,name=entry_type,json=entryType,proto3" json:"entry_type,omitempty"` // DEPRECATED (G9-32L2) — dùng origin
 	CreatedBy      string                 `protobuf:"bytes,9,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// G9-32L2/UL-P8+P9.
+	Origin string `protobuf:"bytes,10,opt,name=origin,proto3" json:"origin,omitempty"` // rỗng = "sale"; "manual" cho ghi tay/backfill
+	// occurred_at — ISO datetime, giờ BÁN. Rỗng = now(). BẮT BUỘC truyền khi backfill đơn cũ, nếu
+	// không entry sẽ rơi vào kỳ đối soát của ngày bấm nút thay vì kỳ bán thật.
+	OccurredAt    string `protobuf:"bytes,11,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateLedgerEntryPairRequest) Reset() {
@@ -549,6 +579,20 @@ func (x *CreateLedgerEntryPairRequest) GetCreatedBy() string {
 	return ""
 }
 
+func (x *CreateLedgerEntryPairRequest) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *CreateLedgerEntryPairRequest) GetOccurredAt() string {
+	if x != nil {
+		return x.OccurredAt
+	}
+	return ""
+}
+
 type CreateLedgerEntryPairResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -617,6 +661,171 @@ func (x *CreateLedgerEntryPairResponse) GetErrorMessage() string {
 	return ""
 }
 
+// ReverseLedgerEntryPairRequest — G9-32L2/UL-P5: đảo (một phần hoặc toàn bộ) một giao dịch đã ghi sổ.
+//
+// API RIÊNG, KHÔNG dùng lại CreateLedgerEntryPair: cái đó idempotent theo transaction_id và trả lại
+// dòng CŨ nếu trùng — gửi transaction_id gốc để đảo sẽ được báo thành công mà không ghi gì.
+// Chiều/unit/order_ref của bút toán đảo suy ra từ giao dịch gốc, người gọi không tự khai.
+type ReverseLedgerEntryPairRequest struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug         string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	OriginalTransactionId string                 `protobuf:"bytes,2,opt,name=original_transaction_id,json=originalTransactionId,proto3" json:"original_transaction_id,omitempty"` // giao dịch bị đảo
+	ReversalTransactionId string                 `protobuf:"bytes,3,opt,name=reversal_transaction_id,json=reversalTransactionId,proto3" json:"reversal_transaction_id,omitempty"` // idempotency key của chính bút toán đảo (bắt buộc, phải khác gốc)
+	AmountMinor           int64                  `protobuf:"varint,4,opt,name=amount_minor,json=amountMinor,proto3" json:"amount_minor,omitempty"`                                // 0 = đảo TOÀN BỘ phần chưa đảo
+	OccurredAt            string                 `protobuf:"bytes,5,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`                                    // ISO datetime, rỗng = now()
+	CreatedBy             string                 `protobuf:"bytes,6,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	Reason                string                 `protobuf:"bytes,7,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *ReverseLedgerEntryPairRequest) Reset() {
+	*x = ReverseLedgerEntryPairRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReverseLedgerEntryPairRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReverseLedgerEntryPairRequest) ProtoMessage() {}
+
+func (x *ReverseLedgerEntryPairRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReverseLedgerEntryPairRequest.ProtoReflect.Descriptor instead.
+func (*ReverseLedgerEntryPairRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetOriginalTransactionId() string {
+	if x != nil {
+		return x.OriginalTransactionId
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetReversalTransactionId() string {
+	if x != nil {
+		return x.ReversalTransactionId
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetAmountMinor() int64 {
+	if x != nil {
+		return x.AmountMinor
+	}
+	return 0
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetOccurredAt() string {
+	if x != nil {
+		return x.OccurredAt
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+type ReverseLedgerEntryPairResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Entries       []*UnitLedgerEntry     `protobuf:"bytes,2,rep,name=entries,proto3" json:"entries,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReverseLedgerEntryPairResponse) Reset() {
+	*x = ReverseLedgerEntryPairResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReverseLedgerEntryPairResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReverseLedgerEntryPairResponse) ProtoMessage() {}
+
+func (x *ReverseLedgerEntryPairResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReverseLedgerEntryPairResponse.ProtoReflect.Descriptor instead.
+func (*ReverseLedgerEntryPairResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ReverseLedgerEntryPairResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ReverseLedgerEntryPairResponse) GetEntries() []*UnitLedgerEntry {
+	if x != nil {
+		return x.Entries
+	}
+	return nil
+}
+
+func (x *ReverseLedgerEntryPairResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ReverseLedgerEntryPairResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 type UnitPairSettlementConfig struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -635,7 +844,7 @@ type UnitPairSettlementConfig struct {
 
 func (x *UnitPairSettlementConfig) Reset() {
 	*x = UnitPairSettlementConfig{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	mi := &file_v1_booking_ledger_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -647,7 +856,7 @@ func (x *UnitPairSettlementConfig) String() string {
 func (*UnitPairSettlementConfig) ProtoMessage() {}
 
 func (x *UnitPairSettlementConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[7]
+	mi := &file_v1_booking_ledger_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -660,7 +869,7 @@ func (x *UnitPairSettlementConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnitPairSettlementConfig.ProtoReflect.Descriptor instead.
 func (*UnitPairSettlementConfig) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{7}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UnitPairSettlementConfig) GetId() int64 {
@@ -750,7 +959,7 @@ type UpsertUnitPairConfigRequest struct {
 
 func (x *UpsertUnitPairConfigRequest) Reset() {
 	*x = UpsertUnitPairConfigRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	mi := &file_v1_booking_ledger_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -762,7 +971,7 @@ func (x *UpsertUnitPairConfigRequest) String() string {
 func (*UpsertUnitPairConfigRequest) ProtoMessage() {}
 
 func (x *UpsertUnitPairConfigRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[8]
+	mi := &file_v1_booking_ledger_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -775,7 +984,7 @@ func (x *UpsertUnitPairConfigRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertUnitPairConfigRequest.ProtoReflect.Descriptor instead.
 func (*UpsertUnitPairConfigRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{8}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpsertUnitPairConfigRequest) GetOrganizerSlug() string {
@@ -839,7 +1048,7 @@ type UpsertUnitPairConfigResponse struct {
 
 func (x *UpsertUnitPairConfigResponse) Reset() {
 	*x = UpsertUnitPairConfigResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[9]
+	mi := &file_v1_booking_ledger_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -851,7 +1060,7 @@ func (x *UpsertUnitPairConfigResponse) String() string {
 func (*UpsertUnitPairConfigResponse) ProtoMessage() {}
 
 func (x *UpsertUnitPairConfigResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[9]
+	mi := &file_v1_booking_ledger_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -864,7 +1073,7 @@ func (x *UpsertUnitPairConfigResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpsertUnitPairConfigResponse.ProtoReflect.Descriptor instead.
 func (*UpsertUnitPairConfigResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{9}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpsertUnitPairConfigResponse) GetSuccess() bool {
@@ -904,7 +1113,7 @@ type ListUnitPairConfigsRequest struct {
 
 func (x *ListUnitPairConfigsRequest) Reset() {
 	*x = ListUnitPairConfigsRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[10]
+	mi := &file_v1_booking_ledger_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -916,7 +1125,7 @@ func (x *ListUnitPairConfigsRequest) String() string {
 func (*ListUnitPairConfigsRequest) ProtoMessage() {}
 
 func (x *ListUnitPairConfigsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[10]
+	mi := &file_v1_booking_ledger_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -929,7 +1138,7 @@ func (x *ListUnitPairConfigsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListUnitPairConfigsRequest.ProtoReflect.Descriptor instead.
 func (*ListUnitPairConfigsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{10}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListUnitPairConfigsRequest) GetOrganizerSlug() string {
@@ -951,7 +1160,7 @@ type ListUnitPairConfigsResponse struct {
 
 func (x *ListUnitPairConfigsResponse) Reset() {
 	*x = ListUnitPairConfigsResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[11]
+	mi := &file_v1_booking_ledger_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -963,7 +1172,7 @@ func (x *ListUnitPairConfigsResponse) String() string {
 func (*ListUnitPairConfigsResponse) ProtoMessage() {}
 
 func (x *ListUnitPairConfigsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[11]
+	mi := &file_v1_booking_ledger_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -976,7 +1185,7 @@ func (x *ListUnitPairConfigsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListUnitPairConfigsResponse.ProtoReflect.Descriptor instead.
 func (*ListUnitPairConfigsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{11}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListUnitPairConfigsResponse) GetSuccess() bool {
@@ -1033,7 +1242,7 @@ type UnitSettlementRun struct {
 
 func (x *UnitSettlementRun) Reset() {
 	*x = UnitSettlementRun{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[12]
+	mi := &file_v1_booking_ledger_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1045,7 +1254,7 @@ func (x *UnitSettlementRun) String() string {
 func (*UnitSettlementRun) ProtoMessage() {}
 
 func (x *UnitSettlementRun) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[12]
+	mi := &file_v1_booking_ledger_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1058,7 +1267,7 @@ func (x *UnitSettlementRun) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnitSettlementRun.ProtoReflect.Descriptor instead.
 func (*UnitSettlementRun) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{12}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UnitSettlementRun) GetId() int64 {
@@ -1201,7 +1410,7 @@ type CreateSettlementRunRequest struct {
 
 func (x *CreateSettlementRunRequest) Reset() {
 	*x = CreateSettlementRunRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[13]
+	mi := &file_v1_booking_ledger_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1213,7 +1422,7 @@ func (x *CreateSettlementRunRequest) String() string {
 func (*CreateSettlementRunRequest) ProtoMessage() {}
 
 func (x *CreateSettlementRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[13]
+	mi := &file_v1_booking_ledger_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1226,7 +1435,7 @@ func (x *CreateSettlementRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSettlementRunRequest.ProtoReflect.Descriptor instead.
 func (*CreateSettlementRunRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{13}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CreateSettlementRunRequest) GetOrganizerSlug() string {
@@ -1283,7 +1492,7 @@ type CreateSettlementRunResponse struct {
 
 func (x *CreateSettlementRunResponse) Reset() {
 	*x = CreateSettlementRunResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[14]
+	mi := &file_v1_booking_ledger_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1295,7 +1504,7 @@ func (x *CreateSettlementRunResponse) String() string {
 func (*CreateSettlementRunResponse) ProtoMessage() {}
 
 func (x *CreateSettlementRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[14]
+	mi := &file_v1_booking_ledger_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1308,7 +1517,7 @@ func (x *CreateSettlementRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSettlementRunResponse.ProtoReflect.Descriptor instead.
 func (*CreateSettlementRunResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{14}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CreateSettlementRunResponse) GetSuccess() bool {
@@ -1349,7 +1558,7 @@ type GetSettlementRunRequest struct {
 
 func (x *GetSettlementRunRequest) Reset() {
 	*x = GetSettlementRunRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[15]
+	mi := &file_v1_booking_ledger_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1361,7 +1570,7 @@ func (x *GetSettlementRunRequest) String() string {
 func (*GetSettlementRunRequest) ProtoMessage() {}
 
 func (x *GetSettlementRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[15]
+	mi := &file_v1_booking_ledger_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1374,7 +1583,7 @@ func (x *GetSettlementRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSettlementRunRequest.ProtoReflect.Descriptor instead.
 func (*GetSettlementRunRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{15}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetSettlementRunRequest) GetOrganizerSlug() string {
@@ -1403,7 +1612,7 @@ type GetSettlementRunResponse struct {
 
 func (x *GetSettlementRunResponse) Reset() {
 	*x = GetSettlementRunResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[16]
+	mi := &file_v1_booking_ledger_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1415,7 +1624,7 @@ func (x *GetSettlementRunResponse) String() string {
 func (*GetSettlementRunResponse) ProtoMessage() {}
 
 func (x *GetSettlementRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[16]
+	mi := &file_v1_booking_ledger_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1428,7 +1637,7 @@ func (x *GetSettlementRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSettlementRunResponse.ProtoReflect.Descriptor instead.
 func (*GetSettlementRunResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{16}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetSettlementRunResponse) GetSuccess() bool {
@@ -1473,7 +1682,7 @@ type ListSettlementRunsRequest struct {
 
 func (x *ListSettlementRunsRequest) Reset() {
 	*x = ListSettlementRunsRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[17]
+	mi := &file_v1_booking_ledger_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1485,7 +1694,7 @@ func (x *ListSettlementRunsRequest) String() string {
 func (*ListSettlementRunsRequest) ProtoMessage() {}
 
 func (x *ListSettlementRunsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[17]
+	mi := &file_v1_booking_ledger_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1498,7 +1707,7 @@ func (x *ListSettlementRunsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSettlementRunsRequest.ProtoReflect.Descriptor instead.
 func (*ListSettlementRunsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{17}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ListSettlementRunsRequest) GetOrganizerSlug() string {
@@ -1556,7 +1765,7 @@ type ListSettlementRunsResponse struct {
 
 func (x *ListSettlementRunsResponse) Reset() {
 	*x = ListSettlementRunsResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[18]
+	mi := &file_v1_booking_ledger_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1568,7 +1777,7 @@ func (x *ListSettlementRunsResponse) String() string {
 func (*ListSettlementRunsResponse) ProtoMessage() {}
 
 func (x *ListSettlementRunsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[18]
+	mi := &file_v1_booking_ledger_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1581,7 +1790,7 @@ func (x *ListSettlementRunsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSettlementRunsResponse.ProtoReflect.Descriptor instead.
 func (*ListSettlementRunsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{18}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *ListSettlementRunsResponse) GetSuccess() bool {
@@ -1634,7 +1843,7 @@ type ConfirmSettlementRunRequest struct {
 
 func (x *ConfirmSettlementRunRequest) Reset() {
 	*x = ConfirmSettlementRunRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[19]
+	mi := &file_v1_booking_ledger_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1646,7 +1855,7 @@ func (x *ConfirmSettlementRunRequest) String() string {
 func (*ConfirmSettlementRunRequest) ProtoMessage() {}
 
 func (x *ConfirmSettlementRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[19]
+	mi := &file_v1_booking_ledger_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1659,7 +1868,7 @@ func (x *ConfirmSettlementRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmSettlementRunRequest.ProtoReflect.Descriptor instead.
 func (*ConfirmSettlementRunRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{19}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ConfirmSettlementRunRequest) GetOrganizerSlug() string {
@@ -1702,7 +1911,7 @@ type ConfirmSettlementRunResponse struct {
 
 func (x *ConfirmSettlementRunResponse) Reset() {
 	*x = ConfirmSettlementRunResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[20]
+	mi := &file_v1_booking_ledger_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1714,7 +1923,7 @@ func (x *ConfirmSettlementRunResponse) String() string {
 func (*ConfirmSettlementRunResponse) ProtoMessage() {}
 
 func (x *ConfirmSettlementRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[20]
+	mi := &file_v1_booking_ledger_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1727,7 +1936,7 @@ func (x *ConfirmSettlementRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmSettlementRunResponse.ProtoReflect.Descriptor instead.
 func (*ConfirmSettlementRunResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{20}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ConfirmSettlementRunResponse) GetSuccess() bool {
@@ -1768,7 +1977,7 @@ type MarkSettlementRunPaidRequest struct {
 
 func (x *MarkSettlementRunPaidRequest) Reset() {
 	*x = MarkSettlementRunPaidRequest{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[21]
+	mi := &file_v1_booking_ledger_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1780,7 +1989,7 @@ func (x *MarkSettlementRunPaidRequest) String() string {
 func (*MarkSettlementRunPaidRequest) ProtoMessage() {}
 
 func (x *MarkSettlementRunPaidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[21]
+	mi := &file_v1_booking_ledger_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1793,7 +2002,7 @@ func (x *MarkSettlementRunPaidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkSettlementRunPaidRequest.ProtoReflect.Descriptor instead.
 func (*MarkSettlementRunPaidRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{21}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *MarkSettlementRunPaidRequest) GetOrganizerSlug() string {
@@ -1822,7 +2031,7 @@ type MarkSettlementRunPaidResponse struct {
 
 func (x *MarkSettlementRunPaidResponse) Reset() {
 	*x = MarkSettlementRunPaidResponse{}
-	mi := &file_v1_booking_ledger_proto_msgTypes[22]
+	mi := &file_v1_booking_ledger_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1834,7 +2043,7 @@ func (x *MarkSettlementRunPaidResponse) String() string {
 func (*MarkSettlementRunPaidResponse) ProtoMessage() {}
 
 func (x *MarkSettlementRunPaidResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_ledger_proto_msgTypes[22]
+	mi := &file_v1_booking_ledger_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1847,7 +2056,7 @@ func (x *MarkSettlementRunPaidResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkSettlementRunPaidResponse.ProtoReflect.Descriptor instead.
 func (*MarkSettlementRunPaidResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{22}
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *MarkSettlementRunPaidResponse) GetSuccess() bool {
@@ -1882,7 +2091,7 @@ var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\n" +
-	"\x17v1/booking/ledger.proto\x12\x11riptik.booking.v1\"\xdc\x04\n" +
+	"\x17v1/booking/ledger.proto\x12\x11riptik.booking.v1\"\xd2\x05\n" +
 	"\x0fUnitLedgerEntry\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12%\n" +
@@ -1903,7 +2112,11 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x11settlement_status\x18\x0e \x01(\tR\x10settlementStatus\x126\n" +
 	"\x17settlement_period_start\x18\x0f \x01(\tR\x15settlementPeriodStart\x122\n" +
 	"\x15settlement_period_end\x18\x10 \x01(\tR\x13settlementPeriodEnd\x12,\n" +
-	"\x12settlement_paid_at\x18\x11 \x01(\tR\x10settlementPaidAt\"h\n" +
+	"\x12settlement_paid_at\x18\x11 \x01(\tR\x10settlementPaidAt\x12\x16\n" +
+	"\x06origin\x18\x12 \x01(\tR\x06origin\x12\x1f\n" +
+	"\voccurred_at\x18\x13 \x01(\tR\n" +
+	"occurredAt\x12;\n" +
+	"\x1areversal_of_transaction_id\x18\x14 \x01(\tR\x17reversalOfTransactionId\"h\n" +
 	"\"ListLedgerEntriesByOrderRefRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1b\n" +
 	"\torder_ref\x18\x02 \x01(\tR\borderRef\"\xc1\x01\n" +
@@ -1921,7 +2134,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xd2\x02\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x8b\x03\n" +
 	"\x1cCreateLedgerEntryPairRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12%\n" +
 	"\x0etransaction_id\x18\x02 \x01(\tR\rtransactionId\x12!\n" +
@@ -1933,8 +2146,28 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\n" +
 	"entry_type\x18\b \x01(\tR\tentryType\x12\x1d\n" +
 	"\n" +
-	"created_by\x18\t \x01(\tR\tcreatedBy\"\xbb\x01\n" +
+	"created_by\x18\t \x01(\tR\tcreatedBy\x12\x16\n" +
+	"\x06origin\x18\n" +
+	" \x01(\tR\x06origin\x12\x1f\n" +
+	"\voccurred_at\x18\v \x01(\tR\n" +
+	"occurredAt\"\xbb\x01\n" +
 	"\x1dCreateLedgerEntryPairResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12<\n" +
+	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xb1\x02\n" +
+	"\x1dReverseLedgerEntryPairRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x126\n" +
+	"\x17original_transaction_id\x18\x02 \x01(\tR\x15originalTransactionId\x126\n" +
+	"\x17reversal_transaction_id\x18\x03 \x01(\tR\x15reversalTransactionId\x12!\n" +
+	"\famount_minor\x18\x04 \x01(\x03R\vamountMinor\x12\x1f\n" +
+	"\voccurred_at\x18\x05 \x01(\tR\n" +
+	"occurredAt\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x06 \x01(\tR\tcreatedBy\x12\x16\n" +
+	"\x06reason\x18\a \x01(\tR\x06reason\"\xbc\x01\n" +
+	"\x1eReverseLedgerEntryPairResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12<\n" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
@@ -2069,7 +2302,7 @@ func file_v1_booking_ledger_proto_rawDescGZIP() []byte {
 	return file_v1_booking_ledger_proto_rawDescData
 }
 
-var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
+var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_v1_booking_ledger_proto_goTypes = []any{
 	(*UnitLedgerEntry)(nil),                          // 0: riptik.booking.v1.UnitLedgerEntry
 	(*ListLedgerEntriesByOrderRefRequest)(nil),       // 1: riptik.booking.v1.ListLedgerEntriesByOrderRefRequest
@@ -2078,39 +2311,42 @@ var file_v1_booking_ledger_proto_goTypes = []any{
 	(*ListLedgerEntriesBySettlementRunResponse)(nil), // 4: riptik.booking.v1.ListLedgerEntriesBySettlementRunResponse
 	(*CreateLedgerEntryPairRequest)(nil),             // 5: riptik.booking.v1.CreateLedgerEntryPairRequest
 	(*CreateLedgerEntryPairResponse)(nil),            // 6: riptik.booking.v1.CreateLedgerEntryPairResponse
-	(*UnitPairSettlementConfig)(nil),                 // 7: riptik.booking.v1.UnitPairSettlementConfig
-	(*UpsertUnitPairConfigRequest)(nil),              // 8: riptik.booking.v1.UpsertUnitPairConfigRequest
-	(*UpsertUnitPairConfigResponse)(nil),             // 9: riptik.booking.v1.UpsertUnitPairConfigResponse
-	(*ListUnitPairConfigsRequest)(nil),               // 10: riptik.booking.v1.ListUnitPairConfigsRequest
-	(*ListUnitPairConfigsResponse)(nil),              // 11: riptik.booking.v1.ListUnitPairConfigsResponse
-	(*UnitSettlementRun)(nil),                        // 12: riptik.booking.v1.UnitSettlementRun
-	(*CreateSettlementRunRequest)(nil),               // 13: riptik.booking.v1.CreateSettlementRunRequest
-	(*CreateSettlementRunResponse)(nil),              // 14: riptik.booking.v1.CreateSettlementRunResponse
-	(*GetSettlementRunRequest)(nil),                  // 15: riptik.booking.v1.GetSettlementRunRequest
-	(*GetSettlementRunResponse)(nil),                 // 16: riptik.booking.v1.GetSettlementRunResponse
-	(*ListSettlementRunsRequest)(nil),                // 17: riptik.booking.v1.ListSettlementRunsRequest
-	(*ListSettlementRunsResponse)(nil),               // 18: riptik.booking.v1.ListSettlementRunsResponse
-	(*ConfirmSettlementRunRequest)(nil),              // 19: riptik.booking.v1.ConfirmSettlementRunRequest
-	(*ConfirmSettlementRunResponse)(nil),             // 20: riptik.booking.v1.ConfirmSettlementRunResponse
-	(*MarkSettlementRunPaidRequest)(nil),             // 21: riptik.booking.v1.MarkSettlementRunPaidRequest
-	(*MarkSettlementRunPaidResponse)(nil),            // 22: riptik.booking.v1.MarkSettlementRunPaidResponse
+	(*ReverseLedgerEntryPairRequest)(nil),            // 7: riptik.booking.v1.ReverseLedgerEntryPairRequest
+	(*ReverseLedgerEntryPairResponse)(nil),           // 8: riptik.booking.v1.ReverseLedgerEntryPairResponse
+	(*UnitPairSettlementConfig)(nil),                 // 9: riptik.booking.v1.UnitPairSettlementConfig
+	(*UpsertUnitPairConfigRequest)(nil),              // 10: riptik.booking.v1.UpsertUnitPairConfigRequest
+	(*UpsertUnitPairConfigResponse)(nil),             // 11: riptik.booking.v1.UpsertUnitPairConfigResponse
+	(*ListUnitPairConfigsRequest)(nil),               // 12: riptik.booking.v1.ListUnitPairConfigsRequest
+	(*ListUnitPairConfigsResponse)(nil),              // 13: riptik.booking.v1.ListUnitPairConfigsResponse
+	(*UnitSettlementRun)(nil),                        // 14: riptik.booking.v1.UnitSettlementRun
+	(*CreateSettlementRunRequest)(nil),               // 15: riptik.booking.v1.CreateSettlementRunRequest
+	(*CreateSettlementRunResponse)(nil),              // 16: riptik.booking.v1.CreateSettlementRunResponse
+	(*GetSettlementRunRequest)(nil),                  // 17: riptik.booking.v1.GetSettlementRunRequest
+	(*GetSettlementRunResponse)(nil),                 // 18: riptik.booking.v1.GetSettlementRunResponse
+	(*ListSettlementRunsRequest)(nil),                // 19: riptik.booking.v1.ListSettlementRunsRequest
+	(*ListSettlementRunsResponse)(nil),               // 20: riptik.booking.v1.ListSettlementRunsResponse
+	(*ConfirmSettlementRunRequest)(nil),              // 21: riptik.booking.v1.ConfirmSettlementRunRequest
+	(*ConfirmSettlementRunResponse)(nil),             // 22: riptik.booking.v1.ConfirmSettlementRunResponse
+	(*MarkSettlementRunPaidRequest)(nil),             // 23: riptik.booking.v1.MarkSettlementRunPaidRequest
+	(*MarkSettlementRunPaidResponse)(nil),            // 24: riptik.booking.v1.MarkSettlementRunPaidResponse
 }
 var file_v1_booking_ledger_proto_depIdxs = []int32{
 	0,  // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
 	0,  // 1: riptik.booking.v1.ListLedgerEntriesBySettlementRunResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
 	0,  // 2: riptik.booking.v1.CreateLedgerEntryPairResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
-	7,  // 3: riptik.booking.v1.UpsertUnitPairConfigResponse.config:type_name -> riptik.booking.v1.UnitPairSettlementConfig
-	7,  // 4: riptik.booking.v1.ListUnitPairConfigsResponse.configs:type_name -> riptik.booking.v1.UnitPairSettlementConfig
-	12, // 5: riptik.booking.v1.CreateSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
-	12, // 6: riptik.booking.v1.GetSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
-	12, // 7: riptik.booking.v1.ListSettlementRunsResponse.runs:type_name -> riptik.booking.v1.UnitSettlementRun
-	12, // 8: riptik.booking.v1.ConfirmSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
-	12, // 9: riptik.booking.v1.MarkSettlementRunPaidResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	0,  // 3: riptik.booking.v1.ReverseLedgerEntryPairResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
+	9,  // 4: riptik.booking.v1.UpsertUnitPairConfigResponse.config:type_name -> riptik.booking.v1.UnitPairSettlementConfig
+	9,  // 5: riptik.booking.v1.ListUnitPairConfigsResponse.configs:type_name -> riptik.booking.v1.UnitPairSettlementConfig
+	14, // 6: riptik.booking.v1.CreateSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	14, // 7: riptik.booking.v1.GetSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	14, // 8: riptik.booking.v1.ListSettlementRunsResponse.runs:type_name -> riptik.booking.v1.UnitSettlementRun
+	14, // 9: riptik.booking.v1.ConfirmSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	14, // 10: riptik.booking.v1.MarkSettlementRunPaidResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_ledger_proto_init() }
@@ -2124,7 +2360,7 @@ func file_v1_booking_ledger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_ledger_proto_rawDesc), len(file_v1_booking_ledger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   23,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
