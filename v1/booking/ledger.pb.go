@@ -1236,8 +1236,11 @@ type UnitSettlementRun struct {
 	PaidAt          string                 `protobuf:"bytes,16,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"` // ISO datetime, rỗng nếu chưa paid
 	CreatedBy       string                 `protobuf:"bytes,17,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
 	Created         string                 `protobuf:"bytes,18,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// G9-32k6/UL-P10 — huỷ run tạo NHẦM (vd sai kỳ) trong khi còn "draft". status có thêm "cancelled".
+	CancelledAt   string `protobuf:"bytes,19,opt,name=cancelled_at,json=cancelledAt,proto3" json:"cancelled_at,omitempty"` // ISO datetime, rỗng nếu chưa/không bị huỷ
+	CancelledBy   string `protobuf:"bytes,20,opt,name=cancelled_by,json=cancelledBy,proto3" json:"cancelled_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UnitSettlementRun) Reset() {
@@ -1392,6 +1395,20 @@ func (x *UnitSettlementRun) GetCreatedBy() string {
 func (x *UnitSettlementRun) GetCreated() string {
 	if x != nil {
 		return x.Created
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetCancelledAt() string {
+	if x != nil {
+		return x.CancelledAt
+	}
+	return ""
+}
+
+func (x *UnitSettlementRun) GetCancelledBy() string {
+	if x != nil {
+		return x.CancelledBy
 	}
 	return ""
 }
@@ -2087,6 +2104,385 @@ func (x *MarkSettlementRunPaidResponse) GetErrorMessage() string {
 	return ""
 }
 
+// CancelSettlementRunRequest — G9-32k6/UL-P10: huỷ 1 run tạo NHẦM trong khi còn "draft" (vd gõ sai
+// kỳ). Trả claimed entries về "chưa thuộc kỳ nào" (settlement_run_id=NULL). Chỉ cho phép ở "draft" —
+// đã "confirmed"/"paid" thì dùng adjustment entry (G9-32L2) để sửa, không huỷ nguyên run.
+type CancelSettlementRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	CancelledBy   string                 `protobuf:"bytes,3,opt,name=cancelled_by,json=cancelledBy,proto3" json:"cancelled_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelSettlementRunRequest) Reset() {
+	*x = CancelSettlementRunRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelSettlementRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelSettlementRunRequest) ProtoMessage() {}
+
+func (x *CancelSettlementRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelSettlementRunRequest.ProtoReflect.Descriptor instead.
+func (*CancelSettlementRunRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *CancelSettlementRunRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *CancelSettlementRunRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *CancelSettlementRunRequest) GetCancelledBy() string {
+	if x != nil {
+		return x.CancelledBy
+	}
+	return ""
+}
+
+type CancelSettlementRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,2,opt,name=run,proto3" json:"run,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CancelSettlementRunResponse) Reset() {
+	*x = CancelSettlementRunResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CancelSettlementRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CancelSettlementRunResponse) ProtoMessage() {}
+
+func (x *CancelSettlementRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CancelSettlementRunResponse.ProtoReflect.Descriptor instead.
+func (*CancelSettlementRunResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *CancelSettlementRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CancelSettlementRunResponse) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *CancelSettlementRunResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CancelSettlementRunResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// OrphanLedgerEntry — G9-32k6/UL-P10: 1 dòng unit_ledger_entry CHƯA thuộc settlement run nào. Trước
+// bản vá này không màn nào hiển thị chúng — admin không biết CÓ gì cần tạo run mà chưa tạo.
+type OrphanLedgerEntry struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	TransactionId string                 `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty"`
+	Unit          string                 `protobuf:"bytes,3,opt,name=unit,proto3" json:"unit,omitempty"`
+	Direction     string                 `protobuf:"bytes,4,opt,name=direction,proto3" json:"direction,omitempty"`
+	OrderRef      string                 `protobuf:"bytes,5,opt,name=order_ref,json=orderRef,proto3" json:"order_ref,omitempty"`
+	AmountMinor   int64                  `protobuf:"varint,6,opt,name=amount_minor,json=amountMinor,proto3" json:"amount_minor,omitempty"`
+	OccurredAt    string                 `protobuf:"bytes,7,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"` // ISO datetime — giờ BÁN
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OrphanLedgerEntry) Reset() {
+	*x = OrphanLedgerEntry{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrphanLedgerEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrphanLedgerEntry) ProtoMessage() {}
+
+func (x *OrphanLedgerEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrphanLedgerEntry.ProtoReflect.Descriptor instead.
+func (*OrphanLedgerEntry) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *OrphanLedgerEntry) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *OrphanLedgerEntry) GetTransactionId() string {
+	if x != nil {
+		return x.TransactionId
+	}
+	return ""
+}
+
+func (x *OrphanLedgerEntry) GetUnit() string {
+	if x != nil {
+		return x.Unit
+	}
+	return ""
+}
+
+func (x *OrphanLedgerEntry) GetDirection() string {
+	if x != nil {
+		return x.Direction
+	}
+	return ""
+}
+
+func (x *OrphanLedgerEntry) GetOrderRef() string {
+	if x != nil {
+		return x.OrderRef
+	}
+	return ""
+}
+
+func (x *OrphanLedgerEntry) GetAmountMinor() int64 {
+	if x != nil {
+		return x.AmountMinor
+	}
+	return 0
+}
+
+func (x *OrphanLedgerEntry) GetOccurredAt() string {
+	if x != nil {
+		return x.OccurredAt
+	}
+	return ""
+}
+
+// ListOrphanLedgerEntriesRequest — mọi entry status="open", settlement_run_id IS NULL, cho 1 cặp unit.
+// Không lọc theo kỳ — hiển thị TẤT CẢ để admin tự thấy khoảng thời gian còn hở.
+type ListOrphanLedgerEntriesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	UnitX         string                 `protobuf:"bytes,2,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"`
+	UnitY         string                 `protobuf:"bytes,3,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	Limit         int32                  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset        int32                  `protobuf:"varint,5,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrphanLedgerEntriesRequest) Reset() {
+	*x = ListOrphanLedgerEntriesRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrphanLedgerEntriesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrphanLedgerEntriesRequest) ProtoMessage() {}
+
+func (x *ListOrphanLedgerEntriesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrphanLedgerEntriesRequest.ProtoReflect.Descriptor instead.
+func (*ListOrphanLedgerEntriesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *ListOrphanLedgerEntriesRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *ListOrphanLedgerEntriesRequest) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *ListOrphanLedgerEntriesRequest) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+func (x *ListOrphanLedgerEntriesRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListOrphanLedgerEntriesRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ListOrphanLedgerEntriesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Entries       []*OrphanLedgerEntry   `protobuf:"bytes,2,rep,name=entries,proto3" json:"entries,omitempty"`
+	Total         int64                  `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrphanLedgerEntriesResponse) Reset() {
+	*x = ListOrphanLedgerEntriesResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrphanLedgerEntriesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrphanLedgerEntriesResponse) ProtoMessage() {}
+
+func (x *ListOrphanLedgerEntriesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrphanLedgerEntriesResponse.ProtoReflect.Descriptor instead.
+func (*ListOrphanLedgerEntriesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ListOrphanLedgerEntriesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListOrphanLedgerEntriesResponse) GetEntries() []*OrphanLedgerEntry {
+	if x != nil {
+		return x.Entries
+	}
+	return nil
+}
+
+func (x *ListOrphanLedgerEntriesResponse) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ListOrphanLedgerEntriesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListOrphanLedgerEntriesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
@@ -2208,7 +2604,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aconfigs\x18\x02 \x03(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\aconfigs\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xd3\x04\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x99\x05\n" +
 	"\x11UnitSettlementRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
@@ -2230,7 +2626,9 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\apaid_at\x18\x10 \x01(\tR\x06paidAt\x12\x1d\n" +
 	"\n" +
 	"created_by\x18\x11 \x01(\tR\tcreatedBy\x12\x18\n" +
-	"\acreated\x18\x12 \x01(\tR\acreated\"\xd2\x01\n" +
+	"\acreated\x18\x12 \x01(\tR\acreated\x12!\n" +
+	"\fcancelled_at\x18\x13 \x01(\tR\vcancelledAt\x12!\n" +
+	"\fcancelled_by\x18\x14 \x01(\tR\vcancelledBy\"\xd2\x01\n" +
 	"\x1aCreateSettlementRunRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
 	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
@@ -2288,7 +2686,39 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"v\n" +
+	"\x1aCancelSettlementRunRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\x12!\n" +
+	"\fcancelled_by\x18\x03 \x01(\tR\vcancelledBy\"\xb3\x01\n" +
+	"\x1bCancelSettlementRunResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x02 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xdd\x01\n" +
+	"\x11OrphanLedgerEntry\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12%\n" +
+	"\x0etransaction_id\x18\x02 \x01(\tR\rtransactionId\x12\x12\n" +
+	"\x04unit\x18\x03 \x01(\tR\x04unit\x12\x1c\n" +
+	"\tdirection\x18\x04 \x01(\tR\tdirection\x12\x1b\n" +
+	"\torder_ref\x18\x05 \x01(\tR\borderRef\x12!\n" +
+	"\famount_minor\x18\x06 \x01(\x03R\vamountMinor\x12\x1f\n" +
+	"\voccurred_at\x18\a \x01(\tR\n" +
+	"occurredAt\"\xa3\x01\n" +
+	"\x1eListOrphanLedgerEntriesRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
+	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x03 \x01(\tR\x05unitY\x12\x14\n" +
+	"\x05limit\x18\x04 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x05 \x01(\x05R\x06offset\"\xd5\x01\n" +
+	"\x1fListOrphanLedgerEntriesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
+	"\aentries\x18\x02 \x03(\v2$.riptik.booking.v1.OrphanLedgerEntryR\aentries\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x03R\x05total\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_ledger_proto_rawDescOnce sync.Once
@@ -2302,7 +2732,7 @@ func file_v1_booking_ledger_proto_rawDescGZIP() []byte {
 	return file_v1_booking_ledger_proto_rawDescData
 }
 
-var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_v1_booking_ledger_proto_goTypes = []any{
 	(*UnitLedgerEntry)(nil),                          // 0: riptik.booking.v1.UnitLedgerEntry
 	(*ListLedgerEntriesByOrderRefRequest)(nil),       // 1: riptik.booking.v1.ListLedgerEntriesByOrderRefRequest
@@ -2329,6 +2759,11 @@ var file_v1_booking_ledger_proto_goTypes = []any{
 	(*ConfirmSettlementRunResponse)(nil),             // 22: riptik.booking.v1.ConfirmSettlementRunResponse
 	(*MarkSettlementRunPaidRequest)(nil),             // 23: riptik.booking.v1.MarkSettlementRunPaidRequest
 	(*MarkSettlementRunPaidResponse)(nil),            // 24: riptik.booking.v1.MarkSettlementRunPaidResponse
+	(*CancelSettlementRunRequest)(nil),               // 25: riptik.booking.v1.CancelSettlementRunRequest
+	(*CancelSettlementRunResponse)(nil),              // 26: riptik.booking.v1.CancelSettlementRunResponse
+	(*OrphanLedgerEntry)(nil),                        // 27: riptik.booking.v1.OrphanLedgerEntry
+	(*ListOrphanLedgerEntriesRequest)(nil),           // 28: riptik.booking.v1.ListOrphanLedgerEntriesRequest
+	(*ListOrphanLedgerEntriesResponse)(nil),          // 29: riptik.booking.v1.ListOrphanLedgerEntriesResponse
 }
 var file_v1_booking_ledger_proto_depIdxs = []int32{
 	0,  // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
@@ -2342,11 +2777,13 @@ var file_v1_booking_ledger_proto_depIdxs = []int32{
 	14, // 8: riptik.booking.v1.ListSettlementRunsResponse.runs:type_name -> riptik.booking.v1.UnitSettlementRun
 	14, // 9: riptik.booking.v1.ConfirmSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
 	14, // 10: riptik.booking.v1.MarkSettlementRunPaidResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	14, // 11: riptik.booking.v1.CancelSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	27, // 12: riptik.booking.v1.ListOrphanLedgerEntriesResponse.entries:type_name -> riptik.booking.v1.OrphanLedgerEntry
+	13, // [13:13] is the sub-list for method output_type
+	13, // [13:13] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_ledger_proto_init() }
@@ -2360,7 +2797,7 @@ func file_v1_booking_ledger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_ledger_proto_rawDesc), len(file_v1_booking_ledger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
