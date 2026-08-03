@@ -1325,10 +1325,19 @@ type UnitSettlementRun struct {
 	CommissionVatAMinor int64 `protobuf:"varint,26,opt,name=commission_vat_a_minor,json=commissionVatAMinor,proto3" json:"commission_vat_a_minor,omitempty"`
 	CommissionVatBMinor int64 `protobuf:"varint,27,opt,name=commission_vat_b_minor,json=commissionVatBMinor,proto3" json:"commission_vat_b_minor,omitempty"`
 	// net_X = total_X_owes_minor − commission_X − commission_vat_X (số unit X THẬT SỰ phải chuyển).
-	NetAMinor     int64 `protobuf:"varint,28,opt,name=net_a_minor,json=netAMinor,proto3" json:"net_a_minor,omitempty"`
-	NetBMinor     int64 `protobuf:"varint,29,opt,name=net_b_minor,json=netBMinor,proto3" json:"net_b_minor,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	NetAMinor int64 `protobuf:"varint,28,opt,name=net_a_minor,json=netAMinor,proto3" json:"net_a_minor,omitempty"`
+	NetBMinor int64 `protobuf:"varint,29,opt,name=net_b_minor,json=netBMinor,proto3" json:"net_b_minor,omitempty"`
+	// pair_configured — G9-32k8(e)/UL-P12: false = cặp CHƯA có unit_pair_settlement_config lúc tạo run
+	// này (hoa hồng mặc định 0%, có thể là "cố ý không hoa hồng" HOẶC "quên cấu hình" — không phân biệt
+	// được ở tầng dữ liệu, chỉ cảnh báo để người tạo tự xác nhận, KHÔNG chặn tạo run). SNAPSHOT lúc tạo,
+	// không đổi theo config sửa sau (mirror mọi field snapshot khác của message này).
+	PairConfigured bool `protobuf:"varint,30,opt,name=pair_configured,json=pairConfigured,proto3" json:"pair_configured,omitempty"`
+	// reminder_sent_at — G9-32k8(c): lần gần nhất được gộp vào email nhắc hạn lập hoá đơn hoa hồng (B5,
+	// ngày 07-10 tháng sau). NULL = chưa từng nhắc. Chỉ set cho run confirmed CHƯA paid — dùng làm khoá
+	// idempotent để host crontab gọi lại nhiều lần trong ngày không spam email.
+	ReminderSentAt string `protobuf:"bytes,31,opt,name=reminder_sent_at,json=reminderSentAt,proto3" json:"reminder_sent_at,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UnitSettlementRun) Reset() {
@@ -1562,6 +1571,20 @@ func (x *UnitSettlementRun) GetNetBMinor() int64 {
 		return x.NetBMinor
 	}
 	return 0
+}
+
+func (x *UnitSettlementRun) GetPairConfigured() bool {
+	if x != nil {
+		return x.PairConfigured
+	}
+	return false
+}
+
+func (x *UnitSettlementRun) GetReminderSentAt() string {
+	if x != nil {
+		return x.ReminderSentAt
+	}
+	return ""
 }
 
 type CreateSettlementRunRequest struct {
@@ -2822,6 +2845,825 @@ func (x *ListInternalBalancesResponse) GetErrorMessage() string {
 	return ""
 }
 
+// OrphanPairSummary — G9-32k8(a)/UL-P12: 1 cặp unit CÓ giao dịch chưa vào settlement run nào, suy ra
+// THUẦN TỪ DỮ LIỆU LEDGER (2 chân cùng transaction_id) — KHÔNG phụ thuộc
+// unit_pair_settlement_config (cấu hình không bắt buộc, nên nhiều cặp phát sinh thật mà chưa từng được
+// cấu hình gì, và trước bản vá này không đâu liệt kê được chúng — vấn đề gốc "không biết cặp nào có
+// phát sinh để mà chốt").
+type OrphanPairSummary struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	UnitA              string                 `protobuf:"bytes,1,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
+	UnitB              string                 `protobuf:"bytes,2,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
+	EntryCount         int64                  `protobuf:"varint,3,opt,name=entry_count,json=entryCount,proto3" json:"entry_count,omitempty"`                          // tổng dòng unit_ledger_entry (cả 2 chân, mọi giao dịch của cặp)
+	EarliestOccurredAt string                 `protobuf:"bytes,4,opt,name=earliest_occurred_at,json=earliestOccurredAt,proto3" json:"earliest_occurred_at,omitempty"` // ISO datetime
+	LatestOccurredAt   string                 `protobuf:"bytes,5,opt,name=latest_occurred_at,json=latestOccurredAt,proto3" json:"latest_occurred_at,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *OrphanPairSummary) Reset() {
+	*x = OrphanPairSummary{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OrphanPairSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OrphanPairSummary) ProtoMessage() {}
+
+func (x *OrphanPairSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OrphanPairSummary.ProtoReflect.Descriptor instead.
+func (*OrphanPairSummary) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *OrphanPairSummary) GetUnitA() string {
+	if x != nil {
+		return x.UnitA
+	}
+	return ""
+}
+
+func (x *OrphanPairSummary) GetUnitB() string {
+	if x != nil {
+		return x.UnitB
+	}
+	return ""
+}
+
+func (x *OrphanPairSummary) GetEntryCount() int64 {
+	if x != nil {
+		return x.EntryCount
+	}
+	return 0
+}
+
+func (x *OrphanPairSummary) GetEarliestOccurredAt() string {
+	if x != nil {
+		return x.EarliestOccurredAt
+	}
+	return ""
+}
+
+func (x *OrphanPairSummary) GetLatestOccurredAt() string {
+	if x != nil {
+		return x.LatestOccurredAt
+	}
+	return ""
+}
+
+type ListOrphanPairsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrphanPairsRequest) Reset() {
+	*x = ListOrphanPairsRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrphanPairsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrphanPairsRequest) ProtoMessage() {}
+
+func (x *ListOrphanPairsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrphanPairsRequest.ProtoReflect.Descriptor instead.
+func (*ListOrphanPairsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *ListOrphanPairsRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+type ListOrphanPairsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Pairs         []*OrphanPairSummary   `protobuf:"bytes,2,rep,name=pairs,proto3" json:"pairs,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOrphanPairsResponse) Reset() {
+	*x = ListOrphanPairsResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[35]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOrphanPairsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOrphanPairsResponse) ProtoMessage() {}
+
+func (x *ListOrphanPairsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[35]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOrphanPairsResponse.ProtoReflect.Descriptor instead.
+func (*ListOrphanPairsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{35}
+}
+
+func (x *ListOrphanPairsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListOrphanPairsResponse) GetPairs() []*OrphanPairSummary {
+	if x != nil {
+		return x.Pairs
+	}
+	return nil
+}
+
+func (x *ListOrphanPairsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListOrphanPairsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// BulkCreateSettlementRuns — G9-32k8(b): chốt hàng loạt nhiều cặp CÙNG 1 kỳ, thay vì tạo tay từng cặp
+// (tối đa 80 cặp/tháng ở quy mô hiện tại → 500-600 thao tác tay/tháng, không khả thi). Người gọi
+// TỰ CHỌN danh sách cặp (thường lấy từ ListOrphanPairs rồi tick chọn) — server KHÔNG tự suy luận
+// "tất cả", tránh chốt nhầm cặp không định chốt trong kỳ này.
+type UnitPairRef struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UnitX         string                 `protobuf:"bytes,1,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"`
+	UnitY         string                 `protobuf:"bytes,2,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnitPairRef) Reset() {
+	*x = UnitPairRef{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[36]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnitPairRef) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnitPairRef) ProtoMessage() {}
+
+func (x *UnitPairRef) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[36]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnitPairRef.ProtoReflect.Descriptor instead.
+func (*UnitPairRef) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{36}
+}
+
+func (x *UnitPairRef) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *UnitPairRef) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+type BulkCreateSettlementRunsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	Pairs         []*UnitPairRef         `protobuf:"bytes,2,rep,name=pairs,proto3" json:"pairs,omitempty"`
+	PeriodStart   string                 `protobuf:"bytes,3,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	PeriodEnd     string                 `protobuf:"bytes,4,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	CreatedBy     string                 `protobuf:"bytes,5,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BulkCreateSettlementRunsRequest) Reset() {
+	*x = BulkCreateSettlementRunsRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BulkCreateSettlementRunsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BulkCreateSettlementRunsRequest) ProtoMessage() {}
+
+func (x *BulkCreateSettlementRunsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BulkCreateSettlementRunsRequest.ProtoReflect.Descriptor instead.
+func (*BulkCreateSettlementRunsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *BulkCreateSettlementRunsRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunsRequest) GetPairs() []*UnitPairRef {
+	if x != nil {
+		return x.Pairs
+	}
+	return nil
+}
+
+func (x *BulkCreateSettlementRunsRequest) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunsRequest) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunsRequest) GetCreatedBy() string {
+	if x != nil {
+		return x.CreatedBy
+	}
+	return ""
+}
+
+// BulkCreateSettlementRunResult — 1 dòng kết quả cho 1 cặp. Lỗi ở 1 cặp (vd trùng kỳ đã tạo run trước
+// đó) KHÔNG chặn các cặp còn lại — mỗi cặp độc lập, tự báo cáo thành công/thất bại riêng.
+type BulkCreateSettlementRunResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UnitX         string                 `protobuf:"bytes,1,opt,name=unit_x,json=unitX,proto3" json:"unit_x,omitempty"`
+	UnitY         string                 `protobuf:"bytes,2,opt,name=unit_y,json=unitY,proto3" json:"unit_y,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Run           *UnitSettlementRun     `protobuf:"bytes,4,opt,name=run,proto3" json:"run,omitempty"`                                       // chỉ có giá trị khi success
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"` // chỉ có giá trị khi !success
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BulkCreateSettlementRunResult) Reset() {
+	*x = BulkCreateSettlementRunResult{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BulkCreateSettlementRunResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BulkCreateSettlementRunResult) ProtoMessage() {}
+
+func (x *BulkCreateSettlementRunResult) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BulkCreateSettlementRunResult.ProtoReflect.Descriptor instead.
+func (*BulkCreateSettlementRunResult) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *BulkCreateSettlementRunResult) GetUnitX() string {
+	if x != nil {
+		return x.UnitX
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunResult) GetUnitY() string {
+	if x != nil {
+		return x.UnitY
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunResult) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *BulkCreateSettlementRunResult) GetRun() *UnitSettlementRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *BulkCreateSettlementRunResult) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type BulkCreateSettlementRunsResponse struct {
+	state         protoimpl.MessageState           `protogen:"open.v1"`
+	Success       bool                             `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"` // true nếu request hợp lệ và đã xử lý xong (dù có result lẻ thất bại)
+	Results       []*BulkCreateSettlementRunResult `protobuf:"bytes,2,rep,name=results,proto3" json:"results,omitempty"`
+	ErrorCode     string                           `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                           `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BulkCreateSettlementRunsResponse) Reset() {
+	*x = BulkCreateSettlementRunsResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BulkCreateSettlementRunsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BulkCreateSettlementRunsResponse) ProtoMessage() {}
+
+func (x *BulkCreateSettlementRunsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BulkCreateSettlementRunsResponse.ProtoReflect.Descriptor instead.
+func (*BulkCreateSettlementRunsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *BulkCreateSettlementRunsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *BulkCreateSettlementRunsResponse) GetResults() []*BulkCreateSettlementRunResult {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *BulkCreateSettlementRunsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *BulkCreateSettlementRunsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// CommissionSummaryByUnit — G9-32k8(d): 1 unit gộp hoa hồng từ MỌI cặp nó tham gia (1 unit có thể vừa
+// là unit_a ở cặp này vừa là unit_b ở cặp khác).
+type CommissionSummaryByUnit struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Unit            string                 `protobuf:"bytes,1,opt,name=unit,proto3" json:"unit,omitempty"`
+	CommissionMinor int64                  `protobuf:"varint,2,opt,name=commission_minor,json=commissionMinor,proto3" json:"commission_minor,omitempty"`
+	VatMinor        int64                  `protobuf:"varint,3,opt,name=vat_minor,json=vatMinor,proto3" json:"vat_minor,omitempty"`
+	NetMinor        int64                  `protobuf:"varint,4,opt,name=net_minor,json=netMinor,proto3" json:"net_minor,omitempty"` // = commission_minor - vat_minor (thực nhận sau thuế)
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CommissionSummaryByUnit) Reset() {
+	*x = CommissionSummaryByUnit{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[40]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CommissionSummaryByUnit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CommissionSummaryByUnit) ProtoMessage() {}
+
+func (x *CommissionSummaryByUnit) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[40]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CommissionSummaryByUnit.ProtoReflect.Descriptor instead.
+func (*CommissionSummaryByUnit) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *CommissionSummaryByUnit) GetUnit() string {
+	if x != nil {
+		return x.Unit
+	}
+	return ""
+}
+
+func (x *CommissionSummaryByUnit) GetCommissionMinor() int64 {
+	if x != nil {
+		return x.CommissionMinor
+	}
+	return 0
+}
+
+func (x *CommissionSummaryByUnit) GetVatMinor() int64 {
+	if x != nil {
+		return x.VatMinor
+	}
+	return 0
+}
+
+func (x *CommissionSummaryByUnit) GetNetMinor() int64 {
+	if x != nil {
+		return x.NetMinor
+	}
+	return 0
+}
+
+// GetCommissionSummaryRequest — G9-32k8(d): tổng hợp hoa hồng/VAT toàn tenant theo kỳ. CHỈ tính run đã
+// 'paid' (draft/confirmed còn có thể đổi số — "đã hưởng" phải là số CHỐT, không phải số tạm tính).
+type GetCommissionSummaryRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	PeriodStart   string                 `protobuf:"bytes,2,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	PeriodEnd     string                 `protobuf:"bytes,3,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetCommissionSummaryRequest) Reset() {
+	*x = GetCommissionSummaryRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[41]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCommissionSummaryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCommissionSummaryRequest) ProtoMessage() {}
+
+func (x *GetCommissionSummaryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[41]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCommissionSummaryRequest.ProtoReflect.Descriptor instead.
+func (*GetCommissionSummaryRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{41}
+}
+
+func (x *GetCommissionSummaryRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+func (x *GetCommissionSummaryRequest) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *GetCommissionSummaryRequest) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+type GetCommissionSummaryResponse struct {
+	state                protoimpl.MessageState     `protogen:"open.v1"`
+	Success              bool                       `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	TotalCommissionMinor int64                      `protobuf:"varint,2,opt,name=total_commission_minor,json=totalCommissionMinor,proto3" json:"total_commission_minor,omitempty"`
+	TotalVatMinor        int64                      `protobuf:"varint,3,opt,name=total_vat_minor,json=totalVatMinor,proto3" json:"total_vat_minor,omitempty"`
+	TotalNetMinor        int64                      `protobuf:"varint,4,opt,name=total_net_minor,json=totalNetMinor,proto3" json:"total_net_minor,omitempty"`
+	Currency             string                     `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
+	ByUnit               []*CommissionSummaryByUnit `protobuf:"bytes,6,rep,name=by_unit,json=byUnit,proto3" json:"by_unit,omitempty"`
+	ErrorCode            string                     `protobuf:"bytes,7,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage         string                     `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *GetCommissionSummaryResponse) Reset() {
+	*x = GetCommissionSummaryResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[42]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetCommissionSummaryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetCommissionSummaryResponse) ProtoMessage() {}
+
+func (x *GetCommissionSummaryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[42]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetCommissionSummaryResponse.ProtoReflect.Descriptor instead.
+func (*GetCommissionSummaryResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *GetCommissionSummaryResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetCommissionSummaryResponse) GetTotalCommissionMinor() int64 {
+	if x != nil {
+		return x.TotalCommissionMinor
+	}
+	return 0
+}
+
+func (x *GetCommissionSummaryResponse) GetTotalVatMinor() int64 {
+	if x != nil {
+		return x.TotalVatMinor
+	}
+	return 0
+}
+
+func (x *GetCommissionSummaryResponse) GetTotalNetMinor() int64 {
+	if x != nil {
+		return x.TotalNetMinor
+	}
+	return 0
+}
+
+func (x *GetCommissionSummaryResponse) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *GetCommissionSummaryResponse) GetByUnit() []*CommissionSummaryByUnit {
+	if x != nil {
+		return x.ByUnit
+	}
+	return nil
+}
+
+func (x *GetCommissionSummaryResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetCommissionSummaryResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// SendSettlementRemindersRequest — G9-32k8(c)/UL-B5: nhắc hạn lập hoá đơn hoa hồng ngày 07-10 tháng
+// sau. Gửi cho mọi run 'confirmed' CHƯA 'paid' VÀ CHƯA từng nhắc (reminder_sent_at IS NULL) — idempotent
+// theo thiết kế: host crontab gọi lại nhiều lần trong ngày (hoặc nhiều ngày trong cửa sổ 07-10) không
+// gửi trùng, vì run đã nhắc sẽ bị loại khỏi lượt sau.
+type SendSettlementRemindersRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendSettlementRemindersRequest) Reset() {
+	*x = SendSettlementRemindersRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[43]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendSettlementRemindersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendSettlementRemindersRequest) ProtoMessage() {}
+
+func (x *SendSettlementRemindersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[43]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendSettlementRemindersRequest.ProtoReflect.Descriptor instead.
+func (*SendSettlementRemindersRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{43}
+}
+
+func (x *SendSettlementRemindersRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+type SendSettlementRemindersResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	RemindersSent int64                  `protobuf:"varint,2,opt,name=reminders_sent,json=remindersSent,proto3" json:"reminders_sent,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendSettlementRemindersResponse) Reset() {
+	*x = SendSettlementRemindersResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendSettlementRemindersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendSettlementRemindersResponse) ProtoMessage() {}
+
+func (x *SendSettlementRemindersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendSettlementRemindersResponse.ProtoReflect.Descriptor instead.
+func (*SendSettlementRemindersResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *SendSettlementRemindersResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SendSettlementRemindersResponse) GetRemindersSent() int64 {
+	if x != nil {
+		return x.RemindersSent
+	}
+	return 0
+}
+
+func (x *SendSettlementRemindersResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *SendSettlementRemindersResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
@@ -2952,7 +3794,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aconfigs\x18\x02 \x03(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\aconfigs\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xda\b\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xad\t\n" +
 	"\x11UnitSettlementRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
@@ -2985,7 +3827,9 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x16commission_vat_a_minor\x18\x1a \x01(\x03R\x13commissionVatAMinor\x123\n" +
 	"\x16commission_vat_b_minor\x18\x1b \x01(\x03R\x13commissionVatBMinor\x12\x1e\n" +
 	"\vnet_a_minor\x18\x1c \x01(\x03R\tnetAMinor\x12\x1e\n" +
-	"\vnet_b_minor\x18\x1d \x01(\x03R\tnetBMinor\"\xd2\x01\n" +
+	"\vnet_b_minor\x18\x1d \x01(\x03R\tnetBMinor\x12'\n" +
+	"\x0fpair_configured\x18\x1e \x01(\bR\x0epairConfigured\x12(\n" +
+	"\x10reminder_sent_at\x18\x1f \x01(\tR\x0ereminderSentAt\"\xd2\x01\n" +
 	"\x1aCreateSettlementRunRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
 	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
@@ -3088,6 +3932,72 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x05pairs\x18\x02 \x03(\v2&.riptik.booking.v1.InternalPairBalanceR\x05pairs\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xc2\x01\n" +
+	"\x11OrphanPairSummary\x12\x15\n" +
+	"\x06unit_a\x18\x01 \x01(\tR\x05unitA\x12\x15\n" +
+	"\x06unit_b\x18\x02 \x01(\tR\x05unitB\x12\x1f\n" +
+	"\ventry_count\x18\x03 \x01(\x03R\n" +
+	"entryCount\x120\n" +
+	"\x14earliest_occurred_at\x18\x04 \x01(\tR\x12earliestOccurredAt\x12,\n" +
+	"\x12latest_occurred_at\x18\x05 \x01(\tR\x10latestOccurredAt\"?\n" +
+	"\x16ListOrphanPairsRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\"\xb3\x01\n" +
+	"\x17ListOrphanPairsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12:\n" +
+	"\x05pairs\x18\x02 \x03(\v2$.riptik.booking.v1.OrphanPairSummaryR\x05pairs\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\";\n" +
+	"\vUnitPairRef\x12\x15\n" +
+	"\x06unit_x\x18\x01 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x02 \x01(\tR\x05unitY\"\xdf\x01\n" +
+	"\x1fBulkCreateSettlementRunsRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x124\n" +
+	"\x05pairs\x18\x02 \x03(\v2\x1e.riptik.booking.v1.UnitPairRefR\x05pairs\x12!\n" +
+	"\fperiod_start\x18\x03 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x04 \x01(\tR\tperiodEnd\x12\x1d\n" +
+	"\n" +
+	"created_by\x18\x05 \x01(\tR\tcreatedBy\"\xc4\x01\n" +
+	"\x1dBulkCreateSettlementRunResult\x12\x15\n" +
+	"\x06unit_x\x18\x01 \x01(\tR\x05unitX\x12\x15\n" +
+	"\x06unit_y\x18\x02 \x01(\tR\x05unitY\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x126\n" +
+	"\x03run\x18\x04 \x01(\v2$.riptik.booking.v1.UnitSettlementRunR\x03run\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\xcc\x01\n" +
+	" BulkCreateSettlementRunsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12J\n" +
+	"\aresults\x18\x02 \x03(\v20.riptik.booking.v1.BulkCreateSettlementRunResultR\aresults\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x92\x01\n" +
+	"\x17CommissionSummaryByUnit\x12\x12\n" +
+	"\x04unit\x18\x01 \x01(\tR\x04unit\x12)\n" +
+	"\x10commission_minor\x18\x02 \x01(\x03R\x0fcommissionMinor\x12\x1b\n" +
+	"\tvat_minor\x18\x03 \x01(\x03R\bvatMinor\x12\x1b\n" +
+	"\tnet_minor\x18\x04 \x01(\x03R\bnetMinor\"\x86\x01\n" +
+	"\x1bGetCommissionSummaryRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12!\n" +
+	"\fperiod_start\x18\x02 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x03 \x01(\tR\tperiodEnd\"\xe3\x02\n" +
+	"\x1cGetCommissionSummaryResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x124\n" +
+	"\x16total_commission_minor\x18\x02 \x01(\x03R\x14totalCommissionMinor\x12&\n" +
+	"\x0ftotal_vat_minor\x18\x03 \x01(\x03R\rtotalVatMinor\x12&\n" +
+	"\x0ftotal_net_minor\x18\x04 \x01(\x03R\rtotalNetMinor\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\x12C\n" +
+	"\aby_unit\x18\x06 \x03(\v2*.riptik.booking.v1.CommissionSummaryByUnitR\x06byUnit\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\a \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\"G\n" +
+	"\x1eSendSettlementRemindersRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\"\xa6\x01\n" +
+	"\x1fSendSettlementRemindersResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12%\n" +
+	"\x0ereminders_sent\x18\x02 \x01(\x03R\rremindersSent\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
@@ -3102,7 +4012,7 @@ func file_v1_booking_ledger_proto_rawDescGZIP() []byte {
 	return file_v1_booking_ledger_proto_rawDescData
 }
 
-var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_v1_booking_ledger_proto_goTypes = []any{
 	(*UnitLedgerEntry)(nil),                          // 0: riptik.booking.v1.UnitLedgerEntry
 	(*ListLedgerEntriesByOrderRefRequest)(nil),       // 1: riptik.booking.v1.ListLedgerEntriesByOrderRefRequest
@@ -3137,6 +4047,18 @@ var file_v1_booking_ledger_proto_goTypes = []any{
 	(*InternalPairBalance)(nil),                      // 30: riptik.booking.v1.InternalPairBalance
 	(*ListInternalBalancesRequest)(nil),              // 31: riptik.booking.v1.ListInternalBalancesRequest
 	(*ListInternalBalancesResponse)(nil),             // 32: riptik.booking.v1.ListInternalBalancesResponse
+	(*OrphanPairSummary)(nil),                        // 33: riptik.booking.v1.OrphanPairSummary
+	(*ListOrphanPairsRequest)(nil),                   // 34: riptik.booking.v1.ListOrphanPairsRequest
+	(*ListOrphanPairsResponse)(nil),                  // 35: riptik.booking.v1.ListOrphanPairsResponse
+	(*UnitPairRef)(nil),                              // 36: riptik.booking.v1.UnitPairRef
+	(*BulkCreateSettlementRunsRequest)(nil),          // 37: riptik.booking.v1.BulkCreateSettlementRunsRequest
+	(*BulkCreateSettlementRunResult)(nil),            // 38: riptik.booking.v1.BulkCreateSettlementRunResult
+	(*BulkCreateSettlementRunsResponse)(nil),         // 39: riptik.booking.v1.BulkCreateSettlementRunsResponse
+	(*CommissionSummaryByUnit)(nil),                  // 40: riptik.booking.v1.CommissionSummaryByUnit
+	(*GetCommissionSummaryRequest)(nil),              // 41: riptik.booking.v1.GetCommissionSummaryRequest
+	(*GetCommissionSummaryResponse)(nil),             // 42: riptik.booking.v1.GetCommissionSummaryResponse
+	(*SendSettlementRemindersRequest)(nil),           // 43: riptik.booking.v1.SendSettlementRemindersRequest
+	(*SendSettlementRemindersResponse)(nil),          // 44: riptik.booking.v1.SendSettlementRemindersResponse
 }
 var file_v1_booking_ledger_proto_depIdxs = []int32{
 	0,  // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
@@ -3153,11 +4075,16 @@ var file_v1_booking_ledger_proto_depIdxs = []int32{
 	14, // 11: riptik.booking.v1.CancelSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
 	27, // 12: riptik.booking.v1.ListOrphanLedgerEntriesResponse.entries:type_name -> riptik.booking.v1.OrphanLedgerEntry
 	30, // 13: riptik.booking.v1.ListInternalBalancesResponse.pairs:type_name -> riptik.booking.v1.InternalPairBalance
-	14, // [14:14] is the sub-list for method output_type
-	14, // [14:14] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	33, // 14: riptik.booking.v1.ListOrphanPairsResponse.pairs:type_name -> riptik.booking.v1.OrphanPairSummary
+	36, // 15: riptik.booking.v1.BulkCreateSettlementRunsRequest.pairs:type_name -> riptik.booking.v1.UnitPairRef
+	14, // 16: riptik.booking.v1.BulkCreateSettlementRunResult.run:type_name -> riptik.booking.v1.UnitSettlementRun
+	38, // 17: riptik.booking.v1.BulkCreateSettlementRunsResponse.results:type_name -> riptik.booking.v1.BulkCreateSettlementRunResult
+	40, // 18: riptik.booking.v1.GetCommissionSummaryResponse.by_unit:type_name -> riptik.booking.v1.CommissionSummaryByUnit
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_ledger_proto_init() }
@@ -3171,7 +4098,7 @@ func file_v1_booking_ledger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_ledger_proto_rawDesc), len(file_v1_booking_ledger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   33,
+			NumMessages:   45,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
