@@ -2634,6 +2634,194 @@ func (x *ListOrphanLedgerEntriesResponse) GetErrorMessage() string {
 	return ""
 }
 
+// InternalPairBalance — G9-32k7(d)/UL-D1: số dư CHƯA CLEAR (status='open' — gồm cả entry mồ côi lẫn
+// entry đã vào run draft/confirmed nhưng chưa paid) giữa 1 cặp unit relationship_type='internal'.
+// Lưu trữ VẪN pairwise (UL-D1 chốt không đổi tầng lưu trữ) — đây chỉ là số derive cho tầng trình bày,
+// cùng công thức total_a/b_owes_minor đã dùng ở UnitSettlementRun.CreateRun (net theo origin, KHÔNG
+// net thẳng payable-receivable — 1 unit có thể vừa nợ vừa được nợ trong cùng kỳ).
+type InternalPairBalance struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	UnitA           string                 `protobuf:"bytes,1,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
+	UnitB           string                 `protobuf:"bytes,2,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
+	TotalAOwesMinor int64                  `protobuf:"varint,3,opt,name=total_a_owes_minor,json=totalAOwesMinor,proto3" json:"total_a_owes_minor,omitempty"` // unit_a nợ unit_b, số CHƯA thanh toán
+	TotalBOwesMinor int64                  `protobuf:"varint,4,opt,name=total_b_owes_minor,json=totalBOwesMinor,proto3" json:"total_b_owes_minor,omitempty"` // unit_b nợ unit_a, số CHƯA thanh toán
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *InternalPairBalance) Reset() {
+	*x = InternalPairBalance{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InternalPairBalance) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InternalPairBalance) ProtoMessage() {}
+
+func (x *InternalPairBalance) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InternalPairBalance.ProtoReflect.Descriptor instead.
+func (*InternalPairBalance) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *InternalPairBalance) GetUnitA() string {
+	if x != nil {
+		return x.UnitA
+	}
+	return ""
+}
+
+func (x *InternalPairBalance) GetUnitB() string {
+	if x != nil {
+		return x.UnitB
+	}
+	return ""
+}
+
+func (x *InternalPairBalance) GetTotalAOwesMinor() int64 {
+	if x != nil {
+		return x.TotalAOwesMinor
+	}
+	return 0
+}
+
+func (x *InternalPairBalance) GetTotalBOwesMinor() int64 {
+	if x != nil {
+		return x.TotalBOwesMinor
+	}
+	return 0
+}
+
+// ListInternalBalancesRequest — mọi cặp unit_pair_settlement_config.relationship_type='internal' của
+// 1 organizer, kèm số dư open. Không lọc theo kỳ (khác CreateRun) — "hub view" là ảnh chụp HIỆN TẠI,
+// không phải 1 kỳ đối soát cụ thể.
+type ListInternalBalancesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerSlug string                 `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListInternalBalancesRequest) Reset() {
+	*x = ListInternalBalancesRequest{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListInternalBalancesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListInternalBalancesRequest) ProtoMessage() {}
+
+func (x *ListInternalBalancesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListInternalBalancesRequest.ProtoReflect.Descriptor instead.
+func (*ListInternalBalancesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *ListInternalBalancesRequest) GetOrganizerSlug() string {
+	if x != nil {
+		return x.OrganizerSlug
+	}
+	return ""
+}
+
+type ListInternalBalancesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Pairs         []*InternalPairBalance `protobuf:"bytes,2,rep,name=pairs,proto3" json:"pairs,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListInternalBalancesResponse) Reset() {
+	*x = ListInternalBalancesResponse{}
+	mi := &file_v1_booking_ledger_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListInternalBalancesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListInternalBalancesResponse) ProtoMessage() {}
+
+func (x *ListInternalBalancesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_ledger_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListInternalBalancesResponse.ProtoReflect.Descriptor instead.
+func (*ListInternalBalancesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_ledger_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *ListInternalBalancesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListInternalBalancesResponse) GetPairs() []*InternalPairBalance {
+	if x != nil {
+		return x.Pairs
+	}
+	return nil
+}
+
+func (x *ListInternalBalancesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListInternalBalancesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
@@ -2887,7 +3075,20 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x05total\x18\x03 \x01(\x03R\x05total\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x05 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\x9d\x01\n" +
+	"\x13InternalPairBalance\x12\x15\n" +
+	"\x06unit_a\x18\x01 \x01(\tR\x05unitA\x12\x15\n" +
+	"\x06unit_b\x18\x02 \x01(\tR\x05unitB\x12+\n" +
+	"\x12total_a_owes_minor\x18\x03 \x01(\x03R\x0ftotalAOwesMinor\x12+\n" +
+	"\x12total_b_owes_minor\x18\x04 \x01(\x03R\x0ftotalBOwesMinor\"D\n" +
+	"\x1bListInternalBalancesRequest\x12%\n" +
+	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\"\xba\x01\n" +
+	"\x1cListInternalBalancesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12<\n" +
+	"\x05pairs\x18\x02 \x03(\v2&.riptik.booking.v1.InternalPairBalanceR\x05pairs\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_ledger_proto_rawDescOnce sync.Once
@@ -2901,7 +3102,7 @@ func file_v1_booking_ledger_proto_rawDescGZIP() []byte {
 	return file_v1_booking_ledger_proto_rawDescData
 }
 
-var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
+var file_v1_booking_ledger_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
 var file_v1_booking_ledger_proto_goTypes = []any{
 	(*UnitLedgerEntry)(nil),                          // 0: riptik.booking.v1.UnitLedgerEntry
 	(*ListLedgerEntriesByOrderRefRequest)(nil),       // 1: riptik.booking.v1.ListLedgerEntriesByOrderRefRequest
@@ -2933,6 +3134,9 @@ var file_v1_booking_ledger_proto_goTypes = []any{
 	(*OrphanLedgerEntry)(nil),                        // 27: riptik.booking.v1.OrphanLedgerEntry
 	(*ListOrphanLedgerEntriesRequest)(nil),           // 28: riptik.booking.v1.ListOrphanLedgerEntriesRequest
 	(*ListOrphanLedgerEntriesResponse)(nil),          // 29: riptik.booking.v1.ListOrphanLedgerEntriesResponse
+	(*InternalPairBalance)(nil),                      // 30: riptik.booking.v1.InternalPairBalance
+	(*ListInternalBalancesRequest)(nil),              // 31: riptik.booking.v1.ListInternalBalancesRequest
+	(*ListInternalBalancesResponse)(nil),             // 32: riptik.booking.v1.ListInternalBalancesResponse
 }
 var file_v1_booking_ledger_proto_depIdxs = []int32{
 	0,  // 0: riptik.booking.v1.ListLedgerEntriesByOrderRefResponse.entries:type_name -> riptik.booking.v1.UnitLedgerEntry
@@ -2948,11 +3152,12 @@ var file_v1_booking_ledger_proto_depIdxs = []int32{
 	14, // 10: riptik.booking.v1.MarkSettlementRunPaidResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
 	14, // 11: riptik.booking.v1.CancelSettlementRunResponse.run:type_name -> riptik.booking.v1.UnitSettlementRun
 	27, // 12: riptik.booking.v1.ListOrphanLedgerEntriesResponse.entries:type_name -> riptik.booking.v1.OrphanLedgerEntry
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	30, // 13: riptik.booking.v1.ListInternalBalancesResponse.pairs:type_name -> riptik.booking.v1.InternalPairBalance
+	14, // [14:14] is the sub-list for method output_type
+	14, // [14:14] is the sub-list for method input_type
+	14, // [14:14] is the sub-list for extension type_name
+	14, // [14:14] is the sub-list for extension extendee
+	0,  // [0:14] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_ledger_proto_init() }
@@ -2966,7 +3171,7 @@ func file_v1_booking_ledger_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_ledger_proto_rawDesc), len(file_v1_booking_ledger_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   30,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
