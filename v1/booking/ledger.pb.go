@@ -841,8 +841,14 @@ type UnitPairSettlementConfig struct {
 	// relationship_type — G9-32k3/UL-P4: "internal" (cùng pháp nhân) | "external" (2 pháp nhân độc lập).
 	// Điều kiện hoá hoa hồng/VAT ở G9-32k4 và TK kế toán lúc xuất bảng kê ở G9-32k7.
 	RelationshipType string `protobuf:"bytes,11,opt,name=relationship_type,json=relationshipType,proto3" json:"relationship_type,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// commission_rate_a/b — G9-32k4/UL-P3 (F2 đã chốt: % cố định, CÓ CHIỀU). Áp dụng khi unit_a/unit_b
+	// tương ứng là bên NỢ. 0 = không có hoa hồng (đa số cặp case 1).
+	CommissionRateA float64 `protobuf:"fixed64,12,opt,name=commission_rate_a,json=commissionRateA,proto3" json:"commission_rate_a,omitempty"`
+	CommissionRateB float64 `protobuf:"fixed64,13,opt,name=commission_rate_b,json=commissionRateB,proto3" json:"commission_rate_b,omitempty"`
+	// commission_vat_rate — G9-32k4/UL-P4 (F4 đã chốt). Mặc định 10%.
+	CommissionVatRate float64 `protobuf:"fixed64,14,opt,name=commission_vat_rate,json=commissionVatRate,proto3" json:"commission_vat_rate,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *UnitPairSettlementConfig) Reset() {
@@ -952,6 +958,27 @@ func (x *UnitPairSettlementConfig) GetRelationshipType() string {
 	return ""
 }
 
+func (x *UnitPairSettlementConfig) GetCommissionRateA() float64 {
+	if x != nil {
+		return x.CommissionRateA
+	}
+	return 0
+}
+
+func (x *UnitPairSettlementConfig) GetCommissionRateB() float64 {
+	if x != nil {
+		return x.CommissionRateB
+	}
+	return 0
+}
+
+func (x *UnitPairSettlementConfig) GetCommissionVatRate() float64 {
+	if x != nil {
+		return x.CommissionVatRate
+	}
+	return 0
+}
+
 // UpsertUnitPairConfigRequest — tạo mới hoặc đổi approval_mode cho 1 cặp unit (idempotent theo cặp,
 // unit_x/unit_y không cần theo đúng thứ tự — server tự chuẩn hoá).
 type UpsertUnitPairConfigRequest struct {
@@ -964,8 +991,16 @@ type UpsertUnitPairConfigRequest struct {
 	NotifyEmailX     string                 `protobuf:"bytes,6,opt,name=notify_email_x,json=notifyEmailX,proto3" json:"notify_email_x,omitempty"` // G9-32h — email nhận thông báo dual-mode cho unit_x, rỗng = không gửi
 	NotifyEmailY     string                 `protobuf:"bytes,7,opt,name=notify_email_y,json=notifyEmailY,proto3" json:"notify_email_y,omitempty"`
 	RelationshipType string                 `protobuf:"bytes,8,opt,name=relationship_type,json=relationshipType,proto3" json:"relationship_type,omitempty"` // G9-32k3 — "internal" | "external", bắt buộc
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// commission_rate_x/y — G9-32k4, áp dụng khi unit_x/unit_y tương ứng là bên NỢ. 0 = không hoa hồng.
+	CommissionRateX float64 `protobuf:"fixed64,9,opt,name=commission_rate_x,json=commissionRateX,proto3" json:"commission_rate_x,omitempty"`
+	CommissionRateY float64 `protobuf:"fixed64,10,opt,name=commission_rate_y,json=commissionRateY,proto3" json:"commission_rate_y,omitempty"`
+	// commission_vat_rate — G9-32k4. Caller (bo-gateway) PHẢI resolve giá trị cụ thể trước khi gửi
+	// (mặc định 10% nếu JSON request không truyền field này) — proto3 double không phân biệt được
+	// "0 tường minh" với "chưa set", nên việc "chưa set → dùng mặc định" xử lý ở tầng HTTP/JSON (nơi có
+	// con trỏ *float64 để phân biệt), không phải ở đây.
+	CommissionVatRate float64 `protobuf:"fixed64,11,opt,name=commission_vat_rate,json=commissionVatRate,proto3" json:"commission_vat_rate,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *UpsertUnitPairConfigRequest) Reset() {
@@ -1052,6 +1087,27 @@ func (x *UpsertUnitPairConfigRequest) GetRelationshipType() string {
 		return x.RelationshipType
 	}
 	return ""
+}
+
+func (x *UpsertUnitPairConfigRequest) GetCommissionRateX() float64 {
+	if x != nil {
+		return x.CommissionRateX
+	}
+	return 0
+}
+
+func (x *UpsertUnitPairConfigRequest) GetCommissionRateY() float64 {
+	if x != nil {
+		return x.CommissionRateY
+	}
+	return 0
+}
+
+func (x *UpsertUnitPairConfigRequest) GetCommissionVatRate() float64 {
+	if x != nil {
+		return x.CommissionVatRate
+	}
+	return 0
 }
 
 type UpsertUnitPairConfigResponse struct {
@@ -1255,8 +1311,22 @@ type UnitSettlementRun struct {
 	CreatedBy       string                 `protobuf:"bytes,17,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
 	Created         string                 `protobuf:"bytes,18,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime
 	// G9-32k6/UL-P10 — huỷ run tạo NHẦM (vd sai kỳ) trong khi còn "draft". status có thêm "cancelled".
-	CancelledAt   string `protobuf:"bytes,19,opt,name=cancelled_at,json=cancelledAt,proto3" json:"cancelled_at,omitempty"` // ISO datetime, rỗng nếu chưa/không bị huỷ
-	CancelledBy   string `protobuf:"bytes,20,opt,name=cancelled_by,json=cancelledBy,proto3" json:"cancelled_by,omitempty"`
+	CancelledAt string `protobuf:"bytes,19,opt,name=cancelled_at,json=cancelledAt,proto3" json:"cancelled_at,omitempty"` // ISO datetime, rỗng nếu chưa/không bị huỷ
+	CancelledBy string `protobuf:"bytes,20,opt,name=cancelled_by,json=cancelledBy,proto3" json:"cancelled_by,omitempty"`
+	// G9-32k4/UL-P3 — hoa hồng, SNAPSHOT tỷ lệ từ unit_pair_settlement_config lúc tạo run (sửa config
+	// sau không ảnh hưởng ngược run đã tạo). commission_vat_rate_snapshot đã áp quy tắc "internal thì
+	// VAT=0" (G9-32k3) — là giá trị HIỆU LỰC thật, không phải giá trị thô trong config.
+	CommissionRateASnapshot   float64 `protobuf:"fixed64,21,opt,name=commission_rate_a_snapshot,json=commissionRateASnapshot,proto3" json:"commission_rate_a_snapshot,omitempty"`
+	CommissionRateBSnapshot   float64 `protobuf:"fixed64,22,opt,name=commission_rate_b_snapshot,json=commissionRateBSnapshot,proto3" json:"commission_rate_b_snapshot,omitempty"`
+	CommissionVatRateSnapshot float64 `protobuf:"fixed64,23,opt,name=commission_vat_rate_snapshot,json=commissionVatRateSnapshot,proto3" json:"commission_vat_rate_snapshot,omitempty"`
+	// commission_X = round(total_X_owes_minor * commission_rate_X_snapshot / 100).
+	CommissionAMinor    int64 `protobuf:"varint,24,opt,name=commission_a_minor,json=commissionAMinor,proto3" json:"commission_a_minor,omitempty"`
+	CommissionBMinor    int64 `protobuf:"varint,25,opt,name=commission_b_minor,json=commissionBMinor,proto3" json:"commission_b_minor,omitempty"`
+	CommissionVatAMinor int64 `protobuf:"varint,26,opt,name=commission_vat_a_minor,json=commissionVatAMinor,proto3" json:"commission_vat_a_minor,omitempty"`
+	CommissionVatBMinor int64 `protobuf:"varint,27,opt,name=commission_vat_b_minor,json=commissionVatBMinor,proto3" json:"commission_vat_b_minor,omitempty"`
+	// net_X = total_X_owes_minor − commission_X − commission_vat_X (số unit X THẬT SỰ phải chuyển).
+	NetAMinor     int64 `protobuf:"varint,28,opt,name=net_a_minor,json=netAMinor,proto3" json:"net_a_minor,omitempty"`
+	NetBMinor     int64 `protobuf:"varint,29,opt,name=net_b_minor,json=netBMinor,proto3" json:"net_b_minor,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1429,6 +1499,69 @@ func (x *UnitSettlementRun) GetCancelledBy() string {
 		return x.CancelledBy
 	}
 	return ""
+}
+
+func (x *UnitSettlementRun) GetCommissionRateASnapshot() float64 {
+	if x != nil {
+		return x.CommissionRateASnapshot
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionRateBSnapshot() float64 {
+	if x != nil {
+		return x.CommissionRateBSnapshot
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionVatRateSnapshot() float64 {
+	if x != nil {
+		return x.CommissionVatRateSnapshot
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionAMinor() int64 {
+	if x != nil {
+		return x.CommissionAMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionBMinor() int64 {
+	if x != nil {
+		return x.CommissionBMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionVatAMinor() int64 {
+	if x != nil {
+		return x.CommissionVatAMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetCommissionVatBMinor() int64 {
+	if x != nil {
+		return x.CommissionVatBMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetNetAMinor() int64 {
+	if x != nil {
+		return x.NetAMinor
+	}
+	return 0
+}
+
+func (x *UnitSettlementRun) GetNetBMinor() int64 {
+	if x != nil {
+		return x.NetBMinor
+	}
+	return 0
 }
 
 type CreateSettlementRunRequest struct {
@@ -2586,7 +2719,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xf7\x02\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xff\x03\n" +
 	"\x18UnitPairSettlementConfig\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
@@ -2600,7 +2733,10 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x0enotify_email_a\x18\t \x01(\tR\fnotifyEmailA\x12$\n" +
 	"\x0enotify_email_b\x18\n" +
 	" \x01(\tR\fnotifyEmailB\x12+\n" +
-	"\x11relationship_type\x18\v \x01(\tR\x10relationshipType\"\xaf\x02\n" +
+	"\x11relationship_type\x18\v \x01(\tR\x10relationshipType\x12*\n" +
+	"\x11commission_rate_a\x18\f \x01(\x01R\x0fcommissionRateA\x12*\n" +
+	"\x11commission_rate_b\x18\r \x01(\x01R\x0fcommissionRateB\x12.\n" +
+	"\x13commission_vat_rate\x18\x0e \x01(\x01R\x11commissionVatRate\"\xb7\x03\n" +
 	"\x1bUpsertUnitPairConfigRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
 	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
@@ -2610,7 +2746,11 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"created_by\x18\x05 \x01(\tR\tcreatedBy\x12$\n" +
 	"\x0enotify_email_x\x18\x06 \x01(\tR\fnotifyEmailX\x12$\n" +
 	"\x0enotify_email_y\x18\a \x01(\tR\fnotifyEmailY\x12+\n" +
-	"\x11relationship_type\x18\b \x01(\tR\x10relationshipType\"\xc1\x01\n" +
+	"\x11relationship_type\x18\b \x01(\tR\x10relationshipType\x12*\n" +
+	"\x11commission_rate_x\x18\t \x01(\x01R\x0fcommissionRateX\x12*\n" +
+	"\x11commission_rate_y\x18\n" +
+	" \x01(\x01R\x0fcommissionRateY\x12.\n" +
+	"\x13commission_vat_rate\x18\v \x01(\x01R\x11commissionVatRate\"\xc1\x01\n" +
 	"\x1cUpsertUnitPairConfigResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12C\n" +
 	"\x06config\x18\x02 \x01(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\x06config\x12\x1d\n" +
@@ -2624,7 +2764,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aconfigs\x18\x02 \x03(\v2+.riptik.booking.v1.UnitPairSettlementConfigR\aconfigs\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x99\x05\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xda\b\n" +
 	"\x11UnitSettlementRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x15\n" +
@@ -2648,7 +2788,16 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"created_by\x18\x11 \x01(\tR\tcreatedBy\x12\x18\n" +
 	"\acreated\x18\x12 \x01(\tR\acreated\x12!\n" +
 	"\fcancelled_at\x18\x13 \x01(\tR\vcancelledAt\x12!\n" +
-	"\fcancelled_by\x18\x14 \x01(\tR\vcancelledBy\"\xd2\x01\n" +
+	"\fcancelled_by\x18\x14 \x01(\tR\vcancelledBy\x12;\n" +
+	"\x1acommission_rate_a_snapshot\x18\x15 \x01(\x01R\x17commissionRateASnapshot\x12;\n" +
+	"\x1acommission_rate_b_snapshot\x18\x16 \x01(\x01R\x17commissionRateBSnapshot\x12?\n" +
+	"\x1ccommission_vat_rate_snapshot\x18\x17 \x01(\x01R\x19commissionVatRateSnapshot\x12,\n" +
+	"\x12commission_a_minor\x18\x18 \x01(\x03R\x10commissionAMinor\x12,\n" +
+	"\x12commission_b_minor\x18\x19 \x01(\x03R\x10commissionBMinor\x123\n" +
+	"\x16commission_vat_a_minor\x18\x1a \x01(\x03R\x13commissionVatAMinor\x123\n" +
+	"\x16commission_vat_b_minor\x18\x1b \x01(\x03R\x13commissionVatBMinor\x12\x1e\n" +
+	"\vnet_a_minor\x18\x1c \x01(\x03R\tnetAMinor\x12\x1e\n" +
+	"\vnet_b_minor\x18\x1d \x01(\x03R\tnetBMinor\"\xd2\x01\n" +
 	"\x1aCreateSettlementRunRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x15\n" +
 	"\x06unit_x\x18\x02 \x01(\tR\x05unitX\x12\x15\n" +
