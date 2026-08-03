@@ -2851,12 +2851,15 @@ func (x *ListInternalBalancesResponse) GetErrorMessage() string {
 // cấu hình gì, và trước bản vá này không đâu liệt kê được chúng — vấn đề gốc "không biết cặp nào có
 // phát sinh để mà chốt").
 type OrphanPairSummary struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	UnitA              string                 `protobuf:"bytes,1,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
-	UnitB              string                 `protobuf:"bytes,2,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
-	EntryCount         int64                  `protobuf:"varint,3,opt,name=entry_count,json=entryCount,proto3" json:"entry_count,omitempty"`                          // tổng dòng unit_ledger_entry (cả 2 chân, mọi giao dịch của cặp)
-	EarliestOccurredAt string                 `protobuf:"bytes,4,opt,name=earliest_occurred_at,json=earliestOccurredAt,proto3" json:"earliest_occurred_at,omitempty"` // ISO datetime
-	LatestOccurredAt   string                 `protobuf:"bytes,5,opt,name=latest_occurred_at,json=latestOccurredAt,proto3" json:"latest_occurred_at,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	UnitA string                 `protobuf:"bytes,1,opt,name=unit_a,json=unitA,proto3" json:"unit_a,omitempty"`
+	UnitB string                 `protobuf:"bytes,2,opt,name=unit_b,json=unitB,proto3" json:"unit_b,omitempty"`
+	// transaction_count — số GIAO DỊCH (không phải số dòng unit_ledger_entry): self-join theo
+	// transaction_id nên COUNT(*) ra đúng 1 dòng/giao dịch (2 chân), không phải 1 dòng/entry. Field này
+	// từng tên "entry_count" (sai — đếm giao dịch, không phải entry), đổi lại cho khớp thực tế.
+	TransactionCount   int64  `protobuf:"varint,3,opt,name=transaction_count,json=transactionCount,proto3" json:"transaction_count,omitempty"`
+	EarliestOccurredAt string `protobuf:"bytes,4,opt,name=earliest_occurred_at,json=earliestOccurredAt,proto3" json:"earliest_occurred_at,omitempty"` // ISO datetime
+	LatestOccurredAt   string `protobuf:"bytes,5,opt,name=latest_occurred_at,json=latestOccurredAt,proto3" json:"latest_occurred_at,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2905,9 +2908,9 @@ func (x *OrphanPairSummary) GetUnitB() string {
 	return ""
 }
 
-func (x *OrphanPairSummary) GetEntryCount() int64 {
+func (x *OrphanPairSummary) GetTransactionCount() int64 {
 	if x != nil {
-		return x.EntryCount
+		return x.TransactionCount
 	}
 	return 0
 }
@@ -3932,12 +3935,11 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x05pairs\x18\x02 \x03(\v2&.riptik.booking.v1.InternalPairBalanceR\x05pairs\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xc2\x01\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xce\x01\n" +
 	"\x11OrphanPairSummary\x12\x15\n" +
 	"\x06unit_a\x18\x01 \x01(\tR\x05unitA\x12\x15\n" +
-	"\x06unit_b\x18\x02 \x01(\tR\x05unitB\x12\x1f\n" +
-	"\ventry_count\x18\x03 \x01(\x03R\n" +
-	"entryCount\x120\n" +
+	"\x06unit_b\x18\x02 \x01(\tR\x05unitB\x12+\n" +
+	"\x11transaction_count\x18\x03 \x01(\x03R\x10transactionCount\x120\n" +
 	"\x14earliest_occurred_at\x18\x04 \x01(\tR\x12earliestOccurredAt\x12,\n" +
 	"\x12latest_occurred_at\x18\x05 \x01(\tR\x10latestOccurredAt\"?\n" +
 	"\x16ListOrphanPairsRequest\x12%\n" +
