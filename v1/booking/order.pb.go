@@ -618,15 +618,12 @@ func (x *CancelOrderRequest) GetComment() string {
 // "đã bán" vĩnh viễn (unique index + truy vấn availability đều key theo canceled=false) và khách vẫn
 // check-in được — tiền đã trả lại nhưng quyền vào cửa vẫn còn.
 type CancelOrderPositionsRequest struct {
-	state       protoimpl.MessageState `protogen:"open.v1"`
-	Organizer   string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                // Organizer slug (required)
-	Event       string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`                                        // Event slug (required)
-	Code        string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`                                          // Order code (required) — phía POS chính là ticket_ref
-	PositionIds []int64                `protobuf:"varint,4,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"` // Các position cần huỷ (required, >=1)
-	Comment     string                 `protobuf:"bytes,5,opt,name=comment,proto3" json:"comment,omitempty"`                                    // Lý do (optional)
-	// reversal_key — khoá idempotency cho BÚT TOÁN ĐẢO công nợ liên đơn vị sinh kèm. Bắt buộc khi đơn có
-	// ghi sổ công nợ; gọi lại cùng khoá KHÔNG đảo thêm lần nữa. POS truyền "<ticket_ref>:refund:L<n>".
-	ReversalKey   string `protobuf:"bytes,6,opt,name=reversal_key,json=reversalKey,proto3" json:"reversal_key,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                // Organizer slug (required)
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`                                        // Event slug (required)
+	Code          string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`                                          // Order code (required) — phía POS chính là ticket_ref
+	PositionIds   []int64                `protobuf:"varint,4,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"` // Các position cần huỷ (required, >=1)
+	Comment       string                 `protobuf:"bytes,5,opt,name=comment,proto3" json:"comment,omitempty"`                                    // Lý do (optional)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -692,13 +689,6 @@ func (x *CancelOrderPositionsRequest) GetPositionIds() []int64 {
 func (x *CancelOrderPositionsRequest) GetComment() string {
 	if x != nil {
 		return x.Comment
-	}
-	return ""
-}
-
-func (x *CancelOrderPositionsRequest) GetReversalKey() string {
-	if x != nil {
-		return x.ReversalKey
 	}
 	return ""
 }
@@ -3647,14 +3637,13 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
 	"\x04code\x18\x03 \x01(\tR\x04code\x12\x18\n" +
-	"\acomment\x18\x04 \x01(\tR\acomment\"\xc5\x01\n" +
+	"\acomment\x18\x04 \x01(\tR\acomment\"\xa2\x01\n" +
 	"\x1bCancelOrderPositionsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
 	"\x04code\x18\x03 \x01(\tR\x04code\x12!\n" +
 	"\fposition_ids\x18\x04 \x03(\x03R\vpositionIds\x12\x18\n" +
-	"\acomment\x18\x05 \x01(\tR\acomment\x12!\n" +
-	"\freversal_key\x18\x06 \x01(\tR\vreversalKey\"\x89\x02\n" +
+	"\acomment\x18\x05 \x01(\tR\acomment\"\x89\x02\n" +
 	"\x1cCancelOrderPositionsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12%\n" +
 	"\x0ecanceled_count\x18\x02 \x01(\x05R\rcanceledCount\x120\n" +
