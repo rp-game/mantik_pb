@@ -426,6 +426,7 @@ type SeatReleaseRequest struct {
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
 	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"`
+	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"` // G9-24: hướng guid-native, thay seat_ids
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -477,6 +478,13 @@ func (x *SeatReleaseRequest) GetSubeventId() int64 {
 func (x *SeatReleaseRequest) GetSeatIds() []int64 {
 	if x != nil {
 		return x.SeatIds
+	}
+	return nil
+}
+
+func (x *SeatReleaseRequest) GetSeatGuids() []string {
+	if x != nil {
+		return x.SeatGuids
 	}
 	return nil
 }
@@ -546,6 +554,7 @@ type SeatRenewRequest struct {
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
 	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"`
+	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"` // G9-24: hướng guid-native, thay seat_ids
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -597,6 +606,13 @@ func (x *SeatRenewRequest) GetSubeventId() int64 {
 func (x *SeatRenewRequest) GetSeatIds() []int64 {
 	if x != nil {
 		return x.SeatIds
+	}
+	return nil
+}
+
+func (x *SeatRenewRequest) GetSeatGuids() []string {
+	if x != nil {
+		return x.SeatGuids
 	}
 	return nil
 }
@@ -886,22 +902,26 @@ const file_v1_booking_seat_proto_rawDesc = "" +
 	"\n" +
 	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\x12,\n" +
-	"\x12conflict_seat_guid\x18\x06 \x01(\tR\x10conflictSeatGuid\"i\n" +
+	"\x12conflict_seat_guid\x18\x06 \x01(\tR\x10conflictSeatGuid\"\x88\x01\n" +
 	"\x12SeatReleaseRequest\x12\x17\n" +
 	"\acart_id\x18\x01 \x01(\tR\x06cartId\x12\x1f\n" +
 	"\vsubevent_id\x18\x02 \x01(\x03R\n" +
 	"subeventId\x12\x19\n" +
-	"\bseat_ids\x18\x03 \x03(\x03R\aseatIds\"n\n" +
+	"\bseat_ids\x18\x03 \x03(\x03R\aseatIds\x12\x1d\n" +
+	"\n" +
+	"seat_guids\x18\x04 \x03(\tR\tseatGuids\"n\n" +
 	"\x0eSeatOpResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"g\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\x86\x01\n" +
 	"\x10SeatRenewRequest\x12\x17\n" +
 	"\acart_id\x18\x01 \x01(\tR\x06cartId\x12\x1f\n" +
 	"\vsubevent_id\x18\x02 \x01(\x03R\n" +
 	"subeventId\x12\x19\n" +
-	"\bseat_ids\x18\x03 \x03(\x03R\aseatIds\"]\n" +
+	"\bseat_ids\x18\x03 \x03(\x03R\aseatIds\x12\x1d\n" +
+	"\n" +
+	"seat_guids\x18\x04 \x03(\tR\tseatGuids\"]\n" +
 	"\x11SeatRenewResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\arenewed\x18\x02 \x01(\x05R\arenewed\x12\x14\n" +
