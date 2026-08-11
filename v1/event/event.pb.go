@@ -427,6 +427,7 @@ type EventGroup struct {
 	SortOrder     int32                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
 	Created       string                 `protobuf:"bytes,5,opt,name=created,proto3" json:"created,omitempty"`                               // ISO datetime
 	LastModified  string                 `protobuf:"bytes,6,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"` // ISO datetime
+	Slug          string                 `protobuf:"bytes,7,opt,name=slug,proto3" json:"slug,omitempty"`                                     // Key ổn định (free text, optional — cùng quy ước Item/
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -503,12 +504,20 @@ func (x *EventGroup) GetLastModified() string {
 	return ""
 }
 
+func (x *EventGroup) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
+}
+
 type CreateEventGroupRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
 	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"` // event slug
 	Name          map[string]string      `protobuf:"bytes,3,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	SortOrder     int32                  `protobuf:"varint,4,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Slug          string                 `protobuf:"bytes,5,opt,name=slug,proto3" json:"slug,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -569,6 +578,13 @@ func (x *CreateEventGroupRequest) GetSortOrder() int32 {
 		return x.SortOrder
 	}
 	return 0
+}
+
+func (x *CreateEventGroupRequest) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
 }
 
 type CreateEventGroupResponse struct {
@@ -766,6 +782,7 @@ type UpdateEventGroupRequest struct {
 	GroupId       int64                  `protobuf:"varint,3,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
 	Name          map[string]string      `protobuf:"bytes,4,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	SortOrder     int32                  `protobuf:"varint,5,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	Slug          string                 `protobuf:"bytes,6,opt,name=slug,proto3" json:"slug,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -833,6 +850,13 @@ func (x *UpdateEventGroupRequest) GetSortOrder() int32 {
 		return x.SortOrder
 	}
 	return 0
+}
+
+func (x *UpdateEventGroupRequest) GetSlug() string {
+	if x != nil {
+		return x.Slug
+	}
+	return ""
 }
 
 type UpdateEventGroupResponse struct {
@@ -1037,7 +1061,7 @@ type ListEventsRequest struct {
 	ModifiedSince string                 `protobuf:"bytes,9,opt,name=modified_since,json=modifiedSince,proto3" json:"modified_since,omitempty"`  // ISO datetime filter
 	CreatedSince  string                 `protobuf:"bytes,10,opt,name=created_since,json=createdSince,proto3" json:"created_since,omitempty"`    // ISO datetime filter
 	CreatedBefore string                 `protobuf:"bytes,11,opt,name=created_before,json=createdBefore,proto3" json:"created_before,omitempty"` // ISO datetime filter
-	// tag_ids (G9-29) — lọc EVENT theo tag của bất kỳ suất nào thuộc event đó (mirror ngữ nghĩa AND của
+	// tag_ids (G9-29/G9-30) — lọc EVENT theo tag của bất kỳ suất nào thuộc event đó (mirror ngữ nghĩa AND của
 	// ListSubEventsRequest.tag_ids, G9-18) — trả lời "phim X bán ở rạp nào". Rỗng = không lọc.
 	TagIds        []int64 `protobuf:"varint,12,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1221,7 +1245,7 @@ type ListSubEventsRequest struct {
 	DateFromAfter  string                 `protobuf:"bytes,7,opt,name=date_from_after,json=dateFromAfter,proto3" json:"date_from_after,omitempty"`
 	DateFromBefore string                 `protobuf:"bytes,8,opt,name=date_from_before,json=dateFromBefore,proto3" json:"date_from_before,omitempty"`
 	ModifiedSince  string                 `protobuf:"bytes,9,opt,name=modified_since,json=modifiedSince,proto3" json:"modified_since,omitempty"`
-	// tag_ids (G9-18, mantik-cinema-chain.md §5B) — lọc suất theo tag (booking-core.tag, vd type='film').
+	// tag_ids (G9-18/G9-30, mantik-cinema-chain.md §5B) — lọc suất theo tag (booking-core.tag, vd type='film').
 	// Ngữ nghĩa AND: suất phải có ĐỦ mọi tag trong danh sách mới khớp. Rỗng = không lọc (hành vi cũ).
 	TagIds        []int64 `protobuf:"varint,10,rep,packed,name=tag_ids,json=tagIds,proto3" json:"tag_ids,omitempty"`
 	GroupId       int64   `protobuf:"varint,11,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"` // G9-29: lọc suất theo phòng chiếu. 0 = không lọc.
@@ -4751,7 +4775,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\rLocationEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\x10\n" +
-	"\x0e_seat_capacity\"\x89\x02\n" +
+	"\x0e_seat_capacity\"\x9d\x02\n" +
 	"\n" +
 	"EventGroup\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
@@ -4760,16 +4784,18 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\n" +
 	"sort_order\x18\x04 \x01(\x05R\tsortOrder\x12\x18\n" +
 	"\acreated\x18\x05 \x01(\tR\acreated\x12#\n" +
-	"\rlast_modified\x18\x06 \x01(\tR\flastModified\x1a7\n" +
+	"\rlast_modified\x18\x06 \x01(\tR\flastModified\x12\x12\n" +
+	"\x04slug\x18\a \x01(\tR\x04slug\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xed\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x81\x02\n" +
 	"\x17CreateEventGroupRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12F\n" +
 	"\x04name\x18\x03 \x03(\v22.riptik.event.v1.CreateEventGroupRequest.NameEntryR\x04name\x12\x1d\n" +
 	"\n" +
-	"sort_order\x18\x04 \x01(\x05R\tsortOrder\x1a7\n" +
+	"sort_order\x18\x04 \x01(\x05R\tsortOrder\x12\x12\n" +
+	"\x04slug\x18\x05 \x01(\tR\x04slug\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xab\x01\n" +
@@ -4787,14 +4813,15 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\aresults\x18\x02 \x03(\v2\x1b.riptik.event.v1.EventGroupR\aresults\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x88\x02\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x9c\x02\n" +
 	"\x17UpdateEventGroupRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x19\n" +
 	"\bgroup_id\x18\x03 \x01(\x03R\agroupId\x12F\n" +
 	"\x04name\x18\x04 \x03(\v22.riptik.event.v1.UpdateEventGroupRequest.NameEntryR\x04name\x12\x1d\n" +
 	"\n" +
-	"sort_order\x18\x05 \x01(\x05R\tsortOrder\x1a7\n" +
+	"sort_order\x18\x05 \x01(\x05R\tsortOrder\x12\x12\n" +
+	"\x04slug\x18\x06 \x01(\tR\x04slug\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xab\x01\n" +
