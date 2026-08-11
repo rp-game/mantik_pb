@@ -617,6 +617,13 @@ func (x *CancelOrderRequest) GetComment() string {
 // Ca dùng: POS hoàn tiền 1 dòng vé của đơn combo. Hoàn tiền mà không huỷ position thì ghế ở lại
 // "đã bán" vĩnh viễn (unique index + truy vấn availability đều key theo canceled=false) và khách vẫn
 // check-in được — tiền đã trả lại nhưng quyền vào cửa vẫn còn.
+//
+// [Khôi phục 2026-08-11] Message này trước đó chỉ tồn tại trong 1 git stash mồ côi (không nằm trên
+// branch nào), chưa từng được commit vào api repo — nhưng mantik_pb đã published sẵn (regen từ code
+// chưa commit ở đâu đó) và booking-core (proto_handlers_orders.go, service/order.go
+// CancelOrderPositions) đang DÙNG THẬT. Phát hiện lúc regen order.proto cho việc khác (PositionAnswerInput
+// thêm option_ids/file) — field-diff cho thấy message này sắp biến mất khỏi mantik_pb, sẽ làm gãy
+// build booking-core ngay khi bump version. Khôi phục nguyên trạng từ stash trước khi regen.
 type CancelOrderPositionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                // Organizer slug (required)
@@ -2097,6 +2104,8 @@ type PositionAnswerInput struct {
 	PositionId    int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
 	QuestionId    int64                  `protobuf:"varint,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
 	Answer        string                 `protobuf:"bytes,3,opt,name=answer,proto3" json:"answer,omitempty"`
+	OptionIds     []int64                `protobuf:"varint,4,rep,packed,name=option_ids,json=optionIds,proto3" json:"option_ids,omitempty"` // Chosen option IDs — câu hỏi loại CHOICE/MULTIPLE (C/M)
+	File          string                 `protobuf:"bytes,5,opt,name=file,proto3" json:"file,omitempty"`                                    // Đường dẫn/URL file đã upload trước — câu hỏi loại FILE (F)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2148,6 +2157,20 @@ func (x *PositionAnswerInput) GetQuestionId() int64 {
 func (x *PositionAnswerInput) GetAnswer() string {
 	if x != nil {
 		return x.Answer
+	}
+	return ""
+}
+
+func (x *PositionAnswerInput) GetOptionIds() []int64 {
+	if x != nil {
+		return x.OptionIds
+	}
+	return nil
+}
+
+func (x *PositionAnswerInput) GetFile() string {
+	if x != nil {
+		return x.File
 	}
 	return ""
 }
@@ -3790,13 +3813,16 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
-	"\x06answer\x18\x02 \x01(\tR\x06answer\"o\n" +
+	"\x06answer\x18\x02 \x01(\tR\x06answer\"\xa2\x01\n" +
 	"\x13PositionAnswerInput\x12\x1f\n" +
 	"\vposition_id\x18\x01 \x01(\x03R\n" +
 	"positionId\x12\x1f\n" +
 	"\vquestion_id\x18\x02 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
-	"\x06answer\x18\x03 \x01(\tR\x06answer\"]\n" +
+	"\x06answer\x18\x03 \x01(\tR\x06answer\x12\x1d\n" +
+	"\n" +
+	"option_ids\x18\x04 \x03(\x03R\toptionIds\x12\x12\n" +
+	"\x04file\x18\x05 \x01(\tR\x04file\"]\n" +
 	"\x19SetPositionAnswersRequest\x12@\n" +
 	"\aanswers\x18\x01 \x03(\v2&.riptik.booking.v1.PositionAnswerInputR\aanswers\"\x9b\x01\n" +
 	"\x1aSetPositionAnswersResponse\x12\x18\n" +
