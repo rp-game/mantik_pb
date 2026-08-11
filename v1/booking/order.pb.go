@@ -625,12 +625,14 @@ func (x *CancelOrderRequest) GetComment() string {
 // thêm option_ids/file) — field-diff cho thấy message này sắp biến mất khỏi mantik_pb, sẽ làm gãy
 // build booking-core ngay khi bump version. Khôi phục nguyên trạng từ stash trước khi regen.
 type CancelOrderPositionsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                // Organizer slug (required)
-	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`                                        // Event slug (required)
-	Code          string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`                                          // Order code (required) — phía POS chính là ticket_ref
-	PositionIds   []int64                `protobuf:"varint,4,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"` // Các position cần huỷ (required, >=1)
-	Comment       string                 `protobuf:"bytes,5,opt,name=comment,proto3" json:"comment,omitempty"`                                    // Lý do (optional)
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// (đã grep pos-app/booking-core xác nhận), giữ reserved tránh field mới sau này vô tình
+	// tái dùng số 6 và bị hiểu nhầm dữ liệu cũ trên wire.
+	Organizer     string  `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                // Organizer slug (required)
+	Event         string  `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`                                        // Event slug (required)
+	Code          string  `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`                                          // Order code (required) — phía POS chính là ticket_ref
+	PositionIds   []int64 `protobuf:"varint,4,rep,packed,name=position_ids,json=positionIds,proto3" json:"position_ids,omitempty"` // Các position cần huỷ (required, >=1)
+	Comment       string  `protobuf:"bytes,5,opt,name=comment,proto3" json:"comment,omitempty"`                                    // Lý do (optional)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3660,13 +3662,13 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
 	"\x04code\x18\x03 \x01(\tR\x04code\x12\x18\n" +
-	"\acomment\x18\x04 \x01(\tR\acomment\"\xa2\x01\n" +
+	"\acomment\x18\x04 \x01(\tR\acomment\"\xa8\x01\n" +
 	"\x1bCancelOrderPositionsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
 	"\x04code\x18\x03 \x01(\tR\x04code\x12!\n" +
 	"\fposition_ids\x18\x04 \x03(\x03R\vpositionIds\x12\x18\n" +
-	"\acomment\x18\x05 \x01(\tR\acomment\"\x89\x02\n" +
+	"\acomment\x18\x05 \x01(\tR\acommentJ\x04\b\x06\x10\a\"\x89\x02\n" +
 	"\x1cCancelOrderPositionsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12%\n" +
 	"\x0ecanceled_count\x18\x02 \x01(\x05R\rcanceledCount\x120\n" +

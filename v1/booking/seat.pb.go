@@ -35,6 +35,10 @@ type SeatStatus struct {
 	// Trước đây client lấy giá từ bundle sơ đồ (index.json categories[].product.price) — sai nguồn:
 	// bundle do công cụ vẽ sơ đồ sinh ra và KHÔNG sở hữu giá, editor mới ghi 0 nên webshop hiện 0đ.
 	// 0 = ghế chưa map product (status=blocked) hoặc item không có giá.
+	//
+	// [Khôi phục 2026-08-11] Field này chỉ tồn tại trong 1 git stash mồ côi, chưa từng commit vào api
+	// repo dù mantik_pb đã publish từ tag v0.1.73 và booking-core (proto_handlers_seat.go) đang dùng
+	// thật — phát hiện lúc audit lại toàn bộ session tìm orphan giống CancelOrderPositionsRequest.
 	Price         float64 `protobuf:"fixed64,9,opt,name=price,proto3" json:"price,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -273,8 +277,8 @@ type SeatHoldRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
-	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"`
-	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"` // G9-24: hướng guid-native, thay seat_ids
+	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"` // legacy — deprecated, prefer seat_guids (G9-24, mantik-cinema-chain.md §7C)
+	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"`   // caller sends EITHER this OR seat_ids (guid preferred; server resolves
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -341,10 +345,10 @@ type SeatHoldResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Success          bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Ok               bool                   `protobuf:"varint,2,opt,name=ok,proto3" json:"ok,omitempty"`                                                 // true = all seats held; false = conflict
-	ConflictSeatId   int64                  `protobuf:"varint,3,opt,name=conflict_seat_id,json=conflictSeatId,proto3" json:"conflict_seat_id,omitempty"` // set when ok=false
+	ConflictSeatId   int64                  `protobuf:"varint,3,opt,name=conflict_seat_id,json=conflictSeatId,proto3" json:"conflict_seat_id,omitempty"` // legacy — 0 once callers are guid-only
 	ErrorCode        string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
 	ErrorMessage     string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	ConflictSeatGuid string                 `protobuf:"bytes,6,opt,name=conflict_seat_guid,json=conflictSeatGuid,proto3" json:"conflict_seat_guid,omitempty"` // G9-24: guid-native
+	ConflictSeatGuid string                 `protobuf:"bytes,6,opt,name=conflict_seat_guid,json=conflictSeatGuid,proto3" json:"conflict_seat_guid,omitempty"` // set when ok=false
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -425,8 +429,8 @@ type SeatReleaseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
-	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"`
-	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"` // G9-24: hướng guid-native, thay seat_ids
+	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"` // legacy — deprecated, prefer seat_guids
+	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -553,8 +557,8 @@ type SeatRenewRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CartId        string                 `protobuf:"bytes,1,opt,name=cart_id,json=cartId,proto3" json:"cart_id,omitempty"`
 	SubeventId    int64                  `protobuf:"varint,2,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
-	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"`
-	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"` // G9-24: hướng guid-native, thay seat_ids
+	SeatIds       []int64                `protobuf:"varint,3,rep,packed,name=seat_ids,json=seatIds,proto3" json:"seat_ids,omitempty"` // legacy — deprecated, prefer seat_guids
+	SeatGuids     []string               `protobuf:"bytes,4,rep,name=seat_guids,json=seatGuids,proto3" json:"seat_guids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -677,7 +681,8 @@ func (x *SeatRenewResponse) GetTotal() int32 {
 	return 0
 }
 
-// G9-31 — đếm held/sold/capacity cho NHIỀU suất trong 1 lần gọi (danh sách suất chiếu).
+// G9-31 — bulk held/sold/capacity theo nhiều subevent_id 1 lần gọi, thay vì loop seat_locks.count từng
+// subevent riêng (tốn round-trip cho màn danh sách suất chiếu cần hiện sức chứa còn lại).
 type SeatCountsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SubeventIds   []int64                `protobuf:"varint,1,rep,packed,name=subevent_ids,json=subeventIds,proto3" json:"subevent_ids,omitempty"`
@@ -725,9 +730,9 @@ func (x *SeatCountsRequest) GetSubeventIds() []int64 {
 type SubEventSeatCount struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SubeventId    int64                  `protobuf:"varint,1,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
-	Held          int64                  `protobuf:"varint,2,opt,name=held,proto3" json:"held,omitempty"`
-	Sold          int64                  `protobuf:"varint,3,opt,name=sold,proto3" json:"sold,omitempty"`
-	Capacity      int64                  `protobuf:"varint,4,opt,name=capacity,proto3" json:"capacity,omitempty"`
+	Held          int64                  `protobuf:"varint,2,opt,name=held,proto3" json:"held,omitempty"`         // currently in the held: ZSET (not yet paid, may still expire)
+	Sold          int64                  `protobuf:"varint,3,opt,name=sold,proto3" json:"sold,omitempty"`         // order_positions with a non-null seat_guid, not canceled
+	Capacity      int64                  `protobuf:"varint,4,opt,name=capacity,proto3" json:"capacity,omitempty"` // 0 = unknown (subevent has no seating_plan_id, or plan not yet resolved)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
