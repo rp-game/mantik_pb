@@ -23,9 +23,9 @@ const (
 
 // ItemVariation — biến thể của Item (vd size S/M/L), có thể override giá riêng. Model đã tồn tại từ
 // lâu (booking-core/internal/models/event.go) và ĐANG dùng thật trong luồng đặt vé/quota (không phải
-// leftover), nhưng CHƯA từng có NATS API nào để list — bổ sung cho tính năng export/import YAML
-// (mantik-export-import-yaml.md), read-only (chỉ list, không thêm Create/Update/Delete — ngoài phạm vi
-// yêu cầu hiện tại).
+// leftover). variations.list (đọc) đã có cho tính năng export YAML; Create/Update thêm ở đây cho tính
+// năng import YAML (mantik-export-import-yaml.md) — cần dựng lại variation khi clone event sang tenant
+// khác.
 type ItemVariation struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -230,6 +230,278 @@ func (x *ListItemVariationsResponse) GetErrorMessage() string {
 	return ""
 }
 
+type CreateItemVariationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ItemId        int64                  `protobuf:"varint,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Value         map[string]string      `protobuf:"bytes,2,rep,name=value,proto3" json:"value,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Active        bool                   `protobuf:"varint,3,opt,name=active,proto3" json:"active,omitempty"`
+	DefaultPrice  string                 `protobuf:"bytes,4,opt,name=default_price,json=defaultPrice,proto3" json:"default_price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateItemVariationRequest) Reset() {
+	*x = CreateItemVariationRequest{}
+	mi := &file_v1_booking_item_variation_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateItemVariationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateItemVariationRequest) ProtoMessage() {}
+
+func (x *CreateItemVariationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_item_variation_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateItemVariationRequest.ProtoReflect.Descriptor instead.
+func (*CreateItemVariationRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_item_variation_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *CreateItemVariationRequest) GetItemId() int64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *CreateItemVariationRequest) GetValue() map[string]string {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
+func (x *CreateItemVariationRequest) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *CreateItemVariationRequest) GetDefaultPrice() string {
+	if x != nil {
+		return x.DefaultPrice
+	}
+	return ""
+}
+
+type CreateItemVariationResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Variation     *ItemVariation         `protobuf:"bytes,2,opt,name=variation,proto3" json:"variation,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateItemVariationResponse) Reset() {
+	*x = CreateItemVariationResponse{}
+	mi := &file_v1_booking_item_variation_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateItemVariationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateItemVariationResponse) ProtoMessage() {}
+
+func (x *CreateItemVariationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_item_variation_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateItemVariationResponse.ProtoReflect.Descriptor instead.
+func (*CreateItemVariationResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_item_variation_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CreateItemVariationResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateItemVariationResponse) GetVariation() *ItemVariation {
+	if x != nil {
+		return x.Variation
+	}
+	return nil
+}
+
+func (x *CreateItemVariationResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateItemVariationResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type UpdateItemVariationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	VariationId   int64                  `protobuf:"varint,1,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`
+	Value         map[string]string      `protobuf:"bytes,2,rep,name=value,proto3" json:"value,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Active        bool                   `protobuf:"varint,3,opt,name=active,proto3" json:"active,omitempty"`
+	DefaultPrice  string                 `protobuf:"bytes,4,opt,name=default_price,json=defaultPrice,proto3" json:"default_price,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateItemVariationRequest) Reset() {
+	*x = UpdateItemVariationRequest{}
+	mi := &file_v1_booking_item_variation_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateItemVariationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateItemVariationRequest) ProtoMessage() {}
+
+func (x *UpdateItemVariationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_item_variation_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateItemVariationRequest.ProtoReflect.Descriptor instead.
+func (*UpdateItemVariationRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_item_variation_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdateItemVariationRequest) GetVariationId() int64 {
+	if x != nil {
+		return x.VariationId
+	}
+	return 0
+}
+
+func (x *UpdateItemVariationRequest) GetValue() map[string]string {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
+func (x *UpdateItemVariationRequest) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *UpdateItemVariationRequest) GetDefaultPrice() string {
+	if x != nil {
+		return x.DefaultPrice
+	}
+	return ""
+}
+
+type UpdateItemVariationResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Variation     *ItemVariation         `protobuf:"bytes,2,opt,name=variation,proto3" json:"variation,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateItemVariationResponse) Reset() {
+	*x = UpdateItemVariationResponse{}
+	mi := &file_v1_booking_item_variation_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateItemVariationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateItemVariationResponse) ProtoMessage() {}
+
+func (x *UpdateItemVariationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_item_variation_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateItemVariationResponse.ProtoReflect.Descriptor instead.
+func (*UpdateItemVariationResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_item_variation_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateItemVariationResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateItemVariationResponse) GetVariation() *ItemVariation {
+	if x != nil {
+		return x.Variation
+	}
+	return nil
+}
+
+func (x *UpdateItemVariationResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *UpdateItemVariationResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_item_variation_proto protoreflect.FileDescriptor
 
 const file_v1_booking_item_variation_proto_rawDesc = "" +
@@ -256,6 +528,36 @@ const file_v1_booking_item_variation_proto_rawDesc = "" +
 	"variations\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xfc\x01\n" +
+	"\x1aCreateItemVariationRequest\x12\x17\n" +
+	"\aitem_id\x18\x01 \x01(\x03R\x06itemId\x12N\n" +
+	"\x05value\x18\x02 \x03(\v28.riptik.booking.v1.CreateItemVariationRequest.ValueEntryR\x05value\x12\x16\n" +
+	"\x06active\x18\x03 \x01(\bR\x06active\x12#\n" +
+	"\rdefault_price\x18\x04 \x01(\tR\fdefaultPrice\x1a8\n" +
+	"\n" +
+	"ValueEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbb\x01\n" +
+	"\x1bCreateItemVariationResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
+	"\tvariation\x18\x02 \x01(\v2 .riptik.booking.v1.ItemVariationR\tvariation\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x86\x02\n" +
+	"\x1aUpdateItemVariationRequest\x12!\n" +
+	"\fvariation_id\x18\x01 \x01(\x03R\vvariationId\x12N\n" +
+	"\x05value\x18\x02 \x03(\v28.riptik.booking.v1.UpdateItemVariationRequest.ValueEntryR\x05value\x12\x16\n" +
+	"\x06active\x18\x03 \x01(\bR\x06active\x12#\n" +
+	"\rdefault_price\x18\x04 \x01(\tR\fdefaultPrice\x1a8\n" +
+	"\n" +
+	"ValueEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbb\x01\n" +
+	"\x1bUpdateItemVariationResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12>\n" +
+	"\tvariation\x18\x02 \x01(\v2 .riptik.booking.v1.ItemVariationR\tvariation\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
@@ -270,21 +572,31 @@ func file_v1_booking_item_variation_proto_rawDescGZIP() []byte {
 	return file_v1_booking_item_variation_proto_rawDescData
 }
 
-var file_v1_booking_item_variation_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_v1_booking_item_variation_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_v1_booking_item_variation_proto_goTypes = []any{
-	(*ItemVariation)(nil),              // 0: riptik.booking.v1.ItemVariation
-	(*ListItemVariationsRequest)(nil),  // 1: riptik.booking.v1.ListItemVariationsRequest
-	(*ListItemVariationsResponse)(nil), // 2: riptik.booking.v1.ListItemVariationsResponse
-	nil,                                // 3: riptik.booking.v1.ItemVariation.ValueEntry
+	(*ItemVariation)(nil),               // 0: riptik.booking.v1.ItemVariation
+	(*ListItemVariationsRequest)(nil),   // 1: riptik.booking.v1.ListItemVariationsRequest
+	(*ListItemVariationsResponse)(nil),  // 2: riptik.booking.v1.ListItemVariationsResponse
+	(*CreateItemVariationRequest)(nil),  // 3: riptik.booking.v1.CreateItemVariationRequest
+	(*CreateItemVariationResponse)(nil), // 4: riptik.booking.v1.CreateItemVariationResponse
+	(*UpdateItemVariationRequest)(nil),  // 5: riptik.booking.v1.UpdateItemVariationRequest
+	(*UpdateItemVariationResponse)(nil), // 6: riptik.booking.v1.UpdateItemVariationResponse
+	nil,                                 // 7: riptik.booking.v1.ItemVariation.ValueEntry
+	nil,                                 // 8: riptik.booking.v1.CreateItemVariationRequest.ValueEntry
+	nil,                                 // 9: riptik.booking.v1.UpdateItemVariationRequest.ValueEntry
 }
 var file_v1_booking_item_variation_proto_depIdxs = []int32{
-	3, // 0: riptik.booking.v1.ItemVariation.value:type_name -> riptik.booking.v1.ItemVariation.ValueEntry
+	7, // 0: riptik.booking.v1.ItemVariation.value:type_name -> riptik.booking.v1.ItemVariation.ValueEntry
 	0, // 1: riptik.booking.v1.ListItemVariationsResponse.variations:type_name -> riptik.booking.v1.ItemVariation
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	8, // 2: riptik.booking.v1.CreateItemVariationRequest.value:type_name -> riptik.booking.v1.CreateItemVariationRequest.ValueEntry
+	0, // 3: riptik.booking.v1.CreateItemVariationResponse.variation:type_name -> riptik.booking.v1.ItemVariation
+	9, // 4: riptik.booking.v1.UpdateItemVariationRequest.value:type_name -> riptik.booking.v1.UpdateItemVariationRequest.ValueEntry
+	0, // 5: riptik.booking.v1.UpdateItemVariationResponse.variation:type_name -> riptik.booking.v1.ItemVariation
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_item_variation_proto_init() }
@@ -298,7 +610,7 @@ func file_v1_booking_item_variation_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_item_variation_proto_rawDesc), len(file_v1_booking_item_variation_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
