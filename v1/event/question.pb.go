@@ -615,8 +615,29 @@ type CreateQuestionRequest struct {
 	Required      bool                           `protobuf:"varint,7,opt,name=required,proto3" json:"required,omitempty"`
 	Items         []int64                        `protobuf:"varint,8,rep,packed,name=items,proto3" json:"items,omitempty"`
 	Options       []*CreateQuestionOptionRequest `protobuf:"bytes,9,rep,name=options,proto3" json:"options,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Field bên dưới trước đây KHÔNG có đường ghi nào (model event-service đã có, chỉ đọc được qua
+	// Question ở trên) — bổ sung cho tính năng import YAML (mantik-export-import-yaml.md).
+	HelpTextEn        string `protobuf:"bytes,10,opt,name=help_text_en,json=helpTextEn,proto3" json:"help_text_en,omitempty"`
+	HelpTextVi        string `protobuf:"bytes,11,opt,name=help_text_vi,json=helpTextVi,proto3" json:"help_text_vi,omitempty"`
+	Hidden            bool   `protobuf:"varint,12,opt,name=hidden,proto3" json:"hidden,omitempty"`
+	PrintOnInvoice    bool   `protobuf:"varint,13,opt,name=print_on_invoice,json=printOnInvoice,proto3" json:"print_on_invoice,omitempty"`
+	AskDuringCheckin  bool   `protobuf:"varint,14,opt,name=ask_during_checkin,json=askDuringCheckin,proto3" json:"ask_during_checkin,omitempty"`
+	ShowDuringCheckin bool   `protobuf:"varint,15,opt,name=show_during_checkin,json=showDuringCheckin,proto3" json:"show_during_checkin,omitempty"`
+	// dependency_question_id — 0 = không phụ thuộc. Caller (bo-gateway import) tự resolve từ
+	// dependency_question_ref (identifier) sang ID số TRƯỚC khi gọi, vì lúc create phải theo đúng thứ tự
+	// phụ thuộc (câu hỏi đích phải đã tồn tại).
+	DependencyQuestionId int64    `protobuf:"varint,16,opt,name=dependency_question_id,json=dependencyQuestionId,proto3" json:"dependency_question_id,omitempty"`
+	DependencyValues     []string `protobuf:"bytes,17,rep,name=dependency_values,json=dependencyValues,proto3" json:"dependency_values,omitempty"`
+	ValidNumberMin       *float64 `protobuf:"fixed64,18,opt,name=valid_number_min,json=validNumberMin,proto3,oneof" json:"valid_number_min,omitempty"`
+	ValidNumberMax       *float64 `protobuf:"fixed64,19,opt,name=valid_number_max,json=validNumberMax,proto3,oneof" json:"valid_number_max,omitempty"`
+	ValidDateMin         string   `protobuf:"bytes,20,opt,name=valid_date_min,json=validDateMin,proto3" json:"valid_date_min,omitempty"`
+	ValidDateMax         string   `protobuf:"bytes,21,opt,name=valid_date_max,json=validDateMax,proto3" json:"valid_date_max,omitempty"`
+	ValidDatetimeMin     string   `protobuf:"bytes,22,opt,name=valid_datetime_min,json=validDatetimeMin,proto3" json:"valid_datetime_min,omitempty"`
+	ValidDatetimeMax     string   `protobuf:"bytes,23,opt,name=valid_datetime_max,json=validDatetimeMax,proto3" json:"valid_datetime_max,omitempty"`
+	ValidStringLengthMax *int32   `protobuf:"varint,24,opt,name=valid_string_length_max,json=validStringLengthMax,proto3,oneof" json:"valid_string_length_max,omitempty"`
+	ValidFilePortrait    bool     `protobuf:"varint,25,opt,name=valid_file_portrait,json=validFilePortrait,proto3" json:"valid_file_portrait,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *CreateQuestionRequest) Reset() {
@@ -712,11 +733,126 @@ func (x *CreateQuestionRequest) GetOptions() []*CreateQuestionOptionRequest {
 	return nil
 }
 
+func (x *CreateQuestionRequest) GetHelpTextEn() string {
+	if x != nil {
+		return x.HelpTextEn
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetHelpTextVi() string {
+	if x != nil {
+		return x.HelpTextVi
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetHidden() bool {
+	if x != nil {
+		return x.Hidden
+	}
+	return false
+}
+
+func (x *CreateQuestionRequest) GetPrintOnInvoice() bool {
+	if x != nil {
+		return x.PrintOnInvoice
+	}
+	return false
+}
+
+func (x *CreateQuestionRequest) GetAskDuringCheckin() bool {
+	if x != nil {
+		return x.AskDuringCheckin
+	}
+	return false
+}
+
+func (x *CreateQuestionRequest) GetShowDuringCheckin() bool {
+	if x != nil {
+		return x.ShowDuringCheckin
+	}
+	return false
+}
+
+func (x *CreateQuestionRequest) GetDependencyQuestionId() int64 {
+	if x != nil {
+		return x.DependencyQuestionId
+	}
+	return 0
+}
+
+func (x *CreateQuestionRequest) GetDependencyValues() []string {
+	if x != nil {
+		return x.DependencyValues
+	}
+	return nil
+}
+
+func (x *CreateQuestionRequest) GetValidNumberMin() float64 {
+	if x != nil && x.ValidNumberMin != nil {
+		return *x.ValidNumberMin
+	}
+	return 0
+}
+
+func (x *CreateQuestionRequest) GetValidNumberMax() float64 {
+	if x != nil && x.ValidNumberMax != nil {
+		return *x.ValidNumberMax
+	}
+	return 0
+}
+
+func (x *CreateQuestionRequest) GetValidDateMin() string {
+	if x != nil {
+		return x.ValidDateMin
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetValidDateMax() string {
+	if x != nil {
+		return x.ValidDateMax
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetValidDatetimeMin() string {
+	if x != nil {
+		return x.ValidDatetimeMin
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetValidDatetimeMax() string {
+	if x != nil {
+		return x.ValidDatetimeMax
+	}
+	return ""
+}
+
+func (x *CreateQuestionRequest) GetValidStringLengthMax() int32 {
+	if x != nil && x.ValidStringLengthMax != nil {
+		return *x.ValidStringLengthMax
+	}
+	return 0
+}
+
+func (x *CreateQuestionRequest) GetValidFilePortrait() bool {
+	if x != nil {
+		return x.ValidFilePortrait
+	}
+	return false
+}
+
 type CreateQuestionOptionRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	AnswerEn      string                 `protobuf:"bytes,1,opt,name=answer_en,json=answerEn,proto3" json:"answer_en,omitempty"`
-	AnswerVi      string                 `protobuf:"bytes,2,opt,name=answer_vi,json=answerVi,proto3" json:"answer_vi,omitempty"`
-	Position      int32                  `protobuf:"varint,3,opt,name=position,proto3" json:"position,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	AnswerEn string                 `protobuf:"bytes,1,opt,name=answer_en,json=answerEn,proto3" json:"answer_en,omitempty"`
+	AnswerVi string                 `protobuf:"bytes,2,opt,name=answer_vi,json=answerVi,proto3" json:"answer_vi,omitempty"`
+	Position int32                  `protobuf:"varint,3,opt,name=position,proto3" json:"position,omitempty"`
+	// identifier — model đã có sẵn (QuestionOption.Identifier, unique/not-null) nhưng trước đây Create
+	// luôn bỏ trắng. Cần cho import YAML giữ đúng identifier đã export.
+	Identifier    string `protobuf:"bytes,4,opt,name=identifier,proto3" json:"identifier,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -772,6 +908,13 @@ func (x *CreateQuestionOptionRequest) GetPosition() int32 {
 	return 0
 }
 
+func (x *CreateQuestionOptionRequest) GetIdentifier() string {
+	if x != nil {
+		return x.Identifier
+	}
+	return ""
+}
+
 type UpdateQuestionRequest struct {
 	state         protoimpl.MessageState         `protogen:"open.v1"`
 	OrganizerSlug string                         `protobuf:"bytes,1,opt,name=organizer_slug,json=organizerSlug,proto3" json:"organizer_slug,omitempty"`
@@ -782,8 +925,25 @@ type UpdateQuestionRequest struct {
 	Required      bool                           `protobuf:"varint,6,opt,name=required,proto3" json:"required,omitempty"`
 	Items         []int64                        `protobuf:"varint,7,rep,packed,name=items,proto3" json:"items,omitempty"`
 	Options       []*UpdateQuestionOptionRequest `protobuf:"bytes,8,rep,name=options,proto3" json:"options,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Field bên dưới — cùng lý do như CreateQuestionRequest (xem comment ở đó).
+	HelpTextEn           string   `protobuf:"bytes,9,opt,name=help_text_en,json=helpTextEn,proto3" json:"help_text_en,omitempty"`
+	HelpTextVi           string   `protobuf:"bytes,10,opt,name=help_text_vi,json=helpTextVi,proto3" json:"help_text_vi,omitempty"`
+	Hidden               bool     `protobuf:"varint,11,opt,name=hidden,proto3" json:"hidden,omitempty"`
+	PrintOnInvoice       bool     `protobuf:"varint,12,opt,name=print_on_invoice,json=printOnInvoice,proto3" json:"print_on_invoice,omitempty"`
+	AskDuringCheckin     bool     `protobuf:"varint,13,opt,name=ask_during_checkin,json=askDuringCheckin,proto3" json:"ask_during_checkin,omitempty"`
+	ShowDuringCheckin    bool     `protobuf:"varint,14,opt,name=show_during_checkin,json=showDuringCheckin,proto3" json:"show_during_checkin,omitempty"`
+	DependencyQuestionId int64    `protobuf:"varint,15,opt,name=dependency_question_id,json=dependencyQuestionId,proto3" json:"dependency_question_id,omitempty"`
+	DependencyValues     []string `protobuf:"bytes,16,rep,name=dependency_values,json=dependencyValues,proto3" json:"dependency_values,omitempty"`
+	ValidNumberMin       *float64 `protobuf:"fixed64,17,opt,name=valid_number_min,json=validNumberMin,proto3,oneof" json:"valid_number_min,omitempty"`
+	ValidNumberMax       *float64 `protobuf:"fixed64,18,opt,name=valid_number_max,json=validNumberMax,proto3,oneof" json:"valid_number_max,omitempty"`
+	ValidDateMin         string   `protobuf:"bytes,19,opt,name=valid_date_min,json=validDateMin,proto3" json:"valid_date_min,omitempty"`
+	ValidDateMax         string   `protobuf:"bytes,20,opt,name=valid_date_max,json=validDateMax,proto3" json:"valid_date_max,omitempty"`
+	ValidDatetimeMin     string   `protobuf:"bytes,21,opt,name=valid_datetime_min,json=validDatetimeMin,proto3" json:"valid_datetime_min,omitempty"`
+	ValidDatetimeMax     string   `protobuf:"bytes,22,opt,name=valid_datetime_max,json=validDatetimeMax,proto3" json:"valid_datetime_max,omitempty"`
+	ValidStringLengthMax *int32   `protobuf:"varint,23,opt,name=valid_string_length_max,json=validStringLengthMax,proto3,oneof" json:"valid_string_length_max,omitempty"`
+	ValidFilePortrait    bool     `protobuf:"varint,24,opt,name=valid_file_portrait,json=validFilePortrait,proto3" json:"valid_file_portrait,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *UpdateQuestionRequest) Reset() {
@@ -872,12 +1032,127 @@ func (x *UpdateQuestionRequest) GetOptions() []*UpdateQuestionOptionRequest {
 	return nil
 }
 
+func (x *UpdateQuestionRequest) GetHelpTextEn() string {
+	if x != nil {
+		return x.HelpTextEn
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetHelpTextVi() string {
+	if x != nil {
+		return x.HelpTextVi
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetHidden() bool {
+	if x != nil {
+		return x.Hidden
+	}
+	return false
+}
+
+func (x *UpdateQuestionRequest) GetPrintOnInvoice() bool {
+	if x != nil {
+		return x.PrintOnInvoice
+	}
+	return false
+}
+
+func (x *UpdateQuestionRequest) GetAskDuringCheckin() bool {
+	if x != nil {
+		return x.AskDuringCheckin
+	}
+	return false
+}
+
+func (x *UpdateQuestionRequest) GetShowDuringCheckin() bool {
+	if x != nil {
+		return x.ShowDuringCheckin
+	}
+	return false
+}
+
+func (x *UpdateQuestionRequest) GetDependencyQuestionId() int64 {
+	if x != nil {
+		return x.DependencyQuestionId
+	}
+	return 0
+}
+
+func (x *UpdateQuestionRequest) GetDependencyValues() []string {
+	if x != nil {
+		return x.DependencyValues
+	}
+	return nil
+}
+
+func (x *UpdateQuestionRequest) GetValidNumberMin() float64 {
+	if x != nil && x.ValidNumberMin != nil {
+		return *x.ValidNumberMin
+	}
+	return 0
+}
+
+func (x *UpdateQuestionRequest) GetValidNumberMax() float64 {
+	if x != nil && x.ValidNumberMax != nil {
+		return *x.ValidNumberMax
+	}
+	return 0
+}
+
+func (x *UpdateQuestionRequest) GetValidDateMin() string {
+	if x != nil {
+		return x.ValidDateMin
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetValidDateMax() string {
+	if x != nil {
+		return x.ValidDateMax
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetValidDatetimeMin() string {
+	if x != nil {
+		return x.ValidDatetimeMin
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetValidDatetimeMax() string {
+	if x != nil {
+		return x.ValidDatetimeMax
+	}
+	return ""
+}
+
+func (x *UpdateQuestionRequest) GetValidStringLengthMax() int32 {
+	if x != nil && x.ValidStringLengthMax != nil {
+		return *x.ValidStringLengthMax
+	}
+	return 0
+}
+
+func (x *UpdateQuestionRequest) GetValidFilePortrait() bool {
+	if x != nil {
+		return x.ValidFilePortrait
+	}
+	return false
+}
+
 type UpdateQuestionOptionRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	AnswerEn      string                 `protobuf:"bytes,2,opt,name=answer_en,json=answerEn,proto3" json:"answer_en,omitempty"`
-	AnswerVi      string                 `protobuf:"bytes,3,opt,name=answer_vi,json=answerVi,proto3" json:"answer_vi,omitempty"`
-	Position      int32                  `protobuf:"varint,4,opt,name=position,proto3" json:"position,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Id       int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	AnswerEn string                 `protobuf:"bytes,2,opt,name=answer_en,json=answerEn,proto3" json:"answer_en,omitempty"`
+	AnswerVi string                 `protobuf:"bytes,3,opt,name=answer_vi,json=answerVi,proto3" json:"answer_vi,omitempty"`
+	Position int32                  `protobuf:"varint,4,opt,name=position,proto3" json:"position,omitempty"`
+	// identifier — cùng lý do CreateQuestionOptionRequest.identifier. Rỗng = giữ nguyên identifier hiện
+	// có (không ghi đè), khớp quy ước "Id rỗng = tạo mới" vốn đã dùng cho field Id ở message này.
+	Identifier    string `protobuf:"bytes,5,opt,name=identifier,proto3" json:"identifier,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -938,6 +1213,13 @@ func (x *UpdateQuestionOptionRequest) GetPosition() int32 {
 		return x.Position
 	}
 	return 0
+}
+
+func (x *UpdateQuestionOptionRequest) GetIdentifier() string {
+	if x != nil {
+		return x.Identifier
+	}
+	return ""
 }
 
 type DeleteQuestionRequest struct {
@@ -1896,7 +2178,7 @@ const file_v1_event_question_proto_rawDesc = "" +
 	"\n" +
 	"event_slug\x18\x02 \x01(\tR\teventSlug\x12\x1f\n" +
 	"\vquestion_id\x18\x03 \x01(\x03R\n" +
-	"questionId\"\xec\x02\n" +
+	"questionId\"\xeb\b\n" +
 	"\x15CreateQuestionRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1d\n" +
 	"\n" +
@@ -1911,11 +2193,36 @@ const file_v1_event_question_proto_rawDesc = "" +
 	"\x04type\x18\x06 \x01(\x0e2\x1d.riptik.event.v1.QuestionTypeR\x04type\x12\x1a\n" +
 	"\brequired\x18\a \x01(\bR\brequired\x12\x14\n" +
 	"\x05items\x18\b \x03(\x03R\x05items\x12F\n" +
-	"\aoptions\x18\t \x03(\v2,.riptik.event.v1.CreateQuestionOptionRequestR\aoptions\"s\n" +
+	"\aoptions\x18\t \x03(\v2,.riptik.event.v1.CreateQuestionOptionRequestR\aoptions\x12 \n" +
+	"\fhelp_text_en\x18\n" +
+	" \x01(\tR\n" +
+	"helpTextEn\x12 \n" +
+	"\fhelp_text_vi\x18\v \x01(\tR\n" +
+	"helpTextVi\x12\x16\n" +
+	"\x06hidden\x18\f \x01(\bR\x06hidden\x12(\n" +
+	"\x10print_on_invoice\x18\r \x01(\bR\x0eprintOnInvoice\x12,\n" +
+	"\x12ask_during_checkin\x18\x0e \x01(\bR\x10askDuringCheckin\x12.\n" +
+	"\x13show_during_checkin\x18\x0f \x01(\bR\x11showDuringCheckin\x124\n" +
+	"\x16dependency_question_id\x18\x10 \x01(\x03R\x14dependencyQuestionId\x12+\n" +
+	"\x11dependency_values\x18\x11 \x03(\tR\x10dependencyValues\x12-\n" +
+	"\x10valid_number_min\x18\x12 \x01(\x01H\x00R\x0evalidNumberMin\x88\x01\x01\x12-\n" +
+	"\x10valid_number_max\x18\x13 \x01(\x01H\x01R\x0evalidNumberMax\x88\x01\x01\x12$\n" +
+	"\x0evalid_date_min\x18\x14 \x01(\tR\fvalidDateMin\x12$\n" +
+	"\x0evalid_date_max\x18\x15 \x01(\tR\fvalidDateMax\x12,\n" +
+	"\x12valid_datetime_min\x18\x16 \x01(\tR\x10validDatetimeMin\x12,\n" +
+	"\x12valid_datetime_max\x18\x17 \x01(\tR\x10validDatetimeMax\x12:\n" +
+	"\x17valid_string_length_max\x18\x18 \x01(\x05H\x02R\x14validStringLengthMax\x88\x01\x01\x12.\n" +
+	"\x13valid_file_portrait\x18\x19 \x01(\bR\x11validFilePortraitB\x13\n" +
+	"\x11_valid_number_minB\x13\n" +
+	"\x11_valid_number_maxB\x1a\n" +
+	"\x18_valid_string_length_max\"\x93\x01\n" +
 	"\x1bCreateQuestionOptionRequest\x12\x1b\n" +
 	"\tanswer_en\x18\x01 \x01(\tR\banswerEn\x12\x1b\n" +
 	"\tanswer_vi\x18\x02 \x01(\tR\banswerVi\x12\x1a\n" +
-	"\bposition\x18\x03 \x01(\x05R\bposition\"\xba\x02\n" +
+	"\bposition\x18\x03 \x01(\x05R\bposition\x12\x1e\n" +
+	"\n" +
+	"identifier\x18\x04 \x01(\tR\n" +
+	"identifier\"\xb9\b\n" +
 	"\x15UpdateQuestionRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1d\n" +
 	"\n" +
@@ -1928,12 +2235,37 @@ const file_v1_event_question_proto_rawDesc = "" +
 	"questionVi\x12\x1a\n" +
 	"\brequired\x18\x06 \x01(\bR\brequired\x12\x14\n" +
 	"\x05items\x18\a \x03(\x03R\x05items\x12F\n" +
-	"\aoptions\x18\b \x03(\v2,.riptik.event.v1.UpdateQuestionOptionRequestR\aoptions\"\x83\x01\n" +
+	"\aoptions\x18\b \x03(\v2,.riptik.event.v1.UpdateQuestionOptionRequestR\aoptions\x12 \n" +
+	"\fhelp_text_en\x18\t \x01(\tR\n" +
+	"helpTextEn\x12 \n" +
+	"\fhelp_text_vi\x18\n" +
+	" \x01(\tR\n" +
+	"helpTextVi\x12\x16\n" +
+	"\x06hidden\x18\v \x01(\bR\x06hidden\x12(\n" +
+	"\x10print_on_invoice\x18\f \x01(\bR\x0eprintOnInvoice\x12,\n" +
+	"\x12ask_during_checkin\x18\r \x01(\bR\x10askDuringCheckin\x12.\n" +
+	"\x13show_during_checkin\x18\x0e \x01(\bR\x11showDuringCheckin\x124\n" +
+	"\x16dependency_question_id\x18\x0f \x01(\x03R\x14dependencyQuestionId\x12+\n" +
+	"\x11dependency_values\x18\x10 \x03(\tR\x10dependencyValues\x12-\n" +
+	"\x10valid_number_min\x18\x11 \x01(\x01H\x00R\x0evalidNumberMin\x88\x01\x01\x12-\n" +
+	"\x10valid_number_max\x18\x12 \x01(\x01H\x01R\x0evalidNumberMax\x88\x01\x01\x12$\n" +
+	"\x0evalid_date_min\x18\x13 \x01(\tR\fvalidDateMin\x12$\n" +
+	"\x0evalid_date_max\x18\x14 \x01(\tR\fvalidDateMax\x12,\n" +
+	"\x12valid_datetime_min\x18\x15 \x01(\tR\x10validDatetimeMin\x12,\n" +
+	"\x12valid_datetime_max\x18\x16 \x01(\tR\x10validDatetimeMax\x12:\n" +
+	"\x17valid_string_length_max\x18\x17 \x01(\x05H\x02R\x14validStringLengthMax\x88\x01\x01\x12.\n" +
+	"\x13valid_file_portrait\x18\x18 \x01(\bR\x11validFilePortraitB\x13\n" +
+	"\x11_valid_number_minB\x13\n" +
+	"\x11_valid_number_maxB\x1a\n" +
+	"\x18_valid_string_length_max\"\xa3\x01\n" +
 	"\x1bUpdateQuestionOptionRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1b\n" +
 	"\tanswer_en\x18\x02 \x01(\tR\banswerEn\x12\x1b\n" +
 	"\tanswer_vi\x18\x03 \x01(\tR\banswerVi\x12\x1a\n" +
-	"\bposition\x18\x04 \x01(\x05R\bposition\"~\n" +
+	"\bposition\x18\x04 \x01(\x05R\bposition\x12\x1e\n" +
+	"\n" +
+	"identifier\x18\x05 \x01(\tR\n" +
+	"identifier\"~\n" +
 	"\x15DeleteQuestionRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1d\n" +
 	"\n" +
@@ -2110,6 +2442,8 @@ func file_v1_event_question_proto_init() {
 		return
 	}
 	file_v1_event_question_proto_msgTypes[1].OneofWrappers = []any{}
+	file_v1_event_question_proto_msgTypes[5].OneofWrappers = []any{}
+	file_v1_event_question_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
