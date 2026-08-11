@@ -23,7 +23,10 @@ const (
 
 // Domain model: Item
 type Item struct {
-	state               protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Pretix "personalized" thấy attendee_name/attendee_email đã tồn tại độc lập ở
+	// order_position, không cần qua field này; giữ số 13 reserved tránh field mới sau này
+	// vô tình tái dùng và bị hiểu nhầm dữ liệu cũ trên wire).
 	Id                  int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	EventId             int64                  `protobuf:"varint,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	Name                map[string]string      `protobuf:"bytes,3,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`               // i18n item name
@@ -36,7 +39,6 @@ type Item struct {
 	TaxRate             string                 `protobuf:"bytes,10,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`                                                                   // Tax rate as decimal string
 	TaxRule             string                 `protobuf:"bytes,11,opt,name=tax_rule,json=taxRule,proto3" json:"tax_rule,omitempty"`                                                                   // Tax rule
 	AdmissionFee        bool                   `protobuf:"varint,12,opt,name=admission_fee,json=admissionFee,proto3" json:"admission_fee,omitempty"`                                                   // Is admission fee
-	Personalization     bool                   `protobuf:"varint,13,opt,name=personalization,proto3" json:"personalization,omitempty"`                                                                 // Allow personalization
 	GenerateTickets     bool                   `protobuf:"varint,14,opt,name=generate_tickets,json=generateTickets,proto3" json:"generate_tickets,omitempty"`                                          // Generate tickets
 	AvailableFrom       string                 `protobuf:"bytes,15,opt,name=available_from,json=availableFrom,proto3" json:"available_from,omitempty"`                                                 // ISO datetime
 	AvailableUntil      string                 `protobuf:"bytes,16,opt,name=available_until,json=availableUntil,proto3" json:"available_until,omitempty"`                                              // ISO datetime
@@ -167,13 +169,6 @@ func (x *Item) GetTaxRule() string {
 func (x *Item) GetAdmissionFee() bool {
 	if x != nil {
 		return x.AdmissionFee
-	}
-	return false
-}
-
-func (x *Item) GetPersonalization() bool {
-	if x != nil {
-		return x.Personalization
 	}
 	return false
 }
@@ -590,7 +585,6 @@ type CreateItemRequest struct {
 	TaxRate            string                 `protobuf:"bytes,10,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`                                                                   // Tax rate as decimal string
 	TaxRule            string                 `protobuf:"bytes,11,opt,name=tax_rule,json=taxRule,proto3" json:"tax_rule,omitempty"`                                                                   // Tax rule
 	AdmissionFee       bool                   `protobuf:"varint,12,opt,name=admission_fee,json=admissionFee,proto3" json:"admission_fee,omitempty"`                                                   // Is admission fee
-	Personalization    bool                   `protobuf:"varint,13,opt,name=personalization,proto3" json:"personalization,omitempty"`                                                                 // Allow personalization
 	GenerateTickets    bool                   `protobuf:"varint,14,opt,name=generate_tickets,json=generateTickets,proto3" json:"generate_tickets,omitempty"`                                          // Generate tickets
 	AvailableFrom      string                 `protobuf:"bytes,15,opt,name=available_from,json=availableFrom,proto3" json:"available_from,omitempty"`                                                 // ISO datetime
 	AvailableUntil     string                 `protobuf:"bytes,16,opt,name=available_until,json=availableUntil,proto3" json:"available_until,omitempty"`                                              // ISO datetime
@@ -724,13 +718,6 @@ func (x *CreateItemRequest) GetAdmissionFee() bool {
 	return false
 }
 
-func (x *CreateItemRequest) GetPersonalization() bool {
-	if x != nil {
-		return x.Personalization
-	}
-	return false
-}
-
 func (x *CreateItemRequest) GetGenerateTickets() bool {
 	if x != nil {
 		return x.GenerateTickets
@@ -833,7 +820,6 @@ type UpdateItemRequest struct {
 	// optional — 0 là giá trị hợp lệ có ý nghĩa ("không giới hạn"), khác "không gửi field" (giữ nguyên).
 	MinPerOrder     *int32 `protobuf:"varint,19,opt,name=min_per_order,json=minPerOrder,proto3,oneof" json:"min_per_order,omitempty"`
 	MaxPerOrder     *int32 `protobuf:"varint,20,opt,name=max_per_order,json=maxPerOrder,proto3,oneof" json:"max_per_order,omitempty"`
-	Personalization bool   `protobuf:"varint,21,opt,name=personalization,proto3" json:"personalization,omitempty"`                        // Allow personalization
 	GenerateTickets bool   `protobuf:"varint,22,opt,name=generate_tickets,json=generateTickets,proto3" json:"generate_tickets,omitempty"` // Generate tickets
 	Picture         string `protobuf:"bytes,23,opt,name=picture,proto3" json:"picture,omitempty"`                                         // Picture URL
 	// position dùng optional (KHÔNG như Create) — Update phải phân biệt "không gửi field" (giữ nguyên vị
@@ -1013,13 +999,6 @@ func (x *UpdateItemRequest) GetMaxPerOrder() int32 {
 		return *x.MaxPerOrder
 	}
 	return 0
-}
-
-func (x *UpdateItemRequest) GetPersonalization() bool {
-	if x != nil {
-		return x.Personalization
-	}
-	return false
 }
 
 func (x *UpdateItemRequest) GetGenerateTickets() bool {
@@ -1887,7 +1866,7 @@ var File_v1_event_item_proto protoreflect.FileDescriptor
 
 const file_v1_event_item_proto_rawDesc = "" +
 	"\n" +
-	"\x13v1/event/item.proto\x12\x0friptik.event.v1\"\xdb\t\n" +
+	"\x13v1/event/item.proto\x12\x0friptik.event.v1\"\xb7\t\n" +
 	"\x04Item\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\bevent_id\x18\x02 \x01(\x03R\aeventId\x123\n" +
@@ -1902,8 +1881,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\btax_rate\x18\n" +
 	" \x01(\tR\ataxRate\x12\x19\n" +
 	"\btax_rule\x18\v \x01(\tR\ataxRule\x12#\n" +
-	"\radmission_fee\x18\f \x01(\bR\fadmissionFee\x12(\n" +
-	"\x0fpersonalization\x18\r \x01(\bR\x0fpersonalization\x12)\n" +
+	"\radmission_fee\x18\f \x01(\bR\fadmissionFee\x12)\n" +
 	"\x10generate_tickets\x18\x0e \x01(\bR\x0fgenerateTickets\x12%\n" +
 	"\x0eavailable_from\x18\x0f \x01(\tR\ravailableFrom\x12'\n" +
 	"\x0favailable_until\x18\x10 \x01(\tR\x0eavailableUntil\x12'\n" +
@@ -1925,7 +1903,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x9c\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\x9c\x02\n" +
 	"\x15ThirdPartyProductInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12!\n" +
@@ -1954,7 +1932,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x0eGetItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
-	"\aitem_id\x18\x03 \x01(\x03R\x06itemId\"\x99\b\n" +
+	"\aitem_id\x18\x03 \x01(\x03R\x06itemId\"\xf5\a\n" +
 	"\x11CreateItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12@\n" +
@@ -1969,8 +1947,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\btax_rate\x18\n" +
 	" \x01(\tR\ataxRate\x12\x19\n" +
 	"\btax_rule\x18\v \x01(\tR\ataxRule\x12#\n" +
-	"\radmission_fee\x18\f \x01(\bR\fadmissionFee\x12(\n" +
-	"\x0fpersonalization\x18\r \x01(\bR\x0fpersonalization\x12)\n" +
+	"\radmission_fee\x18\f \x01(\bR\fadmissionFee\x12)\n" +
 	"\x10generate_tickets\x18\x0e \x01(\bR\x0fgenerateTickets\x12%\n" +
 	"\x0eavailable_from\x18\x0f \x01(\tR\ravailableFrom\x12'\n" +
 	"\x0favailable_until\x18\x10 \x01(\tR\x0eavailableUntil\x12'\n" +
@@ -1987,7 +1964,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb5\t\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\x91\t\n" +
 	"\x11UpdateItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -2010,8 +1987,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x14hide_without_voucher\x18\x11 \x01(\bR\x12hideWithoutVoucher\x12!\n" +
 	"\fallow_cancel\x18\x12 \x01(\bR\vallowCancel\x12'\n" +
 	"\rmin_per_order\x18\x13 \x01(\x05H\x03R\vminPerOrder\x88\x01\x01\x12'\n" +
-	"\rmax_per_order\x18\x14 \x01(\x05H\x04R\vmaxPerOrder\x88\x01\x01\x12(\n" +
-	"\x0fpersonalization\x18\x15 \x01(\bR\x0fpersonalization\x12)\n" +
+	"\rmax_per_order\x18\x14 \x01(\x05H\x04R\vmaxPerOrder\x88\x01\x01\x12)\n" +
 	"\x10generate_tickets\x18\x16 \x01(\bR\x0fgenerateTickets\x12\x18\n" +
 	"\apicture\x18\x17 \x01(\tR\apicture\x12\x1f\n" +
 	"\bposition\x18\x18 \x01(\x05H\x05R\bposition\x88\x01\x01\x12%\n" +
@@ -2027,7 +2003,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x10_available_untilB\x10\n" +
 	"\x0e_min_per_orderB\x10\n" +
 	"\x0e_max_per_orderB\v\n" +
-	"\t_position\"`\n" +
+	"\t_positionJ\x04\b\x15\x10\x16\"`\n" +
 	"\x11DeleteItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
