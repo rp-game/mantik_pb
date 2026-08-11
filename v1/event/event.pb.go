@@ -1562,7 +1562,7 @@ type UpdateEventRequest struct {
 	TestMode      bool                   `protobuf:"varint,10,opt,name=test_mode,json=testMode,proto3" json:"test_mode,omitempty"`
 	Location      map[string]*any1.Any   `protobuf:"bytes,11,rep,name=location,proto3" json:"location,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Settings      map[string]*any1.Any   `protobuf:"bytes,12,rep,name=settings,proto3" json:"settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	EventType     string                 `protobuf:"bytes,13,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"` // G9-28 — xem Event.event_type
+	EventType     *string                `protobuf:"bytes,13,opt,name=event_type,json=eventType,proto3,oneof" json:"event_type,omitempty"` // G9-28 — optional để phân biệt "không đổi" vs "user xoá về
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1682,8 +1682,8 @@ func (x *UpdateEventRequest) GetSettings() map[string]*any1.Any {
 }
 
 func (x *UpdateEventRequest) GetEventType() string {
-	if x != nil {
-		return x.EventType
+	if x != nil && x.EventType != nil {
+		return *x.EventType
 	}
 	return ""
 }
@@ -4904,7 +4904,7 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xbe\x05\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xd2\x05\n" +
 	"\x12UpdateEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -4918,15 +4918,16 @@ const file_v1_event_event_proto_rawDesc = "" +
 	"\ttest_mode\x18\n" +
 	" \x01(\bR\btestMode\x12M\n" +
 	"\blocation\x18\v \x03(\v21.riptik.event.v1.UpdateEventRequest.LocationEntryR\blocation\x12M\n" +
-	"\bsettings\x18\f \x03(\v21.riptik.event.v1.UpdateEventRequest.SettingsEntryR\bsettings\x12\x1d\n" +
+	"\bsettings\x18\f \x03(\v21.riptik.event.v1.UpdateEventRequest.SettingsEntryR\bsettings\x12\"\n" +
 	"\n" +
-	"event_type\x18\r \x01(\tR\teventType\x1aQ\n" +
+	"event_type\x18\r \x01(\tH\x00R\teventType\x88\x01\x01\x1aQ\n" +
 	"\rLocationEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
 	"\rSettingsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"F\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01B\r\n" +
+	"\v_event_type\"F\n" +
 	"\x12DeleteEventRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\"G\n" +
@@ -5354,6 +5355,7 @@ func file_v1_event_event_proto_init() {
 		return
 	}
 	file_v1_event_event_proto_msgTypes[1].OneofWrappers = []any{}
+	file_v1_event_event_proto_msgTypes[15].OneofWrappers = []any{}
 	file_v1_event_event_proto_msgTypes[22].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
