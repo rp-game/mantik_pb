@@ -833,10 +833,13 @@ type UpdateItemRequest struct {
 	Personalization    bool                   `protobuf:"varint,21,opt,name=personalization,proto3" json:"personalization,omitempty"`                                                                 // Allow personalization
 	GenerateTickets    bool                   `protobuf:"varint,22,opt,name=generate_tickets,json=generateTickets,proto3" json:"generate_tickets,omitempty"`                                          // Generate tickets
 	Picture            string                 `protobuf:"bytes,23,opt,name=picture,proto3" json:"picture,omitempty"`                                                                                  // Picture URL
-	Position           int32                  `protobuf:"varint,24,opt,name=position,proto3" json:"position,omitempty"`                                                                               // Position trong danh sách item
-	SalesChannels      []string               `protobuf:"bytes,25,rep,name=sales_channels,json=salesChannels,proto3" json:"sales_channels,omitempty"`                                                 // Kênh bán
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// position dùng optional (KHÔNG như Create) — Update phải phân biệt "không gửi field" (giữ nguyên vị
+	// trí hiện có) với "gửi position=0" (chuyển về đầu danh sách thật sự); int32 thường không phân biệt
+	// được 2 trường hợp này, dễ vô tình reset position mỗi lần caller cũ (chưa biết field mới) gọi update.
+	Position      *int32   `protobuf:"varint,24,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	SalesChannels []string `protobuf:"bytes,25,rep,name=sales_channels,json=salesChannels,proto3" json:"sales_channels,omitempty"` // Kênh bán — rỗng/không gửi = giữ nguyên (repeated field không
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateItemRequest) Reset() {
@@ -1031,8 +1034,8 @@ func (x *UpdateItemRequest) GetPicture() string {
 }
 
 func (x *UpdateItemRequest) GetPosition() int32 {
-	if x != nil {
-		return x.Position
+	if x != nil && x.Position != nil {
+		return *x.Position
 	}
 	return 0
 }
@@ -1981,7 +1984,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb2\b\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc4\b\n" +
 	"\x11UpdateItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -2007,15 +2010,16 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\rmax_per_order\x18\x14 \x01(\x05R\vmaxPerOrder\x12(\n" +
 	"\x0fpersonalization\x18\x15 \x01(\bR\x0fpersonalization\x12)\n" +
 	"\x10generate_tickets\x18\x16 \x01(\bR\x0fgenerateTickets\x12\x18\n" +
-	"\apicture\x18\x17 \x01(\tR\apicture\x12\x1a\n" +
-	"\bposition\x18\x18 \x01(\x05R\bposition\x12%\n" +
+	"\apicture\x18\x17 \x01(\tR\apicture\x12\x1f\n" +
+	"\bposition\x18\x18 \x01(\x05H\x00R\bposition\x88\x01\x01\x12%\n" +
 	"\x0esales_channels\x18\x19 \x03(\tR\rsalesChannels\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"`\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B\v\n" +
+	"\t_position\"`\n" +
 	"\x11DeleteItemRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
@@ -2153,6 +2157,7 @@ func file_v1_event_item_proto_init() {
 	if File_v1_event_item_proto != nil {
 		return
 	}
+	file_v1_event_item_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
