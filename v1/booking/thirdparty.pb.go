@@ -6401,6 +6401,8 @@ type ListSettlementsRequest struct {
 	Status        string                 `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`                            // "" = all statuses
 	Limit         int32                  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,5,opt,name=offset,proto3" json:"offset,omitempty"`
+	PeriodStart   string                 `protobuf:"bytes,6,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"` // ISO datetime, rỗng = không lọc theo thời gian. Lọc theo OVERLAP với
+	PeriodEnd     string                 `protobuf:"bytes,7,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`       // period_start/period_end của settlement (không phải created_at) — khớp ý
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6468,6 +6470,20 @@ func (x *ListSettlementsRequest) GetOffset() int32 {
 		return x.Offset
 	}
 	return 0
+}
+
+func (x *ListSettlementsRequest) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *ListSettlementsRequest) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
 }
 
 type ListSettlementsResponse struct {
@@ -7540,14 +7556,17 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"settlement\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xa2\x01\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xe4\x01\n" +
 	"\x16ListSettlementsRequest\x12!\n" +
 	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x1f\n" +
 	"\vsupplier_id\x18\x02 \x01(\x03R\n" +
 	"supplierId\x12\x16\n" +
 	"\x06status\x18\x03 \x01(\tR\x06status\x12\x14\n" +
 	"\x05limit\x18\x04 \x01(\x05R\x05limit\x12\x16\n" +
-	"\x06offset\x18\x05 \x01(\x05R\x06offset\"\xfc\x01\n" +
+	"\x06offset\x18\x05 \x01(\x05R\x06offset\x12!\n" +
+	"\fperiod_start\x18\x06 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\a \x01(\tR\tperiodEnd\"\xfc\x01\n" +
 	"\x17ListSettlementsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12?\n" +
 	"\vsettlements\x18\x02 \x03(\v2\x1d.riptik.booking.v1.SettlementR\vsettlements\x12\x14\n" +
@@ -7578,7 +7597,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"settlement\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_thirdparty_proto_rawDescOnce sync.Once
