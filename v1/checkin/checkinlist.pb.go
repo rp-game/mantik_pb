@@ -29,7 +29,7 @@ type CheckinList struct {
 	Id                   int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	EventId              int64                  `protobuf:"varint,2,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	Name                 string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	SubeventId           int64                  `protobuf:"varint,4,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	SubeventIds          []int64                `protobuf:"varint,4,rep,packed,name=subevent_ids,json=subeventIds,proto3" json:"subevent_ids,omitempty"` // empty = event-wide (all subevents)
 	AllProducts          bool                   `protobuf:"varint,5,opt,name=all_products,json=allProducts,proto3" json:"all_products,omitempty"`
 	LimitProducts        []int64                `protobuf:"varint,6,rep,packed,name=limit_products,json=limitProducts,proto3" json:"limit_products,omitempty"`
 	IncludePending       bool                   `protobuf:"varint,7,opt,name=include_pending,json=includePending,proto3" json:"include_pending,omitempty"`
@@ -93,11 +93,11 @@ func (x *CheckinList) GetName() string {
 	return ""
 }
 
-func (x *CheckinList) GetSubeventId() int64 {
+func (x *CheckinList) GetSubeventIds() []int64 {
 	if x != nil {
-		return x.SubeventId
+		return x.SubeventIds
 	}
-	return 0
+	return nil
 }
 
 func (x *CheckinList) GetAllProducts() bool {
@@ -473,7 +473,7 @@ type CreateCheckinListRequest struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	EventId              int64                  `protobuf:"varint,1,opt,name=event_id,json=eventId,proto3" json:"event_id,omitempty"`
 	Name                 string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	SubeventId           int64                  `protobuf:"varint,3,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
+	SubeventIds          []int64                `protobuf:"varint,3,rep,packed,name=subevent_ids,json=subeventIds,proto3" json:"subevent_ids,omitempty"` // empty = event-wide (all subevents)
 	AllProducts          bool                   `protobuf:"varint,4,opt,name=all_products,json=allProducts,proto3" json:"all_products,omitempty"`
 	LimitProducts        []int64                `protobuf:"varint,5,rep,packed,name=limit_products,json=limitProducts,proto3" json:"limit_products,omitempty"`
 	IncludePending       bool                   `protobuf:"varint,6,opt,name=include_pending,json=includePending,proto3" json:"include_pending,omitempty"`
@@ -528,11 +528,11 @@ func (x *CreateCheckinListRequest) GetName() string {
 	return ""
 }
 
-func (x *CreateCheckinListRequest) GetSubeventId() int64 {
+func (x *CreateCheckinListRequest) GetSubeventIds() []int64 {
 	if x != nil {
-		return x.SubeventId
+		return x.SubeventIds
 	}
-	return 0
+	return nil
 }
 
 func (x *CreateCheckinListRequest) GetAllProducts() bool {
@@ -592,7 +592,7 @@ type UpdateCheckinListRequest struct {
 	// rỗng/false" — proto3 scalar (bool/string) không tự phân biệt được 2 trường hợp này, nên thiếu
 	// field_mask sẽ khiến PATCH 1 field ghi đè rỗng TẤT CẢ field khác (bug thật đã gặp, G10-13 review).
 	FieldMask     []string `protobuf:"bytes,9,rep,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
-	SubeventId    int64    `protobuf:"varint,10,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"` // only applied if "subevent" is present in field_mask
+	SubeventIds   []int64  `protobuf:"varint,10,rep,packed,name=subevent_ids,json=subeventIds,proto3" json:"subevent_ids,omitempty"` // only applied if "subevent" is present in field_mask
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -690,11 +690,11 @@ func (x *UpdateCheckinListRequest) GetFieldMask() []string {
 	return nil
 }
 
-func (x *UpdateCheckinListRequest) GetSubeventId() int64 {
+func (x *UpdateCheckinListRequest) GetSubeventIds() []int64 {
 	if x != nil {
-		return x.SubeventId
+		return x.SubeventIds
 	}
-	return 0
+	return nil
 }
 
 type DeleteCheckinListRequest struct {
@@ -1942,13 +1942,12 @@ var File_v1_checkin_checkinlist_proto protoreflect.FileDescriptor
 
 const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\n" +
-	"\x1cv1/checkin/checkinlist.proto\x12\x11riptik.checkin.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xd2\x04\n" +
+	"\x1cv1/checkin/checkinlist.proto\x12\x11riptik.checkin.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xd4\x04\n" +
 	"\vCheckinList\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\bevent_id\x18\x02 \x01(\x03R\aeventId\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1f\n" +
-	"\vsubevent_id\x18\x04 \x01(\x03R\n" +
-	"subeventId\x12!\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12!\n" +
+	"\fsubevent_ids\x18\x04 \x03(\x03R\vsubeventIds\x12!\n" +
 	"\fall_products\x18\x05 \x01(\bR\vallProducts\x12%\n" +
 	"\x0elimit_products\x18\x06 \x03(\x03R\rlimitProducts\x12'\n" +
 	"\x0finclude_pending\x18\a \x01(\bR\x0eincludePending\x124\n" +
@@ -1999,12 +1998,11 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"'\n" +
 	"\x15GetCheckinListRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xe6\x03\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"\xe8\x03\n" +
 	"\x18CreateCheckinListRequest\x12\x19\n" +
 	"\bevent_id\x18\x01 \x01(\x03R\aeventId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1f\n" +
-	"\vsubevent_id\x18\x03 \x01(\x03R\n" +
-	"subeventId\x12!\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
+	"\fsubevent_ids\x18\x03 \x03(\x03R\vsubeventIds\x12!\n" +
 	"\fall_products\x18\x04 \x01(\bR\vallProducts\x12%\n" +
 	"\x0elimit_products\x18\x05 \x03(\x03R\rlimitProducts\x12'\n" +
 	"\x0finclude_pending\x18\x06 \x01(\bR\x0eincludePending\x124\n" +
@@ -2014,7 +2012,7 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xfa\x03\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xfc\x03\n" +
 	"\x18UpdateCheckinListRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
@@ -2025,10 +2023,9 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\x16allow_entry_after_exit\x18\a \x01(\bR\x13allowEntryAfterExit\x12L\n" +
 	"\x05rules\x18\b \x03(\v26.riptik.checkin.v1.UpdateCheckinListRequest.RulesEntryR\x05rules\x12\x1d\n" +
 	"\n" +
-	"field_mask\x18\t \x03(\tR\tfieldMask\x12\x1f\n" +
-	"\vsubevent_id\x18\n" +
-	" \x01(\x03R\n" +
-	"subeventId\x1aN\n" +
+	"field_mask\x18\t \x03(\tR\tfieldMask\x12!\n" +
+	"\fsubevent_ids\x18\n" +
+	" \x03(\x03R\vsubeventIds\x1aN\n" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
