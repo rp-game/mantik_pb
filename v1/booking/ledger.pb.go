@@ -46,8 +46,13 @@ type UnitLedgerEntry struct {
 	Origin                  string `protobuf:"bytes,18,opt,name=origin,proto3" json:"origin,omitempty"`                                                                      // "sale" | "manual" | "reversal"
 	OccurredAt              string `protobuf:"bytes,19,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`                                            // ISO datetime — giờ BÁN (khác `created` là giờ ghi sổ)
 	ReversalOfTransactionId string `protobuf:"bytes,20,opt,name=reversal_of_transaction_id,json=reversalOfTransactionId,proto3" json:"reversal_of_transaction_id,omitempty"` // chỉ có giá trị khi origin="reversal"
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// net_amount_minor/tax_amount_minor — mantik-tax-config.md Phase F3: breakdown gross AmountMinor.
+	// optional (KHÔNG phải giá trị mặc định 0) — phân biệt "entry cũ trước khi có field này" với
+	// "net/tax thật sự bằng 0" (vd hàng miễn phí). net + tax luôn == amount_minor khi cả 2 có giá trị.
+	NetAmountMinor *int64 `protobuf:"varint,21,opt,name=net_amount_minor,json=netAmountMinor,proto3,oneof" json:"net_amount_minor,omitempty"`
+	TaxAmountMinor *int64 `protobuf:"varint,22,opt,name=tax_amount_minor,json=taxAmountMinor,proto3,oneof" json:"tax_amount_minor,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *UnitLedgerEntry) Reset() {
@@ -218,6 +223,20 @@ func (x *UnitLedgerEntry) GetReversalOfTransactionId() string {
 		return x.ReversalOfTransactionId
 	}
 	return ""
+}
+
+func (x *UnitLedgerEntry) GetNetAmountMinor() int64 {
+	if x != nil && x.NetAmountMinor != nil {
+		return *x.NetAmountMinor
+	}
+	return 0
+}
+
+func (x *UnitLedgerEntry) GetTaxAmountMinor() int64 {
+	if x != nil && x.TaxAmountMinor != nil {
+		return *x.TaxAmountMinor
+	}
+	return 0
 }
 
 // ListLedgerEntriesByOrderRefRequest — G9-32e: "join" cho Order Details (fnbpos) — 1 order_ref
@@ -481,9 +500,13 @@ type CreateLedgerEntryPairRequest struct {
 	Origin string `protobuf:"bytes,10,opt,name=origin,proto3" json:"origin,omitempty"` // rỗng = "sale"; "manual" cho ghi tay/backfill
 	// occurred_at — ISO datetime, giờ BÁN. Rỗng = now(). BẮT BUỘC truyền khi backfill đơn cũ, nếu
 	// không entry sẽ rơi vào kỳ đối soát của ngày bấm nút thay vì kỳ bán thật.
-	OccurredAt    string `protobuf:"bytes,11,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	OccurredAt string `protobuf:"bytes,11,opt,name=occurred_at,json=occurredAt,proto3" json:"occurred_at,omitempty"`
+	// net_amount_minor/tax_amount_minor — mantik-tax-config.md Phase F3, optional (rỗng = caller không
+	// tách được, giữ NULL — KHÔNG suy diễn 0). booking-core không tự tính lại, chỉ forward nguyên xi.
+	NetAmountMinor *int64 `protobuf:"varint,12,opt,name=net_amount_minor,json=netAmountMinor,proto3,oneof" json:"net_amount_minor,omitempty"`
+	TaxAmountMinor *int64 `protobuf:"varint,13,opt,name=tax_amount_minor,json=taxAmountMinor,proto3,oneof" json:"tax_amount_minor,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *CreateLedgerEntryPairRequest) Reset() {
@@ -591,6 +614,20 @@ func (x *CreateLedgerEntryPairRequest) GetOccurredAt() string {
 		return x.OccurredAt
 	}
 	return ""
+}
+
+func (x *CreateLedgerEntryPairRequest) GetNetAmountMinor() int64 {
+	if x != nil && x.NetAmountMinor != nil {
+		return *x.NetAmountMinor
+	}
+	return 0
+}
+
+func (x *CreateLedgerEntryPairRequest) GetTaxAmountMinor() int64 {
+	if x != nil && x.TaxAmountMinor != nil {
+		return *x.TaxAmountMinor
+	}
+	return 0
 }
 
 type CreateLedgerEntryPairResponse struct {
@@ -3671,7 +3708,7 @@ var File_v1_booking_ledger_proto protoreflect.FileDescriptor
 
 const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\n" +
-	"\x17v1/booking/ledger.proto\x12\x11riptik.booking.v1\"\xd2\x05\n" +
+	"\x17v1/booking/ledger.proto\x12\x11riptik.booking.v1\"\xda\x06\n" +
 	"\x0fUnitLedgerEntry\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12%\n" +
@@ -3696,7 +3733,11 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x06origin\x18\x12 \x01(\tR\x06origin\x12\x1f\n" +
 	"\voccurred_at\x18\x13 \x01(\tR\n" +
 	"occurredAt\x12;\n" +
-	"\x1areversal_of_transaction_id\x18\x14 \x01(\tR\x17reversalOfTransactionId\"h\n" +
+	"\x1areversal_of_transaction_id\x18\x14 \x01(\tR\x17reversalOfTransactionId\x12-\n" +
+	"\x10net_amount_minor\x18\x15 \x01(\x03H\x00R\x0enetAmountMinor\x88\x01\x01\x12-\n" +
+	"\x10tax_amount_minor\x18\x16 \x01(\x03H\x01R\x0etaxAmountMinor\x88\x01\x01B\x13\n" +
+	"\x11_net_amount_minorB\x13\n" +
+	"\x11_tax_amount_minor\"h\n" +
 	"\"ListLedgerEntriesByOrderRefRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1b\n" +
 	"\torder_ref\x18\x02 \x01(\tR\borderRef\"\xc1\x01\n" +
@@ -3714,7 +3755,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x8b\x03\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x93\x04\n" +
 	"\x1cCreateLedgerEntryPairRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12%\n" +
 	"\x0etransaction_id\x18\x02 \x01(\tR\rtransactionId\x12!\n" +
@@ -3730,7 +3771,11 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x06origin\x18\n" +
 	" \x01(\tR\x06origin\x12\x1f\n" +
 	"\voccurred_at\x18\v \x01(\tR\n" +
-	"occurredAt\"\xbb\x01\n" +
+	"occurredAt\x12-\n" +
+	"\x10net_amount_minor\x18\f \x01(\x03H\x00R\x0enetAmountMinor\x88\x01\x01\x12-\n" +
+	"\x10tax_amount_minor\x18\r \x01(\x03H\x01R\x0etaxAmountMinor\x88\x01\x01B\x13\n" +
+	"\x11_net_amount_minorB\x13\n" +
+	"\x11_tax_amount_minor\"\xbb\x01\n" +
 	"\x1dCreateLedgerEntryPairResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12<\n" +
 	"\aentries\x18\x02 \x03(\v2\".riptik.booking.v1.UnitLedgerEntryR\aentries\x12\x1d\n" +
@@ -4000,7 +4045,7 @@ const file_v1_booking_ledger_proto_rawDesc = "" +
 	"\x0ereminders_sent\x18\x02 \x01(\x03R\rremindersSent\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_ledger_proto_rawDescOnce sync.Once
@@ -4094,6 +4139,8 @@ func file_v1_booking_ledger_proto_init() {
 	if File_v1_booking_ledger_proto != nil {
 		return
 	}
+	file_v1_booking_ledger_proto_msgTypes[0].OneofWrappers = []any{}
+	file_v1_booking_ledger_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
