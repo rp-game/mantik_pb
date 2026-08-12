@@ -6818,6 +6818,568 @@ func (x *MarkSettlementPaidResponse) GetErrorMessage() string {
 	return ""
 }
 
+// ApiCallLogSummary — dùng cho List, KHÔNG có 4 field headers/body (tránh NATS message-size bloat
+// khi 1 trang có nhiều dòng) — xem chi tiết đầy đủ phải gọi GetApiCallLog riêng.
+type ApiCallLogSummary struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	SupplierId     int64                  `protobuf:"varint,2,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
+	SupplierName   string                 `protobuf:"bytes,3,opt,name=supplier_name,json=supplierName,proto3" json:"supplier_name,omitempty"`
+	ProductId      int64                  `protobuf:"varint,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	ProductName    string                 `protobuf:"bytes,5,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
+	OrderId        int64                  `protobuf:"varint,6,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	OrderCode      string                 `protobuf:"bytes,7,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	CallType       string                 `protobuf:"bytes,8,opt,name=call_type,json=callType,proto3" json:"call_type,omitempty"`
+	HttpMethod     string                 `protobuf:"bytes,9,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`
+	Url            string                 `protobuf:"bytes,10,opt,name=url,proto3" json:"url,omitempty"`                                              // đã redact query param nhạy cảm
+	ResponseStatus int32                  `protobuf:"varint,11,opt,name=response_status,json=responseStatus,proto3" json:"response_status,omitempty"` // 0 = không có response (network/timeout)
+	ErrorMessage   string                 `protobuf:"bytes,12,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	DurationMs     int32                  `protobuf:"varint,13,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
+	Truncated      bool                   `protobuf:"varint,14,opt,name=truncated,proto3" json:"truncated,omitempty"`
+	Created        string                 `protobuf:"bytes,15,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ApiCallLogSummary) Reset() {
+	*x = ApiCallLogSummary{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[83]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ApiCallLogSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApiCallLogSummary) ProtoMessage() {}
+
+func (x *ApiCallLogSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[83]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApiCallLogSummary.ProtoReflect.Descriptor instead.
+func (*ApiCallLogSummary) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{83}
+}
+
+func (x *ApiCallLogSummary) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetSupplierId() int64 {
+	if x != nil {
+		return x.SupplierId
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetSupplierName() string {
+	if x != nil {
+		return x.SupplierName
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetProductId() int64 {
+	if x != nil {
+		return x.ProductId
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetProductName() string {
+	if x != nil {
+		return x.ProductName
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetCallType() string {
+	if x != nil {
+		return x.CallType
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetHttpMethod() string {
+	if x != nil {
+		return x.HttpMethod
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetResponseStatus() int32 {
+	if x != nil {
+		return x.ResponseStatus
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetDurationMs() int32 {
+	if x != nil {
+		return x.DurationMs
+	}
+	return 0
+}
+
+func (x *ApiCallLogSummary) GetTruncated() bool {
+	if x != nil {
+		return x.Truncated
+	}
+	return false
+}
+
+func (x *ApiCallLogSummary) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+type ApiCallLog struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	Summary             *ApiCallLogSummary     `protobuf:"bytes,1,opt,name=summary,proto3" json:"summary,omitempty"`
+	RequestHeadersJson  string                 `protobuf:"bytes,2,opt,name=request_headers_json,json=requestHeadersJson,proto3" json:"request_headers_json,omitempty"`    // JSON string, đã redact
+	RequestBodyJson     string                 `protobuf:"bytes,3,opt,name=request_body_json,json=requestBodyJson,proto3" json:"request_body_json,omitempty"`             // JSON string, đã redact
+	ResponseHeadersJson string                 `protobuf:"bytes,4,opt,name=response_headers_json,json=responseHeadersJson,proto3" json:"response_headers_json,omitempty"` // JSON string, đã redact
+	ResponseBodyJson    string                 `protobuf:"bytes,5,opt,name=response_body_json,json=responseBodyJson,proto3" json:"response_body_json,omitempty"`          // JSON string, đã redact
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *ApiCallLog) Reset() {
+	*x = ApiCallLog{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[84]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ApiCallLog) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApiCallLog) ProtoMessage() {}
+
+func (x *ApiCallLog) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[84]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApiCallLog.ProtoReflect.Descriptor instead.
+func (*ApiCallLog) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{84}
+}
+
+func (x *ApiCallLog) GetSummary() *ApiCallLogSummary {
+	if x != nil {
+		return x.Summary
+	}
+	return nil
+}
+
+func (x *ApiCallLog) GetRequestHeadersJson() string {
+	if x != nil {
+		return x.RequestHeadersJson
+	}
+	return ""
+}
+
+func (x *ApiCallLog) GetRequestBodyJson() string {
+	if x != nil {
+		return x.RequestBodyJson
+	}
+	return ""
+}
+
+func (x *ApiCallLog) GetResponseHeadersJson() string {
+	if x != nil {
+		return x.ResponseHeadersJson
+	}
+	return ""
+}
+
+func (x *ApiCallLog) GetResponseBodyJson() string {
+	if x != nil {
+		return x.ResponseBodyJson
+	}
+	return ""
+}
+
+type ListApiCallLogsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	SupplierId    int64                  `protobuf:"varint,2,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
+	ProductId     int64                  `protobuf:"varint,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	OrderCode     string                 `protobuf:"bytes,4,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	CallType      string                 `protobuf:"bytes,5,opt,name=call_type,json=callType,proto3" json:"call_type,omitempty"`
+	Status        string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`                              // "" | "success" | "failed" | "error"
+	PeriodStart   string                 `protobuf:"bytes,7,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"` // ISO datetime, lọc theo created
+	PeriodEnd     string                 `protobuf:"bytes,8,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	Limit         int32                  `protobuf:"varint,9,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset        int32                  `protobuf:"varint,10,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListApiCallLogsRequest) Reset() {
+	*x = ListApiCallLogsRequest{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[85]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListApiCallLogsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListApiCallLogsRequest) ProtoMessage() {}
+
+func (x *ListApiCallLogsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[85]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListApiCallLogsRequest.ProtoReflect.Descriptor instead.
+func (*ListApiCallLogsRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{85}
+}
+
+func (x *ListApiCallLogsRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsRequest) GetSupplierId() int64 {
+	if x != nil {
+		return x.SupplierId
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsRequest) GetProductId() int64 {
+	if x != nil {
+		return x.ProductId
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsRequest) GetCallType() string {
+	if x != nil {
+		return x.CallType
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsRequest) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsRequest) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+type ListApiCallLogsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Logs          []*ApiCallLogSummary   `protobuf:"bytes,2,rep,name=logs,proto3" json:"logs,omitempty"`
+	Total         int32                  `protobuf:"varint,3,opt,name=total,proto3" json:"total,omitempty"`
+	Limit         int32                  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset        int32                  `protobuf:"varint,5,opt,name=offset,proto3" json:"offset,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListApiCallLogsResponse) Reset() {
+	*x = ListApiCallLogsResponse{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[86]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListApiCallLogsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListApiCallLogsResponse) ProtoMessage() {}
+
+func (x *ListApiCallLogsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[86]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListApiCallLogsResponse.ProtoReflect.Descriptor instead.
+func (*ListApiCallLogsResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{86}
+}
+
+func (x *ListApiCallLogsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListApiCallLogsResponse) GetLogs() []*ApiCallLogSummary {
+	if x != nil {
+		return x.Logs
+	}
+	return nil
+}
+
+func (x *ListApiCallLogsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsResponse) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsResponse) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+func (x *ListApiCallLogsResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListApiCallLogsResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type GetApiCallLogRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	Id            int64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetApiCallLogRequest) Reset() {
+	*x = GetApiCallLogRequest{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[87]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetApiCallLogRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetApiCallLogRequest) ProtoMessage() {}
+
+func (x *GetApiCallLogRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[87]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetApiCallLogRequest.ProtoReflect.Descriptor instead.
+func (*GetApiCallLogRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{87}
+}
+
+func (x *GetApiCallLogRequest) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *GetApiCallLogRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type GetApiCallLogResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Log           *ApiCallLog            `protobuf:"bytes,2,opt,name=log,proto3" json:"log,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetApiCallLogResponse) Reset() {
+	*x = GetApiCallLogResponse{}
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[88]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetApiCallLogResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetApiCallLogResponse) ProtoMessage() {}
+
+func (x *GetApiCallLogResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_thirdparty_proto_msgTypes[88]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetApiCallLogResponse.ProtoReflect.Descriptor instead.
+func (*GetApiCallLogResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{88}
+}
+
+func (x *GetApiCallLogResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetApiCallLogResponse) GetLog() *ApiCallLog {
+	if x != nil {
+		return x.Log
+	}
+	return nil
+}
+
+func (x *GetApiCallLogResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetApiCallLogResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_thirdparty_proto protoreflect.FileDescriptor
 
 const file_v1_booking_thirdparty_proto_rawDesc = "" +
@@ -7597,6 +8159,69 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"settlement\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xdc\x03\n" +
+	"\x11ApiCallLogSummary\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
+	"\vsupplier_id\x18\x02 \x01(\x03R\n" +
+	"supplierId\x12#\n" +
+	"\rsupplier_name\x18\x03 \x01(\tR\fsupplierName\x12\x1d\n" +
+	"\n" +
+	"product_id\x18\x04 \x01(\x03R\tproductId\x12!\n" +
+	"\fproduct_name\x18\x05 \x01(\tR\vproductName\x12\x19\n" +
+	"\border_id\x18\x06 \x01(\x03R\aorderId\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\a \x01(\tR\torderCode\x12\x1b\n" +
+	"\tcall_type\x18\b \x01(\tR\bcallType\x12\x1f\n" +
+	"\vhttp_method\x18\t \x01(\tR\n" +
+	"httpMethod\x12\x10\n" +
+	"\x03url\x18\n" +
+	" \x01(\tR\x03url\x12'\n" +
+	"\x0fresponse_status\x18\v \x01(\x05R\x0eresponseStatus\x12#\n" +
+	"\rerror_message\x18\f \x01(\tR\ferrorMessage\x12\x1f\n" +
+	"\vduration_ms\x18\r \x01(\x05R\n" +
+	"durationMs\x12\x1c\n" +
+	"\ttruncated\x18\x0e \x01(\bR\ttruncated\x12\x18\n" +
+	"\acreated\x18\x0f \x01(\tR\acreated\"\x8c\x02\n" +
+	"\n" +
+	"ApiCallLog\x12>\n" +
+	"\asummary\x18\x01 \x01(\v2$.riptik.booking.v1.ApiCallLogSummaryR\asummary\x120\n" +
+	"\x14request_headers_json\x18\x02 \x01(\tR\x12requestHeadersJson\x12*\n" +
+	"\x11request_body_json\x18\x03 \x01(\tR\x0frequestBodyJson\x122\n" +
+	"\x15response_headers_json\x18\x04 \x01(\tR\x13responseHeadersJson\x12,\n" +
+	"\x12response_body_json\x18\x05 \x01(\tR\x10responseBodyJson\"\xbf\x02\n" +
+	"\x16ListApiCallLogsRequest\x12!\n" +
+	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x1f\n" +
+	"\vsupplier_id\x18\x02 \x01(\x03R\n" +
+	"supplierId\x12\x1d\n" +
+	"\n" +
+	"product_id\x18\x03 \x01(\x03R\tproductId\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\x04 \x01(\tR\torderCode\x12\x1b\n" +
+	"\tcall_type\x18\x05 \x01(\tR\bcallType\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\tR\x06status\x12!\n" +
+	"\fperiod_start\x18\a \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\b \x01(\tR\tperiodEnd\x12\x14\n" +
+	"\x05limit\x18\t \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\n" +
+	" \x01(\x05R\x06offset\"\xf5\x01\n" +
+	"\x17ListApiCallLogsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x128\n" +
+	"\x04logs\x18\x02 \x03(\v2$.riptik.booking.v1.ApiCallLogSummaryR\x04logs\x12\x14\n" +
+	"\x05total\x18\x03 \x01(\x05R\x05total\x12\x14\n" +
+	"\x05limit\x18\x04 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x05 \x01(\x05R\x06offset\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\"I\n" +
+	"\x14GetApiCallLogRequest\x12!\n" +
+	"\forganizer_id\x18\x01 \x01(\x03R\vorganizerId\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x03R\x02id\"\xa6\x01\n" +
+	"\x15GetApiCallLogResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12/\n" +
+	"\x03log\x18\x02 \x01(\v2\x1d.riptik.booking.v1.ApiCallLogR\x03log\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
@@ -7611,7 +8236,7 @@ func file_v1_booking_thirdparty_proto_rawDescGZIP() []byte {
 	return file_v1_booking_thirdparty_proto_rawDescData
 }
 
-var file_v1_booking_thirdparty_proto_msgTypes = make([]protoimpl.MessageInfo, 114)
+var file_v1_booking_thirdparty_proto_msgTypes = make([]protoimpl.MessageInfo, 120)
 var file_v1_booking_thirdparty_proto_goTypes = []any{
 	(*ThirdPartySupplier)(nil),                   // 0: riptik.booking.v1.ThirdPartySupplier
 	(*CreateSupplierRequest)(nil),                // 1: riptik.booking.v1.CreateSupplierRequest
@@ -7696,150 +8321,159 @@ var file_v1_booking_thirdparty_proto_goTypes = []any{
 	(*ConfirmSettlementResponse)(nil),            // 80: riptik.booking.v1.ConfirmSettlementResponse
 	(*MarkSettlementPaidRequest)(nil),            // 81: riptik.booking.v1.MarkSettlementPaidRequest
 	(*MarkSettlementPaidResponse)(nil),           // 82: riptik.booking.v1.MarkSettlementPaidResponse
-	nil,                                          // 83: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
-	nil,                                          // 84: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
-	nil,                                          // 85: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
-	nil,                                          // 86: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
-	nil,                                          // 87: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
-	nil,                                          // 88: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
-	nil,                                          // 89: riptik.booking.v1.ListSuppliersRequest.FilterEntry
-	nil,                                          // 90: riptik.booking.v1.SupplierImportItem.ApiConfigEntry
-	nil,                                          // 91: riptik.booking.v1.SupplierImportItem.CsvConfigEntry
-	nil,                                          // 92: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
-	nil,                                          // 93: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
-	nil,                                          // 94: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
-	nil,                                          // 95: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
-	nil,                                          // 96: riptik.booking.v1.CreateProductRequest.RequestMappingEntry
-	nil,                                          // 97: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
-	nil,                                          // 98: riptik.booking.v1.CreateProductRequest.MetaDataEntry
-	nil,                                          // 99: riptik.booking.v1.ListProductsRequest.FilterEntry
-	nil,                                          // 100: riptik.booking.v1.ProductImportItem.RequestMappingEntry
-	nil,                                          // 101: riptik.booking.v1.ProductImportItem.ResponseMappingEntry
-	nil,                                          // 102: riptik.booking.v1.ProductImportItem.MetaDataEntry
-	nil,                                          // 103: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
-	nil,                                          // 104: riptik.booking.v1.ImportInventoryRequest.ConfigEntry
-	nil,                                          // 105: riptik.booking.v1.ListInventoryRequest.FilterEntry
-	nil,                                          // 106: riptik.booking.v1.InventoryStatsResponse.CountsEntry
-	nil,                                          // 107: riptik.booking.v1.Fulfillment.MetadataEntry
-	nil,                                          // 108: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
-	nil,                                          // 109: riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
-	nil,                                          // 110: riptik.booking.v1.AssignProductToEventRequest.NameEntry
-	nil,                                          // 111: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
-	nil,                                          // 112: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
-	nil,                                          // 113: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
-	(*timestamp.Timestamp)(nil),                  // 114: google.protobuf.Timestamp
-	(*any1.Any)(nil),                             // 115: google.protobuf.Any
+	(*ApiCallLogSummary)(nil),                    // 83: riptik.booking.v1.ApiCallLogSummary
+	(*ApiCallLog)(nil),                           // 84: riptik.booking.v1.ApiCallLog
+	(*ListApiCallLogsRequest)(nil),               // 85: riptik.booking.v1.ListApiCallLogsRequest
+	(*ListApiCallLogsResponse)(nil),              // 86: riptik.booking.v1.ListApiCallLogsResponse
+	(*GetApiCallLogRequest)(nil),                 // 87: riptik.booking.v1.GetApiCallLogRequest
+	(*GetApiCallLogResponse)(nil),                // 88: riptik.booking.v1.GetApiCallLogResponse
+	nil,                                          // 89: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
+	nil,                                          // 90: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
+	nil,                                          // 91: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
+	nil,                                          // 92: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
+	nil,                                          // 93: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
+	nil,                                          // 94: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
+	nil,                                          // 95: riptik.booking.v1.ListSuppliersRequest.FilterEntry
+	nil,                                          // 96: riptik.booking.v1.SupplierImportItem.ApiConfigEntry
+	nil,                                          // 97: riptik.booking.v1.SupplierImportItem.CsvConfigEntry
+	nil,                                          // 98: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
+	nil,                                          // 99: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
+	nil,                                          // 100: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
+	nil,                                          // 101: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
+	nil,                                          // 102: riptik.booking.v1.CreateProductRequest.RequestMappingEntry
+	nil,                                          // 103: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
+	nil,                                          // 104: riptik.booking.v1.CreateProductRequest.MetaDataEntry
+	nil,                                          // 105: riptik.booking.v1.ListProductsRequest.FilterEntry
+	nil,                                          // 106: riptik.booking.v1.ProductImportItem.RequestMappingEntry
+	nil,                                          // 107: riptik.booking.v1.ProductImportItem.ResponseMappingEntry
+	nil,                                          // 108: riptik.booking.v1.ProductImportItem.MetaDataEntry
+	nil,                                          // 109: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
+	nil,                                          // 110: riptik.booking.v1.ImportInventoryRequest.ConfigEntry
+	nil,                                          // 111: riptik.booking.v1.ListInventoryRequest.FilterEntry
+	nil,                                          // 112: riptik.booking.v1.InventoryStatsResponse.CountsEntry
+	nil,                                          // 113: riptik.booking.v1.Fulfillment.MetadataEntry
+	nil,                                          // 114: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
+	nil,                                          // 115: riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
+	nil,                                          // 116: riptik.booking.v1.AssignProductToEventRequest.NameEntry
+	nil,                                          // 117: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
+	nil,                                          // 118: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
+	nil,                                          // 119: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
+	(*timestamp.Timestamp)(nil),                  // 120: google.protobuf.Timestamp
+	(*any1.Any)(nil),                             // 121: google.protobuf.Any
 }
 var file_v1_booking_thirdparty_proto_depIdxs = []int32{
-	83,  // 0: riptik.booking.v1.ThirdPartySupplier.api_config:type_name -> riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
-	84,  // 1: riptik.booking.v1.ThirdPartySupplier.csv_config:type_name -> riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
-	114, // 2: riptik.booking.v1.ThirdPartySupplier.created_at:type_name -> google.protobuf.Timestamp
-	114, // 3: riptik.booking.v1.ThirdPartySupplier.updated_at:type_name -> google.protobuf.Timestamp
-	85,  // 4: riptik.booking.v1.CreateSupplierRequest.api_config:type_name -> riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
-	86,  // 5: riptik.booking.v1.CreateSupplierRequest.csv_config:type_name -> riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
-	87,  // 6: riptik.booking.v1.UpdateSupplierRequest.api_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
-	88,  // 7: riptik.booking.v1.UpdateSupplierRequest.csv_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
-	89,  // 8: riptik.booking.v1.ListSuppliersRequest.filter:type_name -> riptik.booking.v1.ListSuppliersRequest.FilterEntry
+	89,  // 0: riptik.booking.v1.ThirdPartySupplier.api_config:type_name -> riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
+	90,  // 1: riptik.booking.v1.ThirdPartySupplier.csv_config:type_name -> riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
+	120, // 2: riptik.booking.v1.ThirdPartySupplier.created_at:type_name -> google.protobuf.Timestamp
+	120, // 3: riptik.booking.v1.ThirdPartySupplier.updated_at:type_name -> google.protobuf.Timestamp
+	91,  // 4: riptik.booking.v1.CreateSupplierRequest.api_config:type_name -> riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
+	92,  // 5: riptik.booking.v1.CreateSupplierRequest.csv_config:type_name -> riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
+	93,  // 6: riptik.booking.v1.UpdateSupplierRequest.api_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
+	94,  // 7: riptik.booking.v1.UpdateSupplierRequest.csv_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
+	95,  // 8: riptik.booking.v1.ListSuppliersRequest.filter:type_name -> riptik.booking.v1.ListSuppliersRequest.FilterEntry
 	0,   // 9: riptik.booking.v1.CreateSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 10: riptik.booking.v1.UpdateSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 11: riptik.booking.v1.GetSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 12: riptik.booking.v1.ListSuppliersResponse.suppliers:type_name -> riptik.booking.v1.ThirdPartySupplier
 	12,  // 13: riptik.booking.v1.BulkImportSuppliersRequest.suppliers:type_name -> riptik.booking.v1.SupplierImportItem
-	90,  // 14: riptik.booking.v1.SupplierImportItem.api_config:type_name -> riptik.booking.v1.SupplierImportItem.ApiConfigEntry
-	91,  // 15: riptik.booking.v1.SupplierImportItem.csv_config:type_name -> riptik.booking.v1.SupplierImportItem.CsvConfigEntry
+	96,  // 14: riptik.booking.v1.SupplierImportItem.api_config:type_name -> riptik.booking.v1.SupplierImportItem.ApiConfigEntry
+	97,  // 15: riptik.booking.v1.SupplierImportItem.csv_config:type_name -> riptik.booking.v1.SupplierImportItem.CsvConfigEntry
 	18,  // 16: riptik.booking.v1.BulkImportSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
-	92,  // 17: riptik.booking.v1.BulkUpdateSuppliersRequest.updates:type_name -> riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
+	98,  // 17: riptik.booking.v1.BulkUpdateSuppliersRequest.updates:type_name -> riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
 	18,  // 18: riptik.booking.v1.BulkUpdateSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
 	18,  // 19: riptik.booking.v1.BulkDeleteSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
-	93,  // 20: riptik.booking.v1.ThirdPartyProduct.request_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
-	94,  // 21: riptik.booking.v1.ThirdPartyProduct.response_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
-	95,  // 22: riptik.booking.v1.ThirdPartyProduct.meta_data:type_name -> riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
-	114, // 23: riptik.booking.v1.ThirdPartyProduct.created_at:type_name -> google.protobuf.Timestamp
-	114, // 24: riptik.booking.v1.ThirdPartyProduct.updated_at:type_name -> google.protobuf.Timestamp
-	96,  // 25: riptik.booking.v1.CreateProductRequest.request_mapping:type_name -> riptik.booking.v1.CreateProductRequest.RequestMappingEntry
-	97,  // 26: riptik.booking.v1.CreateProductRequest.response_mapping:type_name -> riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
-	98,  // 27: riptik.booking.v1.CreateProductRequest.meta_data:type_name -> riptik.booking.v1.CreateProductRequest.MetaDataEntry
-	99,  // 28: riptik.booking.v1.ListProductsRequest.filter:type_name -> riptik.booking.v1.ListProductsRequest.FilterEntry
+	99,  // 20: riptik.booking.v1.ThirdPartyProduct.request_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
+	100, // 21: riptik.booking.v1.ThirdPartyProduct.response_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
+	101, // 22: riptik.booking.v1.ThirdPartyProduct.meta_data:type_name -> riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
+	120, // 23: riptik.booking.v1.ThirdPartyProduct.created_at:type_name -> google.protobuf.Timestamp
+	120, // 24: riptik.booking.v1.ThirdPartyProduct.updated_at:type_name -> google.protobuf.Timestamp
+	102, // 25: riptik.booking.v1.CreateProductRequest.request_mapping:type_name -> riptik.booking.v1.CreateProductRequest.RequestMappingEntry
+	103, // 26: riptik.booking.v1.CreateProductRequest.response_mapping:type_name -> riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
+	104, // 27: riptik.booking.v1.CreateProductRequest.meta_data:type_name -> riptik.booking.v1.CreateProductRequest.MetaDataEntry
+	105, // 28: riptik.booking.v1.ListProductsRequest.filter:type_name -> riptik.booking.v1.ListProductsRequest.FilterEntry
 	19,  // 29: riptik.booking.v1.CreateProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 30: riptik.booking.v1.UpdateProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 31: riptik.booking.v1.GetProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 32: riptik.booking.v1.ListProductsResponse.products:type_name -> riptik.booking.v1.ThirdPartyProduct
 	31,  // 33: riptik.booking.v1.BulkImportProductsRequest.products:type_name -> riptik.booking.v1.ProductImportItem
-	100, // 34: riptik.booking.v1.ProductImportItem.request_mapping:type_name -> riptik.booking.v1.ProductImportItem.RequestMappingEntry
-	101, // 35: riptik.booking.v1.ProductImportItem.response_mapping:type_name -> riptik.booking.v1.ProductImportItem.ResponseMappingEntry
-	102, // 36: riptik.booking.v1.ProductImportItem.meta_data:type_name -> riptik.booking.v1.ProductImportItem.MetaDataEntry
+	106, // 34: riptik.booking.v1.ProductImportItem.request_mapping:type_name -> riptik.booking.v1.ProductImportItem.RequestMappingEntry
+	107, // 35: riptik.booking.v1.ProductImportItem.response_mapping:type_name -> riptik.booking.v1.ProductImportItem.ResponseMappingEntry
+	108, // 36: riptik.booking.v1.ProductImportItem.meta_data:type_name -> riptik.booking.v1.ProductImportItem.MetaDataEntry
 	37,  // 37: riptik.booking.v1.BulkImportProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
-	103, // 38: riptik.booking.v1.BulkUpdateProductsRequest.updates:type_name -> riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
+	109, // 38: riptik.booking.v1.BulkUpdateProductsRequest.updates:type_name -> riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
 	37,  // 39: riptik.booking.v1.BulkUpdateProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
 	37,  // 40: riptik.booking.v1.BulkDeleteProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
-	114, // 41: riptik.booking.v1.InventoryCode.created_at:type_name -> google.protobuf.Timestamp
-	114, // 42: riptik.booking.v1.InventoryCode.reserved_until:type_name -> google.protobuf.Timestamp
-	114, // 43: riptik.booking.v1.InventoryCode.redeemed_at:type_name -> google.protobuf.Timestamp
-	114, // 44: riptik.booking.v1.InventoryCode.expired_at:type_name -> google.protobuf.Timestamp
-	104, // 45: riptik.booking.v1.ImportInventoryRequest.config:type_name -> riptik.booking.v1.ImportInventoryRequest.ConfigEntry
-	105, // 46: riptik.booking.v1.ListInventoryRequest.filter:type_name -> riptik.booking.v1.ListInventoryRequest.FilterEntry
+	120, // 41: riptik.booking.v1.InventoryCode.created_at:type_name -> google.protobuf.Timestamp
+	120, // 42: riptik.booking.v1.InventoryCode.reserved_until:type_name -> google.protobuf.Timestamp
+	120, // 43: riptik.booking.v1.InventoryCode.redeemed_at:type_name -> google.protobuf.Timestamp
+	120, // 44: riptik.booking.v1.InventoryCode.expired_at:type_name -> google.protobuf.Timestamp
+	110, // 45: riptik.booking.v1.ImportInventoryRequest.config:type_name -> riptik.booking.v1.ImportInventoryRequest.ConfigEntry
+	111, // 46: riptik.booking.v1.ListInventoryRequest.filter:type_name -> riptik.booking.v1.ListInventoryRequest.FilterEntry
 	38,  // 47: riptik.booking.v1.ListInventoryResponse.codes:type_name -> riptik.booking.v1.InventoryCode
-	106, // 48: riptik.booking.v1.InventoryStatsResponse.counts:type_name -> riptik.booking.v1.InventoryStatsResponse.CountsEntry
-	114, // 49: riptik.booking.v1.Fulfillment.created_at:type_name -> google.protobuf.Timestamp
-	114, // 50: riptik.booking.v1.Fulfillment.fulfilled_at:type_name -> google.protobuf.Timestamp
-	107, // 51: riptik.booking.v1.Fulfillment.metadata:type_name -> riptik.booking.v1.Fulfillment.MetadataEntry
-	108, // 52: riptik.booking.v1.ListFulfillmentsRequest.filter:type_name -> riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
+	112, // 48: riptik.booking.v1.InventoryStatsResponse.counts:type_name -> riptik.booking.v1.InventoryStatsResponse.CountsEntry
+	120, // 49: riptik.booking.v1.Fulfillment.created_at:type_name -> google.protobuf.Timestamp
+	120, // 50: riptik.booking.v1.Fulfillment.fulfilled_at:type_name -> google.protobuf.Timestamp
+	113, // 51: riptik.booking.v1.Fulfillment.metadata:type_name -> riptik.booking.v1.Fulfillment.MetadataEntry
+	114, // 52: riptik.booking.v1.ListFulfillmentsRequest.filter:type_name -> riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
 	45,  // 53: riptik.booking.v1.GetFulfillmentResponse.fulfillment:type_name -> riptik.booking.v1.Fulfillment
 	45,  // 54: riptik.booking.v1.ListFulfillmentsResponse.fulfillments:type_name -> riptik.booking.v1.Fulfillment
-	109, // 55: riptik.booking.v1.FulfillmentStatsResponse.stats:type_name -> riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
-	110, // 56: riptik.booking.v1.AssignProductToEventRequest.name:type_name -> riptik.booking.v1.AssignProductToEventRequest.NameEntry
-	111, // 57: riptik.booking.v1.AssignProductToEventRequest.event_pricing:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
-	112, // 58: riptik.booking.v1.AssignProductToEventRequest.event_settings:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
-	113, // 59: riptik.booking.v1.GetEventProductAssignmentsRequest.filters:type_name -> riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
+	115, // 55: riptik.booking.v1.FulfillmentStatsResponse.stats:type_name -> riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
+	116, // 56: riptik.booking.v1.AssignProductToEventRequest.name:type_name -> riptik.booking.v1.AssignProductToEventRequest.NameEntry
+	117, // 57: riptik.booking.v1.AssignProductToEventRequest.event_pricing:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
+	118, // 58: riptik.booking.v1.AssignProductToEventRequest.event_settings:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
+	119, // 59: riptik.booking.v1.GetEventProductAssignmentsRequest.filters:type_name -> riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
 	19,  // 60: riptik.booking.v1.ListEventProductsResponse.products:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 61: riptik.booking.v1.EventInventoryStatsResponse.items:type_name -> riptik.booking.v1.ThirdPartyProduct
-	114, // 62: riptik.booking.v1.StockReconciliation.checked_at:type_name -> google.protobuf.Timestamp
+	120, // 62: riptik.booking.v1.StockReconciliation.checked_at:type_name -> google.protobuf.Timestamp
 	66,  // 63: riptik.booking.v1.TriggerReconciliationResponse.reconciliation:type_name -> riptik.booking.v1.StockReconciliation
 	66,  // 64: riptik.booking.v1.ListReconciliationHistoryResponse.records:type_name -> riptik.booking.v1.StockReconciliation
-	114, // 65: riptik.booking.v1.Settlement.period_start:type_name -> google.protobuf.Timestamp
-	114, // 66: riptik.booking.v1.Settlement.period_end:type_name -> google.protobuf.Timestamp
-	114, // 67: riptik.booking.v1.Settlement.confirmed_at:type_name -> google.protobuf.Timestamp
-	114, // 68: riptik.booking.v1.Settlement.paid_at:type_name -> google.protobuf.Timestamp
-	114, // 69: riptik.booking.v1.Settlement.created_at:type_name -> google.protobuf.Timestamp
+	120, // 65: riptik.booking.v1.Settlement.period_start:type_name -> google.protobuf.Timestamp
+	120, // 66: riptik.booking.v1.Settlement.period_end:type_name -> google.protobuf.Timestamp
+	120, // 67: riptik.booking.v1.Settlement.confirmed_at:type_name -> google.protobuf.Timestamp
+	120, // 68: riptik.booking.v1.Settlement.paid_at:type_name -> google.protobuf.Timestamp
+	120, // 69: riptik.booking.v1.Settlement.created_at:type_name -> google.protobuf.Timestamp
 	71,  // 70: riptik.booking.v1.Settlement.items:type_name -> riptik.booking.v1.SettlementItem
-	114, // 71: riptik.booking.v1.CreateSettlementRequest.period_start:type_name -> google.protobuf.Timestamp
-	114, // 72: riptik.booking.v1.CreateSettlementRequest.period_end:type_name -> google.protobuf.Timestamp
+	120, // 71: riptik.booking.v1.CreateSettlementRequest.period_start:type_name -> google.protobuf.Timestamp
+	120, // 72: riptik.booking.v1.CreateSettlementRequest.period_end:type_name -> google.protobuf.Timestamp
 	72,  // 73: riptik.booking.v1.CreateSettlementResponse.settlement:type_name -> riptik.booking.v1.Settlement
 	72,  // 74: riptik.booking.v1.GetSettlementResponse.settlement:type_name -> riptik.booking.v1.Settlement
 	72,  // 75: riptik.booking.v1.ListSettlementsResponse.settlements:type_name -> riptik.booking.v1.Settlement
 	72,  // 76: riptik.booking.v1.ConfirmSettlementResponse.settlement:type_name -> riptik.booking.v1.Settlement
 	72,  // 77: riptik.booking.v1.MarkSettlementPaidResponse.settlement:type_name -> riptik.booking.v1.Settlement
-	115, // 78: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 79: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 80: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 81: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 82: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 83: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 84: riptik.booking.v1.ListSuppliersRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	115, // 85: riptik.booking.v1.SupplierImportItem.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 86: riptik.booking.v1.SupplierImportItem.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	115, // 87: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
-	115, // 88: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 89: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 90: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry.value:type_name -> google.protobuf.Any
-	115, // 91: riptik.booking.v1.CreateProductRequest.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 92: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 93: riptik.booking.v1.CreateProductRequest.MetaDataEntry.value:type_name -> google.protobuf.Any
-	115, // 94: riptik.booking.v1.ListProductsRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	115, // 95: riptik.booking.v1.ProductImportItem.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 96: riptik.booking.v1.ProductImportItem.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	115, // 97: riptik.booking.v1.ProductImportItem.MetaDataEntry.value:type_name -> google.protobuf.Any
-	115, // 98: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
-	115, // 99: riptik.booking.v1.ListInventoryRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	115, // 100: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	115, // 101: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry.value:type_name -> google.protobuf.Any
-	115, // 102: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry.value:type_name -> google.protobuf.Any
-	115, // 103: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry.value:type_name -> google.protobuf.Any
-	104, // [104:104] is the sub-list for method output_type
-	104, // [104:104] is the sub-list for method input_type
-	104, // [104:104] is the sub-list for extension type_name
-	104, // [104:104] is the sub-list for extension extendee
-	0,   // [0:104] is the sub-list for field type_name
+	83,  // 78: riptik.booking.v1.ApiCallLog.summary:type_name -> riptik.booking.v1.ApiCallLogSummary
+	83,  // 79: riptik.booking.v1.ListApiCallLogsResponse.logs:type_name -> riptik.booking.v1.ApiCallLogSummary
+	84,  // 80: riptik.booking.v1.GetApiCallLogResponse.log:type_name -> riptik.booking.v1.ApiCallLog
+	121, // 81: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 82: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 83: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 84: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 85: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 86: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 87: riptik.booking.v1.ListSuppliersRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	121, // 88: riptik.booking.v1.SupplierImportItem.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 89: riptik.booking.v1.SupplierImportItem.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	121, // 90: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
+	121, // 91: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 92: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 93: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry.value:type_name -> google.protobuf.Any
+	121, // 94: riptik.booking.v1.CreateProductRequest.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 95: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 96: riptik.booking.v1.CreateProductRequest.MetaDataEntry.value:type_name -> google.protobuf.Any
+	121, // 97: riptik.booking.v1.ListProductsRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	121, // 98: riptik.booking.v1.ProductImportItem.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 99: riptik.booking.v1.ProductImportItem.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	121, // 100: riptik.booking.v1.ProductImportItem.MetaDataEntry.value:type_name -> google.protobuf.Any
+	121, // 101: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
+	121, // 102: riptik.booking.v1.ListInventoryRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	121, // 103: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	121, // 104: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry.value:type_name -> google.protobuf.Any
+	121, // 105: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry.value:type_name -> google.protobuf.Any
+	121, // 106: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry.value:type_name -> google.protobuf.Any
+	107, // [107:107] is the sub-list for method output_type
+	107, // [107:107] is the sub-list for method input_type
+	107, // [107:107] is the sub-list for extension type_name
+	107, // [107:107] is the sub-list for extension extendee
+	0,   // [0:107] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_thirdparty_proto_init() }
@@ -7853,7 +8487,7 @@ func file_v1_booking_thirdparty_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_thirdparty_proto_rawDesc), len(file_v1_booking_thirdparty_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   114,
+			NumMessages:   120,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
