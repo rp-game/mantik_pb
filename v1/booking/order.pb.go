@@ -1732,8 +1732,11 @@ type OrderPosition struct {
 	TicketQr          string `protobuf:"bytes,13,opt,name=ticket_qr,json=ticketQr,proto3" json:"ticket_qr,omitempty"`                            // Third-party voucher QR payload (may equal ticket_code)
 	FulfillmentStatus string `protobuf:"bytes,14,opt,name=fulfillment_status,json=fulfillmentStatus,proto3" json:"fulfillment_status,omitempty"` // "", "pending", "fulfilled", "failed", "refunded" — check before showing ticket_code
 	Tax               string `protobuf:"bytes,15,opt,name=tax,proto3" json:"tax,omitempty"`                                                      // Tax already included in price, as decimal string (task 001 — informational, tax-inclusive pricing)
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// tax_rate — % thuế đã áp dụng lúc tạo position (snapshot, khác Item.tax_rate là giá trị sống có thể
+	// đổi sau — mantik-tax-config.md Phase F1). "" = position tạo trước khi có field này.
+	TaxRate       string `protobuf:"bytes,16,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OrderPosition) Reset() {
@@ -1871,6 +1874,13 @@ func (x *OrderPosition) GetTax() string {
 	return ""
 }
 
+func (x *OrderPosition) GetTaxRate() string {
+	if x != nil {
+		return x.TaxRate
+	}
+	return ""
+}
+
 // Order position detail (for findBySecret response)
 type OrderPositionDetail struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1891,6 +1901,7 @@ type OrderPositionDetail struct {
 	SeatLabel     string                 `protobuf:"bytes,15,opt,name=seat_label,json=seatLabel,proto3" json:"seat_label,omitempty"`             // "" for general-admission — G9-24e: check-in previously had NO seat field at all
 	Blocked       bool                   `protobuf:"varint,16,opt,name=blocked,proto3" json:"blocked,omitempty"`                                 // true if OrderPosition.Blocked (jsonb) is non-empty — checkin-app.md §0 mục 2/§6.0 A2
 	ItemName      string                 `protobuf:"bytes,17,opt,name=item_name,json=itemName,proto3" json:"item_name,omitempty"`                // OrderPosition.ItemName (denormalized, đã có sẵn ở model — G10-12 P4 review: redeem online chưa từng trả tên hạng vé, chỉ CheckinListPosition (prefetch) có
+	TaxRate       string                 `protobuf:"bytes,18,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`                   // % thuế snapshot lúc tạo position — xem OrderPosition.tax_rate
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2040,6 +2051,13 @@ func (x *OrderPositionDetail) GetBlocked() bool {
 func (x *OrderPositionDetail) GetItemName() string {
 	if x != nil {
 		return x.ItemName
+	}
+	return ""
+}
+
+func (x *OrderPositionDetail) GetTaxRate() string {
+	if x != nil {
+		return x.TaxRate
 	}
 	return ""
 }
@@ -3770,7 +3788,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xd9\x03\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf4\x03\n" +
 	"\rOrderPosition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05order\x18\x02 \x01(\tR\x05order\x12\x1e\n" +
@@ -3790,7 +3808,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0eticket_barcode\x18\f \x01(\tR\rticketBarcode\x12\x1b\n" +
 	"\tticket_qr\x18\r \x01(\tR\bticketQr\x12-\n" +
 	"\x12fulfillment_status\x18\x0e \x01(\tR\x11fulfillmentStatus\x12\x10\n" +
-	"\x03tax\x18\x0f \x01(\tR\x03tax\"\xe8\x03\n" +
+	"\x03tax\x18\x0f \x01(\tR\x03tax\x12\x19\n" +
+	"\btax_rate\x18\x10 \x01(\tR\ataxRate\"\x83\x04\n" +
 	"\x13OrderPositionDetail\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x17\n" +
@@ -3811,7 +3830,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\n" +
 	"seat_label\x18\x0f \x01(\tR\tseatLabel\x12\x18\n" +
 	"\ablocked\x18\x10 \x01(\bR\ablocked\x12\x1b\n" +
-	"\titem_name\x18\x11 \x01(\tR\bitemName\"I\n" +
+	"\titem_name\x18\x11 \x01(\tR\bitemName\x12\x19\n" +
+	"\btax_rate\x18\x12 \x01(\tR\ataxRate\"I\n" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
