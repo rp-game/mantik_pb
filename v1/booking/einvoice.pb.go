@@ -644,6 +644,666 @@ func (x *UpsertEinvoiceProviderConfigResponse) GetErrorMessage() string {
 	return ""
 }
 
+type Einvoice struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrderId       int64                  `protobuf:"varint,2,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
+	OrderCode     string                 `protobuf:"bytes,3,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	Organizer     string                 `protobuf:"bytes,4,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,5,opt,name=event,proto3" json:"event,omitempty"`
+	ProviderType  string                 `protobuf:"bytes,6,opt,name=provider_type,json=providerType,proto3" json:"provider_type,omitempty"` // "HILO" | "MISA"
+	Status        string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`                                 // "pending" | "issued" | "failed"
+	Fkey          string                 `protobuf:"bytes,8,opt,name=fkey,proto3" json:"fkey,omitempty"`                                     // khoá tham chiếu phía provider
+	ErrorMessage  string                 `protobuf:"bytes,9,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	BuyerName     string                 `protobuf:"bytes,10,opt,name=buyer_name,json=buyerName,proto3" json:"buyer_name,omitempty"`
+	BuyerCompany  string                 `protobuf:"bytes,11,opt,name=buyer_company,json=buyerCompany,proto3" json:"buyer_company,omitempty"`
+	BuyerTaxCode  string                 `protobuf:"bytes,12,opt,name=buyer_tax_code,json=buyerTaxCode,proto3" json:"buyer_tax_code,omitempty"`
+	BuyerAddress  string                 `protobuf:"bytes,13,opt,name=buyer_address,json=buyerAddress,proto3" json:"buyer_address,omitempty"`
+	BuyerEmail    string                 `protobuf:"bytes,14,opt,name=buyer_email,json=buyerEmail,proto3" json:"buyer_email,omitempty"`
+	BuyerPhone    string                 `protobuf:"bytes,15,opt,name=buyer_phone,json=buyerPhone,proto3" json:"buyer_phone,omitempty"`
+	PaymentMethod string                 `protobuf:"bytes,16,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`
+	Note          string                 `protobuf:"bytes,17,opt,name=note,proto3" json:"note,omitempty"`
+	Subtotal      float64                `protobuf:"fixed64,18,opt,name=subtotal,proto3" json:"subtotal,omitempty"`
+	VatAmount     float64                `protobuf:"fixed64,19,opt,name=vat_amount,json=vatAmount,proto3" json:"vat_amount,omitempty"`
+	TotalAmount   float64                `protobuf:"fixed64,20,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	Created       string                 `protobuf:"bytes,21,opt,name=created,proto3" json:"created,omitempty"`                               // ISO datetime
+	LastModified  string                 `protobuf:"bytes,22,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"` // ISO datetime
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Einvoice) Reset() {
+	*x = Einvoice{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Einvoice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Einvoice) ProtoMessage() {}
+
+func (x *Einvoice) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Einvoice.ProtoReflect.Descriptor instead.
+func (*Einvoice) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Einvoice) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Einvoice) GetOrderId() int64 {
+	if x != nil {
+		return x.OrderId
+	}
+	return 0
+}
+
+func (x *Einvoice) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *Einvoice) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *Einvoice) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *Einvoice) GetProviderType() string {
+	if x != nil {
+		return x.ProviderType
+	}
+	return ""
+}
+
+func (x *Einvoice) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *Einvoice) GetFkey() string {
+	if x != nil {
+		return x.Fkey
+	}
+	return ""
+}
+
+func (x *Einvoice) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerName() string {
+	if x != nil {
+		return x.BuyerName
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerCompany() string {
+	if x != nil {
+		return x.BuyerCompany
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerTaxCode() string {
+	if x != nil {
+		return x.BuyerTaxCode
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerAddress() string {
+	if x != nil {
+		return x.BuyerAddress
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerEmail() string {
+	if x != nil {
+		return x.BuyerEmail
+	}
+	return ""
+}
+
+func (x *Einvoice) GetBuyerPhone() string {
+	if x != nil {
+		return x.BuyerPhone
+	}
+	return ""
+}
+
+func (x *Einvoice) GetPaymentMethod() string {
+	if x != nil {
+		return x.PaymentMethod
+	}
+	return ""
+}
+
+func (x *Einvoice) GetNote() string {
+	if x != nil {
+		return x.Note
+	}
+	return ""
+}
+
+func (x *Einvoice) GetSubtotal() float64 {
+	if x != nil {
+		return x.Subtotal
+	}
+	return 0
+}
+
+func (x *Einvoice) GetVatAmount() float64 {
+	if x != nil {
+		return x.VatAmount
+	}
+	return 0
+}
+
+func (x *Einvoice) GetTotalAmount() float64 {
+	if x != nil {
+		return x.TotalAmount
+	}
+	return 0
+}
+
+func (x *Einvoice) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+func (x *Einvoice) GetLastModified() string {
+	if x != nil {
+		return x.LastModified
+	}
+	return ""
+}
+
+type CreateEinvoiceForOrderRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	OrderCode     string                 `protobuf:"bytes,3,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	BuyerName     string                 `protobuf:"bytes,4,opt,name=buyer_name,json=buyerName,proto3" json:"buyer_name,omitempty"`
+	BuyerCompany  string                 `protobuf:"bytes,5,opt,name=buyer_company,json=buyerCompany,proto3" json:"buyer_company,omitempty"`
+	BuyerTaxCode  string                 `protobuf:"bytes,6,opt,name=buyer_tax_code,json=buyerTaxCode,proto3" json:"buyer_tax_code,omitempty"`
+	BuyerAddress  string                 `protobuf:"bytes,7,opt,name=buyer_address,json=buyerAddress,proto3" json:"buyer_address,omitempty"`
+	BuyerEmail    string                 `protobuf:"bytes,8,opt,name=buyer_email,json=buyerEmail,proto3" json:"buyer_email,omitempty"`
+	BuyerPhone    string                 `protobuf:"bytes,9,opt,name=buyer_phone,json=buyerPhone,proto3" json:"buyer_phone,omitempty"`
+	PaymentMethod string                 `protobuf:"bytes,10,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`
+	Note          string                 `protobuf:"bytes,11,opt,name=note,proto3" json:"note,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateEinvoiceForOrderRequest) Reset() {
+	*x = CreateEinvoiceForOrderRequest{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateEinvoiceForOrderRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateEinvoiceForOrderRequest) ProtoMessage() {}
+
+func (x *CreateEinvoiceForOrderRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateEinvoiceForOrderRequest.ProtoReflect.Descriptor instead.
+func (*CreateEinvoiceForOrderRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerName() string {
+	if x != nil {
+		return x.BuyerName
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerCompany() string {
+	if x != nil {
+		return x.BuyerCompany
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerTaxCode() string {
+	if x != nil {
+		return x.BuyerTaxCode
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerAddress() string {
+	if x != nil {
+		return x.BuyerAddress
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerEmail() string {
+	if x != nil {
+		return x.BuyerEmail
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetBuyerPhone() string {
+	if x != nil {
+		return x.BuyerPhone
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetPaymentMethod() string {
+	if x != nil {
+		return x.PaymentMethod
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderRequest) GetNote() string {
+	if x != nil {
+		return x.Note
+	}
+	return ""
+}
+
+type CreateEinvoiceForOrderResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Invoice       *Einvoice              `protobuf:"bytes,2,opt,name=invoice,proto3" json:"invoice,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateEinvoiceForOrderResponse) Reset() {
+	*x = CreateEinvoiceForOrderResponse{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateEinvoiceForOrderResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateEinvoiceForOrderResponse) ProtoMessage() {}
+
+func (x *CreateEinvoiceForOrderResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateEinvoiceForOrderResponse.ProtoReflect.Descriptor instead.
+func (*CreateEinvoiceForOrderResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CreateEinvoiceForOrderResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateEinvoiceForOrderResponse) GetInvoice() *Einvoice {
+	if x != nil {
+		return x.Invoice
+	}
+	return nil
+}
+
+func (x *CreateEinvoiceForOrderResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateEinvoiceForOrderResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type ListEinvoicesForOrderRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	OrderCode     string                 `protobuf:"bytes,3,opt,name=order_code,json=orderCode,proto3" json:"order_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEinvoicesForOrderRequest) Reset() {
+	*x = ListEinvoicesForOrderRequest{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEinvoicesForOrderRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEinvoicesForOrderRequest) ProtoMessage() {}
+
+func (x *ListEinvoicesForOrderRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEinvoicesForOrderRequest.ProtoReflect.Descriptor instead.
+func (*ListEinvoicesForOrderRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListEinvoicesForOrderRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *ListEinvoicesForOrderRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *ListEinvoicesForOrderRequest) GetOrderCode() string {
+	if x != nil {
+		return x.OrderCode
+	}
+	return ""
+}
+
+type ListEinvoicesForOrderResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Invoices      []*Einvoice            `protobuf:"bytes,2,rep,name=invoices,proto3" json:"invoices,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListEinvoicesForOrderResponse) Reset() {
+	*x = ListEinvoicesForOrderResponse{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListEinvoicesForOrderResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListEinvoicesForOrderResponse) ProtoMessage() {}
+
+func (x *ListEinvoicesForOrderResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListEinvoicesForOrderResponse.ProtoReflect.Descriptor instead.
+func (*ListEinvoicesForOrderResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListEinvoicesForOrderResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListEinvoicesForOrderResponse) GetInvoices() []*Einvoice {
+	if x != nil {
+		return x.Invoices
+	}
+	return nil
+}
+
+func (x *ListEinvoicesForOrderResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListEinvoicesForOrderResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+type GetEinvoicePdfRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	InvoiceId     int64                  `protobuf:"varint,3,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEinvoicePdfRequest) Reset() {
+	*x = GetEinvoicePdfRequest{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEinvoicePdfRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEinvoicePdfRequest) ProtoMessage() {}
+
+func (x *GetEinvoicePdfRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEinvoicePdfRequest.ProtoReflect.Descriptor instead.
+func (*GetEinvoicePdfRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetEinvoicePdfRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *GetEinvoicePdfRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *GetEinvoicePdfRequest) GetInvoiceId() int64 {
+	if x != nil {
+		return x.InvoiceId
+	}
+	return 0
+}
+
+type GetEinvoicePdfResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	PdfBase64     string                 `protobuf:"bytes,2,opt,name=pdf_base64,json=pdfBase64,proto3" json:"pdf_base64,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEinvoicePdfResponse) Reset() {
+	*x = GetEinvoicePdfResponse{}
+	mi := &file_v1_booking_einvoice_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEinvoicePdfResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEinvoicePdfResponse) ProtoMessage() {}
+
+func (x *GetEinvoicePdfResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_einvoice_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEinvoicePdfResponse.ProtoReflect.Descriptor instead.
+func (*GetEinvoicePdfResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_einvoice_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetEinvoicePdfResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetEinvoicePdfResponse) GetPdfBase64() string {
+	if x != nil {
+		return x.PdfBase64
+	}
+	return ""
+}
+
+func (x *GetEinvoicePdfResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *GetEinvoicePdfResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_einvoice_proto protoreflect.FileDescriptor
 
 const file_v1_booking_einvoice_proto_rawDesc = "" +
@@ -714,6 +1374,81 @@ const file_v1_booking_einvoice_proto_rawDesc = "" +
 	"\x06config\x18\x02 \x01(\v2).riptik.booking.v1.EinvoiceProviderConfigR\x06config\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xa7\x05\n" +
+	"\bEinvoice\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
+	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\x03 \x01(\tR\torderCode\x12\x1c\n" +
+	"\torganizer\x18\x04 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x05 \x01(\tR\x05event\x12#\n" +
+	"\rprovider_type\x18\x06 \x01(\tR\fproviderType\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status\x12\x12\n" +
+	"\x04fkey\x18\b \x01(\tR\x04fkey\x12#\n" +
+	"\rerror_message\x18\t \x01(\tR\ferrorMessage\x12\x1d\n" +
+	"\n" +
+	"buyer_name\x18\n" +
+	" \x01(\tR\tbuyerName\x12#\n" +
+	"\rbuyer_company\x18\v \x01(\tR\fbuyerCompany\x12$\n" +
+	"\x0ebuyer_tax_code\x18\f \x01(\tR\fbuyerTaxCode\x12#\n" +
+	"\rbuyer_address\x18\r \x01(\tR\fbuyerAddress\x12\x1f\n" +
+	"\vbuyer_email\x18\x0e \x01(\tR\n" +
+	"buyerEmail\x12\x1f\n" +
+	"\vbuyer_phone\x18\x0f \x01(\tR\n" +
+	"buyerPhone\x12%\n" +
+	"\x0epayment_method\x18\x10 \x01(\tR\rpaymentMethod\x12\x12\n" +
+	"\x04note\x18\x11 \x01(\tR\x04note\x12\x1a\n" +
+	"\bsubtotal\x18\x12 \x01(\x01R\bsubtotal\x12\x1d\n" +
+	"\n" +
+	"vat_amount\x18\x13 \x01(\x01R\tvatAmount\x12!\n" +
+	"\ftotal_amount\x18\x14 \x01(\x01R\vtotalAmount\x12\x18\n" +
+	"\acreated\x18\x15 \x01(\tR\acreated\x12#\n" +
+	"\rlast_modified\x18\x16 \x01(\tR\flastModified\"\xfe\x02\n" +
+	"\x1dCreateEinvoiceForOrderRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\x03 \x01(\tR\torderCode\x12\x1d\n" +
+	"\n" +
+	"buyer_name\x18\x04 \x01(\tR\tbuyerName\x12#\n" +
+	"\rbuyer_company\x18\x05 \x01(\tR\fbuyerCompany\x12$\n" +
+	"\x0ebuyer_tax_code\x18\x06 \x01(\tR\fbuyerTaxCode\x12#\n" +
+	"\rbuyer_address\x18\a \x01(\tR\fbuyerAddress\x12\x1f\n" +
+	"\vbuyer_email\x18\b \x01(\tR\n" +
+	"buyerEmail\x12\x1f\n" +
+	"\vbuyer_phone\x18\t \x01(\tR\n" +
+	"buyerPhone\x12%\n" +
+	"\x0epayment_method\x18\n" +
+	" \x01(\tR\rpaymentMethod\x12\x12\n" +
+	"\x04note\x18\v \x01(\tR\x04note\"\xb5\x01\n" +
+	"\x1eCreateEinvoiceForOrderResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x125\n" +
+	"\ainvoice\x18\x02 \x01(\v2\x1b.riptik.booking.v1.EinvoiceR\ainvoice\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"q\n" +
+	"\x1cListEinvoicesForOrderRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
+	"\n" +
+	"order_code\x18\x03 \x01(\tR\torderCode\"\xb6\x01\n" +
+	"\x1dListEinvoicesForOrderResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x127\n" +
+	"\binvoices\x18\x02 \x03(\v2\x1b.riptik.booking.v1.EinvoiceR\binvoices\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"j\n" +
+	"\x15GetEinvoicePdfRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
+	"\n" +
+	"invoice_id\x18\x03 \x01(\x03R\tinvoiceId\"\x95\x01\n" +
+	"\x16GetEinvoicePdfResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"pdf_base64\x18\x02 \x01(\tR\tpdfBase64\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
@@ -728,22 +1463,31 @@ func file_v1_booking_einvoice_proto_rawDescGZIP() []byte {
 	return file_v1_booking_einvoice_proto_rawDescData
 }
 
-var file_v1_booking_einvoice_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_v1_booking_einvoice_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_v1_booking_einvoice_proto_goTypes = []any{
 	(*EinvoiceProviderConfig)(nil),               // 0: riptik.booking.v1.EinvoiceProviderConfig
 	(*GetEinvoiceProviderConfigRequest)(nil),     // 1: riptik.booking.v1.GetEinvoiceProviderConfigRequest
 	(*GetEinvoiceProviderConfigResponse)(nil),    // 2: riptik.booking.v1.GetEinvoiceProviderConfigResponse
 	(*UpsertEinvoiceProviderConfigRequest)(nil),  // 3: riptik.booking.v1.UpsertEinvoiceProviderConfigRequest
 	(*UpsertEinvoiceProviderConfigResponse)(nil), // 4: riptik.booking.v1.UpsertEinvoiceProviderConfigResponse
+	(*Einvoice)(nil),                             // 5: riptik.booking.v1.Einvoice
+	(*CreateEinvoiceForOrderRequest)(nil),        // 6: riptik.booking.v1.CreateEinvoiceForOrderRequest
+	(*CreateEinvoiceForOrderResponse)(nil),       // 7: riptik.booking.v1.CreateEinvoiceForOrderResponse
+	(*ListEinvoicesForOrderRequest)(nil),         // 8: riptik.booking.v1.ListEinvoicesForOrderRequest
+	(*ListEinvoicesForOrderResponse)(nil),        // 9: riptik.booking.v1.ListEinvoicesForOrderResponse
+	(*GetEinvoicePdfRequest)(nil),                // 10: riptik.booking.v1.GetEinvoicePdfRequest
+	(*GetEinvoicePdfResponse)(nil),               // 11: riptik.booking.v1.GetEinvoicePdfResponse
 }
 var file_v1_booking_einvoice_proto_depIdxs = []int32{
 	0, // 0: riptik.booking.v1.GetEinvoiceProviderConfigResponse.config:type_name -> riptik.booking.v1.EinvoiceProviderConfig
 	0, // 1: riptik.booking.v1.UpsertEinvoiceProviderConfigResponse.config:type_name -> riptik.booking.v1.EinvoiceProviderConfig
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	5, // 2: riptik.booking.v1.CreateEinvoiceForOrderResponse.invoice:type_name -> riptik.booking.v1.Einvoice
+	5, // 3: riptik.booking.v1.ListEinvoicesForOrderResponse.invoices:type_name -> riptik.booking.v1.Einvoice
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_einvoice_proto_init() }
@@ -757,7 +1501,7 @@ func file_v1_booking_einvoice_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_einvoice_proto_rawDesc), len(file_v1_booking_einvoice_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
