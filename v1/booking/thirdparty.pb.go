@@ -7,10 +7,10 @@
 package booking
 
 import (
+	any1 "github.com/golang/protobuf/ptypes/any"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	anypb "google.golang.org/protobuf/types/known/anypb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -34,11 +34,11 @@ type ThirdPartySupplier struct {
 	CommissionRate float64                `protobuf:"fixed64,7,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
 	SettlementDays int32                  `protobuf:"varint,8,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
 	Currency       string                 `protobuf:"bytes,9,opt,name=currency,proto3" json:"currency,omitempty"`
-	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,10,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,11,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,10,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,11,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active         bool                   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt      *timestamp.Timestamp   `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt      *timestamp.Timestamp   `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -136,14 +136,14 @@ func (x *ThirdPartySupplier) GetCurrency() string {
 	return ""
 }
 
-func (x *ThirdPartySupplier) GetApiConfig() map[string]*anypb.Any {
+func (x *ThirdPartySupplier) GetApiConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.ApiConfig
 	}
 	return nil
 }
 
-func (x *ThirdPartySupplier) GetCsvConfig() map[string]*anypb.Any {
+func (x *ThirdPartySupplier) GetCsvConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.CsvConfig
 	}
@@ -157,14 +157,14 @@ func (x *ThirdPartySupplier) GetActive() bool {
 	return false
 }
 
-func (x *ThirdPartySupplier) GetCreatedAt() *timestamppb.Timestamp {
+func (x *ThirdPartySupplier) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *ThirdPartySupplier) GetUpdatedAt() *timestamppb.Timestamp {
+func (x *ThirdPartySupplier) GetUpdatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
@@ -181,8 +181,8 @@ type CreateSupplierRequest struct {
 	CommissionRate float64                `protobuf:"fixed64,6,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
 	SettlementDays int32                  `protobuf:"varint,7,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
 	Currency       string                 `protobuf:"bytes,8,opt,name=currency,proto3" json:"currency,omitempty"`
-	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,9,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,9,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active         bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
 	OrganizerId    int64                  `protobuf:"varint,12,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
@@ -275,14 +275,14 @@ func (x *CreateSupplierRequest) GetCurrency() string {
 	return ""
 }
 
-func (x *CreateSupplierRequest) GetApiConfig() map[string]*anypb.Any {
+func (x *CreateSupplierRequest) GetApiConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.ApiConfig
 	}
 	return nil
 }
 
-func (x *CreateSupplierRequest) GetCsvConfig() map[string]*anypb.Any {
+func (x *CreateSupplierRequest) GetCsvConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.CsvConfig
 	}
@@ -312,8 +312,8 @@ type UpdateSupplierRequest struct {
 	CommissionRate float64                `protobuf:"fixed64,5,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
 	SettlementDays int32                  `protobuf:"varint,6,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
 	Currency       string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
-	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	OrganizerId    int64                  `protobuf:"varint,10,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -398,14 +398,14 @@ func (x *UpdateSupplierRequest) GetCurrency() string {
 	return ""
 }
 
-func (x *UpdateSupplierRequest) GetApiConfig() map[string]*anypb.Any {
+func (x *UpdateSupplierRequest) GetApiConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.ApiConfig
 	}
 	return nil
 }
 
-func (x *UpdateSupplierRequest) GetCsvConfig() map[string]*anypb.Any {
+func (x *UpdateSupplierRequest) GetCsvConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.CsvConfig
 	}
@@ -475,7 +475,7 @@ type ListSuppliersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         int32                  `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
-	Filter        map[string]*anypb.Any  `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filter        map[string]*any1.Any   `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -524,7 +524,7 @@ func (x *ListSuppliersRequest) GetOffset() int32 {
 	return 0
 }
 
-func (x *ListSuppliersRequest) GetFilter() map[string]*anypb.Any {
+func (x *ListSuppliersRequest) GetFilter() map[string]*any1.Any {
 	if x != nil {
 		return x.Filter
 	}
@@ -1029,8 +1029,8 @@ type SupplierImportItem struct {
 	CommissionRate float64                `protobuf:"fixed64,6,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
 	SettlementDays int32                  `protobuf:"varint,7,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
 	Currency       string                 `protobuf:"bytes,8,opt,name=currency,proto3" json:"currency,omitempty"`
-	ApiConfig      map[string]*anypb.Any  `protobuf:"bytes,9,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CsvConfig      map[string]*anypb.Any  `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,9,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active         bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -1122,14 +1122,14 @@ func (x *SupplierImportItem) GetCurrency() string {
 	return ""
 }
 
-func (x *SupplierImportItem) GetApiConfig() map[string]*anypb.Any {
+func (x *SupplierImportItem) GetApiConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.ApiConfig
 	}
 	return nil
 }
 
-func (x *SupplierImportItem) GetCsvConfig() map[string]*anypb.Any {
+func (x *SupplierImportItem) GetCsvConfig() map[string]*any1.Any {
 	if x != nil {
 		return x.CsvConfig
 	}
@@ -1240,7 +1240,7 @@ func (x *BulkImportSuppliersResponse) GetErrorMessage() string {
 type BulkUpdateSuppliersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
-	Updates       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
+	Updates       map[string]*any1.Any   `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
 	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1283,7 +1283,7 @@ func (x *BulkUpdateSuppliersRequest) GetIds() []int64 {
 	return nil
 }
 
-func (x *BulkUpdateSuppliersRequest) GetUpdates() map[string]*anypb.Any {
+func (x *BulkUpdateSuppliersRequest) GetUpdates() map[string]*any1.Any {
 	if x != nil {
 		return x.Updates
 	}
@@ -1626,12 +1626,12 @@ type ThirdPartyProduct struct {
 	DeliveryMethod    string                 `protobuf:"bytes,9,opt,name=delivery_method,json=deliveryMethod,proto3" json:"delivery_method,omitempty"`
 	CostPrice         float64                `protobuf:"fixed64,10,opt,name=cost_price,json=costPrice,proto3" json:"cost_price,omitempty"`
 	MarkupPercentage  float64                `protobuf:"fixed64,11,opt,name=markup_percentage,json=markupPercentage,proto3" json:"markup_percentage,omitempty"`
-	RequestMapping    map[string]*anypb.Any  `protobuf:"bytes,12,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	ResponseMapping   map[string]*anypb.Any  `protobuf:"bytes,13,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	MetaData          map[string]*anypb.Any  `protobuf:"bytes,14,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	RequestMapping    map[string]*any1.Any   `protobuf:"bytes,12,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ResponseMapping   map[string]*any1.Any   `protobuf:"bytes,13,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	MetaData          map[string]*any1.Any   `protobuf:"bytes,14,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active            bool                   `protobuf:"varint,15,opt,name=active,proto3" json:"active,omitempty"`
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt         *timestamp.Timestamp   `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt         *timestamp.Timestamp   `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1743,21 +1743,21 @@ func (x *ThirdPartyProduct) GetMarkupPercentage() float64 {
 	return 0
 }
 
-func (x *ThirdPartyProduct) GetRequestMapping() map[string]*anypb.Any {
+func (x *ThirdPartyProduct) GetRequestMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.RequestMapping
 	}
 	return nil
 }
 
-func (x *ThirdPartyProduct) GetResponseMapping() map[string]*anypb.Any {
+func (x *ThirdPartyProduct) GetResponseMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.ResponseMapping
 	}
 	return nil
 }
 
-func (x *ThirdPartyProduct) GetMetaData() map[string]*anypb.Any {
+func (x *ThirdPartyProduct) GetMetaData() map[string]*any1.Any {
 	if x != nil {
 		return x.MetaData
 	}
@@ -1771,14 +1771,14 @@ func (x *ThirdPartyProduct) GetActive() bool {
 	return false
 }
 
-func (x *ThirdPartyProduct) GetCreatedAt() *timestamppb.Timestamp {
+func (x *ThirdPartyProduct) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *ThirdPartyProduct) GetUpdatedAt() *timestamppb.Timestamp {
+func (x *ThirdPartyProduct) GetUpdatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
@@ -1797,9 +1797,9 @@ type CreateProductRequest struct {
 	DeliveryMethod    string                 `protobuf:"bytes,8,opt,name=delivery_method,json=deliveryMethod,proto3" json:"delivery_method,omitempty"`
 	CostPrice         float64                `protobuf:"fixed64,9,opt,name=cost_price,json=costPrice,proto3" json:"cost_price,omitempty"`
 	MarkupPercentage  float64                `protobuf:"fixed64,10,opt,name=markup_percentage,json=markupPercentage,proto3" json:"markup_percentage,omitempty"`
-	RequestMapping    map[string]*anypb.Any  `protobuf:"bytes,11,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	ResponseMapping   map[string]*anypb.Any  `protobuf:"bytes,12,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	MetaData          map[string]*anypb.Any  `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	RequestMapping    map[string]*any1.Any   `protobuf:"bytes,11,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ResponseMapping   map[string]*any1.Any   `protobuf:"bytes,12,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	MetaData          map[string]*any1.Any   `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active            bool                   `protobuf:"varint,14,opt,name=active,proto3" json:"active,omitempty"`
 	OrganizerId       int64                  `protobuf:"varint,15,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
@@ -1906,21 +1906,21 @@ func (x *CreateProductRequest) GetMarkupPercentage() float64 {
 	return 0
 }
 
-func (x *CreateProductRequest) GetRequestMapping() map[string]*anypb.Any {
+func (x *CreateProductRequest) GetRequestMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.RequestMapping
 	}
 	return nil
 }
 
-func (x *CreateProductRequest) GetResponseMapping() map[string]*anypb.Any {
+func (x *CreateProductRequest) GetResponseMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.ResponseMapping
 	}
 	return nil
 }
 
-func (x *CreateProductRequest) GetMetaData() map[string]*anypb.Any {
+func (x *CreateProductRequest) GetMetaData() map[string]*any1.Any {
 	if x != nil {
 		return x.MetaData
 	}
@@ -2121,7 +2121,7 @@ type ListProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         int32                  `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
-	Filter        map[string]*anypb.Any  `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filter        map[string]*any1.Any   `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2170,7 +2170,7 @@ func (x *ListProductsRequest) GetOffset() int32 {
 	return 0
 }
 
-func (x *ListProductsRequest) GetFilter() map[string]*anypb.Any {
+func (x *ListProductsRequest) GetFilter() map[string]*any1.Any {
 	if x != nil {
 		return x.Filter
 	}
@@ -2677,9 +2677,9 @@ type ProductImportItem struct {
 	DeliveryMethod    string                 `protobuf:"bytes,8,opt,name=delivery_method,json=deliveryMethod,proto3" json:"delivery_method,omitempty"`
 	CostPrice         float64                `protobuf:"fixed64,9,opt,name=cost_price,json=costPrice,proto3" json:"cost_price,omitempty"`
 	MarkupPercentage  float64                `protobuf:"fixed64,10,opt,name=markup_percentage,json=markupPercentage,proto3" json:"markup_percentage,omitempty"`
-	RequestMapping    map[string]*anypb.Any  `protobuf:"bytes,11,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	ResponseMapping   map[string]*anypb.Any  `protobuf:"bytes,12,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	MetaData          map[string]*anypb.Any  `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	RequestMapping    map[string]*any1.Any   `protobuf:"bytes,11,rep,name=request_mapping,json=requestMapping,proto3" json:"request_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	ResponseMapping   map[string]*any1.Any   `protobuf:"bytes,12,rep,name=response_mapping,json=responseMapping,proto3" json:"response_mapping,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	MetaData          map[string]*any1.Any   `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active            bool                   `protobuf:"varint,14,opt,name=active,proto3" json:"active,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
@@ -2785,21 +2785,21 @@ func (x *ProductImportItem) GetMarkupPercentage() float64 {
 	return 0
 }
 
-func (x *ProductImportItem) GetRequestMapping() map[string]*anypb.Any {
+func (x *ProductImportItem) GetRequestMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.RequestMapping
 	}
 	return nil
 }
 
-func (x *ProductImportItem) GetResponseMapping() map[string]*anypb.Any {
+func (x *ProductImportItem) GetResponseMapping() map[string]*any1.Any {
 	if x != nil {
 		return x.ResponseMapping
 	}
 	return nil
 }
 
-func (x *ProductImportItem) GetMetaData() map[string]*anypb.Any {
+func (x *ProductImportItem) GetMetaData() map[string]*any1.Any {
 	if x != nil {
 		return x.MetaData
 	}
@@ -2910,7 +2910,7 @@ func (x *BulkImportProductsResponse) GetErrorMessage() string {
 type BulkUpdateProductsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ids           []int64                `protobuf:"varint,1,rep,packed,name=ids,proto3" json:"ids,omitempty"`
-	Updates       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
+	Updates       map[string]*any1.Any   `protobuf:"bytes,2,rep,name=updates,proto3" json:"updates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Fields to update
 	OrganizerId   int64                  `protobuf:"varint,3,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2953,7 +2953,7 @@ func (x *BulkUpdateProductsRequest) GetIds() []int64 {
 	return nil
 }
 
-func (x *BulkUpdateProductsRequest) GetUpdates() map[string]*anypb.Any {
+func (x *BulkUpdateProductsRequest) GetUpdates() map[string]*any1.Any {
 	if x != nil {
 		return x.Updates
 	}
@@ -3289,10 +3289,10 @@ type InventoryCode struct {
 	ProductId     int64                  `protobuf:"varint,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Code          string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
 	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	ReservedUntil *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=reserved_until,json=reservedUntil,proto3" json:"reserved_until,omitempty"`
-	RedeemedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=redeemed_at,json=redeemedAt,proto3" json:"redeemed_at,omitempty"`
-	ExpiredAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=expired_at,json=expiredAt,proto3" json:"expired_at,omitempty"`
+	CreatedAt     *timestamp.Timestamp   `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ReservedUntil *timestamp.Timestamp   `protobuf:"bytes,6,opt,name=reserved_until,json=reservedUntil,proto3" json:"reserved_until,omitempty"`
+	RedeemedAt    *timestamp.Timestamp   `protobuf:"bytes,7,opt,name=redeemed_at,json=redeemedAt,proto3" json:"redeemed_at,omitempty"`
+	ExpiredAt     *timestamp.Timestamp   `protobuf:"bytes,8,opt,name=expired_at,json=expiredAt,proto3" json:"expired_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3355,28 +3355,28 @@ func (x *InventoryCode) GetStatus() string {
 	return ""
 }
 
-func (x *InventoryCode) GetCreatedAt() *timestamppb.Timestamp {
+func (x *InventoryCode) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *InventoryCode) GetReservedUntil() *timestamppb.Timestamp {
+func (x *InventoryCode) GetReservedUntil() *timestamp.Timestamp {
 	if x != nil {
 		return x.ReservedUntil
 	}
 	return nil
 }
 
-func (x *InventoryCode) GetRedeemedAt() *timestamppb.Timestamp {
+func (x *InventoryCode) GetRedeemedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.RedeemedAt
 	}
 	return nil
 }
 
-func (x *InventoryCode) GetExpiredAt() *timestamppb.Timestamp {
+func (x *InventoryCode) GetExpiredAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.ExpiredAt
 	}
@@ -3464,7 +3464,7 @@ type ListInventoryRequest struct {
 	ProductId     int64                  `protobuf:"varint,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Limit         int32                  `protobuf:"varint,2,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,3,opt,name=offset,proto3" json:"offset,omitempty"`
-	Filter        map[string]*anypb.Any  `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filter        map[string]*any1.Any   `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	OrganizerId   int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3521,7 +3521,7 @@ func (x *ListInventoryRequest) GetOffset() int32 {
 	return 0
 }
 
-func (x *ListInventoryRequest) GetFilter() map[string]*anypb.Any {
+func (x *ListInventoryRequest) GetFilter() map[string]*any1.Any {
 	if x != nil {
 		return x.Filter
 	}
@@ -3847,8 +3847,8 @@ type Fulfillment struct {
 	OrderId       int64                  `protobuf:"varint,4,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`
 	PositionId    int64                  `protobuf:"varint,5,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
 	Status        string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	FulfilledAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=fulfilled_at,json=fulfilledAt,proto3" json:"fulfilled_at,omitempty"`
+	CreatedAt     *timestamp.Timestamp   `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	FulfilledAt   *timestamp.Timestamp   `protobuf:"bytes,8,opt,name=fulfilled_at,json=fulfilledAt,proto3" json:"fulfilled_at,omitempty"`
 	Metadata      map[string]string      `protobuf:"bytes,9,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -3926,14 +3926,14 @@ func (x *Fulfillment) GetStatus() string {
 	return ""
 }
 
-func (x *Fulfillment) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Fulfillment) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
 	return nil
 }
 
-func (x *Fulfillment) GetFulfilledAt() *timestamppb.Timestamp {
+func (x *Fulfillment) GetFulfilledAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.FulfilledAt
 	}
@@ -4003,7 +4003,7 @@ type ListFulfillmentsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Limit         int32                  `protobuf:"varint,1,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
-	Filter        map[string]*anypb.Any  `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filter        map[string]*any1.Any   `protobuf:"bytes,3,rep,name=filter,proto3" json:"filter,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4052,7 +4052,7 @@ func (x *ListFulfillmentsRequest) GetOffset() int32 {
 	return 0
 }
 
-func (x *ListFulfillmentsRequest) GetFilter() map[string]*anypb.Any {
+func (x *ListFulfillmentsRequest) GetFilter() map[string]*any1.Any {
 	if x != nil {
 		return x.Filter
 	}
@@ -4378,10 +4378,14 @@ type AssignProductToEventRequest struct {
 	Name          map[string]string      `protobuf:"bytes,3,rep,name=name,proto3" json:"name,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	PriceOverride float64                `protobuf:"fixed64,4,opt,name=price_override,json=priceOverride,proto3" json:"price_override,omitempty"`
 	SupplierId    int64                  `protobuf:"varint,5,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
-	EventPricing  map[string]*anypb.Any  `protobuf:"bytes,6,rep,name=event_pricing,json=eventPricing,proto3" json:"event_pricing,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	EventPricing  map[string]*any1.Any   `protobuf:"bytes,6,rep,name=event_pricing,json=eventPricing,proto3" json:"event_pricing,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	EventQuota    int32                  `protobuf:"varint,7,opt,name=event_quota,json=eventQuota,proto3" json:"event_quota,omitempty"`
-	EventSettings map[string]*anypb.Any  `protobuf:"bytes,8,rep,name=event_settings,json=eventSettings,proto3" json:"event_settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	EventSettings map[string]*any1.Any   `protobuf:"bytes,8,rep,name=event_settings,json=eventSettings,proto3" json:"event_settings,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	OrganizerId   int64                  `protobuf:"varint,9,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	// tax_rate — bắt buộc, thuế suất % áp dụng cho item được tạo ra khi gán product này vào event
+	// (mantik-tax-config.md). Item của booking-core (repository.Item) trước đây không có field tax nào,
+	// dẫn tới sản phẩm 3rd-party luôn tax_rate=NULL — bổ sung đường ghi thật ở đây.
+	TaxRate       string `protobuf:"bytes,10,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4451,7 +4455,7 @@ func (x *AssignProductToEventRequest) GetSupplierId() int64 {
 	return 0
 }
 
-func (x *AssignProductToEventRequest) GetEventPricing() map[string]*anypb.Any {
+func (x *AssignProductToEventRequest) GetEventPricing() map[string]*any1.Any {
 	if x != nil {
 		return x.EventPricing
 	}
@@ -4465,7 +4469,7 @@ func (x *AssignProductToEventRequest) GetEventQuota() int32 {
 	return 0
 }
 
-func (x *AssignProductToEventRequest) GetEventSettings() map[string]*anypb.Any {
+func (x *AssignProductToEventRequest) GetEventSettings() map[string]*any1.Any {
 	if x != nil {
 		return x.EventSettings
 	}
@@ -4477,6 +4481,13 @@ func (x *AssignProductToEventRequest) GetOrganizerId() int64 {
 		return x.OrganizerId
 	}
 	return 0
+}
+
+func (x *AssignProductToEventRequest) GetTaxRate() string {
+	if x != nil {
+		return x.TaxRate
+	}
+	return ""
 }
 
 type UnassignProductFromEventRequest struct {
@@ -4618,7 +4629,7 @@ func (x *UpdateEventProductAssignmentRequest) GetOrganizerId() int64 {
 type GetEventProductAssignmentsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventSlug     string                 `protobuf:"bytes,1,opt,name=event_slug,json=eventSlug,proto3" json:"event_slug,omitempty"`
-	Filters       map[string]*anypb.Any  `protobuf:"bytes,2,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Filters       map[string]*any1.Any   `protobuf:"bytes,2,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
 	Offset        int32                  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset,omitempty"`
 	OrganizerId   int64                  `protobuf:"varint,5,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
@@ -4663,7 +4674,7 @@ func (x *GetEventProductAssignmentsRequest) GetEventSlug() string {
 	return ""
 }
 
-func (x *GetEventProductAssignmentsRequest) GetFilters() map[string]*anypb.Any {
+func (x *GetEventProductAssignmentsRequest) GetFilters() map[string]*any1.Any {
 	if x != nil {
 		return x.Filters
 	}
@@ -5471,7 +5482,7 @@ type StockReconciliation struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	Id                int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	ProductId         int64                  `protobuf:"varint,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	CheckedAt         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=checked_at,json=checkedAt,proto3" json:"checked_at,omitempty"`
+	CheckedAt         *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=checked_at,json=checkedAt,proto3" json:"checked_at,omitempty"`
 	TriggeredBy       string                 `protobuf:"bytes,4,opt,name=triggered_by,json=triggeredBy,proto3" json:"triggered_by,omitempty"` // "manual", "worker"
 	StockBefore       int32                  `protobuf:"varint,5,opt,name=stock_before,json=stockBefore,proto3" json:"stock_before,omitempty"`
 	HasStockBefore    bool                   `protobuf:"varint,6,opt,name=has_stock_before,json=hasStockBefore,proto3" json:"has_stock_before,omitempty"` // stock_before is nullable (untracked products); guards the zero value
@@ -5530,7 +5541,7 @@ func (x *StockReconciliation) GetProductId() int64 {
 	return 0
 }
 
-func (x *StockReconciliation) GetCheckedAt() *timestamppb.Timestamp {
+func (x *StockReconciliation) GetCheckedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CheckedAt
 	}
@@ -5945,8 +5956,8 @@ type Settlement struct {
 	SupplierId       int64                  `protobuf:"varint,2,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
 	SupplierName     string                 `protobuf:"bytes,3,opt,name=supplier_name,json=supplierName,proto3" json:"supplier_name,omitempty"`
 	OrganizerId      int64                  `protobuf:"varint,4,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
-	PeriodStart      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
-	PeriodEnd        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	PeriodStart      *timestamp.Timestamp   `protobuf:"bytes,5,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	PeriodEnd        *timestamp.Timestamp   `protobuf:"bytes,6,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
 	Status           string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"` // draft, confirmed, paid
 	Currency         string                 `protobuf:"bytes,8,opt,name=currency,proto3" json:"currency,omitempty"`
 	TotalQuantity    int32                  `protobuf:"varint,9,opt,name=total_quantity,json=totalQuantity,proto3" json:"total_quantity,omitempty"`
@@ -5955,9 +5966,9 @@ type Settlement struct {
 	CommissionAmount float64                `protobuf:"fixed64,12,opt,name=commission_amount,json=commissionAmount,proto3" json:"commission_amount,omitempty"`
 	Notes            string                 `protobuf:"bytes,13,opt,name=notes,proto3" json:"notes,omitempty"`
 	CreatedBy        string                 `protobuf:"bytes,14,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
-	ConfirmedAt      *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=confirmed_at,json=confirmedAt,proto3" json:"confirmed_at,omitempty"`
-	PaidAt           *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`
-	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ConfirmedAt      *timestamp.Timestamp   `protobuf:"bytes,15,opt,name=confirmed_at,json=confirmedAt,proto3" json:"confirmed_at,omitempty"`
+	PaidAt           *timestamp.Timestamp   `protobuf:"bytes,16,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`
+	CreatedAt        *timestamp.Timestamp   `protobuf:"bytes,17,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	Items            []*SettlementItem      `protobuf:"bytes,18,rep,name=items,proto3" json:"items,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
@@ -6021,14 +6032,14 @@ func (x *Settlement) GetOrganizerId() int64 {
 	return 0
 }
 
-func (x *Settlement) GetPeriodStart() *timestamppb.Timestamp {
+func (x *Settlement) GetPeriodStart() *timestamp.Timestamp {
 	if x != nil {
 		return x.PeriodStart
 	}
 	return nil
 }
 
-func (x *Settlement) GetPeriodEnd() *timestamppb.Timestamp {
+func (x *Settlement) GetPeriodEnd() *timestamp.Timestamp {
 	if x != nil {
 		return x.PeriodEnd
 	}
@@ -6091,21 +6102,21 @@ func (x *Settlement) GetCreatedBy() string {
 	return ""
 }
 
-func (x *Settlement) GetConfirmedAt() *timestamppb.Timestamp {
+func (x *Settlement) GetConfirmedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.ConfirmedAt
 	}
 	return nil
 }
 
-func (x *Settlement) GetPaidAt() *timestamppb.Timestamp {
+func (x *Settlement) GetPaidAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.PaidAt
 	}
 	return nil
 }
 
-func (x *Settlement) GetCreatedAt() *timestamppb.Timestamp {
+func (x *Settlement) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
@@ -6123,8 +6134,8 @@ type CreateSettlementRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OrganizerId   int64                  `protobuf:"varint,1,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
 	SupplierId    int64                  `protobuf:"varint,2,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
-	PeriodStart   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
-	PeriodEnd     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
+	PeriodStart   *timestamp.Timestamp   `protobuf:"bytes,3,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`
+	PeriodEnd     *timestamp.Timestamp   `protobuf:"bytes,4,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`
 	CreatedBy     string                 `protobuf:"bytes,5,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -6174,14 +6185,14 @@ func (x *CreateSettlementRequest) GetSupplierId() int64 {
 	return 0
 }
 
-func (x *CreateSettlementRequest) GetPeriodStart() *timestamppb.Timestamp {
+func (x *CreateSettlementRequest) GetPeriodStart() *timestamp.Timestamp {
 	if x != nil {
 		return x.PeriodStart
 	}
 	return nil
 }
 
-func (x *CreateSettlementRequest) GetPeriodEnd() *timestamppb.Timestamp {
+func (x *CreateSettlementRequest) GetPeriodEnd() *timestamp.Timestamp {
 	if x != nil {
 		return x.PeriodEnd
 	}
@@ -7304,7 +7315,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"StatsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xee\x05\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\x89\x06\n" +
 	"\x1bAssignProductToEventRequest\x12\x1d\n" +
 	"\n" +
 	"event_slug\x18\x01 \x01(\tR\teventSlug\x12\x1d\n" +
@@ -7318,7 +7329,9 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\vevent_quota\x18\a \x01(\x05R\n" +
 	"eventQuota\x12h\n" +
 	"\x0eevent_settings\x18\b \x03(\v2A.riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntryR\reventSettings\x12!\n" +
-	"\forganizer_id\x18\t \x01(\x03R\vorganizerId\x1a7\n" +
+	"\forganizer_id\x18\t \x01(\x03R\vorganizerId\x12\x19\n" +
+	"\btax_rate\x18\n" +
+	" \x01(\tR\ataxRate\x1a7\n" +
 	"\tNameEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1aU\n" +
@@ -7695,8 +7708,8 @@ var file_v1_booking_thirdparty_proto_goTypes = []any{
 	nil,                                          // 111: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
 	nil,                                          // 112: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
 	nil,                                          // 113: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
-	(*timestamppb.Timestamp)(nil),                // 114: google.protobuf.Timestamp
-	(*anypb.Any)(nil),                            // 115: google.protobuf.Any
+	(*timestamp.Timestamp)(nil),                  // 114: google.protobuf.Timestamp
+	(*any1.Any)(nil),                             // 115: google.protobuf.Any
 }
 var file_v1_booking_thirdparty_proto_depIdxs = []int32{
 	83,  // 0: riptik.booking.v1.ThirdPartySupplier.api_config:type_name -> riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
