@@ -6836,7 +6836,8 @@ type ApiCallLogSummary struct {
 	ErrorMessage   string                 `protobuf:"bytes,12,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	DurationMs     int32                  `protobuf:"varint,13,opt,name=duration_ms,json=durationMs,proto3" json:"duration_ms,omitempty"`
 	Truncated      bool                   `protobuf:"varint,14,opt,name=truncated,proto3" json:"truncated,omitempty"`
-	Created        string                 `protobuf:"bytes,15,opt,name=created,proto3" json:"created,omitempty"` // ISO datetime
+	Created        string                 `protobuf:"bytes,15,opt,name=created,proto3" json:"created,omitempty"`   // ISO datetime
+	Provider       string                 `protobuf:"bytes,16,opt,name=provider,proto3" json:"provider,omitempty"` // nhãn nguồn gọi cho e-invoice (vd "HILO"/"MISA") — ticket supplier để trống, dùng supplier_name
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -6972,6 +6973,13 @@ func (x *ApiCallLogSummary) GetTruncated() bool {
 func (x *ApiCallLogSummary) GetCreated() string {
 	if x != nil {
 		return x.Created
+	}
+	return ""
+}
+
+func (x *ApiCallLogSummary) GetProvider() string {
+	if x != nil {
+		return x.Provider
 	}
 	return ""
 }
@@ -8159,7 +8167,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"settlement\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xdc\x03\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xf8\x03\n" +
 	"\x11ApiCallLogSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
 	"\vsupplier_id\x18\x02 \x01(\x03R\n" +
@@ -8181,7 +8189,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\vduration_ms\x18\r \x01(\x05R\n" +
 	"durationMs\x12\x1c\n" +
 	"\ttruncated\x18\x0e \x01(\bR\ttruncated\x12\x18\n" +
-	"\acreated\x18\x0f \x01(\tR\acreated\"\x8c\x02\n" +
+	"\acreated\x18\x0f \x01(\tR\acreated\x12\x1a\n" +
+	"\bprovider\x18\x10 \x01(\tR\bprovider\"\x8c\x02\n" +
 	"\n" +
 	"ApiCallLog\x12>\n" +
 	"\asummary\x18\x01 \x01(\v2$.riptik.booking.v1.ApiCallLogSummaryR\asummary\x120\n" +
