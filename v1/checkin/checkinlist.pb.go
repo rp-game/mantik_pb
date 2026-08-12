@@ -592,6 +592,7 @@ type UpdateCheckinListRequest struct {
 	// rỗng/false" — proto3 scalar (bool/string) không tự phân biệt được 2 trường hợp này, nên thiếu
 	// field_mask sẽ khiến PATCH 1 field ghi đè rỗng TẤT CẢ field khác (bug thật đã gặp, G10-13 review).
 	FieldMask     []string `protobuf:"bytes,9,rep,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	SubeventId    int64    `protobuf:"varint,10,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"` // only applied if "subevent" is present in field_mask
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -687,6 +688,13 @@ func (x *UpdateCheckinListRequest) GetFieldMask() []string {
 		return x.FieldMask
 	}
 	return nil
+}
+
+func (x *UpdateCheckinListRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
 }
 
 type DeleteCheckinListRequest struct {
@@ -2006,7 +2014,7 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd9\x03\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xfa\x03\n" +
 	"\x18UpdateCheckinListRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
@@ -2017,7 +2025,10 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\x16allow_entry_after_exit\x18\a \x01(\bR\x13allowEntryAfterExit\x12L\n" +
 	"\x05rules\x18\b \x03(\v26.riptik.checkin.v1.UpdateCheckinListRequest.RulesEntryR\x05rules\x12\x1d\n" +
 	"\n" +
-	"field_mask\x18\t \x03(\tR\tfieldMask\x1aN\n" +
+	"field_mask\x18\t \x03(\tR\tfieldMask\x12\x1f\n" +
+	"\vsubevent_id\x18\n" +
+	" \x01(\x03R\n" +
+	"subeventId\x1aN\n" +
 	"\n" +
 	"RulesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
