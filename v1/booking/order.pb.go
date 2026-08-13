@@ -445,6 +445,7 @@ type OrderCreatePosition struct {
 	SubeventId    int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`         // Sub-event ID for date-selection tickets (0 = event-wide)
 	SeatId        int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                     // legacy — deprecated, prefer seat_guid (G9-24, mantik-cinema-chain.md §7C)
 	SeatGuid      string                 `protobuf:"bytes,9,opt,name=seat_guid,json=seatGuid,proto3" json:"seat_guid,omitempty"`                // Assigned seat guid for seated events ("" = no seat). One seat per position (quantity=1).
+	VoucherCode   string                 `protobuf:"bytes,10,opt,name=voucher_code,json=voucherCode,proto3" json:"voucher_code,omitempty"`      // Voucher code applied to THIS line (optional, "" = no voucher). Voucher is scoped per-position, not per-order.
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -538,6 +539,13 @@ func (x *OrderCreatePosition) GetSeatId() int64 {
 func (x *OrderCreatePosition) GetSeatGuid() string {
 	if x != nil {
 		return x.SeatGuid
+	}
+	return ""
+}
+
+func (x *OrderCreatePosition) GetVoucherCode() string {
+	if x != nil {
+		return x.VoucherCode
 	}
 	return ""
 }
@@ -1734,9 +1742,11 @@ type OrderPosition struct {
 	Tax               string `protobuf:"bytes,15,opt,name=tax,proto3" json:"tax,omitempty"`                                                      // Tax already included in price, as decimal string (task 001 — informational, tax-inclusive pricing)
 	// tax_rate — % thuế đã áp dụng lúc tạo position (snapshot, khác Item.tax_rate là giá trị sống có thể
 	// đổi sau — mantik-tax-config.md Phase F1). "" = position tạo trước khi có field này.
-	TaxRate       string `protobuf:"bytes,16,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	TaxRate        string `protobuf:"bytes,16,opt,name=tax_rate,json=taxRate,proto3" json:"tax_rate,omitempty"`
+	DiscountAmount string `protobuf:"bytes,17,opt,name=discount_amount,json=discountAmount,proto3" json:"discount_amount,omitempty"` // Voucher discount applied to this line, as decimal string ("0" = no voucher)
+	VoucherCode    string `protobuf:"bytes,18,opt,name=voucher_code,json=voucherCode,proto3" json:"voucher_code,omitempty"`          // Voucher code applied to this line ("" = no voucher)
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *OrderPosition) Reset() {
@@ -1877,6 +1887,20 @@ func (x *OrderPosition) GetTax() string {
 func (x *OrderPosition) GetTaxRate() string {
 	if x != nil {
 		return x.TaxRate
+	}
+	return ""
+}
+
+func (x *OrderPosition) GetDiscountAmount() string {
+	if x != nil {
+		return x.DiscountAmount
+	}
+	return ""
+}
+
+func (x *OrderPosition) GetVoucherCode() string {
+	if x != nil {
+		return x.VoucherCode
 	}
 	return ""
 }
@@ -3664,7 +3688,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa6\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc9\x02\n" +
 	"\x13OrderCreatePosition\x12\x17\n" +
 	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
 	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
@@ -3675,7 +3699,9 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\vsubevent_id\x18\a \x01(\x03R\n" +
 	"subeventId\x12\x17\n" +
 	"\aseat_id\x18\b \x01(\x03R\x06seatId\x12\x1b\n" +
-	"\tseat_guid\x18\t \x01(\tR\bseatGuid\"v\n" +
+	"\tseat_guid\x18\t \x01(\tR\bseatGuid\x12!\n" +
+	"\fvoucher_code\x18\n" +
+	" \x01(\tR\vvoucherCode\"v\n" +
 	"\x12CancelOrderRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -3788,7 +3814,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf4\x03\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc0\x04\n" +
 	"\rOrderPosition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05order\x18\x02 \x01(\tR\x05order\x12\x1e\n" +
@@ -3809,7 +3835,9 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\tticket_qr\x18\r \x01(\tR\bticketQr\x12-\n" +
 	"\x12fulfillment_status\x18\x0e \x01(\tR\x11fulfillmentStatus\x12\x10\n" +
 	"\x03tax\x18\x0f \x01(\tR\x03tax\x12\x19\n" +
-	"\btax_rate\x18\x10 \x01(\tR\ataxRate\"\x83\x04\n" +
+	"\btax_rate\x18\x10 \x01(\tR\ataxRate\x12'\n" +
+	"\x0fdiscount_amount\x18\x11 \x01(\tR\x0ediscountAmount\x12!\n" +
+	"\fvoucher_code\x18\x12 \x01(\tR\vvoucherCode\"\x83\x04\n" +
 	"\x13OrderPositionDetail\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x19\n" +
 	"\border_id\x18\x02 \x01(\x03R\aorderId\x12\x17\n" +
