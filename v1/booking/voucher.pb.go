@@ -436,8 +436,13 @@ type VoucherRestrictions struct {
 	FirstTimeCustomersOnly bool                   `protobuf:"varint,3,opt,name=first_time_customers_only,json=firstTimeCustomersOnly,proto3" json:"first_time_customers_only,omitempty"` // Only for first-time customers
 	ApplicableItems        []string               `protobuf:"bytes,4,rep,name=applicable_items,json=applicableItems,proto3" json:"applicable_items,omitempty"`                           // Applicable item IDs
 	ExcludedItems          []string               `protobuf:"bytes,5,rep,name=excluded_items,json=excludedItems,proto3" json:"excluded_items,omitempty"`                                 // Excluded item IDs
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	// fnb_outlet_ids/fnb_menu_item_ids — voucher F&B (fnbpos), IDs thuộc hệ khác, KHÔNG validate ở
+	// booking-core, chỉ lưu/trả lại. Rỗng cả 2 = không giới hạn outlet/món. Khớp 1 trong 2 (OR) là
+	// áp dụng được — xem models.FnbScopes.CanBeUsedForFnbScope.
+	FnbOutletIds   []int64 `protobuf:"varint,6,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`
+	FnbMenuItemIds []int64 `protobuf:"varint,7,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *VoucherRestrictions) Reset() {
@@ -505,6 +510,20 @@ func (x *VoucherRestrictions) GetExcludedItems() []string {
 	return nil
 }
 
+func (x *VoucherRestrictions) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *VoucherRestrictions) GetFnbMenuItemIds() []int64 {
+	if x != nil {
+		return x.FnbMenuItemIds
+	}
+	return nil
+}
+
 // Request: Bulk create vouchers
 type BulkCreateVouchersRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -523,8 +542,11 @@ type BulkCreateVouchersRequest struct {
 	ValidUntil      string                 `protobuf:"bytes,13,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                   // ISO 8601 date string (required)
 	Restrictions    *VoucherRestrictions   `protobuf:"bytes,14,opt,name=restrictions,proto3" json:"restrictions,omitempty"`                                 // Restrictions object
 	EventIds        []int64                `protobuf:"varint,15,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                 // Phase 1 — voucher đa event (rỗng = đơn-event, dùng `event` ở trên)
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// fnb_only — voucher F&B, không gắn event nào (event/event_ids đều rỗng khi field này bật).
+	// Restrictions.fnb_outlet_ids/fnb_menu_item_ids giới hạn phạm vi, rỗng = mọi outlet/món.
+	FnbOnly       bool `protobuf:"varint,16,opt,name=fnb_only,json=fnbOnly,proto3" json:"fnb_only,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *BulkCreateVouchersRequest) Reset() {
@@ -660,6 +682,13 @@ func (x *BulkCreateVouchersRequest) GetEventIds() []int64 {
 		return x.EventIds
 	}
 	return nil
+}
+
+func (x *BulkCreateVouchersRequest) GetFnbOnly() bool {
+	if x != nil {
+		return x.FnbOnly
+	}
+	return false
 }
 
 // Request: Validate voucher
@@ -1343,33 +1372,36 @@ func (x *UpdateVoucherResponse) GetErrorMessage() string {
 }
 
 type Voucher struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                                       // Voucher ID
-	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                                                                                    // Voucher code
-	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`                                                                                                  // Value as decimal string
-	PriceMode     string                 `protobuf:"bytes,4,opt,name=price_mode,json=priceMode,proto3" json:"price_mode,omitempty"`                                                                         // "none", "set", "subtract", "percent"
-	MaxUsages     int32                  `protobuf:"varint,5,opt,name=max_usages,json=maxUsages,proto3" json:"max_usages,omitempty"`                                                                        // Maximum number of usages
-	Redeemed      int32                  `protobuf:"varint,6,opt,name=redeemed,proto3" json:"redeemed,omitempty"`                                                                                           // Times redeemed
-	Uses          int32                  `protobuf:"varint,7,opt,name=uses,proto3" json:"uses,omitempty"`                                                                                                   // Alias for redeemed
-	Budget        string                 `protobuf:"bytes,8,opt,name=budget,proto3" json:"budget,omitempty"`                                                                                                // Budget limit as decimal string
-	BudgetUsed    string                 `protobuf:"bytes,9,opt,name=budget_used,json=budgetUsed,proto3" json:"budget_used,omitempty"`                                                                      // Budget used as decimal string
-	ValidFrom     string                 `protobuf:"bytes,10,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`                                                                        // ISO datetime (valid from)
-	ValidUntil    string                 `protobuf:"bytes,11,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                                                                     // ISO datetime (valid until)
-	Active        bool                   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`                                                                                              // Is active
-	ItemId        int64                  `protobuf:"varint,13,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`                                                                                // Restricted item ID (optional)
-	VariationId   int64                  `protobuf:"varint,14,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`                                                                 // Restricted variation ID (optional)
-	Tag           string                 `protobuf:"bytes,15,opt,name=tag,proto3" json:"tag,omitempty"`                                                                                                     // Campaign name tag
-	Comment       string                 `protobuf:"bytes,16,opt,name=comment,proto3" json:"comment,omitempty"`                                                                                             // Description comment
-	Created       string                 `protobuf:"bytes,17,opt,name=created,proto3" json:"created,omitempty"`                                                                                             // ISO datetime (created)
-	LastModified  string                 `protobuf:"bytes,18,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`                                                               // ISO datetime (last modified)
-	MetaData      map[string]string      `protobuf:"bytes,19,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Custom metadata
-	CampaignName  string                 `protobuf:"bytes,20,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"`                                                               // Marketing campaign name (0.2 — real column, not tag/meta_data)
-	Channel       string                 `protobuf:"bytes,21,opt,name=channel,proto3" json:"channel,omitempty"`                                                                                             // Marketing channel (0.2 — real column)
-	EventIds      []int64                `protobuf:"varint,22,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                                                                   // Phase 1 — voucher đa event (rỗng = chỉ event gốc, xem event_id nếu có ở nơi khác)
-	ItemIds       []int64                `protobuf:"varint,23,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                                                                      // Phase 1 — voucher đa sản phẩm (rỗng = chỉ item_id đơn ở trên)
-	BatchId       int64                  `protobuf:"varint,24,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`                                                                             // Voucher batches — nhóm cha thật cho voucher tạo hàng loạt (0 = voucher đơn lẻ, không thuộc batch nào)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                                       // Voucher ID
+	Code           string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                                                                                    // Voucher code
+	Value          string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`                                                                                                  // Value as decimal string
+	PriceMode      string                 `protobuf:"bytes,4,opt,name=price_mode,json=priceMode,proto3" json:"price_mode,omitempty"`                                                                         // "none", "set", "subtract", "percent"
+	MaxUsages      int32                  `protobuf:"varint,5,opt,name=max_usages,json=maxUsages,proto3" json:"max_usages,omitempty"`                                                                        // Maximum number of usages
+	Redeemed       int32                  `protobuf:"varint,6,opt,name=redeemed,proto3" json:"redeemed,omitempty"`                                                                                           // Times redeemed
+	Uses           int32                  `protobuf:"varint,7,opt,name=uses,proto3" json:"uses,omitempty"`                                                                                                   // Alias for redeemed
+	Budget         string                 `protobuf:"bytes,8,opt,name=budget,proto3" json:"budget,omitempty"`                                                                                                // Budget limit as decimal string
+	BudgetUsed     string                 `protobuf:"bytes,9,opt,name=budget_used,json=budgetUsed,proto3" json:"budget_used,omitempty"`                                                                      // Budget used as decimal string
+	ValidFrom      string                 `protobuf:"bytes,10,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`                                                                        // ISO datetime (valid from)
+	ValidUntil     string                 `protobuf:"bytes,11,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                                                                     // ISO datetime (valid until)
+	Active         bool                   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`                                                                                              // Is active
+	ItemId         int64                  `protobuf:"varint,13,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`                                                                                // Restricted item ID (optional)
+	VariationId    int64                  `protobuf:"varint,14,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`                                                                 // Restricted variation ID (optional)
+	Tag            string                 `protobuf:"bytes,15,opt,name=tag,proto3" json:"tag,omitempty"`                                                                                                     // Campaign name tag
+	Comment        string                 `protobuf:"bytes,16,opt,name=comment,proto3" json:"comment,omitempty"`                                                                                             // Description comment
+	Created        string                 `protobuf:"bytes,17,opt,name=created,proto3" json:"created,omitempty"`                                                                                             // ISO datetime (created)
+	LastModified   string                 `protobuf:"bytes,18,opt,name=last_modified,json=lastModified,proto3" json:"last_modified,omitempty"`                                                               // ISO datetime (last modified)
+	MetaData       map[string]string      `protobuf:"bytes,19,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Custom metadata
+	CampaignName   string                 `protobuf:"bytes,20,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"`                                                               // Marketing campaign name (0.2 — real column, not tag/meta_data)
+	Channel        string                 `protobuf:"bytes,21,opt,name=channel,proto3" json:"channel,omitempty"`                                                                                             // Marketing channel (0.2 — real column)
+	EventIds       []int64                `protobuf:"varint,22,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                                                                   // Phase 1 — voucher đa event (rỗng = chỉ event gốc, xem event_id nếu có ở nơi khác)
+	ItemIds        []int64                `protobuf:"varint,23,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                                                                      // Phase 1 — voucher đa sản phẩm (rỗng = chỉ item_id đơn ở trên)
+	BatchId        int64                  `protobuf:"varint,24,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`                                                                             // Voucher batches — nhóm cha thật cho voucher tạo hàng loạt (0 = voucher đơn lẻ, không thuộc batch nào)
+	FnbOnly        bool                   `protobuf:"varint,25,opt,name=fnb_only,json=fnbOnly,proto3" json:"fnb_only,omitempty"`                                                                             // Voucher F&B — không gắn event nào (event_id/event_ids đều rỗng)
+	FnbOutletIds   []int64                `protobuf:"varint,26,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`                                                     // Xem VoucherRestrictions.fnb_outlet_ids
+	FnbMenuItemIds []int64                `protobuf:"varint,27,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"`                                             // Xem VoucherRestrictions.fnb_menu_item_ids
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Voucher) Reset() {
@@ -1570,6 +1602,27 @@ func (x *Voucher) GetBatchId() int64 {
 	return 0
 }
 
+func (x *Voucher) GetFnbOnly() bool {
+	if x != nil {
+		return x.FnbOnly
+	}
+	return false
+}
+
+func (x *Voucher) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *Voucher) GetFnbMenuItemIds() []int64 {
+	if x != nil {
+		return x.FnbMenuItemIds
+	}
+	return nil
+}
+
 type VoucherBatch struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	Id           int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -1590,9 +1643,12 @@ type VoucherBatch struct {
 	RedeemedCount int32   `protobuf:"varint,15,opt,name=redeemed_count,json=redeemedCount,proto3" json:"redeemed_count,omitempty"` // Tổng số lần đã redeem trên toàn batch (SUM(redeemed))
 	EventIds      []int64 `protobuf:"varint,16,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`         // Đọc đại diện từ 1 voucher con — mọi voucher con đều được ghi
 	// đồng bộ cùng set này qua UpdateVoucherBatchRequest.event_ids
-	ItemIds       []int64 `protobuf:"varint,17,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"` // Cùng lý do như event_ids
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	ItemIds        []int64 `protobuf:"varint,17,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                          // Cùng lý do như event_ids
+	FnbOnly        bool    `protobuf:"varint,18,opt,name=fnb_only,json=fnbOnly,proto3" json:"fnb_only,omitempty"`                                 // Voucher F&B — không gắn event nào
+	FnbOutletIds   []int64 `protobuf:"varint,19,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`         // Xem VoucherRestrictions.fnb_outlet_ids
+	FnbMenuItemIds []int64 `protobuf:"varint,20,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"` // Xem VoucherRestrictions.fnb_menu_item_ids
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *VoucherBatch) Reset() {
@@ -1740,6 +1796,27 @@ func (x *VoucherBatch) GetEventIds() []int64 {
 func (x *VoucherBatch) GetItemIds() []int64 {
 	if x != nil {
 		return x.ItemIds
+	}
+	return nil
+}
+
+func (x *VoucherBatch) GetFnbOnly() bool {
+	if x != nil {
+		return x.FnbOnly
+	}
+	return false
+}
+
+func (x *VoucherBatch) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *VoucherBatch) GetFnbMenuItemIds() []int64 {
+	if x != nil {
+		return x.FnbMenuItemIds
 	}
 	return nil
 }
@@ -2284,6 +2361,171 @@ func (x *ListVoucherBatchCodesResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Request: fnbpos validate 1 mã voucher cho 1 organizer/outlet/món cụ thể — preview only, KHÔNG
+// redeem gì (redeem xảy ra qua consumer JetStream subscribe pos.promotion.*.confirmed, xem
+// booking-core/internal/nats — không phải qua subject này).
+type ValidateVoucherForOrganizerRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // fnbpos tenant_id, dùng thẳng làm organizer slug (quy ước có sẵn)
+	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	OutletId      int64                  `protobuf:"varint,3,opt,name=outlet_id,json=outletId,proto3" json:"outlet_id,omitempty"`         // 0 = không biết/không áp dụng outlet-scope check
+	MenuItemId    int64                  `protobuf:"varint,4,opt,name=menu_item_id,json=menuItemId,proto3" json:"menu_item_id,omitempty"` // 0 = không biết/không áp dụng menu-item-scope check
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateVoucherForOrganizerRequest) Reset() {
+	*x = ValidateVoucherForOrganizerRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateVoucherForOrganizerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateVoucherForOrganizerRequest) ProtoMessage() {}
+
+func (x *ValidateVoucherForOrganizerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateVoucherForOrganizerRequest.ProtoReflect.Descriptor instead.
+func (*ValidateVoucherForOrganizerRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ValidateVoucherForOrganizerRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerRequest) GetOutletId() int64 {
+	if x != nil {
+		return x.OutletId
+	}
+	return 0
+}
+
+func (x *ValidateVoucherForOrganizerRequest) GetMenuItemId() int64 {
+	if x != nil {
+		return x.MenuItemId
+	}
+	return 0
+}
+
+type ValidateVoucherForOrganizerResponse struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Success   bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                     // false = lỗi hệ thống (DB, v.v.) — fnbpos PHẢI fail-open
+	Valid     bool                   `protobuf:"varint,2,opt,name=valid,proto3" json:"valid,omitempty"`                         // false = mã không hợp lệ/hết hạn/hết lượt/không khớp scope
+	PriceMode string                 `protobuf:"bytes,3,opt,name=price_mode,json=priceMode,proto3" json:"price_mode,omitempty"` // "none", "set", "subtract", "percent" — KHÔNG dịch sang
+	// "percentage"/"fixed_amount" (đó là convention riêng của
+	// bo-gateway/backoffice, fnbpos không cần)
+	Value             string `protobuf:"bytes,4,opt,name=value,proto3" json:"value,omitempty"`                                                    // Value as decimal string
+	MaxDiscountAmount string `protobuf:"bytes,5,opt,name=max_discount_amount,json=maxDiscountAmount,proto3" json:"max_discount_amount,omitempty"` // Decimal string, rỗng = không giới hạn
+	ErrorCode         string `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage      string `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *ValidateVoucherForOrganizerResponse) Reset() {
+	*x = ValidateVoucherForOrganizerResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateVoucherForOrganizerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateVoucherForOrganizerResponse) ProtoMessage() {}
+
+func (x *ValidateVoucherForOrganizerResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateVoucherForOrganizerResponse.ProtoReflect.Descriptor instead.
+func (*ValidateVoucherForOrganizerResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetValid() bool {
+	if x != nil {
+		return x.Valid
+	}
+	return false
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetPriceMode() string {
+	if x != nil {
+		return x.PriceMode
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetMaxDiscountAmount() string {
+	if x != nil {
+		return x.MaxDiscountAmount
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_voucher_proto protoreflect.FileDescriptor
 
 const file_v1_booking_voucher_proto_rawDesc = "" +
@@ -2336,13 +2578,15 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\acomment\x18\x15 \x01(\tR\acomment\x12J\n" +
 	"\frestrictions\x18\x16 \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\x12\x1b\n" +
 	"\tevent_ids\x18\x17 \x03(\x03R\beventIds\x12\x19\n" +
-	"\bitem_ids\x18\x18 \x03(\x03R\aitemIds\"\xfc\x01\n" +
+	"\bitem_ids\x18\x18 \x03(\x03R\aitemIds\"\xcd\x02\n" +
 	"\x13VoucherRestrictions\x12(\n" +
 	"\x10min_order_amount\x18\x01 \x01(\tR\x0eminOrderAmount\x12.\n" +
 	"\x13max_discount_amount\x18\x02 \x01(\tR\x11maxDiscountAmount\x129\n" +
 	"\x19first_time_customers_only\x18\x03 \x01(\bR\x16firstTimeCustomersOnly\x12)\n" +
 	"\x10applicable_items\x18\x04 \x03(\tR\x0fapplicableItems\x12%\n" +
-	"\x0eexcluded_items\x18\x05 \x03(\tR\rexcludedItems\"\x8d\x04\n" +
+	"\x0eexcluded_items\x18\x05 \x03(\tR\rexcludedItems\x12$\n" +
+	"\x0efnb_outlet_ids\x18\x06 \x03(\x03R\ffnbOutletIds\x12)\n" +
+	"\x11fnb_menu_item_ids\x18\a \x03(\x03R\x0efnbMenuItemIds\"\xa8\x04\n" +
 	"\x19BulkCreateVouchersRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12#\n" +
@@ -2363,7 +2607,8 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\vvalid_until\x18\r \x01(\tR\n" +
 	"validUntil\x12J\n" +
 	"\frestrictions\x18\x0e \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\x12\x1b\n" +
-	"\tevent_ids\x18\x0f \x03(\x03R\beventIds\"y\n" +
+	"\tevent_ids\x18\x0f \x03(\x03R\beventIds\x12\x19\n" +
+	"\bfnb_only\x18\x10 \x01(\bR\afnbOnly\"y\n" +
 	"\x16ValidateVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -2429,7 +2674,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\avoucher\x18\x02 \x01(\v2\x1a.riptik.booking.v1.VoucherR\avoucher\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xff\x05\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xeb\x06\n" +
 	"\aVoucher\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x14\n" +
@@ -2460,10 +2705,13 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\achannel\x18\x15 \x01(\tR\achannel\x12\x1b\n" +
 	"\tevent_ids\x18\x16 \x03(\x03R\beventIds\x12\x19\n" +
 	"\bitem_ids\x18\x17 \x03(\x03R\aitemIds\x12\x19\n" +
-	"\bbatch_id\x18\x18 \x01(\x03R\abatchId\x1a;\n" +
+	"\bbatch_id\x18\x18 \x01(\x03R\abatchId\x12\x19\n" +
+	"\bfnb_only\x18\x19 \x01(\bR\afnbOnly\x12$\n" +
+	"\x0efnb_outlet_ids\x18\x1a \x03(\x03R\ffnbOutletIds\x12)\n" +
+	"\x11fnb_menu_item_ids\x18\x1b \x03(\x03R\x0efnbMenuItemIds\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x84\x04\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xf0\x04\n" +
 	"\fVoucherBatch\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x1f\n" +
@@ -2486,7 +2734,10 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\rvoucher_count\x18\x0e \x01(\x05R\fvoucherCount\x12%\n" +
 	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\x12\x1b\n" +
 	"\tevent_ids\x18\x10 \x03(\x03R\beventIds\x12\x19\n" +
-	"\bitem_ids\x18\x11 \x03(\x03R\aitemIds\"\xfc\x01\n" +
+	"\bitem_ids\x18\x11 \x03(\x03R\aitemIds\x12\x19\n" +
+	"\bfnb_only\x18\x12 \x01(\bR\afnbOnly\x12$\n" +
+	"\x0efnb_outlet_ids\x18\x13 \x03(\x03R\ffnbOutletIds\x12)\n" +
+	"\x11fnb_menu_item_ids\x18\x14 \x03(\x03R\x0efnbMenuItemIds\"\xfc\x01\n" +
 	"\x19UpdateVoucherBatchRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
 	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\x12\x1f\n" +
@@ -2530,7 +2781,23 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\bvouchers\x18\x02 \x03(\v2\x1a.riptik.booking.v1.VoucherR\bvouchers\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x95\x01\n" +
+	"\"ValidateVoucherForOrganizerRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\x12\x1b\n" +
+	"\toutlet_id\x18\x03 \x01(\x03R\boutletId\x12 \n" +
+	"\fmenu_item_id\x18\x04 \x01(\x03R\n" +
+	"menuItemId\"\xfe\x01\n" +
+	"#ValidateVoucherForOrganizerResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05valid\x18\x02 \x01(\bR\x05valid\x12\x1d\n" +
+	"\n" +
+	"price_mode\x18\x03 \x01(\tR\tpriceMode\x12\x14\n" +
+	"\x05value\x18\x04 \x01(\tR\x05value\x12.\n" +
+	"\x13max_discount_amount\x18\x05 \x01(\tR\x11maxDiscountAmount\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_voucher_proto_rawDescOnce sync.Once
@@ -2544,32 +2811,34 @@ func file_v1_booking_voucher_proto_rawDescGZIP() []byte {
 	return file_v1_booking_voucher_proto_rawDescData
 }
 
-var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
 var file_v1_booking_voucher_proto_goTypes = []any{
-	(*ListVouchersRequest)(nil),           // 0: riptik.booking.v1.ListVouchersRequest
-	(*GetVoucherRequest)(nil),             // 1: riptik.booking.v1.GetVoucherRequest
-	(*CreateVoucherRequest)(nil),          // 2: riptik.booking.v1.CreateVoucherRequest
-	(*VoucherRestrictions)(nil),           // 3: riptik.booking.v1.VoucherRestrictions
-	(*BulkCreateVouchersRequest)(nil),     // 4: riptik.booking.v1.BulkCreateVouchersRequest
-	(*ValidateVoucherRequest)(nil),        // 5: riptik.booking.v1.ValidateVoucherRequest
-	(*UpdateVoucherRequest)(nil),          // 6: riptik.booking.v1.UpdateVoucherRequest
-	(*ListVouchersResponse)(nil),          // 7: riptik.booking.v1.ListVouchersResponse
-	(*GetVoucherResponse)(nil),            // 8: riptik.booking.v1.GetVoucherResponse
-	(*CreateVoucherResponse)(nil),         // 9: riptik.booking.v1.CreateVoucherResponse
-	(*BulkCreateVouchersResponse)(nil),    // 10: riptik.booking.v1.BulkCreateVouchersResponse
-	(*ValidateVoucherResponse)(nil),       // 11: riptik.booking.v1.ValidateVoucherResponse
-	(*UpdateVoucherResponse)(nil),         // 12: riptik.booking.v1.UpdateVoucherResponse
-	(*Voucher)(nil),                       // 13: riptik.booking.v1.Voucher
-	(*VoucherBatch)(nil),                  // 14: riptik.booking.v1.VoucherBatch
-	(*UpdateVoucherBatchRequest)(nil),     // 15: riptik.booking.v1.UpdateVoucherBatchRequest
-	(*UpdateVoucherBatchResponse)(nil),    // 16: riptik.booking.v1.UpdateVoucherBatchResponse
-	(*DeleteVoucherBatchRequest)(nil),     // 17: riptik.booking.v1.DeleteVoucherBatchRequest
-	(*DeleteVoucherBatchResponse)(nil),    // 18: riptik.booking.v1.DeleteVoucherBatchResponse
-	(*ListVoucherBatchesRequest)(nil),     // 19: riptik.booking.v1.ListVoucherBatchesRequest
-	(*ListVoucherBatchesResponse)(nil),    // 20: riptik.booking.v1.ListVoucherBatchesResponse
-	(*ListVoucherBatchCodesRequest)(nil),  // 21: riptik.booking.v1.ListVoucherBatchCodesRequest
-	(*ListVoucherBatchCodesResponse)(nil), // 22: riptik.booking.v1.ListVoucherBatchCodesResponse
-	nil,                                   // 23: riptik.booking.v1.Voucher.MetaDataEntry
+	(*ListVouchersRequest)(nil),                 // 0: riptik.booking.v1.ListVouchersRequest
+	(*GetVoucherRequest)(nil),                   // 1: riptik.booking.v1.GetVoucherRequest
+	(*CreateVoucherRequest)(nil),                // 2: riptik.booking.v1.CreateVoucherRequest
+	(*VoucherRestrictions)(nil),                 // 3: riptik.booking.v1.VoucherRestrictions
+	(*BulkCreateVouchersRequest)(nil),           // 4: riptik.booking.v1.BulkCreateVouchersRequest
+	(*ValidateVoucherRequest)(nil),              // 5: riptik.booking.v1.ValidateVoucherRequest
+	(*UpdateVoucherRequest)(nil),                // 6: riptik.booking.v1.UpdateVoucherRequest
+	(*ListVouchersResponse)(nil),                // 7: riptik.booking.v1.ListVouchersResponse
+	(*GetVoucherResponse)(nil),                  // 8: riptik.booking.v1.GetVoucherResponse
+	(*CreateVoucherResponse)(nil),               // 9: riptik.booking.v1.CreateVoucherResponse
+	(*BulkCreateVouchersResponse)(nil),          // 10: riptik.booking.v1.BulkCreateVouchersResponse
+	(*ValidateVoucherResponse)(nil),             // 11: riptik.booking.v1.ValidateVoucherResponse
+	(*UpdateVoucherResponse)(nil),               // 12: riptik.booking.v1.UpdateVoucherResponse
+	(*Voucher)(nil),                             // 13: riptik.booking.v1.Voucher
+	(*VoucherBatch)(nil),                        // 14: riptik.booking.v1.VoucherBatch
+	(*UpdateVoucherBatchRequest)(nil),           // 15: riptik.booking.v1.UpdateVoucherBatchRequest
+	(*UpdateVoucherBatchResponse)(nil),          // 16: riptik.booking.v1.UpdateVoucherBatchResponse
+	(*DeleteVoucherBatchRequest)(nil),           // 17: riptik.booking.v1.DeleteVoucherBatchRequest
+	(*DeleteVoucherBatchResponse)(nil),          // 18: riptik.booking.v1.DeleteVoucherBatchResponse
+	(*ListVoucherBatchesRequest)(nil),           // 19: riptik.booking.v1.ListVoucherBatchesRequest
+	(*ListVoucherBatchesResponse)(nil),          // 20: riptik.booking.v1.ListVoucherBatchesResponse
+	(*ListVoucherBatchCodesRequest)(nil),        // 21: riptik.booking.v1.ListVoucherBatchCodesRequest
+	(*ListVoucherBatchCodesResponse)(nil),       // 22: riptik.booking.v1.ListVoucherBatchCodesResponse
+	(*ValidateVoucherForOrganizerRequest)(nil),  // 23: riptik.booking.v1.ValidateVoucherForOrganizerRequest
+	(*ValidateVoucherForOrganizerResponse)(nil), // 24: riptik.booking.v1.ValidateVoucherForOrganizerResponse
+	nil, // 25: riptik.booking.v1.Voucher.MetaDataEntry
 }
 var file_v1_booking_voucher_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateVoucherRequest.restrictions:type_name -> riptik.booking.v1.VoucherRestrictions
@@ -2580,7 +2849,7 @@ var file_v1_booking_voucher_proto_depIdxs = []int32{
 	13, // 5: riptik.booking.v1.BulkCreateVouchersResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	13, // 6: riptik.booking.v1.ValidateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
 	13, // 7: riptik.booking.v1.UpdateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
-	23, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
+	25, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
 	14, // 9: riptik.booking.v1.ListVoucherBatchesResponse.batches:type_name -> riptik.booking.v1.VoucherBatch
 	13, // 10: riptik.booking.v1.ListVoucherBatchCodesResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	11, // [11:11] is the sub-list for method output_type
@@ -2601,7 +2870,7 @@ func file_v1_booking_voucher_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_voucher_proto_rawDesc), len(file_v1_booking_voucher_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   26,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
