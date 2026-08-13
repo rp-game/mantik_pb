@@ -1730,13 +1730,19 @@ func (x *VoucherBatch) GetRedeemedCount() int32 {
 // Request: Update mọi voucher trong 1 batch cùng lúc (1 transaction, atomic — không phải N update
 // rời rạc). organizer bắt buộc để IDOR check ở tầng NATS handler.
 type UpdateVoucherBatchRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                      // Organizer slug (required)
-	BatchId       int64                  `protobuf:"varint,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`          // Batch ID (required)
-	ValidUntil    string                 `protobuf:"bytes,3,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`  // ISO 8601 date string — rỗng = không đổi
-	UsageLimit    int32                  `protobuf:"varint,4,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"` // rỗng/0 = không đổi
-	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
-	Value         string                 `protobuf:"bytes,6,opt,name=value,proto3" json:"value,omitempty"` // Value as decimal string — CHỈ áp dụng nếu SUM(redeemed)=0 toàn batch,
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Organizer  string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                      // Organizer slug (required)
+	BatchId    int64                  `protobuf:"varint,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`          // Batch ID (required)
+	ValidUntil string                 `protobuf:"bytes,3,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`  // ISO 8601 date string — rỗng = không đổi
+	UsageLimit int32                  `protobuf:"varint,4,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"` // rỗng/0 = không đổi
+	Active     bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
+	Value      string                 `protobuf:"bytes,6,opt,name=value,proto3" json:"value,omitempty"` // Value as decimal string — CHỈ áp dụng nếu SUM(redeemed)=0 toàn batch,
+	// ngược lại bị bỏ qua (xem UpdateVoucherBatchResponse.value_rejected)
+	// event_ids/item_ids — REPLACE toàn bộ set áp dụng cho MỌI voucher con trong batch (ghi đồng bộ,
+	// không phải tham chiếu sống) TRONG CÙNG transaction với các field update ở trên. Rỗng (len==0)
+	// = không đổi, giữ nguyên set hiện tại — cùng convention với UpdateVoucherRequest.
+	EventIds      []int64 `protobuf:"varint,7,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`
+	ItemIds       []int64 `protobuf:"varint,8,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1811,6 +1817,20 @@ func (x *UpdateVoucherBatchRequest) GetValue() string {
 		return x.Value
 	}
 	return ""
+}
+
+func (x *UpdateVoucherBatchRequest) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
+func (x *UpdateVoucherBatchRequest) GetItemIds() []int64 {
+	if x != nil {
+		return x.ItemIds
+	}
+	return nil
 }
 
 type UpdateVoucherBatchResponse struct {
@@ -2324,7 +2344,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x06active\x18\f \x01(\bR\x06active\x12\x18\n" +
 	"\acreated\x18\r \x01(\tR\acreated\x12#\n" +
 	"\rvoucher_count\x18\x0e \x01(\x05R\fvoucherCount\x12%\n" +
-	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\"\xc4\x01\n" +
+	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\"\xfc\x01\n" +
 	"\x19UpdateVoucherBatchRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
 	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\x12\x1f\n" +
@@ -2333,7 +2353,9 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\vusage_limit\x18\x04 \x01(\x05R\n" +
 	"usageLimit\x12\x16\n" +
 	"\x06active\x18\x05 \x01(\bR\x06active\x12\x14\n" +
-	"\x05value\x18\x06 \x01(\tR\x05value\"\xc6\x01\n" +
+	"\x05value\x18\x06 \x01(\tR\x05value\x12\x1b\n" +
+	"\tevent_ids\x18\a \x03(\x03R\beventIds\x12\x19\n" +
+	"\bitem_ids\x18\b \x03(\x03R\aitemIds\"\xc6\x01\n" +
 	"\x1aUpdateVoucherBatchResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
 	"\rupdated_count\x18\x02 \x01(\x05R\fupdatedCount\x12%\n" +
