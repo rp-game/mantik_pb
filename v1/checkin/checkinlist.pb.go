@@ -786,12 +786,15 @@ func (x *GetCheckinListStatusRequest) GetId() int64 {
 }
 
 type GetCheckinListPositionsRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ListId        int64                  `protobuf:"varint,1,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
-	Search        string                 `protobuf:"bytes,2,opt,name=search,proto3" json:"search,omitempty"`
-	Limit         int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
-	Offset        int32                  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset,omitempty"`
-	Filters       map[string]*any1.Any   `protobuf:"bytes,5,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	ListId  int64                  `protobuf:"varint,1,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
+	Search  string                 `protobuf:"bytes,2,opt,name=search,proto3" json:"search,omitempty"`
+	Limit   int32                  `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	Offset  int32                  `protobuf:"varint,4,opt,name=offset,proto3" json:"offset,omitempty"`
+	Filters map[string]*any1.Any   `protobuf:"bytes,5,rep,name=filters,proto3" json:"filters,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// subevent_id — optional extra narrowing on top of the list's own subevent_ids scope (useful for
+	// an event-wide list, to view just 1 subevent's attendees). 0 = no extra filter.
+	SubeventId    int64 `protobuf:"varint,6,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -859,6 +862,13 @@ func (x *GetCheckinListPositionsRequest) GetFilters() map[string]*any1.Any {
 		return x.Filters
 	}
 	return nil
+}
+
+func (x *GetCheckinListPositionsRequest) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
 }
 
 type GetCheckinListStatsRequest struct {
@@ -2033,13 +2043,15 @@ const file_v1_checkin_checkinlist_proto_rawDesc = "" +
 	"\x18DeleteCheckinListRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"-\n" +
 	"\x1bGetCheckinListStatusRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\xab\x02\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"\xcc\x02\n" +
 	"\x1eGetCheckinListPositionsRequest\x12\x17\n" +
 	"\alist_id\x18\x01 \x01(\x03R\x06listId\x12\x16\n" +
 	"\x06search\x18\x02 \x01(\tR\x06search\x12\x14\n" +
 	"\x05limit\x18\x03 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x04 \x01(\x05R\x06offset\x12X\n" +
-	"\afilters\x18\x05 \x03(\v2>.riptik.checkin.v1.GetCheckinListPositionsRequest.FiltersEntryR\afilters\x1aP\n" +
+	"\afilters\x18\x05 \x03(\v2>.riptik.checkin.v1.GetCheckinListPositionsRequest.FiltersEntryR\afilters\x12\x1f\n" +
+	"\vsubevent_id\x18\x06 \x01(\x03R\n" +
+	"subeventId\x1aP\n" +
 	"\fFiltersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"X\n" +
