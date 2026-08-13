@@ -1038,13 +1038,14 @@ func (x *GetMetadataSchemaResponse) GetErrorMessage() string {
 }
 
 type GetMetadataValuesResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Values        map[string]string      `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // property_key -> value (string-encoded)
-	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
-	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	Success                 bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Values                  map[string]string      `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // property_key -> value (string-encoded)
+	ErrorCode               string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage            string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	EventSpecificProperties []*MetadataProperty    `protobuf:"bytes,5,rep,name=event_specific_properties,json=eventSpecificProperties,proto3" json:"event_specific_properties,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *GetMetadataValuesResponse) Reset() {
@@ -1105,14 +1106,22 @@ func (x *GetMetadataValuesResponse) GetErrorMessage() string {
 	return ""
 }
 
+func (x *GetMetadataValuesResponse) GetEventSpecificProperties() []*MetadataProperty {
+	if x != nil {
+		return x.EventSpecificProperties
+	}
+	return nil
+}
+
 type UpdateMetadataValuesResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Values        map[string]string      `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // property_key -> value (string-encoded)
-	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
-	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                   protoimpl.MessageState `protogen:"open.v1"`
+	Success                 bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Values                  map[string]string      `protobuf:"bytes,2,rep,name=values,proto3" json:"values,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // property_key -> value (string-encoded)
+	ErrorCode               string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage            string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	EventSpecificProperties []*MetadataProperty    `protobuf:"bytes,5,rep,name=event_specific_properties,json=eventSpecificProperties,proto3" json:"event_specific_properties,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *UpdateMetadataValuesResponse) Reset() {
@@ -1171,6 +1180,13 @@ func (x *UpdateMetadataValuesResponse) GetErrorMessage() string {
 		return x.ErrorMessage
 	}
 	return ""
+}
+
+func (x *UpdateMetadataValuesResponse) GetEventSpecificProperties() []*MetadataProperty {
+	if x != nil {
+		return x.EventSpecificProperties
+	}
+	return nil
 }
 
 type GetItemMetadataSchemaResponse struct {
@@ -1331,22 +1347,24 @@ const file_v1_event_metadata_proto_rawDesc = "" +
 	"\x06schema\x18\x02 \x01(\v2\x1f.riptik.event.v1.MetadataSchemaR\x06schema\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x84\x02\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xe3\x02\n" +
 	"\x19GetMetadataValuesResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12N\n" +
 	"\x06values\x18\x02 \x03(\v26.riptik.event.v1.GetMetadataValuesResponse.ValuesEntryR\x06values\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\x1a9\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\x12]\n" +
+	"\x19event_specific_properties\x18\x05 \x03(\v2!.riptik.event.v1.MetadataPropertyR\x17eventSpecificProperties\x1a9\n" +
 	"\vValuesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x8a\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xe9\x02\n" +
 	"\x1cUpdateMetadataValuesResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12Q\n" +
 	"\x06values\x18\x02 \x03(\v29.riptik.event.v1.UpdateMetadataValuesResponse.ValuesEntryR\x06values\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\x1a9\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\x12]\n" +
+	"\x19event_specific_properties\x18\x05 \x03(\v2!.riptik.event.v1.MetadataPropertyR\x17eventSpecificProperties\x1a9\n" +
 	"\vValuesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc0\x01\n" +
@@ -1404,13 +1422,15 @@ var file_v1_event_metadata_proto_depIdxs = []int32{
 	0,  // 5: riptik.event.v1.UpdateMetadataPropertyResponse.property:type_name -> riptik.event.v1.MetadataProperty
 	1,  // 6: riptik.event.v1.GetMetadataSchemaResponse.schema:type_name -> riptik.event.v1.MetadataSchema
 	19, // 7: riptik.event.v1.GetMetadataValuesResponse.values:type_name -> riptik.event.v1.GetMetadataValuesResponse.ValuesEntry
-	20, // 8: riptik.event.v1.UpdateMetadataValuesResponse.values:type_name -> riptik.event.v1.UpdateMetadataValuesResponse.ValuesEntry
-	0,  // 9: riptik.event.v1.GetItemMetadataSchemaResponse.properties:type_name -> riptik.event.v1.MetadataProperty
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	0,  // 8: riptik.event.v1.GetMetadataValuesResponse.event_specific_properties:type_name -> riptik.event.v1.MetadataProperty
+	20, // 9: riptik.event.v1.UpdateMetadataValuesResponse.values:type_name -> riptik.event.v1.UpdateMetadataValuesResponse.ValuesEntry
+	0,  // 10: riptik.event.v1.UpdateMetadataValuesResponse.event_specific_properties:type_name -> riptik.event.v1.MetadataProperty
+	0,  // 11: riptik.event.v1.GetItemMetadataSchemaResponse.properties:type_name -> riptik.event.v1.MetadataProperty
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_v1_event_metadata_proto_init() }
