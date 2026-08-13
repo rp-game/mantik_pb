@@ -2161,6 +2161,129 @@ func (x *ListVoucherBatchesResponse) GetErrorMessage() string {
 	return ""
 }
 
+// Request: List every voucher code that belongs to 1 batch (dùng khi mở rộng dòng lô trên
+// backoffice) — KHÔNG dùng vouchers.list vì page_size ở đó bị chặn cứng ở 200, không đủ cho batch
+// lớn (bug thật đã xảy ra: batch 1001 mã, page_size=1006 bị REST layer từ chối, bảng con trống).
+type ListVoucherBatchCodesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`             // Organizer slug (required)
+	BatchId       int64                  `protobuf:"varint,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"` // Batch ID (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListVoucherBatchCodesRequest) Reset() {
+	*x = ListVoucherBatchCodesRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVoucherBatchCodesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVoucherBatchCodesRequest) ProtoMessage() {}
+
+func (x *ListVoucherBatchCodesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVoucherBatchCodesRequest.ProtoReflect.Descriptor instead.
+func (*ListVoucherBatchCodesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *ListVoucherBatchCodesRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *ListVoucherBatchCodesRequest) GetBatchId() int64 {
+	if x != nil {
+		return x.BatchId
+	}
+	return 0
+}
+
+type ListVoucherBatchCodesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Vouchers      []*Voucher             `protobuf:"bytes,2,rep,name=vouchers,proto3" json:"vouchers,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListVoucherBatchCodesResponse) Reset() {
+	*x = ListVoucherBatchCodesResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVoucherBatchCodesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVoucherBatchCodesResponse) ProtoMessage() {}
+
+func (x *ListVoucherBatchCodesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVoucherBatchCodesResponse.ProtoReflect.Descriptor instead.
+func (*ListVoucherBatchCodesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *ListVoucherBatchCodesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListVoucherBatchCodesResponse) GetVouchers() []*Voucher {
+	if x != nil {
+		return x.Vouchers
+	}
+	return nil
+}
+
+func (x *ListVoucherBatchCodesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListVoucherBatchCodesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_voucher_proto protoreflect.FileDescriptor
 
 const file_v1_booking_voucher_proto_rawDesc = "" +
@@ -2398,6 +2521,15 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\abatches\x18\x02 \x03(\v2\x1f.riptik.booking.v1.VoucherBatchR\abatches\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"W\n" +
+	"\x1cListVoucherBatchCodesRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
+	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\"\xb5\x01\n" +
+	"\x1dListVoucherBatchCodesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x126\n" +
+	"\bvouchers\x18\x02 \x03(\v2\x1a.riptik.booking.v1.VoucherR\bvouchers\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
@@ -2412,30 +2544,32 @@ func file_v1_booking_voucher_proto_rawDescGZIP() []byte {
 	return file_v1_booking_voucher_proto_rawDescData
 }
 
-var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_v1_booking_voucher_proto_goTypes = []any{
-	(*ListVouchersRequest)(nil),        // 0: riptik.booking.v1.ListVouchersRequest
-	(*GetVoucherRequest)(nil),          // 1: riptik.booking.v1.GetVoucherRequest
-	(*CreateVoucherRequest)(nil),       // 2: riptik.booking.v1.CreateVoucherRequest
-	(*VoucherRestrictions)(nil),        // 3: riptik.booking.v1.VoucherRestrictions
-	(*BulkCreateVouchersRequest)(nil),  // 4: riptik.booking.v1.BulkCreateVouchersRequest
-	(*ValidateVoucherRequest)(nil),     // 5: riptik.booking.v1.ValidateVoucherRequest
-	(*UpdateVoucherRequest)(nil),       // 6: riptik.booking.v1.UpdateVoucherRequest
-	(*ListVouchersResponse)(nil),       // 7: riptik.booking.v1.ListVouchersResponse
-	(*GetVoucherResponse)(nil),         // 8: riptik.booking.v1.GetVoucherResponse
-	(*CreateVoucherResponse)(nil),      // 9: riptik.booking.v1.CreateVoucherResponse
-	(*BulkCreateVouchersResponse)(nil), // 10: riptik.booking.v1.BulkCreateVouchersResponse
-	(*ValidateVoucherResponse)(nil),    // 11: riptik.booking.v1.ValidateVoucherResponse
-	(*UpdateVoucherResponse)(nil),      // 12: riptik.booking.v1.UpdateVoucherResponse
-	(*Voucher)(nil),                    // 13: riptik.booking.v1.Voucher
-	(*VoucherBatch)(nil),               // 14: riptik.booking.v1.VoucherBatch
-	(*UpdateVoucherBatchRequest)(nil),  // 15: riptik.booking.v1.UpdateVoucherBatchRequest
-	(*UpdateVoucherBatchResponse)(nil), // 16: riptik.booking.v1.UpdateVoucherBatchResponse
-	(*DeleteVoucherBatchRequest)(nil),  // 17: riptik.booking.v1.DeleteVoucherBatchRequest
-	(*DeleteVoucherBatchResponse)(nil), // 18: riptik.booking.v1.DeleteVoucherBatchResponse
-	(*ListVoucherBatchesRequest)(nil),  // 19: riptik.booking.v1.ListVoucherBatchesRequest
-	(*ListVoucherBatchesResponse)(nil), // 20: riptik.booking.v1.ListVoucherBatchesResponse
-	nil,                                // 21: riptik.booking.v1.Voucher.MetaDataEntry
+	(*ListVouchersRequest)(nil),           // 0: riptik.booking.v1.ListVouchersRequest
+	(*GetVoucherRequest)(nil),             // 1: riptik.booking.v1.GetVoucherRequest
+	(*CreateVoucherRequest)(nil),          // 2: riptik.booking.v1.CreateVoucherRequest
+	(*VoucherRestrictions)(nil),           // 3: riptik.booking.v1.VoucherRestrictions
+	(*BulkCreateVouchersRequest)(nil),     // 4: riptik.booking.v1.BulkCreateVouchersRequest
+	(*ValidateVoucherRequest)(nil),        // 5: riptik.booking.v1.ValidateVoucherRequest
+	(*UpdateVoucherRequest)(nil),          // 6: riptik.booking.v1.UpdateVoucherRequest
+	(*ListVouchersResponse)(nil),          // 7: riptik.booking.v1.ListVouchersResponse
+	(*GetVoucherResponse)(nil),            // 8: riptik.booking.v1.GetVoucherResponse
+	(*CreateVoucherResponse)(nil),         // 9: riptik.booking.v1.CreateVoucherResponse
+	(*BulkCreateVouchersResponse)(nil),    // 10: riptik.booking.v1.BulkCreateVouchersResponse
+	(*ValidateVoucherResponse)(nil),       // 11: riptik.booking.v1.ValidateVoucherResponse
+	(*UpdateVoucherResponse)(nil),         // 12: riptik.booking.v1.UpdateVoucherResponse
+	(*Voucher)(nil),                       // 13: riptik.booking.v1.Voucher
+	(*VoucherBatch)(nil),                  // 14: riptik.booking.v1.VoucherBatch
+	(*UpdateVoucherBatchRequest)(nil),     // 15: riptik.booking.v1.UpdateVoucherBatchRequest
+	(*UpdateVoucherBatchResponse)(nil),    // 16: riptik.booking.v1.UpdateVoucherBatchResponse
+	(*DeleteVoucherBatchRequest)(nil),     // 17: riptik.booking.v1.DeleteVoucherBatchRequest
+	(*DeleteVoucherBatchResponse)(nil),    // 18: riptik.booking.v1.DeleteVoucherBatchResponse
+	(*ListVoucherBatchesRequest)(nil),     // 19: riptik.booking.v1.ListVoucherBatchesRequest
+	(*ListVoucherBatchesResponse)(nil),    // 20: riptik.booking.v1.ListVoucherBatchesResponse
+	(*ListVoucherBatchCodesRequest)(nil),  // 21: riptik.booking.v1.ListVoucherBatchCodesRequest
+	(*ListVoucherBatchCodesResponse)(nil), // 22: riptik.booking.v1.ListVoucherBatchCodesResponse
+	nil,                                   // 23: riptik.booking.v1.Voucher.MetaDataEntry
 }
 var file_v1_booking_voucher_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateVoucherRequest.restrictions:type_name -> riptik.booking.v1.VoucherRestrictions
@@ -2446,13 +2580,14 @@ var file_v1_booking_voucher_proto_depIdxs = []int32{
 	13, // 5: riptik.booking.v1.BulkCreateVouchersResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	13, // 6: riptik.booking.v1.ValidateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
 	13, // 7: riptik.booking.v1.UpdateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
-	21, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
+	23, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
 	14, // 9: riptik.booking.v1.ListVoucherBatchesResponse.batches:type_name -> riptik.booking.v1.VoucherBatch
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	13, // 10: riptik.booking.v1.ListVoucherBatchCodesResponse.vouchers:type_name -> riptik.booking.v1.Voucher
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_voucher_proto_init() }
@@ -2466,7 +2601,7 @@ func file_v1_booking_voucher_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_voucher_proto_rawDesc), len(file_v1_booking_voucher_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
