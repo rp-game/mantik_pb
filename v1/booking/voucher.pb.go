@@ -1580,14 +1580,17 @@ type VoucherBatch struct {
 	Type         string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`   // "percentage" or "fixed_amount"
 	Value        string                 `protobuf:"bytes,7,opt,name=value,proto3" json:"value,omitempty"` // Value as decimal string, lúc tạo lô — có thể trôi khỏi voucher
 	// con nếu ai sửa lẻ 1 mã sau đó qua UpdateVoucherRequest
-	UsageLimit    int32  `protobuf:"varint,8,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"`
-	ValidFrom     string `protobuf:"bytes,9,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`     // ISO datetime
-	ValidUntil    string `protobuf:"bytes,10,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // ISO datetime
-	Description   string `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
-	Active        bool   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`
-	Created       string `protobuf:"bytes,13,opt,name=created,proto3" json:"created,omitempty"`                                   // ISO datetime
-	VoucherCount  int32  `protobuf:"varint,14,opt,name=voucher_count,json=voucherCount,proto3" json:"voucher_count,omitempty"`    // Tổng số voucher con trong batch
-	RedeemedCount int32  `protobuf:"varint,15,opt,name=redeemed_count,json=redeemedCount,proto3" json:"redeemed_count,omitempty"` // Tổng số lần đã redeem trên toàn batch (SUM(redeemed))
+	UsageLimit    int32   `protobuf:"varint,8,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"`
+	ValidFrom     string  `protobuf:"bytes,9,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`     // ISO datetime
+	ValidUntil    string  `protobuf:"bytes,10,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // ISO datetime
+	Description   string  `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	Active        bool    `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`
+	Created       string  `protobuf:"bytes,13,opt,name=created,proto3" json:"created,omitempty"`                                   // ISO datetime
+	VoucherCount  int32   `protobuf:"varint,14,opt,name=voucher_count,json=voucherCount,proto3" json:"voucher_count,omitempty"`    // Tổng số voucher con trong batch
+	RedeemedCount int32   `protobuf:"varint,15,opt,name=redeemed_count,json=redeemedCount,proto3" json:"redeemed_count,omitempty"` // Tổng số lần đã redeem trên toàn batch (SUM(redeemed))
+	EventIds      []int64 `protobuf:"varint,16,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`         // Đọc đại diện từ 1 voucher con — mọi voucher con đều được ghi
+	// đồng bộ cùng set này qua UpdateVoucherBatchRequest.event_ids
+	ItemIds       []int64 `protobuf:"varint,17,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"` // Cùng lý do như event_ids
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1725,6 +1728,20 @@ func (x *VoucherBatch) GetRedeemedCount() int32 {
 		return x.RedeemedCount
 	}
 	return 0
+}
+
+func (x *VoucherBatch) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
+func (x *VoucherBatch) GetItemIds() []int64 {
+	if x != nil {
+		return x.ItemIds
+	}
+	return nil
 }
 
 // Request: Update mọi voucher trong 1 batch cùng lúc (1 transaction, atomic — không phải N update
@@ -2323,7 +2340,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\bbatch_id\x18\x18 \x01(\x03R\abatchId\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xcc\x03\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x84\x04\n" +
 	"\fVoucherBatch\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x1f\n" +
@@ -2344,7 +2361,9 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x06active\x18\f \x01(\bR\x06active\x12\x18\n" +
 	"\acreated\x18\r \x01(\tR\acreated\x12#\n" +
 	"\rvoucher_count\x18\x0e \x01(\x05R\fvoucherCount\x12%\n" +
-	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\"\xfc\x01\n" +
+	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\x12\x1b\n" +
+	"\tevent_ids\x18\x10 \x03(\x03R\beventIds\x12\x19\n" +
+	"\bitem_ids\x18\x11 \x03(\x03R\aitemIds\"\xfc\x01\n" +
 	"\x19UpdateVoucherBatchRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
 	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\x12\x1f\n" +
