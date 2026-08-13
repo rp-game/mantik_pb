@@ -224,6 +224,8 @@ type CreateVoucherRequest struct {
 	Tag              string                 `protobuf:"bytes,20,opt,name=tag,proto3" json:"tag,omitempty"`                                                      // Campaign tag (alias for campaign_name)
 	Comment          string                 `protobuf:"bytes,21,opt,name=comment,proto3" json:"comment,omitempty"`                                              // Internal comment
 	Restrictions     *VoucherRestrictions   `protobuf:"bytes,22,opt,name=restrictions,proto3" json:"restrictions,omitempty"`                                    // Restrictions object
+	EventIds         []int64                `protobuf:"varint,23,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                    // Phase 1 — voucher đa event (rỗng = đơn-event, dùng `event` ở trên)
+	ItemIds          []int64                `protobuf:"varint,24,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                       // Phase 1 — voucher đa sản phẩm (rỗng = dùng `item_id` đơn ở trên)
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -412,6 +414,20 @@ func (x *CreateVoucherRequest) GetRestrictions() *VoucherRestrictions {
 	return nil
 }
 
+func (x *CreateVoucherRequest) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
+func (x *CreateVoucherRequest) GetItemIds() []int64 {
+	if x != nil {
+		return x.ItemIds
+	}
+	return nil
+}
+
 // Voucher restrictions
 type VoucherRestrictions struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
@@ -506,6 +522,7 @@ type BulkCreateVouchersRequest struct {
 	ValidFrom       string                 `protobuf:"bytes,12,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`                      // ISO 8601 date string (required)
 	ValidUntil      string                 `protobuf:"bytes,13,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                   // ISO 8601 date string (required)
 	Restrictions    *VoucherRestrictions   `protobuf:"bytes,14,opt,name=restrictions,proto3" json:"restrictions,omitempty"`                                 // Restrictions object
+	EventIds        []int64                `protobuf:"varint,15,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                 // Phase 1 — voucher đa event (rỗng = đơn-event, dùng `event` ở trên)
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -638,6 +655,13 @@ func (x *BulkCreateVouchersRequest) GetRestrictions() *VoucherRestrictions {
 	return nil
 }
 
+func (x *BulkCreateVouchersRequest) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
 // Request: Validate voucher
 type ValidateVoucherRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -720,6 +744,8 @@ type UpdateVoucherRequest struct {
 	UsageLimit    int32                  `protobuf:"varint,8,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"`      // Max usages
 	Active        bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`                                // Active status
 	Comment       string                 `protobuf:"bytes,10,opt,name=comment,proto3" json:"comment,omitempty"`                              // Internal comment
+	EventIds      []int64                `protobuf:"varint,11,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`    // Phase 1 — REPLACE toàn bộ set event (rỗng = không đổi)
+	ItemIds       []int64                `protobuf:"varint,12,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`       // Phase 1 — REPLACE toàn bộ set item (rỗng = không đổi)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -822,6 +848,20 @@ func (x *UpdateVoucherRequest) GetComment() string {
 		return x.Comment
 	}
 	return ""
+}
+
+func (x *UpdateVoucherRequest) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
+func (x *UpdateVoucherRequest) GetItemIds() []int64 {
+	if x != nil {
+		return x.ItemIds
+	}
+	return nil
 }
 
 // Response: Voucher list
@@ -1317,6 +1357,8 @@ type Voucher struct {
 	MetaData      map[string]string      `protobuf:"bytes,19,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Custom metadata
 	CampaignName  string                 `protobuf:"bytes,20,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"`                                                               // Marketing campaign name (0.2 — real column, not tag/meta_data)
 	Channel       string                 `protobuf:"bytes,21,opt,name=channel,proto3" json:"channel,omitempty"`                                                                                             // Marketing channel (0.2 — real column)
+	EventIds      []int64                `protobuf:"varint,22,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                                                                   // Phase 1 — voucher đa event (rỗng = chỉ event gốc, xem event_id nếu có ở nơi khác)
+	ItemIds       []int64                `protobuf:"varint,23,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                                                                      // Phase 1 — voucher đa sản phẩm (rỗng = chỉ item_id đơn ở trên)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1498,6 +1540,20 @@ func (x *Voucher) GetChannel() string {
 	return ""
 }
 
+func (x *Voucher) GetEventIds() []int64 {
+	if x != nil {
+		return x.EventIds
+	}
+	return nil
+}
+
+func (x *Voucher) GetItemIds() []int64 {
+	if x != nil {
+		return x.ItemIds
+	}
+	return nil
+}
+
 var File_v1_booking_voucher_proto protoreflect.FileDescriptor
 
 const file_v1_booking_voucher_proto_rawDesc = "" +
@@ -1520,7 +1576,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
 	"\n" +
-	"voucher_id\x18\x03 \x01(\x03R\tvoucherId\"\xc5\x05\n" +
+	"voucher_id\x18\x03 \x01(\x03R\tvoucherId\"\xfd\x05\n" +
 	"\x14CreateVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -1548,13 +1604,15 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x11show_hidden_items\x18\x13 \x01(\bR\x0fshowHiddenItems\x12\x10\n" +
 	"\x03tag\x18\x14 \x01(\tR\x03tag\x12\x18\n" +
 	"\acomment\x18\x15 \x01(\tR\acomment\x12J\n" +
-	"\frestrictions\x18\x16 \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\"\xfc\x01\n" +
+	"\frestrictions\x18\x16 \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\x12\x1b\n" +
+	"\tevent_ids\x18\x17 \x03(\x03R\beventIds\x12\x19\n" +
+	"\bitem_ids\x18\x18 \x03(\x03R\aitemIds\"\xfc\x01\n" +
 	"\x13VoucherRestrictions\x12(\n" +
 	"\x10min_order_amount\x18\x01 \x01(\tR\x0eminOrderAmount\x12.\n" +
 	"\x13max_discount_amount\x18\x02 \x01(\tR\x11maxDiscountAmount\x129\n" +
 	"\x19first_time_customers_only\x18\x03 \x01(\bR\x16firstTimeCustomersOnly\x12)\n" +
 	"\x10applicable_items\x18\x04 \x03(\tR\x0fapplicableItems\x12%\n" +
-	"\x0eexcluded_items\x18\x05 \x03(\tR\rexcludedItems\"\xf0\x03\n" +
+	"\x0eexcluded_items\x18\x05 \x03(\tR\rexcludedItems\"\x8d\x04\n" +
 	"\x19BulkCreateVouchersRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12#\n" +
@@ -1574,12 +1632,13 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"valid_from\x18\f \x01(\tR\tvalidFrom\x12\x1f\n" +
 	"\vvalid_until\x18\r \x01(\tR\n" +
 	"validUntil\x12J\n" +
-	"\frestrictions\x18\x0e \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\"y\n" +
+	"\frestrictions\x18\x0e \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\x12\x1b\n" +
+	"\tevent_ids\x18\x0f \x03(\x03R\beventIds\"y\n" +
 	"\x16ValidateVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
 	"\x04code\x18\x03 \x01(\tR\x04code\x12\x17\n" +
-	"\aitem_id\x18\x04 \x01(\x03R\x06itemId\"\xac\x02\n" +
+	"\aitem_id\x18\x04 \x01(\x03R\x06itemId\"\xe4\x02\n" +
 	"\x14UpdateVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
@@ -1594,7 +1653,9 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"usageLimit\x12\x16\n" +
 	"\x06active\x18\t \x01(\bR\x06active\x12\x18\n" +
 	"\acomment\x18\n" +
-	" \x01(\tR\acomment\"\xf0\x01\n" +
+	" \x01(\tR\acomment\x12\x1b\n" +
+	"\tevent_ids\x18\v \x03(\x03R\beventIds\x12\x19\n" +
+	"\bitem_ids\x18\f \x03(\x03R\aitemIds\"\xf0\x01\n" +
 	"\x14ListVouchersResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05count\x18\x02 \x01(\x05R\x05count\x12\x12\n" +
@@ -1637,7 +1698,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\avoucher\x18\x02 \x01(\v2\x1a.riptik.booking.v1.VoucherR\avoucher\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xac\x05\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xe4\x05\n" +
 	"\aVoucher\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x14\n" +
@@ -1665,7 +1726,9 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\rlast_modified\x18\x12 \x01(\tR\flastModified\x12E\n" +
 	"\tmeta_data\x18\x13 \x03(\v2(.riptik.booking.v1.Voucher.MetaDataEntryR\bmetaData\x12#\n" +
 	"\rcampaign_name\x18\x14 \x01(\tR\fcampaignName\x12\x18\n" +
-	"\achannel\x18\x15 \x01(\tR\achannel\x1a;\n" +
+	"\achannel\x18\x15 \x01(\tR\achannel\x12\x1b\n" +
+	"\tevent_ids\x18\x16 \x03(\x03R\beventIds\x12\x19\n" +
+	"\bitem_ids\x18\x17 \x03(\x03R\aitemIds\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
