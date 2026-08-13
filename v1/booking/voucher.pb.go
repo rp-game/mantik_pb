@@ -1104,6 +1104,7 @@ type BulkCreateVouchersResponse struct {
 	CampaignName  string                 `protobuf:"bytes,4,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"` // Campaign reference
 	ErrorCode     string                 `protobuf:"bytes,5,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
 	ErrorMessage  string                 `protobuf:"bytes,6,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	BatchId       int64                  `protobuf:"varint,7,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"` // Voucher batches — ID của lô cha vừa tạo
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1178,6 +1179,13 @@ func (x *BulkCreateVouchersResponse) GetErrorMessage() string {
 		return x.ErrorMessage
 	}
 	return ""
+}
+
+func (x *BulkCreateVouchersResponse) GetBatchId() int64 {
+	if x != nil {
+		return x.BatchId
+	}
+	return 0
 }
 
 // Response: Validate voucher
@@ -1359,6 +1367,7 @@ type Voucher struct {
 	Channel       string                 `protobuf:"bytes,21,opt,name=channel,proto3" json:"channel,omitempty"`                                                                                             // Marketing channel (0.2 — real column)
 	EventIds      []int64                `protobuf:"varint,22,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                                                                   // Phase 1 — voucher đa event (rỗng = chỉ event gốc, xem event_id nếu có ở nơi khác)
 	ItemIds       []int64                `protobuf:"varint,23,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`                                                                      // Phase 1 — voucher đa sản phẩm (rỗng = chỉ item_id đơn ở trên)
+	BatchId       int64                  `protobuf:"varint,24,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`                                                                             // Voucher batches — nhóm cha thật cho voucher tạo hàng loạt (0 = voucher đơn lẻ, không thuộc batch nào)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1554,6 +1563,567 @@ func (x *Voucher) GetItemIds() []int64 {
 	return nil
 }
 
+func (x *Voucher) GetBatchId() int64 {
+	if x != nil {
+		return x.BatchId
+	}
+	return 0
+}
+
+type VoucherBatch struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Id           int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizerId  int64                  `protobuf:"varint,2,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	CodePrefix   string                 `protobuf:"bytes,3,opt,name=code_prefix,json=codePrefix,proto3" json:"code_prefix,omitempty"`
+	CampaignName string                 `protobuf:"bytes,4,opt,name=campaign_name,json=campaignName,proto3" json:"campaign_name,omitempty"`
+	Channel      string                 `protobuf:"bytes,5,opt,name=channel,proto3" json:"channel,omitempty"`
+	Type         string                 `protobuf:"bytes,6,opt,name=type,proto3" json:"type,omitempty"`   // "percentage" or "fixed_amount"
+	Value        string                 `protobuf:"bytes,7,opt,name=value,proto3" json:"value,omitempty"` // Value as decimal string, lúc tạo lô — có thể trôi khỏi voucher
+	// con nếu ai sửa lẻ 1 mã sau đó qua UpdateVoucherRequest
+	UsageLimit    int32  `protobuf:"varint,8,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"`
+	ValidFrom     string `protobuf:"bytes,9,opt,name=valid_from,json=validFrom,proto3" json:"valid_from,omitempty"`     // ISO datetime
+	ValidUntil    string `protobuf:"bytes,10,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // ISO datetime
+	Description   string `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	Active        bool   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`
+	Created       string `protobuf:"bytes,13,opt,name=created,proto3" json:"created,omitempty"`                                   // ISO datetime
+	VoucherCount  int32  `protobuf:"varint,14,opt,name=voucher_count,json=voucherCount,proto3" json:"voucher_count,omitempty"`    // Tổng số voucher con trong batch
+	RedeemedCount int32  `protobuf:"varint,15,opt,name=redeemed_count,json=redeemedCount,proto3" json:"redeemed_count,omitempty"` // Tổng số lần đã redeem trên toàn batch (SUM(redeemed))
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VoucherBatch) Reset() {
+	*x = VoucherBatch{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VoucherBatch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VoucherBatch) ProtoMessage() {}
+
+func (x *VoucherBatch) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VoucherBatch.ProtoReflect.Descriptor instead.
+func (*VoucherBatch) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *VoucherBatch) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *VoucherBatch) GetOrganizerId() int64 {
+	if x != nil {
+		return x.OrganizerId
+	}
+	return 0
+}
+
+func (x *VoucherBatch) GetCodePrefix() string {
+	if x != nil {
+		return x.CodePrefix
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetCampaignName() string {
+	if x != nil {
+		return x.CampaignName
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetChannel() string {
+	if x != nil {
+		return x.Channel
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetUsageLimit() int32 {
+	if x != nil {
+		return x.UsageLimit
+	}
+	return 0
+}
+
+func (x *VoucherBatch) GetValidFrom() string {
+	if x != nil {
+		return x.ValidFrom
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetValidUntil() string {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *VoucherBatch) GetCreated() string {
+	if x != nil {
+		return x.Created
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetVoucherCount() int32 {
+	if x != nil {
+		return x.VoucherCount
+	}
+	return 0
+}
+
+func (x *VoucherBatch) GetRedeemedCount() int32 {
+	if x != nil {
+		return x.RedeemedCount
+	}
+	return 0
+}
+
+// Request: Update mọi voucher trong 1 batch cùng lúc (1 transaction, atomic — không phải N update
+// rời rạc). organizer bắt buộc để IDOR check ở tầng NATS handler.
+type UpdateVoucherBatchRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                      // Organizer slug (required)
+	BatchId       int64                  `protobuf:"varint,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"`          // Batch ID (required)
+	ValidUntil    string                 `protobuf:"bytes,3,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`  // ISO 8601 date string — rỗng = không đổi
+	UsageLimit    int32                  `protobuf:"varint,4,opt,name=usage_limit,json=usageLimit,proto3" json:"usage_limit,omitempty"` // rỗng/0 = không đổi
+	Active        bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
+	Value         string                 `protobuf:"bytes,6,opt,name=value,proto3" json:"value,omitempty"` // Value as decimal string — CHỈ áp dụng nếu SUM(redeemed)=0 toàn batch,
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateVoucherBatchRequest) Reset() {
+	*x = UpdateVoucherBatchRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateVoucherBatchRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateVoucherBatchRequest) ProtoMessage() {}
+
+func (x *UpdateVoucherBatchRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateVoucherBatchRequest.ProtoReflect.Descriptor instead.
+func (*UpdateVoucherBatchRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *UpdateVoucherBatchRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *UpdateVoucherBatchRequest) GetBatchId() int64 {
+	if x != nil {
+		return x.BatchId
+	}
+	return 0
+}
+
+func (x *UpdateVoucherBatchRequest) GetValidUntil() string {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return ""
+}
+
+func (x *UpdateVoucherBatchRequest) GetUsageLimit() int32 {
+	if x != nil {
+		return x.UsageLimit
+	}
+	return 0
+}
+
+func (x *UpdateVoucherBatchRequest) GetActive() bool {
+	if x != nil {
+		return x.Active
+	}
+	return false
+}
+
+func (x *UpdateVoucherBatchRequest) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+type UpdateVoucherBatchResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	UpdatedCount  int32                  `protobuf:"varint,2,opt,name=updated_count,json=updatedCount,proto3" json:"updated_count,omitempty"`    // Số voucher con bị ảnh hưởng
+	ValueRejected bool                   `protobuf:"varint,3,opt,name=value_rejected,json=valueRejected,proto3" json:"value_rejected,omitempty"` // true = field `value` bị bỏ qua vì batch đã có mã được redeem
+	ErrorCode     string                 `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateVoucherBatchResponse) Reset() {
+	*x = UpdateVoucherBatchResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateVoucherBatchResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateVoucherBatchResponse) ProtoMessage() {}
+
+func (x *UpdateVoucherBatchResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateVoucherBatchResponse.ProtoReflect.Descriptor instead.
+func (*UpdateVoucherBatchResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *UpdateVoucherBatchResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateVoucherBatchResponse) GetUpdatedCount() int32 {
+	if x != nil {
+		return x.UpdatedCount
+	}
+	return 0
+}
+
+func (x *UpdateVoucherBatchResponse) GetValueRejected() bool {
+	if x != nil {
+		return x.ValueRejected
+	}
+	return false
+}
+
+func (x *UpdateVoucherBatchResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *UpdateVoucherBatchResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Request: Xóa vĩnh viễn cả batch (batch cha + mọi voucher con) — CHỈ thành công nếu chưa mã nào
+// trong batch được redeem (SUM(redeemed)=0), ngược lại reject rõ ràng, không xóa gì.
+type DeleteVoucherBatchRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`             // Organizer slug (required)
+	BatchId       int64                  `protobuf:"varint,2,opt,name=batch_id,json=batchId,proto3" json:"batch_id,omitempty"` // Batch ID (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteVoucherBatchRequest) Reset() {
+	*x = DeleteVoucherBatchRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteVoucherBatchRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteVoucherBatchRequest) ProtoMessage() {}
+
+func (x *DeleteVoucherBatchRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteVoucherBatchRequest.ProtoReflect.Descriptor instead.
+func (*DeleteVoucherBatchRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *DeleteVoucherBatchRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *DeleteVoucherBatchRequest) GetBatchId() int64 {
+	if x != nil {
+		return x.BatchId
+	}
+	return 0
+}
+
+type DeleteVoucherBatchResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	DeletedCount  int32                  `protobuf:"varint,2,opt,name=deleted_count,json=deletedCount,proto3" json:"deleted_count,omitempty"` // Số voucher con đã xóa (0 nếu bị reject)
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteVoucherBatchResponse) Reset() {
+	*x = DeleteVoucherBatchResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteVoucherBatchResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteVoucherBatchResponse) ProtoMessage() {}
+
+func (x *DeleteVoucherBatchResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteVoucherBatchResponse.ProtoReflect.Descriptor instead.
+func (*DeleteVoucherBatchResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *DeleteVoucherBatchResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteVoucherBatchResponse) GetDeletedCount() int32 {
+	if x != nil {
+		return x.DeletedCount
+	}
+	return 0
+}
+
+func (x *DeleteVoucherBatchResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *DeleteVoucherBatchResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+// Request: List mọi batch thuộc 1 organizer (dùng cho dropdown filter "Lô/Chiến dịch" ở backoffice)
+type ListVoucherBatchesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // Organizer slug (required)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListVoucherBatchesRequest) Reset() {
+	*x = ListVoucherBatchesRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVoucherBatchesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVoucherBatchesRequest) ProtoMessage() {}
+
+func (x *ListVoucherBatchesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVoucherBatchesRequest.ProtoReflect.Descriptor instead.
+func (*ListVoucherBatchesRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ListVoucherBatchesRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+type ListVoucherBatchesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Batches       []*VoucherBatch        `protobuf:"bytes,2,rep,name=batches,proto3" json:"batches,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,3,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,4,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListVoucherBatchesResponse) Reset() {
+	*x = ListVoucherBatchesResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListVoucherBatchesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListVoucherBatchesResponse) ProtoMessage() {}
+
+func (x *ListVoucherBatchesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListVoucherBatchesResponse.ProtoReflect.Descriptor instead.
+func (*ListVoucherBatchesResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *ListVoucherBatchesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListVoucherBatchesResponse) GetBatches() []*VoucherBatch {
+	if x != nil {
+		return x.Batches
+	}
+	return nil
+}
+
+func (x *ListVoucherBatchesResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *ListVoucherBatchesResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_v1_booking_voucher_proto protoreflect.FileDescriptor
 
 const file_v1_booking_voucher_proto_rawDesc = "" +
@@ -1676,7 +2246,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\avoucher\x18\x02 \x01(\v2\x1a.riptik.booking.v1.VoucherR\avoucher\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xf1\x01\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x8c\x02\n" +
 	"\x1aBulkCreateVouchersResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\acreated\x18\x02 \x01(\x05R\acreated\x126\n" +
@@ -1684,7 +2254,8 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\rcampaign_name\x18\x04 \x01(\tR\fcampaignName\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x05 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x06 \x01(\tR\ferrorMessage\"\xdb\x01\n" +
+	"\rerror_message\x18\x06 \x01(\tR\ferrorMessage\x12\x19\n" +
+	"\bbatch_id\x18\a \x01(\x03R\abatchId\"\xdb\x01\n" +
 	"\x17ValidateVoucherResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05valid\x18\x02 \x01(\bR\x05valid\x124\n" +
@@ -1698,7 +2269,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\avoucher\x18\x02 \x01(\v2\x1a.riptik.booking.v1.VoucherR\avoucher\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xe4\x05\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xff\x05\n" +
 	"\aVoucher\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x14\n" +
@@ -1728,10 +2299,65 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\rcampaign_name\x18\x14 \x01(\tR\fcampaignName\x12\x18\n" +
 	"\achannel\x18\x15 \x01(\tR\achannel\x12\x1b\n" +
 	"\tevent_ids\x18\x16 \x03(\x03R\beventIds\x12\x19\n" +
-	"\bitem_ids\x18\x17 \x03(\x03R\aitemIds\x1a;\n" +
+	"\bitem_ids\x18\x17 \x03(\x03R\aitemIds\x12\x19\n" +
+	"\bbatch_id\x18\x18 \x01(\x03R\abatchId\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01B*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xcc\x03\n" +
+	"\fVoucherBatch\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
+	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x1f\n" +
+	"\vcode_prefix\x18\x03 \x01(\tR\n" +
+	"codePrefix\x12#\n" +
+	"\rcampaign_name\x18\x04 \x01(\tR\fcampaignName\x12\x18\n" +
+	"\achannel\x18\x05 \x01(\tR\achannel\x12\x12\n" +
+	"\x04type\x18\x06 \x01(\tR\x04type\x12\x14\n" +
+	"\x05value\x18\a \x01(\tR\x05value\x12\x1f\n" +
+	"\vusage_limit\x18\b \x01(\x05R\n" +
+	"usageLimit\x12\x1d\n" +
+	"\n" +
+	"valid_from\x18\t \x01(\tR\tvalidFrom\x12\x1f\n" +
+	"\vvalid_until\x18\n" +
+	" \x01(\tR\n" +
+	"validUntil\x12 \n" +
+	"\vdescription\x18\v \x01(\tR\vdescription\x12\x16\n" +
+	"\x06active\x18\f \x01(\bR\x06active\x12\x18\n" +
+	"\acreated\x18\r \x01(\tR\acreated\x12#\n" +
+	"\rvoucher_count\x18\x0e \x01(\x05R\fvoucherCount\x12%\n" +
+	"\x0eredeemed_count\x18\x0f \x01(\x05R\rredeemedCount\"\xc4\x01\n" +
+	"\x19UpdateVoucherBatchRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
+	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\x12\x1f\n" +
+	"\vvalid_until\x18\x03 \x01(\tR\n" +
+	"validUntil\x12\x1f\n" +
+	"\vusage_limit\x18\x04 \x01(\x05R\n" +
+	"usageLimit\x12\x16\n" +
+	"\x06active\x18\x05 \x01(\bR\x06active\x12\x14\n" +
+	"\x05value\x18\x06 \x01(\tR\x05value\"\xc6\x01\n" +
+	"\x1aUpdateVoucherBatchResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rupdated_count\x18\x02 \x01(\x05R\fupdatedCount\x12%\n" +
+	"\x0evalue_rejected\x18\x03 \x01(\bR\rvalueRejected\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"T\n" +
+	"\x19DeleteVoucherBatchRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
+	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\"\x9f\x01\n" +
+	"\x1aDeleteVoucherBatchResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
+	"\rdeleted_count\x18\x02 \x01(\x05R\fdeletedCount\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"9\n" +
+	"\x19ListVoucherBatchesRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\"\xb5\x01\n" +
+	"\x1aListVoucherBatchesResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x129\n" +
+	"\abatches\x18\x02 \x03(\v2\x1f.riptik.booking.v1.VoucherBatchR\abatches\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_voucher_proto_rawDescOnce sync.Once
@@ -1745,7 +2371,7 @@ func file_v1_booking_voucher_proto_rawDescGZIP() []byte {
 	return file_v1_booking_voucher_proto_rawDescData
 }
 
-var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_v1_booking_voucher_proto_goTypes = []any{
 	(*ListVouchersRequest)(nil),        // 0: riptik.booking.v1.ListVouchersRequest
 	(*GetVoucherRequest)(nil),          // 1: riptik.booking.v1.GetVoucherRequest
@@ -1761,7 +2387,14 @@ var file_v1_booking_voucher_proto_goTypes = []any{
 	(*ValidateVoucherResponse)(nil),    // 11: riptik.booking.v1.ValidateVoucherResponse
 	(*UpdateVoucherResponse)(nil),      // 12: riptik.booking.v1.UpdateVoucherResponse
 	(*Voucher)(nil),                    // 13: riptik.booking.v1.Voucher
-	nil,                                // 14: riptik.booking.v1.Voucher.MetaDataEntry
+	(*VoucherBatch)(nil),               // 14: riptik.booking.v1.VoucherBatch
+	(*UpdateVoucherBatchRequest)(nil),  // 15: riptik.booking.v1.UpdateVoucherBatchRequest
+	(*UpdateVoucherBatchResponse)(nil), // 16: riptik.booking.v1.UpdateVoucherBatchResponse
+	(*DeleteVoucherBatchRequest)(nil),  // 17: riptik.booking.v1.DeleteVoucherBatchRequest
+	(*DeleteVoucherBatchResponse)(nil), // 18: riptik.booking.v1.DeleteVoucherBatchResponse
+	(*ListVoucherBatchesRequest)(nil),  // 19: riptik.booking.v1.ListVoucherBatchesRequest
+	(*ListVoucherBatchesResponse)(nil), // 20: riptik.booking.v1.ListVoucherBatchesResponse
+	nil,                                // 21: riptik.booking.v1.Voucher.MetaDataEntry
 }
 var file_v1_booking_voucher_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateVoucherRequest.restrictions:type_name -> riptik.booking.v1.VoucherRestrictions
@@ -1772,12 +2405,13 @@ var file_v1_booking_voucher_proto_depIdxs = []int32{
 	13, // 5: riptik.booking.v1.BulkCreateVouchersResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	13, // 6: riptik.booking.v1.ValidateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
 	13, // 7: riptik.booking.v1.UpdateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
-	14, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
-	9,  // [9:9] is the sub-list for method output_type
-	9,  // [9:9] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	21, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
+	14, // 9: riptik.booking.v1.ListVoucherBatchesResponse.batches:type_name -> riptik.booking.v1.VoucherBatch
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_voucher_proto_init() }
@@ -1791,7 +2425,7 @@ func file_v1_booking_voucher_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_voucher_proto_rawDesc), len(file_v1_booking_voucher_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
