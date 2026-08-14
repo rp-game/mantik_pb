@@ -544,7 +544,11 @@ type BulkCreateVouchersRequest struct {
 	EventIds        []int64                `protobuf:"varint,15,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`                 // Phase 1 — voucher đa event (rỗng = đơn-event, dùng `event` ở trên)
 	// fnb_only — voucher F&B, không gắn event nào (event/event_ids đều rỗng khi field này bật).
 	// Restrictions.fnb_outlet_ids/fnb_menu_item_ids giới hạn phạm vi, rỗng = mọi outlet/món.
-	FnbOnly       bool `protobuf:"varint,16,opt,name=fnb_only,json=fnbOnly,proto3" json:"fnb_only,omitempty"`
+	FnbOnly bool `protobuf:"varint,16,opt,name=fnb_only,json=fnbOnly,proto3" json:"fnb_only,omitempty"`
+	// budget (2026-08-14) — tổng ngân sách giảm giá cho CẢ LÔ (không phải từng mã riêng — mỗi mã con
+	// KHÔNG có budget riêng, chỉ batch cha giữ 1 pool chung, trừ dần mỗi lần redeem bất kỳ mã con nào
+	// trong lô). Decimal string, rỗng = không giới hạn.
+	Budget        string `protobuf:"bytes,17,opt,name=budget,proto3" json:"budget,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -689,6 +693,13 @@ func (x *BulkCreateVouchersRequest) GetFnbOnly() bool {
 		return x.FnbOnly
 	}
 	return false
+}
+
+func (x *BulkCreateVouchersRequest) GetBudget() string {
+	if x != nil {
+		return x.Budget
+	}
+	return ""
 }
 
 // Request: Validate voucher
@@ -1668,8 +1679,15 @@ type VoucherBatch struct {
 	FnbOutletIds      []int64 `protobuf:"varint,19,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`         // Xem VoucherRestrictions.fnb_outlet_ids
 	FnbMenuItemIds    []int64 `protobuf:"varint,20,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"` // Xem VoucherRestrictions.fnb_menu_item_ids
 	MaxDiscountAmount string  `protobuf:"bytes,21,opt,name=max_discount_amount,json=maxDiscountAmount,proto3" json:"max_discount_amount,omitempty"`  // Đọc đại diện từ 1 voucher con (đồng bộ qua UpdateVoucherBatchRequest.max_discount_amount) — decimal string, rỗng = không giới hạn
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// budget/budget_used (2026-08-14) — NGÂN SÁCH CHUNG CẢ LÔ, KHÁC hẳn max_discount_amount (cái đó
+	// giới hạn 1 LẦN redeem, cái này giới hạn TỔNG mọi lần redeem cộng dồn trên toàn lô). Đây là cột
+	// riêng của batch (voucher_batches.budget/budget_used), KHÔNG đọc đại diện từ voucher con nào —
+	// mỗi voucher con vẫn có Voucher.budget/budget_used riêng (luôn NULL/0 với voucher tạo qua bulk,
+	// không dùng ở đây). Rỗng ở budget = không giới hạn.
+	Budget        string `protobuf:"bytes,22,opt,name=budget,proto3" json:"budget,omitempty"`
+	BudgetUsed    string `protobuf:"bytes,23,opt,name=budget_used,json=budgetUsed,proto3" json:"budget_used,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *VoucherBatch) Reset() {
@@ -1849,6 +1867,20 @@ func (x *VoucherBatch) GetMaxDiscountAmount() string {
 	return ""
 }
 
+func (x *VoucherBatch) GetBudget() string {
+	if x != nil {
+		return x.Budget
+	}
+	return ""
+}
+
+func (x *VoucherBatch) GetBudgetUsed() string {
+	if x != nil {
+		return x.BudgetUsed
+	}
+	return ""
+}
+
 // Request: Update mọi voucher trong 1 batch cùng lúc (1 transaction, atomic — không phải N update
 // rời rạc). organizer bắt buộc để IDOR check ở tầng NATS handler.
 type UpdateVoucherBatchRequest struct {
@@ -1869,8 +1901,12 @@ type UpdateVoucherBatchRequest struct {
 	// không đổi, "0" = xoá giới hạn. REPLACE đồng bộ xuống MỌI voucher con trong batch (giống value/
 	// event_ids/item_ids), trong CÙNG transaction.
 	MaxDiscountAmount string `protobuf:"bytes,9,opt,name=max_discount_amount,json=maxDiscountAmount,proto3" json:"max_discount_amount,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// budget — CHỈ ghi vào voucher_batches.budget (KHÔNG đồng bộ xuống voucher con, khác hẳn
+	// max_discount_amount/value/event_ids/item_ids — xem comment VoucherBatch.budget). Rỗng = không
+	// đổi, "0" = xoá giới hạn (không giới hạn ngân sách).
+	Budget        string `protobuf:"bytes,10,opt,name=budget,proto3" json:"budget,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateVoucherBatchRequest) Reset() {
@@ -1962,6 +1998,13 @@ func (x *UpdateVoucherBatchRequest) GetItemIds() []int64 {
 func (x *UpdateVoucherBatchRequest) GetMaxDiscountAmount() string {
 	if x != nil {
 		return x.MaxDiscountAmount
+	}
+	return ""
+}
+
+func (x *UpdateVoucherBatchRequest) GetBudget() string {
+	if x != nil {
+		return x.Budget
 	}
 	return ""
 }
@@ -2625,7 +2668,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x10applicable_items\x18\x04 \x03(\tR\x0fapplicableItems\x12%\n" +
 	"\x0eexcluded_items\x18\x05 \x03(\tR\rexcludedItems\x12$\n" +
 	"\x0efnb_outlet_ids\x18\x06 \x03(\x03R\ffnbOutletIds\x12)\n" +
-	"\x11fnb_menu_item_ids\x18\a \x03(\x03R\x0efnbMenuItemIds\"\xa8\x04\n" +
+	"\x11fnb_menu_item_ids\x18\a \x03(\x03R\x0efnbMenuItemIds\"\xc0\x04\n" +
 	"\x19BulkCreateVouchersRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12#\n" +
@@ -2647,7 +2690,8 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"validUntil\x12J\n" +
 	"\frestrictions\x18\x0e \x01(\v2&.riptik.booking.v1.VoucherRestrictionsR\frestrictions\x12\x1b\n" +
 	"\tevent_ids\x18\x0f \x03(\x03R\beventIds\x12\x19\n" +
-	"\bfnb_only\x18\x10 \x01(\bR\afnbOnly\"y\n" +
+	"\bfnb_only\x18\x10 \x01(\bR\afnbOnly\x12\x16\n" +
+	"\x06budget\x18\x11 \x01(\tR\x06budget\"y\n" +
 	"\x16ValidateVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -2752,7 +2796,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x13max_discount_amount\x18\x1c \x01(\tR\x11maxDiscountAmount\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa0\x05\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xd9\x05\n" +
 	"\fVoucherBatch\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\x12\x1f\n" +
@@ -2779,7 +2823,10 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\bfnb_only\x18\x12 \x01(\bR\afnbOnly\x12$\n" +
 	"\x0efnb_outlet_ids\x18\x13 \x03(\x03R\ffnbOutletIds\x12)\n" +
 	"\x11fnb_menu_item_ids\x18\x14 \x03(\x03R\x0efnbMenuItemIds\x12.\n" +
-	"\x13max_discount_amount\x18\x15 \x01(\tR\x11maxDiscountAmount\"\xac\x02\n" +
+	"\x13max_discount_amount\x18\x15 \x01(\tR\x11maxDiscountAmount\x12\x16\n" +
+	"\x06budget\x18\x16 \x01(\tR\x06budget\x12\x1f\n" +
+	"\vbudget_used\x18\x17 \x01(\tR\n" +
+	"budgetUsed\"\xc4\x02\n" +
 	"\x19UpdateVoucherBatchRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x19\n" +
 	"\bbatch_id\x18\x02 \x01(\x03R\abatchId\x12\x1f\n" +
@@ -2791,7 +2838,9 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x05value\x18\x06 \x01(\tR\x05value\x12\x1b\n" +
 	"\tevent_ids\x18\a \x03(\x03R\beventIds\x12\x19\n" +
 	"\bitem_ids\x18\b \x03(\x03R\aitemIds\x12.\n" +
-	"\x13max_discount_amount\x18\t \x01(\tR\x11maxDiscountAmount\"\xc6\x01\n" +
+	"\x13max_discount_amount\x18\t \x01(\tR\x11maxDiscountAmount\x12\x16\n" +
+	"\x06budget\x18\n" +
+	" \x01(\tR\x06budget\"\xc6\x01\n" +
 	"\x1aUpdateVoucherBatchResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12#\n" +
 	"\rupdated_count\x18\x02 \x01(\x05R\fupdatedCount\x12%\n" +
