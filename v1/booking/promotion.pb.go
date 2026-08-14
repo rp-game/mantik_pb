@@ -1040,6 +1040,348 @@ func (x *DeletePromotionResponse) GetErrorMessage() string {
 	return ""
 }
 
+// ============================================================================
+// Cart quote (2026-08-14) — PREVIEW ĐỌC, KHÔNG tạo order/redeem gì. Cho phép webshop hiển thị giá đã
+// trừ promotion NGAY Ở GIỎ HÀNG (trước khi bấm "Tiến hành thanh toán"), tái dùng ĐÚNG cùng 1 hàm
+// EvaluateForCart mà orders.create/order_groups.create dùng lúc tạo đơn thật — nên preview và giá lúc
+// tạo đơn thật LUÔN khớp nhau (không có 2 code path tính giá khác nhau). subject: cart.quote.
+// ============================================================================
+type QuoteCartLine struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ItemId        string                 `protobuf:"bytes,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`                // required
+	VariationId   string                 `protobuf:"bytes,2,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"` // optional
+	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`                         // default 1
+	SubeventId    int64                  `protobuf:"varint,4,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`   // 0 = event-wide (không phải vé chọn ngày)
+	VoucherCode   string                 `protobuf:"bytes,5,opt,name=voucher_code,json=voucherCode,proto3" json:"voucher_code,omitempty"` // optional, cộng dồn với promotion giống lúc tạo đơn thật
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuoteCartLine) Reset() {
+	*x = QuoteCartLine{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuoteCartLine) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuoteCartLine) ProtoMessage() {}
+
+func (x *QuoteCartLine) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuoteCartLine.ProtoReflect.Descriptor instead.
+func (*QuoteCartLine) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *QuoteCartLine) GetItemId() string {
+	if x != nil {
+		return x.ItemId
+	}
+	return ""
+}
+
+func (x *QuoteCartLine) GetVariationId() string {
+	if x != nil {
+		return x.VariationId
+	}
+	return ""
+}
+
+func (x *QuoteCartLine) GetQuantity() int32 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *QuoteCartLine) GetSubeventId() int64 {
+	if x != nil {
+		return x.SubeventId
+	}
+	return 0
+}
+
+func (x *QuoteCartLine) GetVoucherCode() string {
+	if x != nil {
+		return x.VoucherCode
+	}
+	return ""
+}
+
+type QuoteCartRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // Organizer slug (required)
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`         // Event slug (required)
+	Lines         []*QuoteCartLine       `protobuf:"bytes,3,rep,name=lines,proto3" json:"lines,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *QuoteCartRequest) Reset() {
+	*x = QuoteCartRequest{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuoteCartRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuoteCartRequest) ProtoMessage() {}
+
+func (x *QuoteCartRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuoteCartRequest.ProtoReflect.Descriptor instead.
+func (*QuoteCartRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *QuoteCartRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *QuoteCartRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *QuoteCartRequest) GetLines() []*QuoteCartLine {
+	if x != nil {
+		return x.Lines
+	}
+	return nil
+}
+
+type QuoteCartLineResult struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	ItemId            string                 `protobuf:"bytes,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	VariationId       string                 `protobuf:"bytes,2,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`
+	Quantity          int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	UnitPrice         string                 `protobuf:"bytes,4,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`                         // giá gốc/đơn vị TRƯỚC promotion (đã gồm thuế + đã trừ voucher nếu có), decimal string
+	LineTotalBefore   string                 `protobuf:"bytes,5,opt,name=line_total_before,json=lineTotalBefore,proto3" json:"line_total_before,omitempty"`     // unit_price * quantity
+	PromotionDiscount string                 `protobuf:"bytes,6,opt,name=promotion_discount,json=promotionDiscount,proto3" json:"promotion_discount,omitempty"` // tổng discount promotion áp cho dòng này (0 nếu không khớp)
+	LineTotalAfter    string                 `protobuf:"bytes,7,opt,name=line_total_after,json=lineTotalAfter,proto3" json:"line_total_after,omitempty"`        // line_total_before - promotion_discount
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *QuoteCartLineResult) Reset() {
+	*x = QuoteCartLineResult{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuoteCartLineResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuoteCartLineResult) ProtoMessage() {}
+
+func (x *QuoteCartLineResult) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuoteCartLineResult.ProtoReflect.Descriptor instead.
+func (*QuoteCartLineResult) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *QuoteCartLineResult) GetItemId() string {
+	if x != nil {
+		return x.ItemId
+	}
+	return ""
+}
+
+func (x *QuoteCartLineResult) GetVariationId() string {
+	if x != nil {
+		return x.VariationId
+	}
+	return ""
+}
+
+func (x *QuoteCartLineResult) GetQuantity() int32 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *QuoteCartLineResult) GetUnitPrice() string {
+	if x != nil {
+		return x.UnitPrice
+	}
+	return ""
+}
+
+func (x *QuoteCartLineResult) GetLineTotalBefore() string {
+	if x != nil {
+		return x.LineTotalBefore
+	}
+	return ""
+}
+
+func (x *QuoteCartLineResult) GetPromotionDiscount() string {
+	if x != nil {
+		return x.PromotionDiscount
+	}
+	return ""
+}
+
+func (x *QuoteCartLineResult) GetLineTotalAfter() string {
+	if x != nil {
+		return x.LineTotalAfter
+	}
+	return ""
+}
+
+type QuoteCartResponse struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Success                bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode              string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage           string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	Lines                  []*QuoteCartLineResult `protobuf:"bytes,4,rep,name=lines,proto3" json:"lines,omitempty"`
+	PromotionId            int64                  `protobuf:"varint,5,opt,name=promotion_id,json=promotionId,proto3" json:"promotion_id,omitempty"` // 0 = không có promotion nào áp được
+	PromotionName          string                 `protobuf:"bytes,6,opt,name=promotion_name,json=promotionName,proto3" json:"promotion_name,omitempty"`
+	SubtotalBeforeDiscount string                 `protobuf:"bytes,7,opt,name=subtotal_before_discount,json=subtotalBeforeDiscount,proto3" json:"subtotal_before_discount,omitempty"`
+	TotalPromotionDiscount string                 `protobuf:"bytes,8,opt,name=total_promotion_discount,json=totalPromotionDiscount,proto3" json:"total_promotion_discount,omitempty"`
+	SubtotalAfterDiscount  string                 `protobuf:"bytes,9,opt,name=subtotal_after_discount,json=subtotalAfterDiscount,proto3" json:"subtotal_after_discount,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *QuoteCartResponse) Reset() {
+	*x = QuoteCartResponse{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *QuoteCartResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*QuoteCartResponse) ProtoMessage() {}
+
+func (x *QuoteCartResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use QuoteCartResponse.ProtoReflect.Descriptor instead.
+func (*QuoteCartResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *QuoteCartResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *QuoteCartResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *QuoteCartResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *QuoteCartResponse) GetLines() []*QuoteCartLineResult {
+	if x != nil {
+		return x.Lines
+	}
+	return nil
+}
+
+func (x *QuoteCartResponse) GetPromotionId() int64 {
+	if x != nil {
+		return x.PromotionId
+	}
+	return 0
+}
+
+func (x *QuoteCartResponse) GetPromotionName() string {
+	if x != nil {
+		return x.PromotionName
+	}
+	return ""
+}
+
+func (x *QuoteCartResponse) GetSubtotalBeforeDiscount() string {
+	if x != nil {
+		return x.SubtotalBeforeDiscount
+	}
+	return ""
+}
+
+func (x *QuoteCartResponse) GetTotalPromotionDiscount() string {
+	if x != nil {
+		return x.TotalPromotionDiscount
+	}
+	return ""
+}
+
+func (x *QuoteCartResponse) GetSubtotalAfterDiscount() string {
+	if x != nil {
+		return x.SubtotalAfterDiscount
+	}
+	return ""
+}
+
 var File_v1_booking_promotion_proto protoreflect.FileDescriptor
 
 const file_v1_booking_promotion_proto_rawDesc = "" +
@@ -1150,7 +1492,38 @@ const file_v1_booking_promotion_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x03 \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\"\xab\x01\n" +
+	"\rQuoteCartLine\x12\x17\n" +
+	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
+	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
+	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x1f\n" +
+	"\vsubevent_id\x18\x04 \x01(\x03R\n" +
+	"subeventId\x12!\n" +
+	"\fvoucher_code\x18\x05 \x01(\tR\vvoucherCode\"~\n" +
+	"\x10QuoteCartRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x126\n" +
+	"\x05lines\x18\x03 \x03(\v2 .riptik.booking.v1.QuoteCartLineR\x05lines\"\x91\x02\n" +
+	"\x13QuoteCartLineResult\x12\x17\n" +
+	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
+	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
+	"\bquantity\x18\x03 \x01(\x05R\bquantity\x12\x1d\n" +
+	"\n" +
+	"unit_price\x18\x04 \x01(\tR\tunitPrice\x12*\n" +
+	"\x11line_total_before\x18\x05 \x01(\tR\x0flineTotalBefore\x12-\n" +
+	"\x12promotion_discount\x18\x06 \x01(\tR\x11promotionDiscount\x12(\n" +
+	"\x10line_total_after\x18\a \x01(\tR\x0elineTotalAfter\"\xa5\x03\n" +
+	"\x11QuoteCartResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\x12<\n" +
+	"\x05lines\x18\x04 \x03(\v2&.riptik.booking.v1.QuoteCartLineResultR\x05lines\x12!\n" +
+	"\fpromotion_id\x18\x05 \x01(\x03R\vpromotionId\x12%\n" +
+	"\x0epromotion_name\x18\x06 \x01(\tR\rpromotionName\x128\n" +
+	"\x18subtotal_before_discount\x18\a \x01(\tR\x16subtotalBeforeDiscount\x128\n" +
+	"\x18total_promotion_discount\x18\b \x01(\tR\x16totalPromotionDiscount\x126\n" +
+	"\x17subtotal_after_discount\x18\t \x01(\tR\x15subtotalAfterDiscountB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_promotion_proto_rawDescOnce sync.Once
@@ -1164,7 +1537,7 @@ func file_v1_booking_promotion_proto_rawDescGZIP() []byte {
 	return file_v1_booking_promotion_proto_rawDescData
 }
 
-var file_v1_booking_promotion_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_v1_booking_promotion_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_v1_booking_promotion_proto_goTypes = []any{
 	(*Promotion)(nil),               // 0: riptik.booking.v1.Promotion
 	(*CreatePromotionRequest)(nil),  // 1: riptik.booking.v1.CreatePromotionRequest
@@ -1177,17 +1550,23 @@ var file_v1_booking_promotion_proto_goTypes = []any{
 	(*ListPromotionsResponse)(nil),  // 8: riptik.booking.v1.ListPromotionsResponse
 	(*DeletePromotionRequest)(nil),  // 9: riptik.booking.v1.DeletePromotionRequest
 	(*DeletePromotionResponse)(nil), // 10: riptik.booking.v1.DeletePromotionResponse
+	(*QuoteCartLine)(nil),           // 11: riptik.booking.v1.QuoteCartLine
+	(*QuoteCartRequest)(nil),        // 12: riptik.booking.v1.QuoteCartRequest
+	(*QuoteCartLineResult)(nil),     // 13: riptik.booking.v1.QuoteCartLineResult
+	(*QuoteCartResponse)(nil),       // 14: riptik.booking.v1.QuoteCartResponse
 }
 var file_v1_booking_promotion_proto_depIdxs = []int32{
-	0, // 0: riptik.booking.v1.CreatePromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
-	0, // 1: riptik.booking.v1.UpdatePromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
-	0, // 2: riptik.booking.v1.GetPromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
-	0, // 3: riptik.booking.v1.ListPromotionsResponse.results:type_name -> riptik.booking.v1.Promotion
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0,  // 0: riptik.booking.v1.CreatePromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
+	0,  // 1: riptik.booking.v1.UpdatePromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
+	0,  // 2: riptik.booking.v1.GetPromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
+	0,  // 3: riptik.booking.v1.ListPromotionsResponse.results:type_name -> riptik.booking.v1.Promotion
+	11, // 4: riptik.booking.v1.QuoteCartRequest.lines:type_name -> riptik.booking.v1.QuoteCartLine
+	13, // 5: riptik.booking.v1.QuoteCartResponse.lines:type_name -> riptik.booking.v1.QuoteCartLineResult
+	6,  // [6:6] is the sub-list for method output_type
+	6,  // [6:6] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_promotion_proto_init() }
@@ -1201,7 +1580,7 @@ func file_v1_booking_promotion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_promotion_proto_rawDesc), len(file_v1_booking_promotion_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
