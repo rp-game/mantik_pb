@@ -256,6 +256,8 @@ type CreatePromotionRequest struct {
 	Comment           string                 `protobuf:"bytes,14,opt,name=comment,proto3" json:"comment,omitempty"`
 	EventIds          []int64                `protobuf:"varint,15,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"`
 	ItemIds           []int64                `protobuf:"varint,16,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`
+	FnbOutletIds      []int64                `protobuf:"varint,17,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`         // GĐ2 — rỗng = mọi outlet của organizer
+	FnbMenuItemIds    []int64                `protobuf:"varint,18,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"` // GĐ2 — rỗng = mọi món của organizer
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -402,6 +404,20 @@ func (x *CreatePromotionRequest) GetItemIds() []int64 {
 	return nil
 }
 
+func (x *CreatePromotionRequest) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *CreatePromotionRequest) GetFnbMenuItemIds() []int64 {
+	if x != nil {
+		return x.FnbMenuItemIds
+	}
+	return nil
+}
+
 type CreatePromotionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -489,6 +505,8 @@ type UpdatePromotionRequest struct {
 	Comment           string                 `protobuf:"bytes,13,opt,name=comment,proto3" json:"comment,omitempty"`
 	EventIds          []int64                `protobuf:"varint,14,rep,packed,name=event_ids,json=eventIds,proto3" json:"event_ids,omitempty"` // rỗng = không đổi
 	ItemIds           []int64                `protobuf:"varint,15,rep,packed,name=item_ids,json=itemIds,proto3" json:"item_ids,omitempty"`
+	FnbOutletIds      []int64                `protobuf:"varint,16,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`         // rỗng = không đổi
+	FnbMenuItemIds    []int64                `protobuf:"varint,17,rep,packed,name=fnb_menu_item_ids,json=fnbMenuItemIds,proto3" json:"fnb_menu_item_ids,omitempty"` // rỗng = không đổi
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -624,6 +642,20 @@ func (x *UpdatePromotionRequest) GetEventIds() []int64 {
 func (x *UpdatePromotionRequest) GetItemIds() []int64 {
 	if x != nil {
 		return x.ItemIds
+	}
+	return nil
+}
+
+func (x *UpdatePromotionRequest) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *UpdatePromotionRequest) GetFnbMenuItemIds() []int64 {
+	if x != nil {
+		return x.FnbMenuItemIds
 	}
 	return nil
 }
@@ -1382,6 +1414,303 @@ func (x *QuoteCartResponse) GetSubtotalAfterDiscount() string {
 	return ""
 }
 
+// ============================================================================
+// F&B promotion quote (GĐ2, 2026-08-15) — fnbpos gọi trực tiếp booking-core (mirror
+// vouchers.validate-for-organizer), KHÔNG qua customer-service (pos.promotion.quote chỉ xử lý loyalty,
+// xem plan). Response trả discount TÍNH SẴN THEO TỪNG DÒNG (line_discounts) — KHÔNG trả price_mode/
+// value để fnbpos tự áp phẳng lên subtotal như voucher (voucher F&B luôn giảm toàn đơn, promotion thì
+// chọn lọc theo dòng — quantity_cart's AppliesToItemIDs/buy_x_get_y, product_scope theo category —
+// nên phải tính sẵn per-line, xem service/promotion.go EvaluateForFnbCart). subject:
+// promotions.evaluate-for-organizer.
+// ============================================================================
+type FnbPromoLine struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	LineNo         int32                  `protobuf:"varint,1,opt,name=line_no,json=lineNo,proto3" json:"line_no,omitempty"`
+	MenuItemId     int64                  `protobuf:"varint,2,opt,name=menu_item_id,json=menuItemId,proto3" json:"menu_item_id,omitempty"`
+	CategoryId     int64                  `protobuf:"varint,3,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"` // 0 = chưa gán category (menu_item_rm.category_id NULL)
+	Qty            int64                  `protobuf:"varint,4,opt,name=qty,proto3" json:"qty,omitempty"`
+	LineTotalMinor int64                  `protobuf:"varint,5,opt,name=line_total_minor,json=lineTotalMinor,proto3" json:"line_total_minor,omitempty"` // đơn vị: đồng nguyên (fnbpos minor = whole VND, KHÔNG chia 100)
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *FnbPromoLine) Reset() {
+	*x = FnbPromoLine{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FnbPromoLine) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FnbPromoLine) ProtoMessage() {}
+
+func (x *FnbPromoLine) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FnbPromoLine.ProtoReflect.Descriptor instead.
+func (*FnbPromoLine) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FnbPromoLine) GetLineNo() int32 {
+	if x != nil {
+		return x.LineNo
+	}
+	return 0
+}
+
+func (x *FnbPromoLine) GetMenuItemId() int64 {
+	if x != nil {
+		return x.MenuItemId
+	}
+	return 0
+}
+
+func (x *FnbPromoLine) GetCategoryId() int64 {
+	if x != nil {
+		return x.CategoryId
+	}
+	return 0
+}
+
+func (x *FnbPromoLine) GetQty() int64 {
+	if x != nil {
+		return x.Qty
+	}
+	return 0
+}
+
+func (x *FnbPromoLine) GetLineTotalMinor() int64 {
+	if x != nil {
+		return x.LineTotalMinor
+	}
+	return 0
+}
+
+type EvaluateFnbPromotionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                // Organizer slug (required)
+	OutletId      int64                  `protobuf:"varint,2,opt,name=outlet_id,json=outletId,proto3" json:"outlet_id,omitempty"` // scope cấp đơn — promotion.fnb_scopes.outlet_ids
+	Channel       string                 `protobuf:"bytes,3,opt,name=channel,proto3" json:"channel,omitempty"`                    // fnbpos luôn gửi "pos"
+	Lines         []*FnbPromoLine        `protobuf:"bytes,4,rep,name=lines,proto3" json:"lines,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EvaluateFnbPromotionRequest) Reset() {
+	*x = EvaluateFnbPromotionRequest{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EvaluateFnbPromotionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EvaluateFnbPromotionRequest) ProtoMessage() {}
+
+func (x *EvaluateFnbPromotionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EvaluateFnbPromotionRequest.ProtoReflect.Descriptor instead.
+func (*EvaluateFnbPromotionRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *EvaluateFnbPromotionRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *EvaluateFnbPromotionRequest) GetOutletId() int64 {
+	if x != nil {
+		return x.OutletId
+	}
+	return 0
+}
+
+func (x *EvaluateFnbPromotionRequest) GetChannel() string {
+	if x != nil {
+		return x.Channel
+	}
+	return ""
+}
+
+func (x *EvaluateFnbPromotionRequest) GetLines() []*FnbPromoLine {
+	if x != nil {
+		return x.Lines
+	}
+	return nil
+}
+
+type FnbLineDiscount struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	LineNo        int32                  `protobuf:"varint,1,opt,name=line_no,json=lineNo,proto3" json:"line_no,omitempty"`
+	AmountMinor   int64                  `protobuf:"varint,2,opt,name=amount_minor,json=amountMinor,proto3" json:"amount_minor,omitempty"` // booking-core tính sẵn — fnbpos CHỈ cộng thẳng, không tự suy ra từ price_mode/value
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FnbLineDiscount) Reset() {
+	*x = FnbLineDiscount{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FnbLineDiscount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FnbLineDiscount) ProtoMessage() {}
+
+func (x *FnbLineDiscount) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FnbLineDiscount.ProtoReflect.Descriptor instead.
+func (*FnbLineDiscount) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *FnbLineDiscount) GetLineNo() int32 {
+	if x != nil {
+		return x.LineNo
+	}
+	return 0
+}
+
+func (x *FnbLineDiscount) GetAmountMinor() int64 {
+	if x != nil {
+		return x.AmountMinor
+	}
+	return 0
+}
+
+type EvaluateFnbPromotionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	ErrorCode     string                 `protobuf:"bytes,2,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,3,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	Applicable    bool                   `protobuf:"varint,4,opt,name=applicable,proto3" json:"applicable,omitempty"` // false = không promotion nào khớp (khác lỗi — line_discounts rỗng cả 2 trường hợp)
+	PromotionId   int64                  `protobuf:"varint,5,opt,name=promotion_id,json=promotionId,proto3" json:"promotion_id,omitempty"`
+	PromotionName string                 `protobuf:"bytes,6,opt,name=promotion_name,json=promotionName,proto3" json:"promotion_name,omitempty"` // PHẢI thread xuống biên lai/màn hình thu ngân
+	LineDiscounts []*FnbLineDiscount     `protobuf:"bytes,7,rep,name=line_discounts,json=lineDiscounts,proto3" json:"line_discounts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EvaluateFnbPromotionResponse) Reset() {
+	*x = EvaluateFnbPromotionResponse{}
+	mi := &file_v1_booking_promotion_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EvaluateFnbPromotionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EvaluateFnbPromotionResponse) ProtoMessage() {}
+
+func (x *EvaluateFnbPromotionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_promotion_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EvaluateFnbPromotionResponse.ProtoReflect.Descriptor instead.
+func (*EvaluateFnbPromotionResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_promotion_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *EvaluateFnbPromotionResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *EvaluateFnbPromotionResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *EvaluateFnbPromotionResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *EvaluateFnbPromotionResponse) GetApplicable() bool {
+	if x != nil {
+		return x.Applicable
+	}
+	return false
+}
+
+func (x *EvaluateFnbPromotionResponse) GetPromotionId() int64 {
+	if x != nil {
+		return x.PromotionId
+	}
+	return 0
+}
+
+func (x *EvaluateFnbPromotionResponse) GetPromotionName() string {
+	if x != nil {
+		return x.PromotionName
+	}
+	return ""
+}
+
+func (x *EvaluateFnbPromotionResponse) GetLineDiscounts() []*FnbLineDiscount {
+	if x != nil {
+		return x.LineDiscounts
+	}
+	return nil
+}
+
 var File_v1_booking_promotion_proto protoreflect.FileDescriptor
 
 const file_v1_booking_promotion_proto_rawDesc = "" +
@@ -1414,7 +1743,7 @@ const file_v1_booking_promotion_proto_rawDesc = "" +
 	"\tevent_ids\x18\x13 \x03(\x03R\beventIds\x12\x19\n" +
 	"\bitem_ids\x18\x14 \x03(\x03R\aitemIds\x12$\n" +
 	"\x0efnb_outlet_ids\x18\x15 \x03(\x03R\ffnbOutletIds\x12)\n" +
-	"\x11fnb_menu_item_ids\x18\x16 \x03(\x03R\x0efnbMenuItemIds\"\x90\x04\n" +
+	"\x11fnb_menu_item_ids\x18\x16 \x03(\x03R\x0efnbMenuItemIds\"\xe1\x04\n" +
 	"\x16CreatePromotionRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12!\n" +
@@ -1435,13 +1764,15 @@ const file_v1_booking_promotion_proto_rawDesc = "" +
 	"\x06budget\x18\r \x01(\tR\x06budget\x12\x18\n" +
 	"\acomment\x18\x0e \x01(\tR\acomment\x12\x1b\n" +
 	"\tevent_ids\x18\x0f \x03(\x03R\beventIds\x12\x19\n" +
-	"\bitem_ids\x18\x10 \x03(\x03R\aitemIds\"\xb3\x01\n" +
+	"\bitem_ids\x18\x10 \x03(\x03R\aitemIds\x12$\n" +
+	"\x0efnb_outlet_ids\x18\x11 \x03(\x03R\ffnbOutletIds\x12)\n" +
+	"\x11fnb_menu_item_ids\x18\x12 \x03(\x03R\x0efnbMenuItemIds\"\xb3\x01\n" +
 	"\x17CreatePromotionResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12:\n" +
 	"\tpromotion\x18\x02 \x01(\v2\x1c.riptik.booking.v1.PromotionR\tpromotion\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xeb\x03\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xbc\x04\n" +
 	"\x16UpdatePromotionRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12!\n" +
 	"\fpromotion_id\x18\x02 \x01(\x03R\vpromotionId\x12\x12\n" +
@@ -1461,7 +1792,9 @@ const file_v1_booking_promotion_proto_rawDesc = "" +
 	"\x06budget\x18\f \x01(\tR\x06budget\x12\x18\n" +
 	"\acomment\x18\r \x01(\tR\acomment\x12\x1b\n" +
 	"\tevent_ids\x18\x0e \x03(\x03R\beventIds\x12\x19\n" +
-	"\bitem_ids\x18\x0f \x03(\x03R\aitemIds\"\xb3\x01\n" +
+	"\bitem_ids\x18\x0f \x03(\x03R\aitemIds\x12$\n" +
+	"\x0efnb_outlet_ids\x18\x10 \x03(\x03R\ffnbOutletIds\x12)\n" +
+	"\x11fnb_menu_item_ids\x18\x11 \x03(\x03R\x0efnbMenuItemIds\"\xb3\x01\n" +
 	"\x17UpdatePromotionResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12:\n" +
 	"\tpromotion\x18\x02 \x01(\v2\x1c.riptik.booking.v1.PromotionR\tpromotion\x12\x1d\n" +
@@ -1523,7 +1856,34 @@ const file_v1_booking_promotion_proto_rawDesc = "" +
 	"\x0epromotion_name\x18\x06 \x01(\tR\rpromotionName\x128\n" +
 	"\x18subtotal_before_discount\x18\a \x01(\tR\x16subtotalBeforeDiscount\x128\n" +
 	"\x18total_promotion_discount\x18\b \x01(\tR\x16totalPromotionDiscount\x126\n" +
-	"\x17subtotal_after_discount\x18\t \x01(\tR\x15subtotalAfterDiscountB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
+	"\x17subtotal_after_discount\x18\t \x01(\tR\x15subtotalAfterDiscount\"\xa6\x01\n" +
+	"\fFnbPromoLine\x12\x17\n" +
+	"\aline_no\x18\x01 \x01(\x05R\x06lineNo\x12 \n" +
+	"\fmenu_item_id\x18\x02 \x01(\x03R\n" +
+	"menuItemId\x12\x1f\n" +
+	"\vcategory_id\x18\x03 \x01(\x03R\n" +
+	"categoryId\x12\x10\n" +
+	"\x03qty\x18\x04 \x01(\x03R\x03qty\x12(\n" +
+	"\x10line_total_minor\x18\x05 \x01(\x03R\x0elineTotalMinor\"\xa9\x01\n" +
+	"\x1bEvaluateFnbPromotionRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x1b\n" +
+	"\toutlet_id\x18\x02 \x01(\x03R\boutletId\x12\x18\n" +
+	"\achannel\x18\x03 \x01(\tR\achannel\x125\n" +
+	"\x05lines\x18\x04 \x03(\v2\x1f.riptik.booking.v1.FnbPromoLineR\x05lines\"M\n" +
+	"\x0fFnbLineDiscount\x12\x17\n" +
+	"\aline_no\x18\x01 \x01(\x05R\x06lineNo\x12!\n" +
+	"\famount_minor\x18\x02 \x01(\x03R\vamountMinor\"\xb1\x02\n" +
+	"\x1cEvaluateFnbPromotionResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x02 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x03 \x01(\tR\ferrorMessage\x12\x1e\n" +
+	"\n" +
+	"applicable\x18\x04 \x01(\bR\n" +
+	"applicable\x12!\n" +
+	"\fpromotion_id\x18\x05 \x01(\x03R\vpromotionId\x12%\n" +
+	"\x0epromotion_name\x18\x06 \x01(\tR\rpromotionName\x12I\n" +
+	"\x0eline_discounts\x18\a \x03(\v2\".riptik.booking.v1.FnbLineDiscountR\rlineDiscountsB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_promotion_proto_rawDescOnce sync.Once
@@ -1537,23 +1897,27 @@ func file_v1_booking_promotion_proto_rawDescGZIP() []byte {
 	return file_v1_booking_promotion_proto_rawDescData
 }
 
-var file_v1_booking_promotion_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_v1_booking_promotion_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_v1_booking_promotion_proto_goTypes = []any{
-	(*Promotion)(nil),               // 0: riptik.booking.v1.Promotion
-	(*CreatePromotionRequest)(nil),  // 1: riptik.booking.v1.CreatePromotionRequest
-	(*CreatePromotionResponse)(nil), // 2: riptik.booking.v1.CreatePromotionResponse
-	(*UpdatePromotionRequest)(nil),  // 3: riptik.booking.v1.UpdatePromotionRequest
-	(*UpdatePromotionResponse)(nil), // 4: riptik.booking.v1.UpdatePromotionResponse
-	(*GetPromotionRequest)(nil),     // 5: riptik.booking.v1.GetPromotionRequest
-	(*GetPromotionResponse)(nil),    // 6: riptik.booking.v1.GetPromotionResponse
-	(*ListPromotionsRequest)(nil),   // 7: riptik.booking.v1.ListPromotionsRequest
-	(*ListPromotionsResponse)(nil),  // 8: riptik.booking.v1.ListPromotionsResponse
-	(*DeletePromotionRequest)(nil),  // 9: riptik.booking.v1.DeletePromotionRequest
-	(*DeletePromotionResponse)(nil), // 10: riptik.booking.v1.DeletePromotionResponse
-	(*QuoteCartLine)(nil),           // 11: riptik.booking.v1.QuoteCartLine
-	(*QuoteCartRequest)(nil),        // 12: riptik.booking.v1.QuoteCartRequest
-	(*QuoteCartLineResult)(nil),     // 13: riptik.booking.v1.QuoteCartLineResult
-	(*QuoteCartResponse)(nil),       // 14: riptik.booking.v1.QuoteCartResponse
+	(*Promotion)(nil),                    // 0: riptik.booking.v1.Promotion
+	(*CreatePromotionRequest)(nil),       // 1: riptik.booking.v1.CreatePromotionRequest
+	(*CreatePromotionResponse)(nil),      // 2: riptik.booking.v1.CreatePromotionResponse
+	(*UpdatePromotionRequest)(nil),       // 3: riptik.booking.v1.UpdatePromotionRequest
+	(*UpdatePromotionResponse)(nil),      // 4: riptik.booking.v1.UpdatePromotionResponse
+	(*GetPromotionRequest)(nil),          // 5: riptik.booking.v1.GetPromotionRequest
+	(*GetPromotionResponse)(nil),         // 6: riptik.booking.v1.GetPromotionResponse
+	(*ListPromotionsRequest)(nil),        // 7: riptik.booking.v1.ListPromotionsRequest
+	(*ListPromotionsResponse)(nil),       // 8: riptik.booking.v1.ListPromotionsResponse
+	(*DeletePromotionRequest)(nil),       // 9: riptik.booking.v1.DeletePromotionRequest
+	(*DeletePromotionResponse)(nil),      // 10: riptik.booking.v1.DeletePromotionResponse
+	(*QuoteCartLine)(nil),                // 11: riptik.booking.v1.QuoteCartLine
+	(*QuoteCartRequest)(nil),             // 12: riptik.booking.v1.QuoteCartRequest
+	(*QuoteCartLineResult)(nil),          // 13: riptik.booking.v1.QuoteCartLineResult
+	(*QuoteCartResponse)(nil),            // 14: riptik.booking.v1.QuoteCartResponse
+	(*FnbPromoLine)(nil),                 // 15: riptik.booking.v1.FnbPromoLine
+	(*EvaluateFnbPromotionRequest)(nil),  // 16: riptik.booking.v1.EvaluateFnbPromotionRequest
+	(*FnbLineDiscount)(nil),              // 17: riptik.booking.v1.FnbLineDiscount
+	(*EvaluateFnbPromotionResponse)(nil), // 18: riptik.booking.v1.EvaluateFnbPromotionResponse
 }
 var file_v1_booking_promotion_proto_depIdxs = []int32{
 	0,  // 0: riptik.booking.v1.CreatePromotionResponse.promotion:type_name -> riptik.booking.v1.Promotion
@@ -1562,11 +1926,13 @@ var file_v1_booking_promotion_proto_depIdxs = []int32{
 	0,  // 3: riptik.booking.v1.ListPromotionsResponse.results:type_name -> riptik.booking.v1.Promotion
 	11, // 4: riptik.booking.v1.QuoteCartRequest.lines:type_name -> riptik.booking.v1.QuoteCartLine
 	13, // 5: riptik.booking.v1.QuoteCartResponse.lines:type_name -> riptik.booking.v1.QuoteCartLineResult
-	6,  // [6:6] is the sub-list for method output_type
-	6,  // [6:6] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	15, // 6: riptik.booking.v1.EvaluateFnbPromotionRequest.lines:type_name -> riptik.booking.v1.FnbPromoLine
+	17, // 7: riptik.booking.v1.EvaluateFnbPromotionResponse.line_discounts:type_name -> riptik.booking.v1.FnbLineDiscount
+	8,  // [8:8] is the sub-list for method output_type
+	8,  // [8:8] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_promotion_proto_init() }
@@ -1580,7 +1946,7 @@ func file_v1_booking_promotion_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_promotion_proto_rawDesc), len(file_v1_booking_promotion_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
