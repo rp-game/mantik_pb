@@ -2144,14 +2144,19 @@ func (x *PositionAnswer) GetAnswer() string {
 // QuestionAnswer(order_position_id) đã tồn tại sẵn (Pretix-compatible), chỉ chưa có API nào ghi vào).
 // 1 request gộp NHIỀU answer thuộc NHIỀU position khác nhau (1 giỏ hàng có thể có nhiều dòng vé).
 type PositionAnswerInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	PositionId    int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
-	QuestionId    int64                  `protobuf:"varint,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
-	Answer        string                 `protobuf:"bytes,3,opt,name=answer,proto3" json:"answer,omitempty"`
-	OptionIds     []int64                `protobuf:"varint,4,rep,packed,name=option_ids,json=optionIds,proto3" json:"option_ids,omitempty"` // Chosen option IDs — câu hỏi loại CHOICE/MULTIPLE (C/M)
-	File          string                 `protobuf:"bytes,5,opt,name=file,proto3" json:"file,omitempty"`                                    // Đường dẫn/URL file đã upload trước — câu hỏi loại FILE (F)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	PositionId int64                  `protobuf:"varint,1,opt,name=position_id,json=positionId,proto3" json:"position_id,omitempty"`
+	QuestionId int64                  `protobuf:"varint,2,opt,name=question_id,json=questionId,proto3" json:"question_id,omitempty"`
+	Answer     string                 `protobuf:"bytes,3,opt,name=answer,proto3" json:"answer,omitempty"`
+	OptionIds  []int64                `protobuf:"varint,4,rep,packed,name=option_ids,json=optionIds,proto3" json:"option_ids,omitempty"` // Chosen option IDs — câu hỏi loại CHOICE/MULTIPLE (C/M)
+	File       string                 `protobuf:"bytes,5,opt,name=file,proto3" json:"file,omitempty"`                                    // Đường dẫn/URL file đã upload trước — câu hỏi loại FILE (F)
+	// question_identifier — set THAY CHO question_id (giữ 0) khi answer thuộc về 1 "câu hỏi ảo" không
+	// có row thật trong bảng questions (vd "core.customer_name", cơ chế require_name — xem
+	// booking-core/internal/nats/proto_handlers_answers.go). Nhận diện qua prefix "core." — route vào
+	// cột cứng (order_positions.attendee_name) thay vì insert question_answers.
+	QuestionIdentifier string `protobuf:"bytes,6,opt,name=question_identifier,json=questionIdentifier,proto3" json:"question_identifier,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *PositionAnswerInput) Reset() {
@@ -2215,6 +2220,13 @@ func (x *PositionAnswerInput) GetOptionIds() []int64 {
 func (x *PositionAnswerInput) GetFile() string {
 	if x != nil {
 		return x.File
+	}
+	return ""
+}
+
+func (x *PositionAnswerInput) GetQuestionIdentifier() string {
+	if x != nil {
+		return x.QuestionIdentifier
 	}
 	return ""
 }
@@ -3863,7 +3875,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x0ePositionAnswer\x12\x1f\n" +
 	"\vquestion_id\x18\x01 \x01(\x03R\n" +
 	"questionId\x12\x16\n" +
-	"\x06answer\x18\x02 \x01(\tR\x06answer\"\xa2\x01\n" +
+	"\x06answer\x18\x02 \x01(\tR\x06answer\"\xd3\x01\n" +
 	"\x13PositionAnswerInput\x12\x1f\n" +
 	"\vposition_id\x18\x01 \x01(\x03R\n" +
 	"positionId\x12\x1f\n" +
@@ -3872,7 +3884,8 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x06answer\x18\x03 \x01(\tR\x06answer\x12\x1d\n" +
 	"\n" +
 	"option_ids\x18\x04 \x03(\x03R\toptionIds\x12\x12\n" +
-	"\x04file\x18\x05 \x01(\tR\x04file\"]\n" +
+	"\x04file\x18\x05 \x01(\tR\x04file\x12/\n" +
+	"\x13question_identifier\x18\x06 \x01(\tR\x12questionIdentifier\"]\n" +
 	"\x19SetPositionAnswersRequest\x12@\n" +
 	"\aanswers\x18\x01 \x03(\v2&.riptik.booking.v1.PositionAnswerInputR\aanswers\"\x9b\x01\n" +
 	"\x1aSetPositionAnswersResponse\x12\x18\n" +
