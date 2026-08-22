@@ -942,8 +942,14 @@ type UpdateQuestionRequest struct {
 	ValidDatetimeMax     string   `protobuf:"bytes,22,opt,name=valid_datetime_max,json=validDatetimeMax,proto3" json:"valid_datetime_max,omitempty"`
 	ValidStringLengthMax *int32   `protobuf:"varint,23,opt,name=valid_string_length_max,json=validStringLengthMax,proto3,oneof" json:"valid_string_length_max,omitempty"`
 	ValidFilePortrait    bool     `protobuf:"varint,24,opt,name=valid_file_portrait,json=validFilePortrait,proto3" json:"valid_file_portrait,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// field_mask — tên field client THỰC SỰ gửi trong request gốc (giống UpdateCheckinListRequest).
+	// proto3 scalar bool/string không phân biệt được "không gửi" với "gửi = false/rỗng" — thiếu field
+	// này sẽ khiến PATCH 1 field (vd chỉ đổi "required") âm thầm reset help_text/hidden/ask_during_checkin/
+	// show_during_checkin/print_on_invoice/valid_file_portrait/dependency_question/valid_date_* về
+	// zero-value dù client không hề gửi các field đó.
+	FieldMask     []string `protobuf:"bytes,25,rep,name=field_mask,json=fieldMask,proto3" json:"field_mask,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateQuestionRequest) Reset() {
@@ -1142,6 +1148,13 @@ func (x *UpdateQuestionRequest) GetValidFilePortrait() bool {
 		return x.ValidFilePortrait
 	}
 	return false
+}
+
+func (x *UpdateQuestionRequest) GetFieldMask() []string {
+	if x != nil {
+		return x.FieldMask
+	}
+	return nil
 }
 
 type UpdateQuestionOptionRequest struct {
@@ -2222,7 +2235,7 @@ const file_v1_event_question_proto_rawDesc = "" +
 	"\bposition\x18\x03 \x01(\x05R\bposition\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x04 \x01(\tR\n" +
-	"identifier\"\xb9\b\n" +
+	"identifier\"\xd8\b\n" +
 	"\x15UpdateQuestionRequest\x12%\n" +
 	"\x0eorganizer_slug\x18\x01 \x01(\tR\rorganizerSlug\x12\x1d\n" +
 	"\n" +
@@ -2254,7 +2267,9 @@ const file_v1_event_question_proto_rawDesc = "" +
 	"\x12valid_datetime_min\x18\x15 \x01(\tR\x10validDatetimeMin\x12,\n" +
 	"\x12valid_datetime_max\x18\x16 \x01(\tR\x10validDatetimeMax\x12:\n" +
 	"\x17valid_string_length_max\x18\x17 \x01(\x05H\x02R\x14validStringLengthMax\x88\x01\x01\x12.\n" +
-	"\x13valid_file_portrait\x18\x18 \x01(\bR\x11validFilePortraitB\x13\n" +
+	"\x13valid_file_portrait\x18\x18 \x01(\bR\x11validFilePortrait\x12\x1d\n" +
+	"\n" +
+	"field_mask\x18\x19 \x03(\tR\tfieldMaskB\x13\n" +
 	"\x11_valid_number_minB\x13\n" +
 	"\x11_valid_number_maxB\x1a\n" +
 	"\x18_valid_string_length_max\"\xa3\x01\n" +
