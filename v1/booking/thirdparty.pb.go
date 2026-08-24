@@ -320,18 +320,22 @@ func (x *CreateSupplierRequest) GetAdapterClass() string {
 }
 
 type UpdateSupplierRequest struct {
-	state          protoimpl.MessageState `protogen:"open.v1"`
-	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Slug           string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	Active         bool                   `protobuf:"varint,4,opt,name=active,proto3" json:"active,omitempty"`
-	CommissionRate float64                `protobuf:"fixed64,5,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
-	SettlementDays int32                  `protobuf:"varint,6,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
-	Currency       string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
-	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
-	OrganizerId    int64                  `protobuf:"varint,10,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
-	AdapterClass   string                 `protobuf:"bytes,11,opt,name=adapter_class,json=adapterClass,proto3" json:"adapter_class,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Id    int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name  string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Slug  string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
+	// active — optional (field presence) vì bool proto3 thường không phân biệt được "không gửi" với
+	// "gửi false". Trước đây field active=4 kiểu bool thường bị handler bỏ qua hoàn toàn để tránh vô
+	// tình tắt supplier — nghĩa là KHÔNG CÓ CÁCH NÀO bật/tắt active qua API/UI. optional ở đây cho phép
+	// handler kiểm tra .active có được gửi hay không (xem kill switch — plan feat/3rdparty-reservation).
+	Active         *bool                `protobuf:"varint,4,opt,name=active,proto3,oneof" json:"active,omitempty"`
+	CommissionRate float64              `protobuf:"fixed64,5,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
+	SettlementDays int32                `protobuf:"varint,6,opt,name=settlement_days,json=settlementDays,proto3" json:"settlement_days,omitempty"`
+	Currency       string               `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
+	ApiConfig      map[string]*any1.Any `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	CsvConfig      map[string]*any1.Any `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	OrganizerId    int64                `protobuf:"varint,10,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	AdapterClass   string               `protobuf:"bytes,11,opt,name=adapter_class,json=adapterClass,proto3" json:"adapter_class,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -388,8 +392,8 @@ func (x *UpdateSupplierRequest) GetSlug() string {
 }
 
 func (x *UpdateSupplierRequest) GetActive() bool {
-	if x != nil {
-		return x.Active
+	if x != nil && x.Active != nil {
+		return *x.Active
 	}
 	return false
 }
@@ -7490,12 +7494,12 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xf5\x04\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x85\x05\n" +
 	"\x15UpdateSupplierRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
-	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x16\n" +
-	"\x06active\x18\x04 \x01(\bR\x06active\x12'\n" +
+	"\x04slug\x18\x03 \x01(\tR\x04slug\x12\x1b\n" +
+	"\x06active\x18\x04 \x01(\bH\x00R\x06active\x88\x01\x01\x12'\n" +
 	"\x0fcommission_rate\x18\x05 \x01(\x01R\x0ecommissionRate\x12'\n" +
 	"\x0fsettlement_days\x18\x06 \x01(\x05R\x0esettlementDays\x12\x1a\n" +
 	"\bcurrency\x18\a \x01(\tR\bcurrency\x12V\n" +
@@ -7511,7 +7515,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"G\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01B\t\n" +
+	"\a_active\"G\n" +
 	"\x12GetSupplierRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xe2\x01\n" +
@@ -8544,6 +8549,7 @@ func file_v1_booking_thirdparty_proto_init() {
 	if File_v1_booking_thirdparty_proto != nil {
 		return
 	}
+	file_v1_booking_thirdparty_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
