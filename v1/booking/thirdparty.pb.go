@@ -28,7 +28,7 @@ type ThirdPartySupplier struct {
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name           string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Slug           string                 `protobuf:"bytes,3,opt,name=slug,proto3" json:"slug,omitempty"`
-	SupplierType   string                 `protobuf:"bytes,4,opt,name=supplier_type,json=supplierType,proto3" json:"supplier_type,omitempty"` // "csv", "api"
+	SupplierType   string                 `protobuf:"bytes,4,opt,name=supplier_type,json=supplierType,proto3" json:"supplier_type,omitempty"` // "csv", "api", "reservation"
 	SupplierCode   string                 `protobuf:"bytes,5,opt,name=supplier_code,json=supplierCode,proto3" json:"supplier_code,omitempty"`
 	Description    string                 `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
 	CommissionRate float64                `protobuf:"fixed64,7,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`
@@ -39,6 +39,7 @@ type ThirdPartySupplier struct {
 	Active         bool                   `protobuf:"varint,12,opt,name=active,proto3" json:"active,omitempty"`
 	CreatedAt      *timestamp.Timestamp   `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt      *timestamp.Timestamp   `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	AdapterClass   string                 `protobuf:"bytes,15,opt,name=adapter_class,json=adapterClass,proto3" json:"adapter_class,omitempty"` // Chỉ dùng khi supplier_type="reservation" — định tuyến sang adapter-service (vd "timeslot")
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -171,6 +172,13 @@ func (x *ThirdPartySupplier) GetUpdatedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *ThirdPartySupplier) GetAdapterClass() string {
+	if x != nil {
+		return x.AdapterClass
+	}
+	return ""
+}
+
 type CreateSupplierRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Name           string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -185,6 +193,7 @@ type CreateSupplierRequest struct {
 	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,10,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active         bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
 	OrganizerId    int64                  `protobuf:"varint,12,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	AdapterClass   string                 `protobuf:"bytes,13,opt,name=adapter_class,json=adapterClass,proto3" json:"adapter_class,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -303,6 +312,13 @@ func (x *CreateSupplierRequest) GetOrganizerId() int64 {
 	return 0
 }
 
+func (x *CreateSupplierRequest) GetAdapterClass() string {
+	if x != nil {
+		return x.AdapterClass
+	}
+	return ""
+}
+
 type UpdateSupplierRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -315,6 +331,7 @@ type UpdateSupplierRequest struct {
 	ApiConfig      map[string]*any1.Any   `protobuf:"bytes,8,rep,name=api_config,json=apiConfig,proto3" json:"api_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	CsvConfig      map[string]*any1.Any   `protobuf:"bytes,9,rep,name=csv_config,json=csvConfig,proto3" json:"csv_config,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	OrganizerId    int64                  `protobuf:"varint,10,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	AdapterClass   string                 `protobuf:"bytes,11,opt,name=adapter_class,json=adapterClass,proto3" json:"adapter_class,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -417,6 +434,13 @@ func (x *UpdateSupplierRequest) GetOrganizerId() int64 {
 		return x.OrganizerId
 	}
 	return 0
+}
+
+func (x *UpdateSupplierRequest) GetAdapterClass() string {
+	if x != nil {
+		return x.AdapterClass
+	}
+	return ""
 }
 
 type GetSupplierRequest struct {
@@ -1632,6 +1656,7 @@ type ThirdPartyProduct struct {
 	Active            bool                   `protobuf:"varint,15,opt,name=active,proto3" json:"active,omitempty"`
 	CreatedAt         *timestamp.Timestamp   `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt         *timestamp.Timestamp   `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	ProductCategory   string                 `protobuf:"bytes,18,opt,name=product_category,json=productCategory,proto3" json:"product_category,omitempty"` // Chỉ dùng khi supplier.supplier_type="reservation" — vd "court"
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1785,6 +1810,13 @@ func (x *ThirdPartyProduct) GetUpdatedAt() *timestamp.Timestamp {
 	return nil
 }
 
+func (x *ThirdPartyProduct) GetProductCategory() string {
+	if x != nil {
+		return x.ProductCategory
+	}
+	return ""
+}
+
 type CreateProductRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	SupplierId        int64                  `protobuf:"varint,1,opt,name=supplier_id,json=supplierId,proto3" json:"supplier_id,omitempty"`
@@ -1802,6 +1834,7 @@ type CreateProductRequest struct {
 	MetaData          map[string]*any1.Any   `protobuf:"bytes,13,rep,name=meta_data,json=metaData,proto3" json:"meta_data,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Active            bool                   `protobuf:"varint,14,opt,name=active,proto3" json:"active,omitempty"`
 	OrganizerId       int64                  `protobuf:"varint,15,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	ProductCategory   string                 `protobuf:"bytes,16,opt,name=product_category,json=productCategory,proto3" json:"product_category,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1941,6 +1974,13 @@ func (x *CreateProductRequest) GetOrganizerId() int64 {
 	return 0
 }
 
+func (x *CreateProductRequest) GetProductCategory() string {
+	if x != nil {
+		return x.ProductCategory
+	}
+	return ""
+}
+
 type UpdateProductRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -1954,6 +1994,7 @@ type UpdateProductRequest struct {
 	MarkupPercentage float64                `protobuf:"fixed64,9,opt,name=markup_percentage,json=markupPercentage,proto3" json:"markup_percentage,omitempty"`
 	Active           bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
 	OrganizerId      int64                  `protobuf:"varint,11,opt,name=organizer_id,json=organizerId,proto3" json:"organizer_id,omitempty"`
+	ProductCategory  string                 `protobuf:"bytes,12,opt,name=product_category,json=productCategory,proto3" json:"product_category,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -2063,6 +2104,13 @@ func (x *UpdateProductRequest) GetOrganizerId() int64 {
 		return x.OrganizerId
 	}
 	return 0
+}
+
+func (x *UpdateProductRequest) GetProductCategory() string {
+	if x != nil {
+		return x.ProductCategory
+	}
+	return ""
 }
 
 type GetProductRequest struct {
@@ -7392,7 +7440,7 @@ var File_v1_booking_thirdparty_proto protoreflect.FileDescriptor
 
 const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
-	"\x1bv1/booking/thirdparty.proto\x12\x11riptik.booking.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\x86\x06\n" +
+	"\x1bv1/booking/thirdparty.proto\x12\x11riptik.booking.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xab\x06\n" +
 	"\x12ThirdPartySupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -7412,13 +7460,14 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\r \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x1aR\n" +
+	"updated_at\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12#\n" +
+	"\radapter_class\x18\x0f \x01(\tR\fadapterClass\x1aR\n" +
 	"\x0eApiConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xac\x05\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd1\x05\n" +
 	"\x15CreateSupplierRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
 	"\x04slug\x18\x02 \x01(\tR\x04slug\x12#\n" +
@@ -7434,13 +7483,14 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"csv_config\x18\n" +
 	" \x03(\v27.riptik.booking.v1.CreateSupplierRequest.CsvConfigEntryR\tcsvConfig\x12\x16\n" +
 	"\x06active\x18\v \x01(\bR\x06active\x12!\n" +
-	"\forganizer_id\x18\f \x01(\x03R\vorganizerId\x1aR\n" +
+	"\forganizer_id\x18\f \x01(\x03R\vorganizerId\x12#\n" +
+	"\radapter_class\x18\r \x01(\tR\fadapterClass\x1aR\n" +
 	"\x0eApiConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
 	"\x0eCsvConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xd0\x04\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xf5\x04\n" +
 	"\x15UpdateSupplierRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -7454,7 +7504,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"csv_config\x18\t \x03(\v27.riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntryR\tcsvConfig\x12!\n" +
 	"\forganizer_id\x18\n" +
-	" \x01(\x03R\vorganizerId\x1aR\n" +
+	" \x01(\x03R\vorganizerId\x12#\n" +
+	"\radapter_class\x18\v \x01(\tR\fadapterClass\x1aR\n" +
 	"\x0eApiConfigEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aR\n" +
@@ -7577,7 +7628,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\rsupplier_slug\x18\x03 \x01(\tR\fsupplierSlug\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x04 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\xd6\b\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\"\x81\t\n" +
 	"\x11ThirdPartyProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
 	"\vsupplier_id\x18\x02 \x01(\x03R\n" +
@@ -7600,7 +7651,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x10 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x1aW\n" +
+	"updated_at\x18\x11 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12)\n" +
+	"\x10product_category\x18\x12 \x01(\tR\x0fproductCategory\x1aW\n" +
 	"\x13RequestMappingEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aX\n" +
@@ -7609,7 +7661,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xff\a\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xaa\b\n" +
 	"\x14CreateProductRequest\x12\x1f\n" +
 	"\vsupplier_id\x18\x01 \x01(\x03R\n" +
 	"supplierId\x12.\n" +
@@ -7628,7 +7680,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x10response_mapping\x18\f \x03(\v2<.riptik.booking.v1.CreateProductRequest.ResponseMappingEntryR\x0fresponseMapping\x12R\n" +
 	"\tmeta_data\x18\r \x03(\v25.riptik.booking.v1.CreateProductRequest.MetaDataEntryR\bmetaData\x12\x16\n" +
 	"\x06active\x18\x0e \x01(\bR\x06active\x12!\n" +
-	"\forganizer_id\x18\x0f \x01(\x03R\vorganizerId\x1aW\n" +
+	"\forganizer_id\x18\x0f \x01(\x03R\vorganizerId\x12)\n" +
+	"\x10product_category\x18\x10 \x01(\tR\x0fproductCategory\x1aW\n" +
 	"\x13RequestMappingEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aX\n" +
@@ -7637,7 +7690,7 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\x1aQ\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12*\n" +
-	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\x95\x03\n" +
+	"\x05value\x18\x02 \x01(\v2\x14.google.protobuf.AnyR\x05value:\x028\x01\"\xc0\x03\n" +
 	"\x14UpdateProductRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\fexternal_sku\x18\x02 \x01(\tR\vexternalSku\x12!\n" +
@@ -7651,7 +7704,8 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\x11markup_percentage\x18\t \x01(\x01R\x10markupPercentage\x12\x16\n" +
 	"\x06active\x18\n" +
 	" \x01(\bR\x06active\x12!\n" +
-	"\forganizer_id\x18\v \x01(\x03R\vorganizerId\"F\n" +
+	"\forganizer_id\x18\v \x01(\x03R\vorganizerId\x12)\n" +
+	"\x10product_category\x18\f \x01(\tR\x0fproductCategory\"F\n" +
 	"\x11GetProductRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\forganizer_id\x18\x02 \x01(\x03R\vorganizerId\"\xe0\x01\n" +
