@@ -435,19 +435,20 @@ func (x *OrderCreateData) GetCartId() string {
 
 // Position for order creation
 type OrderCreatePosition struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ItemId        string                 `protobuf:"bytes,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`                      // Item ID (required)
-	VariationId   string                 `protobuf:"bytes,2,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`       // Variation ID (optional)
-	Quantity      int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`                               // Quantity (default: 1)
-	Price         string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`                                      // Unit price as decimal string (optional)
-	AttendeeName  string                 `protobuf:"bytes,5,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`    // Attendee name (optional)
-	AttendeeEmail string                 `protobuf:"bytes,6,opt,name=attendee_email,json=attendeeEmail,proto3" json:"attendee_email,omitempty"` // Attendee email (optional)
-	SubeventId    int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`         // Sub-event ID for date-selection tickets (0 = event-wide)
-	SeatId        int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                     // legacy — deprecated, prefer seat_guid (G9-24, mantik-cinema-chain.md §7C)
-	SeatGuid      string                 `protobuf:"bytes,9,opt,name=seat_guid,json=seatGuid,proto3" json:"seat_guid,omitempty"`                // Assigned seat guid for seated events ("" = no seat). One seat per position (quantity=1).
-	VoucherCode   string                 `protobuf:"bytes,10,opt,name=voucher_code,json=voucherCode,proto3" json:"voucher_code,omitempty"`      // Voucher code applied to THIS line (optional, "" = no voucher). Voucher is scoped per-position, not per-order.
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	ItemId            string                 `protobuf:"bytes,1,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`                                                                                                             // Item ID (required)
+	VariationId       string                 `protobuf:"bytes,2,opt,name=variation_id,json=variationId,proto3" json:"variation_id,omitempty"`                                                                                              // Variation ID (optional)
+	Quantity          int32                  `protobuf:"varint,3,opt,name=quantity,proto3" json:"quantity,omitempty"`                                                                                                                      // Quantity (default: 1)
+	Price             string                 `protobuf:"bytes,4,opt,name=price,proto3" json:"price,omitempty"`                                                                                                                             // Unit price as decimal string (optional)
+	AttendeeName      string                 `protobuf:"bytes,5,opt,name=attendee_name,json=attendeeName,proto3" json:"attendee_name,omitempty"`                                                                                           // Attendee name (optional)
+	AttendeeEmail     string                 `protobuf:"bytes,6,opt,name=attendee_email,json=attendeeEmail,proto3" json:"attendee_email,omitempty"`                                                                                        // Attendee email (optional)
+	SubeventId        int64                  `protobuf:"varint,7,opt,name=subevent_id,json=subeventId,proto3" json:"subevent_id,omitempty"`                                                                                                // Sub-event ID for date-selection tickets (0 = event-wide)
+	SeatId            int64                  `protobuf:"varint,8,opt,name=seat_id,json=seatId,proto3" json:"seat_id,omitempty"`                                                                                                            // legacy — deprecated, prefer seat_guid (G9-24, mantik-cinema-chain.md §7C)
+	SeatGuid          string                 `protobuf:"bytes,9,opt,name=seat_guid,json=seatGuid,proto3" json:"seat_guid,omitempty"`                                                                                                       // Assigned seat guid for seated events ("" = no seat). One seat per position (quantity=1).
+	VoucherCode       string                 `protobuf:"bytes,10,opt,name=voucher_code,json=voucherCode,proto3" json:"voucher_code,omitempty"`                                                                                             // Voucher code applied to THIS line (optional, "" = no voucher). Voucher is scoped per-position, not per-order.
+	ReservationParams map[string]string      `protobuf:"bytes,11,rep,name=reservation_params,json=reservationParams,proto3" json:"reservation_params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"` // Tham số Reserve cho ThirdPartyProduct.SupplierType="reservation" (vd court: resource_id/start_at/end_at). Rỗng = không áp dụng.
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *OrderCreatePosition) Reset() {
@@ -548,6 +549,13 @@ func (x *OrderCreatePosition) GetVoucherCode() string {
 		return x.VoucherCode
 	}
 	return ""
+}
+
+func (x *OrderCreatePosition) GetReservationParams() map[string]string {
+	if x != nil {
+		return x.ReservationParams
+	}
+	return nil
 }
 
 // Request: Cancel order
@@ -3700,7 +3708,7 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a;\n" +
 	"\rMetaDataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc9\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xfd\x03\n" +
 	"\x13OrderCreatePosition\x12\x17\n" +
 	"\aitem_id\x18\x01 \x01(\tR\x06itemId\x12!\n" +
 	"\fvariation_id\x18\x02 \x01(\tR\vvariationId\x12\x1a\n" +
@@ -3713,7 +3721,11 @@ const file_v1_booking_order_proto_rawDesc = "" +
 	"\aseat_id\x18\b \x01(\x03R\x06seatId\x12\x1b\n" +
 	"\tseat_guid\x18\t \x01(\tR\bseatGuid\x12!\n" +
 	"\fvoucher_code\x18\n" +
-	" \x01(\tR\vvoucherCode\"v\n" +
+	" \x01(\tR\vvoucherCode\x12l\n" +
+	"\x12reservation_params\x18\v \x03(\v2=.riptik.booking.v1.OrderCreatePosition.ReservationParamsEntryR\x11reservationParams\x1aD\n" +
+	"\x16ReservationParamsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"v\n" +
 	"\x12CancelOrderRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
@@ -4036,7 +4048,7 @@ func file_v1_booking_order_proto_rawDescGZIP() []byte {
 	return file_v1_booking_order_proto_rawDescData
 }
 
-var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 48)
+var file_v1_booking_order_proto_msgTypes = make([]protoimpl.MessageInfo, 49)
 var file_v1_booking_order_proto_goTypes = []any{
 	(*ListOrdersRequest)(nil),                 // 0: riptik.booking.v1.ListOrdersRequest
 	(*GetOrderRequest)(nil),                   // 1: riptik.booking.v1.GetOrderRequest
@@ -4082,45 +4094,47 @@ var file_v1_booking_order_proto_goTypes = []any{
 	(*GetPublicTicketResponse)(nil),           // 41: riptik.booking.v1.GetPublicTicketResponse
 	nil,                                       // 42: riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
 	nil,                                       // 43: riptik.booking.v1.OrderCreateData.MetaDataEntry
-	nil,                                       // 44: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	nil,                                       // 45: riptik.booking.v1.Order.InvoiceAddressEntry
-	nil,                                       // 46: riptik.booking.v1.Order.MetaDataEntry
-	nil,                                       // 47: riptik.booking.v1.OrderGroupData.MetaDataEntry
+	nil,                                       // 44: riptik.booking.v1.OrderCreatePosition.ReservationParamsEntry
+	nil,                                       // 45: riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	nil,                                       // 46: riptik.booking.v1.Order.InvoiceAddressEntry
+	nil,                                       // 47: riptik.booking.v1.Order.MetaDataEntry
+	nil,                                       // 48: riptik.booking.v1.OrderGroupData.MetaDataEntry
 }
 var file_v1_booking_order_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateOrderRequest.order_data:type_name -> riptik.booking.v1.OrderCreateData
 	42, // 1: riptik.booking.v1.OrderCreateData.invoice_address:type_name -> riptik.booking.v1.OrderCreateData.InvoiceAddressEntry
 	43, // 2: riptik.booking.v1.OrderCreateData.meta_data:type_name -> riptik.booking.v1.OrderCreateData.MetaDataEntry
 	4,  // 3: riptik.booking.v1.OrderCreateData.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	44, // 4: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
-	18, // 5: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
-	18, // 6: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
-	18, // 7: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
-	18, // 8: riptik.booking.v1.OrderActionResponse.order:type_name -> riptik.booking.v1.Order
-	20, // 9: riptik.booking.v1.FindOrderPositionBySecretResponse.position:type_name -> riptik.booking.v1.OrderPositionDetail
-	19, // 10: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
-	25, // 11: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
-	26, // 12: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
-	45, // 13: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
-	46, // 14: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
-	21, // 15: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
-	22, // 16: riptik.booking.v1.SetPositionAnswersRequest.answers:type_name -> riptik.booking.v1.PositionAnswerInput
-	28, // 17: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
-	47, // 18: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
-	29, // 19: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
-	4,  // 20: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
-	18, // 21: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
-	31, // 22: riptik.booking.v1.CreateOrderGroupResponse.group_error:type_name -> riptik.booking.v1.OrderGroupError
-	18, // 23: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
-	33, // 24: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
-	33, // 25: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
-	33, // 26: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
-	40, // 27: riptik.booking.v1.GetPublicTicketResponse.ticket:type_name -> riptik.booking.v1.PublicTicketInfo
-	28, // [28:28] is the sub-list for method output_type
-	28, // [28:28] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	44, // 4: riptik.booking.v1.OrderCreatePosition.reservation_params:type_name -> riptik.booking.v1.OrderCreatePosition.ReservationParamsEntry
+	45, // 5: riptik.booking.v1.UpdateOrderRequest.order_data:type_name -> riptik.booking.v1.UpdateOrderRequest.OrderDataEntry
+	18, // 6: riptik.booking.v1.ListOrdersResponse.results:type_name -> riptik.booking.v1.Order
+	18, // 7: riptik.booking.v1.GetOrderResponse.order:type_name -> riptik.booking.v1.Order
+	18, // 8: riptik.booking.v1.CreateOrderResponse.order:type_name -> riptik.booking.v1.Order
+	18, // 9: riptik.booking.v1.OrderActionResponse.order:type_name -> riptik.booking.v1.Order
+	20, // 10: riptik.booking.v1.FindOrderPositionBySecretResponse.position:type_name -> riptik.booking.v1.OrderPositionDetail
+	19, // 11: riptik.booking.v1.Order.positions:type_name -> riptik.booking.v1.OrderPosition
+	25, // 12: riptik.booking.v1.Order.payments:type_name -> riptik.booking.v1.OrderPayment
+	26, // 13: riptik.booking.v1.Order.refunds:type_name -> riptik.booking.v1.OrderRefund
+	46, // 14: riptik.booking.v1.Order.invoice_address:type_name -> riptik.booking.v1.Order.InvoiceAddressEntry
+	47, // 15: riptik.booking.v1.Order.meta_data:type_name -> riptik.booking.v1.Order.MetaDataEntry
+	21, // 16: riptik.booking.v1.OrderPosition.answers:type_name -> riptik.booking.v1.PositionAnswer
+	22, // 17: riptik.booking.v1.SetPositionAnswersRequest.answers:type_name -> riptik.booking.v1.PositionAnswerInput
+	28, // 18: riptik.booking.v1.CreateOrderGroupRequest.group_data:type_name -> riptik.booking.v1.OrderGroupData
+	48, // 19: riptik.booking.v1.OrderGroupData.meta_data:type_name -> riptik.booking.v1.OrderGroupData.MetaDataEntry
+	29, // 20: riptik.booking.v1.OrderGroupData.children:type_name -> riptik.booking.v1.OrderGroupChild
+	4,  // 21: riptik.booking.v1.OrderGroupChild.positions:type_name -> riptik.booking.v1.OrderCreatePosition
+	18, // 22: riptik.booking.v1.CreateOrderGroupResponse.children:type_name -> riptik.booking.v1.Order
+	31, // 23: riptik.booking.v1.CreateOrderGroupResponse.group_error:type_name -> riptik.booking.v1.OrderGroupError
+	18, // 24: riptik.booking.v1.OrderGroup.children:type_name -> riptik.booking.v1.Order
+	33, // 25: riptik.booking.v1.GetOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	33, // 26: riptik.booking.v1.ListOrderGroupsResponse.results:type_name -> riptik.booking.v1.OrderGroup
+	33, // 27: riptik.booking.v1.CancelOrderGroupResponse.group:type_name -> riptik.booking.v1.OrderGroup
+	40, // 28: riptik.booking.v1.GetPublicTicketResponse.ticket:type_name -> riptik.booking.v1.PublicTicketInfo
+	29, // [29:29] is the sub-list for method output_type
+	29, // [29:29] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_v1_booking_order_proto_init() }
@@ -4134,7 +4148,7 @@ func file_v1_booking_order_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_order_proto_rawDesc), len(file_v1_booking_order_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   48,
+			NumMessages:   49,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
