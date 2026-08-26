@@ -296,6 +296,9 @@ type ThirdPartyProductInfo struct {
 	FulfillmentType string                 `protobuf:"bytes,6,opt,name=fulfillment_type,json=fulfillmentType,proto3" json:"fulfillment_type,omitempty"`
 	BasePrice       string                 `protobuf:"bytes,7,opt,name=base_price,json=basePrice,proto3" json:"base_price,omitempty"` // Base price as decimal string
 	IsActive        bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	// product_category: copy từ booking.ThirdPartyProduct.ProductCategory (vd "court"/"hotel"/"flight") —
+	// dùng ở webshop để nhận diện Item nào cần hiện UI chọn lịch/slot (xem webshop court-booking plan).
+	ProductCategory string `protobuf:"bytes,9,opt,name=product_category,json=productCategory,proto3" json:"product_category,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -384,6 +387,13 @@ func (x *ThirdPartyProductInfo) GetIsActive() bool {
 		return x.IsActive
 	}
 	return false
+}
+
+func (x *ThirdPartyProductInfo) GetProductCategory() string {
+	if x != nil {
+		return x.ProductCategory
+	}
+	return ""
 }
 
 // Requests
@@ -1903,7 +1913,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\x9c\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\xc7\x02\n" +
 	"\x15ThirdPartyProductInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12!\n" +
@@ -1914,7 +1924,8 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x10fulfillment_type\x18\x06 \x01(\tR\x0ffulfillmentType\x12\x1d\n" +
 	"\n" +
 	"base_price\x18\a \x01(\tR\tbasePrice\x12\x1b\n" +
-	"\tis_active\x18\b \x01(\bR\bisActive\"\xd3\x02\n" +
+	"\tis_active\x18\b \x01(\bR\bisActive\x12)\n" +
+	"\x10product_category\x18\t \x01(\tR\x0fproductCategory\"\xd3\x02\n" +
 	"\x10ListItemsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
