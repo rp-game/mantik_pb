@@ -299,8 +299,14 @@ type ThirdPartyProductInfo struct {
 	// product_category: copy từ booking.ThirdPartyProduct.ProductCategory (vd "court"/"hotel"/"flight") —
 	// dùng ở webshop để nhận diện Item nào cần hiện UI chọn lịch/slot (xem webshop court-booking plan).
 	ProductCategory string `protobuf:"bytes,9,opt,name=product_category,json=productCategory,proto3" json:"product_category,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// external_product_id: KHÁC external_sku (field 3, thường rỗng trên thực tế) — đây mới là resource_id
+	// thật của tài nguyên đặt chỗ (vd "s-5" cho 1 sân), set lúc onboarding qua
+	// POST /organizers/:organizer/thirdparty/products {external_product_id}. Webshop PHẢI dùng field này để
+	// gửi resource_id trong reservation_params khi tạo đơn đặt chỗ — bug thật phát hiện qua review: dùng
+	// nhầm external_sku (luôn rỗng) sẽ khiến resource_id gửi lên trống, hỏng toàn bộ luồng đặt chỗ.
+	ExternalProductId string `protobuf:"bytes,10,opt,name=external_product_id,json=externalProductId,proto3" json:"external_product_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ThirdPartyProductInfo) Reset() {
@@ -392,6 +398,13 @@ func (x *ThirdPartyProductInfo) GetIsActive() bool {
 func (x *ThirdPartyProductInfo) GetProductCategory() string {
 	if x != nil {
 		return x.ProductCategory
+	}
+	return ""
+}
+
+func (x *ThirdPartyProductInfo) GetExternalProductId() string {
+	if x != nil {
+		return x.ExternalProductId
 	}
 	return ""
 }
@@ -1913,7 +1926,7 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\x1a>\n" +
 	"\x10DescriptionEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\xc7\x02\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01J\x04\b\r\x10\x0e\"\xf7\x02\n" +
 	"\x15ThirdPartyProductInfo\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12!\n" +
 	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12!\n" +
@@ -1925,7 +1938,9 @@ const file_v1_event_item_proto_rawDesc = "" +
 	"\n" +
 	"base_price\x18\a \x01(\tR\tbasePrice\x12\x1b\n" +
 	"\tis_active\x18\b \x01(\bR\bisActive\x12)\n" +
-	"\x10product_category\x18\t \x01(\tR\x0fproductCategory\"\xd3\x02\n" +
+	"\x10product_category\x18\t \x01(\tR\x0fproductCategory\x12.\n" +
+	"\x13external_product_id\x18\n" +
+	" \x01(\tR\x11externalProductId\"\xd3\x02\n" +
 	"\x10ListItemsRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
 	"\x05event\x18\x02 \x01(\tR\x05event\x12\x12\n" +
