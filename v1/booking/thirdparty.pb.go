@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v3.12.4
-// source: v1/booking/thirdparty.proto
+// source: proto/v1/booking/thirdparty.proto
 
 package booking
 
@@ -46,7 +46,7 @@ type ThirdPartySupplier struct {
 
 func (x *ThirdPartySupplier) Reset() {
 	*x = ThirdPartySupplier{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[0]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -58,7 +58,7 @@ func (x *ThirdPartySupplier) String() string {
 func (*ThirdPartySupplier) ProtoMessage() {}
 
 func (x *ThirdPartySupplier) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[0]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -71,7 +71,7 @@ func (x *ThirdPartySupplier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ThirdPartySupplier.ProtoReflect.Descriptor instead.
 func (*ThirdPartySupplier) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{0}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ThirdPartySupplier) GetId() int64 {
@@ -200,7 +200,7 @@ type CreateSupplierRequest struct {
 
 func (x *CreateSupplierRequest) Reset() {
 	*x = CreateSupplierRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[1]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -212,7 +212,7 @@ func (x *CreateSupplierRequest) String() string {
 func (*CreateSupplierRequest) ProtoMessage() {}
 
 func (x *CreateSupplierRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[1]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -225,7 +225,7 @@ func (x *CreateSupplierRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSupplierRequest.ProtoReflect.Descriptor instead.
 func (*CreateSupplierRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{1}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateSupplierRequest) GetName() string {
@@ -342,7 +342,7 @@ type UpdateSupplierRequest struct {
 
 func (x *UpdateSupplierRequest) Reset() {
 	*x = UpdateSupplierRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[2]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -354,7 +354,7 @@ func (x *UpdateSupplierRequest) String() string {
 func (*UpdateSupplierRequest) ProtoMessage() {}
 
 func (x *UpdateSupplierRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[2]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -367,7 +367,7 @@ func (x *UpdateSupplierRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSupplierRequest.ProtoReflect.Descriptor instead.
 func (*UpdateSupplierRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{2}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *UpdateSupplierRequest) GetId() int64 {
@@ -457,7 +457,7 @@ type GetSupplierRequest struct {
 
 func (x *GetSupplierRequest) Reset() {
 	*x = GetSupplierRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[3]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -469,7 +469,7 @@ func (x *GetSupplierRequest) String() string {
 func (*GetSupplierRequest) ProtoMessage() {}
 
 func (x *GetSupplierRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[3]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -482,7 +482,7 @@ func (x *GetSupplierRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSupplierRequest.ProtoReflect.Descriptor instead.
 func (*GetSupplierRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{3}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GetSupplierRequest) GetId() int64 {
@@ -510,7 +510,7 @@ type ListSuppliersRequest struct {
 
 func (x *ListSuppliersRequest) Reset() {
 	*x = ListSuppliersRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[4]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -522,7 +522,7 @@ func (x *ListSuppliersRequest) String() string {
 func (*ListSuppliersRequest) ProtoMessage() {}
 
 func (x *ListSuppliersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[4]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -535,7 +535,7 @@ func (x *ListSuppliersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSuppliersRequest.ProtoReflect.Descriptor instead.
 func (*ListSuppliersRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{4}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListSuppliersRequest) GetLimit() int32 {
@@ -571,7 +571,7 @@ type CreateSupplierResponse struct {
 
 func (x *CreateSupplierResponse) Reset() {
 	*x = CreateSupplierResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[5]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -583,7 +583,7 @@ func (x *CreateSupplierResponse) String() string {
 func (*CreateSupplierResponse) ProtoMessage() {}
 
 func (x *CreateSupplierResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[5]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -596,7 +596,7 @@ func (x *CreateSupplierResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSupplierResponse.ProtoReflect.Descriptor instead.
 func (*CreateSupplierResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{5}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateSupplierResponse) GetSuccess() bool {
@@ -639,7 +639,7 @@ type UpdateSupplierResponse struct {
 
 func (x *UpdateSupplierResponse) Reset() {
 	*x = UpdateSupplierResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[6]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -651,7 +651,7 @@ func (x *UpdateSupplierResponse) String() string {
 func (*UpdateSupplierResponse) ProtoMessage() {}
 
 func (x *UpdateSupplierResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[6]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -664,7 +664,7 @@ func (x *UpdateSupplierResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateSupplierResponse.ProtoReflect.Descriptor instead.
 func (*UpdateSupplierResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{6}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateSupplierResponse) GetSuccess() bool {
@@ -707,7 +707,7 @@ type GetSupplierResponse struct {
 
 func (x *GetSupplierResponse) Reset() {
 	*x = GetSupplierResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[7]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -719,7 +719,7 @@ func (x *GetSupplierResponse) String() string {
 func (*GetSupplierResponse) ProtoMessage() {}
 
 func (x *GetSupplierResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[7]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -732,7 +732,7 @@ func (x *GetSupplierResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSupplierResponse.ProtoReflect.Descriptor instead.
 func (*GetSupplierResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{7}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetSupplierResponse) GetSuccess() bool {
@@ -778,7 +778,7 @@ type ListSuppliersResponse struct {
 
 func (x *ListSuppliersResponse) Reset() {
 	*x = ListSuppliersResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[8]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -790,7 +790,7 @@ func (x *ListSuppliersResponse) String() string {
 func (*ListSuppliersResponse) ProtoMessage() {}
 
 func (x *ListSuppliersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[8]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -803,7 +803,7 @@ func (x *ListSuppliersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSuppliersResponse.ProtoReflect.Descriptor instead.
 func (*ListSuppliersResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{8}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ListSuppliersResponse) GetSuccess() bool {
@@ -866,7 +866,7 @@ type DeleteSupplierRequest struct {
 
 func (x *DeleteSupplierRequest) Reset() {
 	*x = DeleteSupplierRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[9]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -878,7 +878,7 @@ func (x *DeleteSupplierRequest) String() string {
 func (*DeleteSupplierRequest) ProtoMessage() {}
 
 func (x *DeleteSupplierRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[9]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -891,7 +891,7 @@ func (x *DeleteSupplierRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSupplierRequest.ProtoReflect.Descriptor instead.
 func (*DeleteSupplierRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{9}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteSupplierRequest) GetId() int64 {
@@ -922,7 +922,7 @@ type DeleteSupplierResponse struct {
 
 func (x *DeleteSupplierResponse) Reset() {
 	*x = DeleteSupplierResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[10]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -934,7 +934,7 @@ func (x *DeleteSupplierResponse) String() string {
 func (*DeleteSupplierResponse) ProtoMessage() {}
 
 func (x *DeleteSupplierResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[10]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -947,7 +947,7 @@ func (x *DeleteSupplierResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteSupplierResponse.ProtoReflect.Descriptor instead.
 func (*DeleteSupplierResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{10}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteSupplierResponse) GetSuccess() bool {
@@ -997,7 +997,7 @@ type BulkImportSuppliersRequest struct {
 
 func (x *BulkImportSuppliersRequest) Reset() {
 	*x = BulkImportSuppliersRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[11]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1009,7 +1009,7 @@ func (x *BulkImportSuppliersRequest) String() string {
 func (*BulkImportSuppliersRequest) ProtoMessage() {}
 
 func (x *BulkImportSuppliersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[11]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1022,7 +1022,7 @@ func (x *BulkImportSuppliersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkImportSuppliersRequest.ProtoReflect.Descriptor instead.
 func (*BulkImportSuppliersRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{11}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *BulkImportSuppliersRequest) GetSuppliers() []*SupplierImportItem {
@@ -1066,7 +1066,7 @@ type SupplierImportItem struct {
 
 func (x *SupplierImportItem) Reset() {
 	*x = SupplierImportItem{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[12]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1078,7 +1078,7 @@ func (x *SupplierImportItem) String() string {
 func (*SupplierImportItem) ProtoMessage() {}
 
 func (x *SupplierImportItem) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[12]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1091,7 +1091,7 @@ func (x *SupplierImportItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SupplierImportItem.ProtoReflect.Descriptor instead.
 func (*SupplierImportItem) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{12}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SupplierImportItem) GetName() string {
@@ -1187,7 +1187,7 @@ type BulkImportSuppliersResponse struct {
 
 func (x *BulkImportSuppliersResponse) Reset() {
 	*x = BulkImportSuppliersResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[13]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1199,7 +1199,7 @@ func (x *BulkImportSuppliersResponse) String() string {
 func (*BulkImportSuppliersResponse) ProtoMessage() {}
 
 func (x *BulkImportSuppliersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[13]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1212,7 +1212,7 @@ func (x *BulkImportSuppliersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkImportSuppliersResponse.ProtoReflect.Descriptor instead.
 func (*BulkImportSuppliersResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{13}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *BulkImportSuppliersResponse) GetSuccess() bool {
@@ -1276,7 +1276,7 @@ type BulkUpdateSuppliersRequest struct {
 
 func (x *BulkUpdateSuppliersRequest) Reset() {
 	*x = BulkUpdateSuppliersRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[14]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1288,7 +1288,7 @@ func (x *BulkUpdateSuppliersRequest) String() string {
 func (*BulkUpdateSuppliersRequest) ProtoMessage() {}
 
 func (x *BulkUpdateSuppliersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[14]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1301,7 +1301,7 @@ func (x *BulkUpdateSuppliersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkUpdateSuppliersRequest.ProtoReflect.Descriptor instead.
 func (*BulkUpdateSuppliersRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{14}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *BulkUpdateSuppliersRequest) GetIds() []int64 {
@@ -1341,7 +1341,7 @@ type BulkUpdateSuppliersResponse struct {
 
 func (x *BulkUpdateSuppliersResponse) Reset() {
 	*x = BulkUpdateSuppliersResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[15]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1353,7 +1353,7 @@ func (x *BulkUpdateSuppliersResponse) String() string {
 func (*BulkUpdateSuppliersResponse) ProtoMessage() {}
 
 func (x *BulkUpdateSuppliersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[15]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1366,7 +1366,7 @@ func (x *BulkUpdateSuppliersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkUpdateSuppliersResponse.ProtoReflect.Descriptor instead.
 func (*BulkUpdateSuppliersResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{15}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *BulkUpdateSuppliersResponse) GetSuccess() bool {
@@ -1429,7 +1429,7 @@ type BulkDeleteSuppliersRequest struct {
 
 func (x *BulkDeleteSuppliersRequest) Reset() {
 	*x = BulkDeleteSuppliersRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[16]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1441,7 +1441,7 @@ func (x *BulkDeleteSuppliersRequest) String() string {
 func (*BulkDeleteSuppliersRequest) ProtoMessage() {}
 
 func (x *BulkDeleteSuppliersRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[16]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1454,7 +1454,7 @@ func (x *BulkDeleteSuppliersRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkDeleteSuppliersRequest.ProtoReflect.Descriptor instead.
 func (*BulkDeleteSuppliersRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{16}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *BulkDeleteSuppliersRequest) GetIds() []int64 {
@@ -1487,7 +1487,7 @@ type BulkDeleteSuppliersResponse struct {
 
 func (x *BulkDeleteSuppliersResponse) Reset() {
 	*x = BulkDeleteSuppliersResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[17]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1499,7 +1499,7 @@ func (x *BulkDeleteSuppliersResponse) String() string {
 func (*BulkDeleteSuppliersResponse) ProtoMessage() {}
 
 func (x *BulkDeleteSuppliersResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[17]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1512,7 +1512,7 @@ func (x *BulkDeleteSuppliersResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkDeleteSuppliersResponse.ProtoReflect.Descriptor instead.
 func (*BulkDeleteSuppliersResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{17}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *BulkDeleteSuppliersResponse) GetSuccess() bool {
@@ -1578,7 +1578,7 @@ type BulkSupplierError struct {
 
 func (x *BulkSupplierError) Reset() {
 	*x = BulkSupplierError{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[18]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1590,7 +1590,7 @@ func (x *BulkSupplierError) String() string {
 func (*BulkSupplierError) ProtoMessage() {}
 
 func (x *BulkSupplierError) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[18]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1603,7 +1603,7 @@ func (x *BulkSupplierError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkSupplierError.ProtoReflect.Descriptor instead.
 func (*BulkSupplierError) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{18}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *BulkSupplierError) GetIndex() int64 {
@@ -1667,7 +1667,7 @@ type ThirdPartyProduct struct {
 
 func (x *ThirdPartyProduct) Reset() {
 	*x = ThirdPartyProduct{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[19]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1679,7 +1679,7 @@ func (x *ThirdPartyProduct) String() string {
 func (*ThirdPartyProduct) ProtoMessage() {}
 
 func (x *ThirdPartyProduct) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[19]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1692,7 +1692,7 @@ func (x *ThirdPartyProduct) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ThirdPartyProduct.ProtoReflect.Descriptor instead.
 func (*ThirdPartyProduct) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{19}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ThirdPartyProduct) GetId() int64 {
@@ -1845,7 +1845,7 @@ type CreateProductRequest struct {
 
 func (x *CreateProductRequest) Reset() {
 	*x = CreateProductRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[20]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1857,7 +1857,7 @@ func (x *CreateProductRequest) String() string {
 func (*CreateProductRequest) ProtoMessage() {}
 
 func (x *CreateProductRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[20]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1870,7 +1870,7 @@ func (x *CreateProductRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateProductRequest.ProtoReflect.Descriptor instead.
 func (*CreateProductRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{20}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CreateProductRequest) GetSupplierId() int64 {
@@ -2005,7 +2005,7 @@ type UpdateProductRequest struct {
 
 func (x *UpdateProductRequest) Reset() {
 	*x = UpdateProductRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[21]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2017,7 +2017,7 @@ func (x *UpdateProductRequest) String() string {
 func (*UpdateProductRequest) ProtoMessage() {}
 
 func (x *UpdateProductRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[21]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2030,7 +2030,7 @@ func (x *UpdateProductRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateProductRequest.ProtoReflect.Descriptor instead.
 func (*UpdateProductRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{21}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *UpdateProductRequest) GetId() int64 {
@@ -2127,7 +2127,7 @@ type GetProductRequest struct {
 
 func (x *GetProductRequest) Reset() {
 	*x = GetProductRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[22]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2139,7 +2139,7 @@ func (x *GetProductRequest) String() string {
 func (*GetProductRequest) ProtoMessage() {}
 
 func (x *GetProductRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[22]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2152,7 +2152,7 @@ func (x *GetProductRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetProductRequest.ProtoReflect.Descriptor instead.
 func (*GetProductRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{22}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetProductRequest) GetId() int64 {
@@ -2180,7 +2180,7 @@ type ListProductsRequest struct {
 
 func (x *ListProductsRequest) Reset() {
 	*x = ListProductsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[23]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2192,7 +2192,7 @@ func (x *ListProductsRequest) String() string {
 func (*ListProductsRequest) ProtoMessage() {}
 
 func (x *ListProductsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[23]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2205,7 +2205,7 @@ func (x *ListProductsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListProductsRequest.ProtoReflect.Descriptor instead.
 func (*ListProductsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{23}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListProductsRequest) GetLimit() int32 {
@@ -2241,7 +2241,7 @@ type CreateProductResponse struct {
 
 func (x *CreateProductResponse) Reset() {
 	*x = CreateProductResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[24]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2253,7 +2253,7 @@ func (x *CreateProductResponse) String() string {
 func (*CreateProductResponse) ProtoMessage() {}
 
 func (x *CreateProductResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[24]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2266,7 +2266,7 @@ func (x *CreateProductResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateProductResponse.ProtoReflect.Descriptor instead.
 func (*CreateProductResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{24}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *CreateProductResponse) GetSuccess() bool {
@@ -2309,7 +2309,7 @@ type UpdateProductResponse struct {
 
 func (x *UpdateProductResponse) Reset() {
 	*x = UpdateProductResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[25]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2321,7 +2321,7 @@ func (x *UpdateProductResponse) String() string {
 func (*UpdateProductResponse) ProtoMessage() {}
 
 func (x *UpdateProductResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[25]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2334,7 +2334,7 @@ func (x *UpdateProductResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateProductResponse.ProtoReflect.Descriptor instead.
 func (*UpdateProductResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{25}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *UpdateProductResponse) GetSuccess() bool {
@@ -2377,7 +2377,7 @@ type GetProductResponse struct {
 
 func (x *GetProductResponse) Reset() {
 	*x = GetProductResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[26]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2389,7 +2389,7 @@ func (x *GetProductResponse) String() string {
 func (*GetProductResponse) ProtoMessage() {}
 
 func (x *GetProductResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[26]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2402,7 +2402,7 @@ func (x *GetProductResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetProductResponse.ProtoReflect.Descriptor instead.
 func (*GetProductResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{26}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetProductResponse) GetSuccess() bool {
@@ -2448,7 +2448,7 @@ type ListProductsResponse struct {
 
 func (x *ListProductsResponse) Reset() {
 	*x = ListProductsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[27]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2460,7 +2460,7 @@ func (x *ListProductsResponse) String() string {
 func (*ListProductsResponse) ProtoMessage() {}
 
 func (x *ListProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[27]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2473,7 +2473,7 @@ func (x *ListProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListProductsResponse.ProtoReflect.Descriptor instead.
 func (*ListProductsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{27}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ListProductsResponse) GetSuccess() bool {
@@ -2536,7 +2536,7 @@ type DeleteProductRequest struct {
 
 func (x *DeleteProductRequest) Reset() {
 	*x = DeleteProductRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[28]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2548,7 +2548,7 @@ func (x *DeleteProductRequest) String() string {
 func (*DeleteProductRequest) ProtoMessage() {}
 
 func (x *DeleteProductRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[28]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2561,7 +2561,7 @@ func (x *DeleteProductRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteProductRequest.ProtoReflect.Descriptor instead.
 func (*DeleteProductRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{28}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *DeleteProductRequest) GetId() int64 {
@@ -2592,7 +2592,7 @@ type DeleteProductResponse struct {
 
 func (x *DeleteProductResponse) Reset() {
 	*x = DeleteProductResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[29]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2604,7 +2604,7 @@ func (x *DeleteProductResponse) String() string {
 func (*DeleteProductResponse) ProtoMessage() {}
 
 func (x *DeleteProductResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[29]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2617,7 +2617,7 @@ func (x *DeleteProductResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteProductResponse.ProtoReflect.Descriptor instead.
 func (*DeleteProductResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{29}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *DeleteProductResponse) GetSuccess() bool {
@@ -2667,7 +2667,7 @@ type BulkImportProductsRequest struct {
 
 func (x *BulkImportProductsRequest) Reset() {
 	*x = BulkImportProductsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[30]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2679,7 +2679,7 @@ func (x *BulkImportProductsRequest) String() string {
 func (*BulkImportProductsRequest) ProtoMessage() {}
 
 func (x *BulkImportProductsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[30]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2692,7 +2692,7 @@ func (x *BulkImportProductsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkImportProductsRequest.ProtoReflect.Descriptor instead.
 func (*BulkImportProductsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{30}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *BulkImportProductsRequest) GetProducts() []*ProductImportItem {
@@ -2739,7 +2739,7 @@ type ProductImportItem struct {
 
 func (x *ProductImportItem) Reset() {
 	*x = ProductImportItem{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[31]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2751,7 +2751,7 @@ func (x *ProductImportItem) String() string {
 func (*ProductImportItem) ProtoMessage() {}
 
 func (x *ProductImportItem) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[31]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2764,7 +2764,7 @@ func (x *ProductImportItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProductImportItem.ProtoReflect.Descriptor instead.
 func (*ProductImportItem) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{31}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *ProductImportItem) GetSupplierId() int64 {
@@ -2881,7 +2881,7 @@ type BulkImportProductsResponse struct {
 
 func (x *BulkImportProductsResponse) Reset() {
 	*x = BulkImportProductsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[32]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2893,7 +2893,7 @@ func (x *BulkImportProductsResponse) String() string {
 func (*BulkImportProductsResponse) ProtoMessage() {}
 
 func (x *BulkImportProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[32]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2906,7 +2906,7 @@ func (x *BulkImportProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkImportProductsResponse.ProtoReflect.Descriptor instead.
 func (*BulkImportProductsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{32}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *BulkImportProductsResponse) GetSuccess() bool {
@@ -2970,7 +2970,7 @@ type BulkUpdateProductsRequest struct {
 
 func (x *BulkUpdateProductsRequest) Reset() {
 	*x = BulkUpdateProductsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[33]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2982,7 +2982,7 @@ func (x *BulkUpdateProductsRequest) String() string {
 func (*BulkUpdateProductsRequest) ProtoMessage() {}
 
 func (x *BulkUpdateProductsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[33]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2995,7 +2995,7 @@ func (x *BulkUpdateProductsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkUpdateProductsRequest.ProtoReflect.Descriptor instead.
 func (*BulkUpdateProductsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{33}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *BulkUpdateProductsRequest) GetIds() []int64 {
@@ -3035,7 +3035,7 @@ type BulkUpdateProductsResponse struct {
 
 func (x *BulkUpdateProductsResponse) Reset() {
 	*x = BulkUpdateProductsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[34]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3047,7 +3047,7 @@ func (x *BulkUpdateProductsResponse) String() string {
 func (*BulkUpdateProductsResponse) ProtoMessage() {}
 
 func (x *BulkUpdateProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[34]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3060,7 +3060,7 @@ func (x *BulkUpdateProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkUpdateProductsResponse.ProtoReflect.Descriptor instead.
 func (*BulkUpdateProductsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{34}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *BulkUpdateProductsResponse) GetSuccess() bool {
@@ -3123,7 +3123,7 @@ type BulkDeleteProductsRequest struct {
 
 func (x *BulkDeleteProductsRequest) Reset() {
 	*x = BulkDeleteProductsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[35]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3135,7 +3135,7 @@ func (x *BulkDeleteProductsRequest) String() string {
 func (*BulkDeleteProductsRequest) ProtoMessage() {}
 
 func (x *BulkDeleteProductsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[35]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3148,7 +3148,7 @@ func (x *BulkDeleteProductsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkDeleteProductsRequest.ProtoReflect.Descriptor instead.
 func (*BulkDeleteProductsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{35}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *BulkDeleteProductsRequest) GetIds() []int64 {
@@ -3181,7 +3181,7 @@ type BulkDeleteProductsResponse struct {
 
 func (x *BulkDeleteProductsResponse) Reset() {
 	*x = BulkDeleteProductsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[36]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3193,7 +3193,7 @@ func (x *BulkDeleteProductsResponse) String() string {
 func (*BulkDeleteProductsResponse) ProtoMessage() {}
 
 func (x *BulkDeleteProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[36]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3206,7 +3206,7 @@ func (x *BulkDeleteProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkDeleteProductsResponse.ProtoReflect.Descriptor instead.
 func (*BulkDeleteProductsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{36}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *BulkDeleteProductsResponse) GetSuccess() bool {
@@ -3272,7 +3272,7 @@ type BulkProductError struct {
 
 func (x *BulkProductError) Reset() {
 	*x = BulkProductError{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[37]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3284,7 +3284,7 @@ func (x *BulkProductError) String() string {
 func (*BulkProductError) ProtoMessage() {}
 
 func (x *BulkProductError) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[37]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3297,7 +3297,7 @@ func (x *BulkProductError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BulkProductError.ProtoReflect.Descriptor instead.
 func (*BulkProductError) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{37}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *BulkProductError) GetIndex() int64 {
@@ -3351,7 +3351,7 @@ type InventoryCode struct {
 
 func (x *InventoryCode) Reset() {
 	*x = InventoryCode{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[38]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3363,7 +3363,7 @@ func (x *InventoryCode) String() string {
 func (*InventoryCode) ProtoMessage() {}
 
 func (x *InventoryCode) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[38]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3376,7 +3376,7 @@ func (x *InventoryCode) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryCode.ProtoReflect.Descriptor instead.
 func (*InventoryCode) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{38}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *InventoryCode) GetId() int64 {
@@ -3448,7 +3448,7 @@ type ImportInventoryRequest struct {
 
 func (x *ImportInventoryRequest) Reset() {
 	*x = ImportInventoryRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[39]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3460,7 +3460,7 @@ func (x *ImportInventoryRequest) String() string {
 func (*ImportInventoryRequest) ProtoMessage() {}
 
 func (x *ImportInventoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[39]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3473,7 +3473,7 @@ func (x *ImportInventoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportInventoryRequest.ProtoReflect.Descriptor instead.
 func (*ImportInventoryRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{39}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *ImportInventoryRequest) GetProductId() int64 {
@@ -3524,7 +3524,7 @@ type ListInventoryRequest struct {
 
 func (x *ListInventoryRequest) Reset() {
 	*x = ListInventoryRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[40]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3536,7 +3536,7 @@ func (x *ListInventoryRequest) String() string {
 func (*ListInventoryRequest) ProtoMessage() {}
 
 func (x *ListInventoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[40]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3549,7 +3549,7 @@ func (x *ListInventoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInventoryRequest.ProtoReflect.Descriptor instead.
 func (*ListInventoryRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{40}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *ListInventoryRequest) GetProductId() int64 {
@@ -3597,7 +3597,7 @@ type GetInventoryStatsRequest struct {
 
 func (x *GetInventoryStatsRequest) Reset() {
 	*x = GetInventoryStatsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[41]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3609,7 +3609,7 @@ func (x *GetInventoryStatsRequest) String() string {
 func (*GetInventoryStatsRequest) ProtoMessage() {}
 
 func (x *GetInventoryStatsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[41]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3622,7 +3622,7 @@ func (x *GetInventoryStatsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetInventoryStatsRequest.ProtoReflect.Descriptor instead.
 func (*GetInventoryStatsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{41}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *GetInventoryStatsRequest) GetProductId() int64 {
@@ -3653,7 +3653,7 @@ type ImportInventoryResponse struct {
 
 func (x *ImportInventoryResponse) Reset() {
 	*x = ImportInventoryResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[42]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3665,7 +3665,7 @@ func (x *ImportInventoryResponse) String() string {
 func (*ImportInventoryResponse) ProtoMessage() {}
 
 func (x *ImportInventoryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[42]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3678,7 +3678,7 @@ func (x *ImportInventoryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportInventoryResponse.ProtoReflect.Descriptor instead.
 func (*ImportInventoryResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{42}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *ImportInventoryResponse) GetSuccess() bool {
@@ -3738,7 +3738,7 @@ type ListInventoryResponse struct {
 
 func (x *ListInventoryResponse) Reset() {
 	*x = ListInventoryResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[43]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3750,7 +3750,7 @@ func (x *ListInventoryResponse) String() string {
 func (*ListInventoryResponse) ProtoMessage() {}
 
 func (x *ListInventoryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[43]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3763,7 +3763,7 @@ func (x *ListInventoryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListInventoryResponse.ProtoReflect.Descriptor instead.
 func (*ListInventoryResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{43}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *ListInventoryResponse) GetSuccess() bool {
@@ -3828,7 +3828,7 @@ type InventoryStatsResponse struct {
 
 func (x *InventoryStatsResponse) Reset() {
 	*x = InventoryStatsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[44]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3840,7 +3840,7 @@ func (x *InventoryStatsResponse) String() string {
 func (*InventoryStatsResponse) ProtoMessage() {}
 
 func (x *InventoryStatsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[44]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3853,7 +3853,7 @@ func (x *InventoryStatsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryStatsResponse.ProtoReflect.Descriptor instead.
 func (*InventoryStatsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{44}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *InventoryStatsResponse) GetSuccess() bool {
@@ -3908,7 +3908,7 @@ type Fulfillment struct {
 
 func (x *Fulfillment) Reset() {
 	*x = Fulfillment{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[45]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3920,7 +3920,7 @@ func (x *Fulfillment) String() string {
 func (*Fulfillment) ProtoMessage() {}
 
 func (x *Fulfillment) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[45]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3933,7 +3933,7 @@ func (x *Fulfillment) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Fulfillment.ProtoReflect.Descriptor instead.
 func (*Fulfillment) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{45}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *Fulfillment) GetId() int64 {
@@ -4009,7 +4009,7 @@ type GetFulfillmentRequest struct {
 
 func (x *GetFulfillmentRequest) Reset() {
 	*x = GetFulfillmentRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[46]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4021,7 +4021,7 @@ func (x *GetFulfillmentRequest) String() string {
 func (*GetFulfillmentRequest) ProtoMessage() {}
 
 func (x *GetFulfillmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[46]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4034,7 +4034,7 @@ func (x *GetFulfillmentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFulfillmentRequest.ProtoReflect.Descriptor instead.
 func (*GetFulfillmentRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{46}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *GetFulfillmentRequest) GetId() int64 {
@@ -4062,7 +4062,7 @@ type ListFulfillmentsRequest struct {
 
 func (x *ListFulfillmentsRequest) Reset() {
 	*x = ListFulfillmentsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[47]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4074,7 +4074,7 @@ func (x *ListFulfillmentsRequest) String() string {
 func (*ListFulfillmentsRequest) ProtoMessage() {}
 
 func (x *ListFulfillmentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[47]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4087,7 +4087,7 @@ func (x *ListFulfillmentsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListFulfillmentsRequest.ProtoReflect.Descriptor instead.
 func (*ListFulfillmentsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{47}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *ListFulfillmentsRequest) GetLimit() int32 {
@@ -4122,7 +4122,7 @@ type GetFulfillmentStatsRequest struct {
 
 func (x *GetFulfillmentStatsRequest) Reset() {
 	*x = GetFulfillmentStatsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[48]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4134,7 +4134,7 @@ func (x *GetFulfillmentStatsRequest) String() string {
 func (*GetFulfillmentStatsRequest) ProtoMessage() {}
 
 func (x *GetFulfillmentStatsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[48]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4147,7 +4147,7 @@ func (x *GetFulfillmentStatsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFulfillmentStatsRequest.ProtoReflect.Descriptor instead.
 func (*GetFulfillmentStatsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{48}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *GetFulfillmentStatsRequest) GetSupplierId() int64 {
@@ -4183,7 +4183,7 @@ type GetFulfillmentResponse struct {
 
 func (x *GetFulfillmentResponse) Reset() {
 	*x = GetFulfillmentResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[49]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4195,7 +4195,7 @@ func (x *GetFulfillmentResponse) String() string {
 func (*GetFulfillmentResponse) ProtoMessage() {}
 
 func (x *GetFulfillmentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[49]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4208,7 +4208,7 @@ func (x *GetFulfillmentResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFulfillmentResponse.ProtoReflect.Descriptor instead.
 func (*GetFulfillmentResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{49}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *GetFulfillmentResponse) GetSuccess() bool {
@@ -4254,7 +4254,7 @@ type ListFulfillmentsResponse struct {
 
 func (x *ListFulfillmentsResponse) Reset() {
 	*x = ListFulfillmentsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[50]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4266,7 +4266,7 @@ func (x *ListFulfillmentsResponse) String() string {
 func (*ListFulfillmentsResponse) ProtoMessage() {}
 
 func (x *ListFulfillmentsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[50]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4279,7 +4279,7 @@ func (x *ListFulfillmentsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListFulfillmentsResponse.ProtoReflect.Descriptor instead.
 func (*ListFulfillmentsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{50}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *ListFulfillmentsResponse) GetSuccess() bool {
@@ -4346,7 +4346,7 @@ type FulfillmentStatsResponse struct {
 
 func (x *FulfillmentStatsResponse) Reset() {
 	*x = FulfillmentStatsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[51]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4358,7 +4358,7 @@ func (x *FulfillmentStatsResponse) String() string {
 func (*FulfillmentStatsResponse) ProtoMessage() {}
 
 func (x *FulfillmentStatsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[51]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4371,7 +4371,7 @@ func (x *FulfillmentStatsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FulfillmentStatsResponse.ProtoReflect.Descriptor instead.
 func (*FulfillmentStatsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{51}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *FulfillmentStatsResponse) GetSuccess() bool {
@@ -4444,7 +4444,7 @@ type AssignProductToEventRequest struct {
 
 func (x *AssignProductToEventRequest) Reset() {
 	*x = AssignProductToEventRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[52]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4456,7 +4456,7 @@ func (x *AssignProductToEventRequest) String() string {
 func (*AssignProductToEventRequest) ProtoMessage() {}
 
 func (x *AssignProductToEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[52]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4469,7 +4469,7 @@ func (x *AssignProductToEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssignProductToEventRequest.ProtoReflect.Descriptor instead.
 func (*AssignProductToEventRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{52}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *AssignProductToEventRequest) GetEventSlug() string {
@@ -4553,7 +4553,7 @@ type UnassignProductFromEventRequest struct {
 
 func (x *UnassignProductFromEventRequest) Reset() {
 	*x = UnassignProductFromEventRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[53]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4565,7 +4565,7 @@ func (x *UnassignProductFromEventRequest) String() string {
 func (*UnassignProductFromEventRequest) ProtoMessage() {}
 
 func (x *UnassignProductFromEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[53]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4578,7 +4578,7 @@ func (x *UnassignProductFromEventRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnassignProductFromEventRequest.ProtoReflect.Descriptor instead.
 func (*UnassignProductFromEventRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{53}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *UnassignProductFromEventRequest) GetEventSlug() string {
@@ -4615,7 +4615,7 @@ type UpdateEventProductAssignmentRequest struct {
 
 func (x *UpdateEventProductAssignmentRequest) Reset() {
 	*x = UpdateEventProductAssignmentRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[54]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4627,7 +4627,7 @@ func (x *UpdateEventProductAssignmentRequest) String() string {
 func (*UpdateEventProductAssignmentRequest) ProtoMessage() {}
 
 func (x *UpdateEventProductAssignmentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[54]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4640,7 +4640,7 @@ func (x *UpdateEventProductAssignmentRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use UpdateEventProductAssignmentRequest.ProtoReflect.Descriptor instead.
 func (*UpdateEventProductAssignmentRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{54}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *UpdateEventProductAssignmentRequest) GetEventSlug() string {
@@ -4691,7 +4691,7 @@ type GetEventProductAssignmentsRequest struct {
 
 func (x *GetEventProductAssignmentsRequest) Reset() {
 	*x = GetEventProductAssignmentsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[55]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4703,7 +4703,7 @@ func (x *GetEventProductAssignmentsRequest) String() string {
 func (*GetEventProductAssignmentsRequest) ProtoMessage() {}
 
 func (x *GetEventProductAssignmentsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[55]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4716,7 +4716,7 @@ func (x *GetEventProductAssignmentsRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use GetEventProductAssignmentsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventProductAssignmentsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{55}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *GetEventProductAssignmentsRequest) GetEventSlug() string {
@@ -4764,7 +4764,7 @@ type GetEventInventoryStatsRequest struct {
 
 func (x *GetEventInventoryStatsRequest) Reset() {
 	*x = GetEventInventoryStatsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[56]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4776,7 +4776,7 @@ func (x *GetEventInventoryStatsRequest) String() string {
 func (*GetEventInventoryStatsRequest) ProtoMessage() {}
 
 func (x *GetEventInventoryStatsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[56]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4789,7 +4789,7 @@ func (x *GetEventInventoryStatsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventInventoryStatsRequest.ProtoReflect.Descriptor instead.
 func (*GetEventInventoryStatsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{56}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *GetEventInventoryStatsRequest) GetEventSlug() string {
@@ -4818,7 +4818,7 @@ type AllocateEventInventoryRequest struct {
 
 func (x *AllocateEventInventoryRequest) Reset() {
 	*x = AllocateEventInventoryRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[57]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4830,7 +4830,7 @@ func (x *AllocateEventInventoryRequest) String() string {
 func (*AllocateEventInventoryRequest) ProtoMessage() {}
 
 func (x *AllocateEventInventoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[57]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4843,7 +4843,7 @@ func (x *AllocateEventInventoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AllocateEventInventoryRequest.ProtoReflect.Descriptor instead.
 func (*AllocateEventInventoryRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{57}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *AllocateEventInventoryRequest) GetEventSlug() string {
@@ -4886,7 +4886,7 @@ type AssignProductToEventResponse struct {
 
 func (x *AssignProductToEventResponse) Reset() {
 	*x = AssignProductToEventResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[58]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4898,7 +4898,7 @@ func (x *AssignProductToEventResponse) String() string {
 func (*AssignProductToEventResponse) ProtoMessage() {}
 
 func (x *AssignProductToEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[58]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4911,7 +4911,7 @@ func (x *AssignProductToEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AssignProductToEventResponse.ProtoReflect.Descriptor instead.
 func (*AssignProductToEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{58}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *AssignProductToEventResponse) GetSuccess() bool {
@@ -4953,7 +4953,7 @@ type UnassignProductFromEventResponse struct {
 
 func (x *UnassignProductFromEventResponse) Reset() {
 	*x = UnassignProductFromEventResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[59]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4965,7 +4965,7 @@ func (x *UnassignProductFromEventResponse) String() string {
 func (*UnassignProductFromEventResponse) ProtoMessage() {}
 
 func (x *UnassignProductFromEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[59]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4978,7 +4978,7 @@ func (x *UnassignProductFromEventResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnassignProductFromEventResponse.ProtoReflect.Descriptor instead.
 func (*UnassignProductFromEventResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{59}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *UnassignProductFromEventResponse) GetSuccess() bool {
@@ -5013,7 +5013,7 @@ type UpdateEventProductAssignmentResponse struct {
 
 func (x *UpdateEventProductAssignmentResponse) Reset() {
 	*x = UpdateEventProductAssignmentResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[60]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5025,7 +5025,7 @@ func (x *UpdateEventProductAssignmentResponse) String() string {
 func (*UpdateEventProductAssignmentResponse) ProtoMessage() {}
 
 func (x *UpdateEventProductAssignmentResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[60]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5038,7 +5038,7 @@ func (x *UpdateEventProductAssignmentResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use UpdateEventProductAssignmentResponse.ProtoReflect.Descriptor instead.
 func (*UpdateEventProductAssignmentResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{60}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *UpdateEventProductAssignmentResponse) GetSuccess() bool {
@@ -5077,7 +5077,7 @@ type ListEventProductsResponse struct {
 
 func (x *ListEventProductsResponse) Reset() {
 	*x = ListEventProductsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[61]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5089,7 +5089,7 @@ func (x *ListEventProductsResponse) String() string {
 func (*ListEventProductsResponse) ProtoMessage() {}
 
 func (x *ListEventProductsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[61]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5102,7 +5102,7 @@ func (x *ListEventProductsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListEventProductsResponse.ProtoReflect.Descriptor instead.
 func (*ListEventProductsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{61}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *ListEventProductsResponse) GetSuccess() bool {
@@ -5170,7 +5170,7 @@ type EventInventoryStatsResponse struct {
 
 func (x *EventInventoryStatsResponse) Reset() {
 	*x = EventInventoryStatsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[62]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5182,7 +5182,7 @@ func (x *EventInventoryStatsResponse) String() string {
 func (*EventInventoryStatsResponse) ProtoMessage() {}
 
 func (x *EventInventoryStatsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[62]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5195,7 +5195,7 @@ func (x *EventInventoryStatsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventInventoryStatsResponse.ProtoReflect.Descriptor instead.
 func (*EventInventoryStatsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{62}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *EventInventoryStatsResponse) GetSuccess() bool {
@@ -5267,7 +5267,7 @@ type AllocateEventInventoryResponse struct {
 
 func (x *AllocateEventInventoryResponse) Reset() {
 	*x = AllocateEventInventoryResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[63]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5279,7 +5279,7 @@ func (x *AllocateEventInventoryResponse) String() string {
 func (*AllocateEventInventoryResponse) ProtoMessage() {}
 
 func (x *AllocateEventInventoryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[63]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5292,7 +5292,7 @@ func (x *AllocateEventInventoryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AllocateEventInventoryResponse.ProtoReflect.Descriptor instead.
 func (*AllocateEventInventoryResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{63}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *AllocateEventInventoryResponse) GetSuccess() bool {
@@ -5346,7 +5346,7 @@ type FulfillOrderPositionRequest struct {
 
 func (x *FulfillOrderPositionRequest) Reset() {
 	*x = FulfillOrderPositionRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[64]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5358,7 +5358,7 @@ func (x *FulfillOrderPositionRequest) String() string {
 func (*FulfillOrderPositionRequest) ProtoMessage() {}
 
 func (x *FulfillOrderPositionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[64]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5371,7 +5371,7 @@ func (x *FulfillOrderPositionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FulfillOrderPositionRequest.ProtoReflect.Descriptor instead.
 func (*FulfillOrderPositionRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{64}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *FulfillOrderPositionRequest) GetOrderId() int64 {
@@ -5446,7 +5446,7 @@ type RefundOrderPositionRequest struct {
 
 func (x *RefundOrderPositionRequest) Reset() {
 	*x = RefundOrderPositionRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[65]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5458,7 +5458,7 @@ func (x *RefundOrderPositionRequest) String() string {
 func (*RefundOrderPositionRequest) ProtoMessage() {}
 
 func (x *RefundOrderPositionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[65]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5471,7 +5471,7 @@ func (x *RefundOrderPositionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RefundOrderPositionRequest.ProtoReflect.Descriptor instead.
 func (*RefundOrderPositionRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{65}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *RefundOrderPositionRequest) GetOrderId() int64 {
@@ -5551,7 +5551,7 @@ type StockReconciliation struct {
 
 func (x *StockReconciliation) Reset() {
 	*x = StockReconciliation{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[66]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5563,7 +5563,7 @@ func (x *StockReconciliation) String() string {
 func (*StockReconciliation) ProtoMessage() {}
 
 func (x *StockReconciliation) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[66]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5576,7 +5576,7 @@ func (x *StockReconciliation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StockReconciliation.ProtoReflect.Descriptor instead.
 func (*StockReconciliation) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{66}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *StockReconciliation) GetId() int64 {
@@ -5680,7 +5680,7 @@ type TriggerReconciliationRequest struct {
 
 func (x *TriggerReconciliationRequest) Reset() {
 	*x = TriggerReconciliationRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[67]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5692,7 +5692,7 @@ func (x *TriggerReconciliationRequest) String() string {
 func (*TriggerReconciliationRequest) ProtoMessage() {}
 
 func (x *TriggerReconciliationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[67]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5705,7 +5705,7 @@ func (x *TriggerReconciliationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TriggerReconciliationRequest.ProtoReflect.Descriptor instead.
 func (*TriggerReconciliationRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{67}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *TriggerReconciliationRequest) GetProductId() int64 {
@@ -5734,7 +5734,7 @@ type TriggerReconciliationResponse struct {
 
 func (x *TriggerReconciliationResponse) Reset() {
 	*x = TriggerReconciliationResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[68]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5746,7 +5746,7 @@ func (x *TriggerReconciliationResponse) String() string {
 func (*TriggerReconciliationResponse) ProtoMessage() {}
 
 func (x *TriggerReconciliationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[68]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5759,7 +5759,7 @@ func (x *TriggerReconciliationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TriggerReconciliationResponse.ProtoReflect.Descriptor instead.
 func (*TriggerReconciliationResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{68}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *TriggerReconciliationResponse) GetSuccess() bool {
@@ -5801,7 +5801,7 @@ type ListReconciliationHistoryRequest struct {
 
 func (x *ListReconciliationHistoryRequest) Reset() {
 	*x = ListReconciliationHistoryRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[69]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5813,7 +5813,7 @@ func (x *ListReconciliationHistoryRequest) String() string {
 func (*ListReconciliationHistoryRequest) ProtoMessage() {}
 
 func (x *ListReconciliationHistoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[69]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5826,7 +5826,7 @@ func (x *ListReconciliationHistoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListReconciliationHistoryRequest.ProtoReflect.Descriptor instead.
 func (*ListReconciliationHistoryRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{69}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *ListReconciliationHistoryRequest) GetProductId() int64 {
@@ -5862,7 +5862,7 @@ type ListReconciliationHistoryResponse struct {
 
 func (x *ListReconciliationHistoryResponse) Reset() {
 	*x = ListReconciliationHistoryResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[70]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5874,7 +5874,7 @@ func (x *ListReconciliationHistoryResponse) String() string {
 func (*ListReconciliationHistoryResponse) ProtoMessage() {}
 
 func (x *ListReconciliationHistoryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[70]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5887,7 +5887,7 @@ func (x *ListReconciliationHistoryResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use ListReconciliationHistoryResponse.ProtoReflect.Descriptor instead.
 func (*ListReconciliationHistoryResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{70}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *ListReconciliationHistoryResponse) GetSuccess() bool {
@@ -5932,7 +5932,7 @@ type SettlementItem struct {
 
 func (x *SettlementItem) Reset() {
 	*x = SettlementItem{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[71]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5944,7 +5944,7 @@ func (x *SettlementItem) String() string {
 func (*SettlementItem) ProtoMessage() {}
 
 func (x *SettlementItem) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[71]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5957,7 +5957,7 @@ func (x *SettlementItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SettlementItem.ProtoReflect.Descriptor instead.
 func (*SettlementItem) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{71}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *SettlementItem) GetId() int64 {
@@ -6028,7 +6028,7 @@ type Settlement struct {
 
 func (x *Settlement) Reset() {
 	*x = Settlement{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[72]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6040,7 +6040,7 @@ func (x *Settlement) String() string {
 func (*Settlement) ProtoMessage() {}
 
 func (x *Settlement) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[72]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6053,7 +6053,7 @@ func (x *Settlement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Settlement.ProtoReflect.Descriptor instead.
 func (*Settlement) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{72}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *Settlement) GetId() int64 {
@@ -6195,7 +6195,7 @@ type CreateSettlementRequest struct {
 
 func (x *CreateSettlementRequest) Reset() {
 	*x = CreateSettlementRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[73]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6207,7 +6207,7 @@ func (x *CreateSettlementRequest) String() string {
 func (*CreateSettlementRequest) ProtoMessage() {}
 
 func (x *CreateSettlementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[73]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6220,7 +6220,7 @@ func (x *CreateSettlementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSettlementRequest.ProtoReflect.Descriptor instead.
 func (*CreateSettlementRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{73}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *CreateSettlementRequest) GetOrganizerId() int64 {
@@ -6270,7 +6270,7 @@ type CreateSettlementResponse struct {
 
 func (x *CreateSettlementResponse) Reset() {
 	*x = CreateSettlementResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[74]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6282,7 +6282,7 @@ func (x *CreateSettlementResponse) String() string {
 func (*CreateSettlementResponse) ProtoMessage() {}
 
 func (x *CreateSettlementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[74]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6295,7 +6295,7 @@ func (x *CreateSettlementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateSettlementResponse.ProtoReflect.Descriptor instead.
 func (*CreateSettlementResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{74}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *CreateSettlementResponse) GetSuccess() bool {
@@ -6336,7 +6336,7 @@ type GetSettlementRequest struct {
 
 func (x *GetSettlementRequest) Reset() {
 	*x = GetSettlementRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[75]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6348,7 +6348,7 @@ func (x *GetSettlementRequest) String() string {
 func (*GetSettlementRequest) ProtoMessage() {}
 
 func (x *GetSettlementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[75]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6361,7 +6361,7 @@ func (x *GetSettlementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSettlementRequest.ProtoReflect.Descriptor instead.
 func (*GetSettlementRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{75}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *GetSettlementRequest) GetId() int64 {
@@ -6390,7 +6390,7 @@ type GetSettlementResponse struct {
 
 func (x *GetSettlementResponse) Reset() {
 	*x = GetSettlementResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[76]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6402,7 +6402,7 @@ func (x *GetSettlementResponse) String() string {
 func (*GetSettlementResponse) ProtoMessage() {}
 
 func (x *GetSettlementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[76]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6415,7 +6415,7 @@ func (x *GetSettlementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSettlementResponse.ProtoReflect.Descriptor instead.
 func (*GetSettlementResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{76}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *GetSettlementResponse) GetSuccess() bool {
@@ -6461,7 +6461,7 @@ type ListSettlementsRequest struct {
 
 func (x *ListSettlementsRequest) Reset() {
 	*x = ListSettlementsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[77]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6473,7 +6473,7 @@ func (x *ListSettlementsRequest) String() string {
 func (*ListSettlementsRequest) ProtoMessage() {}
 
 func (x *ListSettlementsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[77]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6486,7 +6486,7 @@ func (x *ListSettlementsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSettlementsRequest.ProtoReflect.Descriptor instead.
 func (*ListSettlementsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{77}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *ListSettlementsRequest) GetOrganizerId() int64 {
@@ -6553,7 +6553,7 @@ type ListSettlementsResponse struct {
 
 func (x *ListSettlementsResponse) Reset() {
 	*x = ListSettlementsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[78]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6565,7 +6565,7 @@ func (x *ListSettlementsResponse) String() string {
 func (*ListSettlementsResponse) ProtoMessage() {}
 
 func (x *ListSettlementsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[78]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6578,7 +6578,7 @@ func (x *ListSettlementsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListSettlementsResponse.ProtoReflect.Descriptor instead.
 func (*ListSettlementsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{78}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *ListSettlementsResponse) GetSuccess() bool {
@@ -6640,7 +6640,7 @@ type ConfirmSettlementRequest struct {
 
 func (x *ConfirmSettlementRequest) Reset() {
 	*x = ConfirmSettlementRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[79]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6652,7 +6652,7 @@ func (x *ConfirmSettlementRequest) String() string {
 func (*ConfirmSettlementRequest) ProtoMessage() {}
 
 func (x *ConfirmSettlementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[79]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6665,7 +6665,7 @@ func (x *ConfirmSettlementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmSettlementRequest.ProtoReflect.Descriptor instead.
 func (*ConfirmSettlementRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{79}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *ConfirmSettlementRequest) GetId() int64 {
@@ -6694,7 +6694,7 @@ type ConfirmSettlementResponse struct {
 
 func (x *ConfirmSettlementResponse) Reset() {
 	*x = ConfirmSettlementResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[80]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6706,7 +6706,7 @@ func (x *ConfirmSettlementResponse) String() string {
 func (*ConfirmSettlementResponse) ProtoMessage() {}
 
 func (x *ConfirmSettlementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[80]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6719,7 +6719,7 @@ func (x *ConfirmSettlementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ConfirmSettlementResponse.ProtoReflect.Descriptor instead.
 func (*ConfirmSettlementResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{80}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *ConfirmSettlementResponse) GetSuccess() bool {
@@ -6760,7 +6760,7 @@ type MarkSettlementPaidRequest struct {
 
 func (x *MarkSettlementPaidRequest) Reset() {
 	*x = MarkSettlementPaidRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[81]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6772,7 +6772,7 @@ func (x *MarkSettlementPaidRequest) String() string {
 func (*MarkSettlementPaidRequest) ProtoMessage() {}
 
 func (x *MarkSettlementPaidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[81]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6785,7 +6785,7 @@ func (x *MarkSettlementPaidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkSettlementPaidRequest.ProtoReflect.Descriptor instead.
 func (*MarkSettlementPaidRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{81}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *MarkSettlementPaidRequest) GetId() int64 {
@@ -6814,7 +6814,7 @@ type MarkSettlementPaidResponse struct {
 
 func (x *MarkSettlementPaidResponse) Reset() {
 	*x = MarkSettlementPaidResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[82]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6826,7 +6826,7 @@ func (x *MarkSettlementPaidResponse) String() string {
 func (*MarkSettlementPaidResponse) ProtoMessage() {}
 
 func (x *MarkSettlementPaidResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[82]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6839,7 +6839,7 @@ func (x *MarkSettlementPaidResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MarkSettlementPaidResponse.ProtoReflect.Descriptor instead.
 func (*MarkSettlementPaidResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{82}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *MarkSettlementPaidResponse) GetSuccess() bool {
@@ -6896,7 +6896,7 @@ type ApiCallLogSummary struct {
 
 func (x *ApiCallLogSummary) Reset() {
 	*x = ApiCallLogSummary{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[83]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6908,7 +6908,7 @@ func (x *ApiCallLogSummary) String() string {
 func (*ApiCallLogSummary) ProtoMessage() {}
 
 func (x *ApiCallLogSummary) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[83]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6921,7 +6921,7 @@ func (x *ApiCallLogSummary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApiCallLogSummary.ProtoReflect.Descriptor instead.
 func (*ApiCallLogSummary) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{83}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *ApiCallLogSummary) GetId() int64 {
@@ -7049,7 +7049,7 @@ type ApiCallLog struct {
 
 func (x *ApiCallLog) Reset() {
 	*x = ApiCallLog{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[84]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7061,7 +7061,7 @@ func (x *ApiCallLog) String() string {
 func (*ApiCallLog) ProtoMessage() {}
 
 func (x *ApiCallLog) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[84]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7074,7 +7074,7 @@ func (x *ApiCallLog) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApiCallLog.ProtoReflect.Descriptor instead.
 func (*ApiCallLog) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{84}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *ApiCallLog) GetSummary() *ApiCallLogSummary {
@@ -7130,7 +7130,7 @@ type ListApiCallLogsRequest struct {
 
 func (x *ListApiCallLogsRequest) Reset() {
 	*x = ListApiCallLogsRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[85]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7142,7 +7142,7 @@ func (x *ListApiCallLogsRequest) String() string {
 func (*ListApiCallLogsRequest) ProtoMessage() {}
 
 func (x *ListApiCallLogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[85]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7155,7 +7155,7 @@ func (x *ListApiCallLogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListApiCallLogsRequest.ProtoReflect.Descriptor instead.
 func (*ListApiCallLogsRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{85}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *ListApiCallLogsRequest) GetOrganizerId() int64 {
@@ -7243,7 +7243,7 @@ type ListApiCallLogsResponse struct {
 
 func (x *ListApiCallLogsResponse) Reset() {
 	*x = ListApiCallLogsResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[86]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7255,7 +7255,7 @@ func (x *ListApiCallLogsResponse) String() string {
 func (*ListApiCallLogsResponse) ProtoMessage() {}
 
 func (x *ListApiCallLogsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[86]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7268,7 +7268,7 @@ func (x *ListApiCallLogsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListApiCallLogsResponse.ProtoReflect.Descriptor instead.
 func (*ListApiCallLogsResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{86}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *ListApiCallLogsResponse) GetSuccess() bool {
@@ -7330,7 +7330,7 @@ type GetApiCallLogRequest struct {
 
 func (x *GetApiCallLogRequest) Reset() {
 	*x = GetApiCallLogRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[87]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7342,7 +7342,7 @@ func (x *GetApiCallLogRequest) String() string {
 func (*GetApiCallLogRequest) ProtoMessage() {}
 
 func (x *GetApiCallLogRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[87]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7355,7 +7355,7 @@ func (x *GetApiCallLogRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetApiCallLogRequest.ProtoReflect.Descriptor instead.
 func (*GetApiCallLogRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{87}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *GetApiCallLogRequest) GetOrganizerId() int64 {
@@ -7384,7 +7384,7 @@ type GetApiCallLogResponse struct {
 
 func (x *GetApiCallLogResponse) Reset() {
 	*x = GetApiCallLogResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[88]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7396,7 +7396,7 @@ func (x *GetApiCallLogResponse) String() string {
 func (*GetApiCallLogResponse) ProtoMessage() {}
 
 func (x *GetApiCallLogResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[88]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7409,7 +7409,7 @@ func (x *GetApiCallLogResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetApiCallLogResponse.ProtoReflect.Descriptor instead.
 func (*GetApiCallLogResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{88}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *GetApiCallLogResponse) GetSuccess() bool {
@@ -7452,7 +7452,7 @@ type CheckReservationAvailabilityRequest struct {
 
 func (x *CheckReservationAvailabilityRequest) Reset() {
 	*x = CheckReservationAvailabilityRequest{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[89]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7464,7 +7464,7 @@ func (x *CheckReservationAvailabilityRequest) String() string {
 func (*CheckReservationAvailabilityRequest) ProtoMessage() {}
 
 func (x *CheckReservationAvailabilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[89]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7477,7 +7477,7 @@ func (x *CheckReservationAvailabilityRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use CheckReservationAvailabilityRequest.ProtoReflect.Descriptor instead.
 func (*CheckReservationAvailabilityRequest) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{89}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *CheckReservationAvailabilityRequest) GetOrganizer() string {
@@ -7520,7 +7520,7 @@ type ReservationAvailabilitySlot struct {
 
 func (x *ReservationAvailabilitySlot) Reset() {
 	*x = ReservationAvailabilitySlot{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[90]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7532,7 +7532,7 @@ func (x *ReservationAvailabilitySlot) String() string {
 func (*ReservationAvailabilitySlot) ProtoMessage() {}
 
 func (x *ReservationAvailabilitySlot) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[90]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7545,7 +7545,7 @@ func (x *ReservationAvailabilitySlot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReservationAvailabilitySlot.ProtoReflect.Descriptor instead.
 func (*ReservationAvailabilitySlot) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{90}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *ReservationAvailabilitySlot) GetStartAt() string {
@@ -7592,7 +7592,7 @@ type CheckReservationAvailabilityResponse struct {
 
 func (x *CheckReservationAvailabilityResponse) Reset() {
 	*x = CheckReservationAvailabilityResponse{}
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[91]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7604,7 +7604,7 @@ func (x *CheckReservationAvailabilityResponse) String() string {
 func (*CheckReservationAvailabilityResponse) ProtoMessage() {}
 
 func (x *CheckReservationAvailabilityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_v1_booking_thirdparty_proto_msgTypes[91]
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7617,7 +7617,7 @@ func (x *CheckReservationAvailabilityResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use CheckReservationAvailabilityResponse.ProtoReflect.Descriptor instead.
 func (*CheckReservationAvailabilityResponse) Descriptor() ([]byte, []int) {
-	return file_v1_booking_thirdparty_proto_rawDescGZIP(), []int{91}
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *CheckReservationAvailabilityResponse) GetSuccess() bool {
@@ -7676,11 +7676,275 @@ func (x *CheckReservationAvailabilityResponse) GetErrorMessage() string {
 	return ""
 }
 
-var File_v1_booking_thirdparty_proto protoreflect.FileDescriptor
+// CheckRecurringAvailability — xem TRƯỚC cả 1 chuỗi buổi định kỳ có trống hết không + tổng giá, KHÔNG
+// giữ chỗ gì (Giai đoạn 3, plan "đặt lịch định kỳ trên webshop"). Tên tổng quát (không hardcode
+// "court"), dùng chung cho mọi supplier_type="reservation" tương lai, đúng tinh thần
+// CheckReservationAvailability ở trên.
+type CheckRecurringAvailabilityRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // slug — dùng để xác nhận item_id thuộc đúng organizer (chặn IDOR xuyên tenant)
+	Event         string                 `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`         // slug — dùng để xác nhận item_id thuộc đúng event
+	ItemId        int64                  `protobuf:"varint,3,opt,name=item_id,json=itemId,proto3" json:"item_id,omitempty"`
+	Weekday       string                 `protobuf:"bytes,4,opt,name=weekday,proto3" json:"weekday,omitempty"`                      // "0"-"6", 0 = Chủ nhật (chuẩn Go time.Weekday)
+	StartTime     string                 `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"` // "HH:mm"
+	EndTime       string                 `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`       // "HH:mm"
+	StartDate     string                 `protobuf:"bytes,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"` // "YYYY-MM-DD"
+	EndDate       string                 `protobuf:"bytes,8,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`       // "YYYY-MM-DD"
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
 
-const file_v1_booking_thirdparty_proto_rawDesc = "" +
+func (x *CheckRecurringAvailabilityRequest) Reset() {
+	*x = CheckRecurringAvailabilityRequest{}
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[92]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckRecurringAvailabilityRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckRecurringAvailabilityRequest) ProtoMessage() {}
+
+func (x *CheckRecurringAvailabilityRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[92]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckRecurringAvailabilityRequest.ProtoReflect.Descriptor instead.
+func (*CheckRecurringAvailabilityRequest) Descriptor() ([]byte, []int) {
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{92}
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetItemId() int64 {
+	if x != nil {
+		return x.ItemId
+	}
+	return 0
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetWeekday() string {
+	if x != nil {
+		return x.Weekday
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetStartTime() string {
+	if x != nil {
+		return x.StartTime
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetEndTime() string {
+	if x != nil {
+		return x.EndTime
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetStartDate() string {
+	if x != nil {
+		return x.StartDate
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityRequest) GetEndDate() string {
+	if x != nil {
+		return x.EndDate
+	}
+	return ""
+}
+
+type RecurringAvailabilityOccurrence struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	StartAt               string                 `protobuf:"bytes,1,opt,name=start_at,json=startAt,proto3" json:"start_at,omitempty"`
+	EndAt                 string                 `protobuf:"bytes,2,opt,name=end_at,json=endAt,proto3" json:"end_at,omitempty"`
+	Available             bool                   `protobuf:"varint,3,opt,name=available,proto3" json:"available,omitempty"`
+	ConflictReservationId string                 `protobuf:"bytes,4,opt,name=conflict_reservation_id,json=conflictReservationId,proto3" json:"conflict_reservation_id,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *RecurringAvailabilityOccurrence) Reset() {
+	*x = RecurringAvailabilityOccurrence{}
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[93]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecurringAvailabilityOccurrence) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecurringAvailabilityOccurrence) ProtoMessage() {}
+
+func (x *RecurringAvailabilityOccurrence) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[93]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecurringAvailabilityOccurrence.ProtoReflect.Descriptor instead.
+func (*RecurringAvailabilityOccurrence) Descriptor() ([]byte, []int) {
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{93}
+}
+
+func (x *RecurringAvailabilityOccurrence) GetStartAt() string {
+	if x != nil {
+		return x.StartAt
+	}
+	return ""
+}
+
+func (x *RecurringAvailabilityOccurrence) GetEndAt() string {
+	if x != nil {
+		return x.EndAt
+	}
+	return ""
+}
+
+func (x *RecurringAvailabilityOccurrence) GetAvailable() bool {
+	if x != nil {
+		return x.Available
+	}
+	return false
+}
+
+func (x *RecurringAvailabilityOccurrence) GetConflictReservationId() string {
+	if x != nil {
+		return x.ConflictReservationId
+	}
+	return ""
+}
+
+type CheckRecurringAvailabilityResponse struct {
+	state         protoimpl.MessageState             `protogen:"open.v1"`
+	Success       bool                               `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Occurrences   []*RecurringAvailabilityOccurrence `protobuf:"bytes,2,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
+	AllAvailable  bool                               `protobuf:"varint,3,opt,name=all_available,json=allAvailable,proto3" json:"all_available,omitempty"`
+	PriceMinor    int64                              `protobuf:"varint,4,opt,name=price_minor,json=priceMinor,proto3" json:"price_minor,omitempty"` // chỉ có ý nghĩa khi all_available=true
+	Currency      string                             `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
+	ErrorCode     string                             `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                             `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CheckRecurringAvailabilityResponse) Reset() {
+	*x = CheckRecurringAvailabilityResponse{}
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[94]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CheckRecurringAvailabilityResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CheckRecurringAvailabilityResponse) ProtoMessage() {}
+
+func (x *CheckRecurringAvailabilityResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_v1_booking_thirdparty_proto_msgTypes[94]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CheckRecurringAvailabilityResponse.ProtoReflect.Descriptor instead.
+func (*CheckRecurringAvailabilityResponse) Descriptor() ([]byte, []int) {
+	return file_proto_v1_booking_thirdparty_proto_rawDescGZIP(), []int{94}
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetOccurrences() []*RecurringAvailabilityOccurrence {
+	if x != nil {
+		return x.Occurrences
+	}
+	return nil
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetAllAvailable() bool {
+	if x != nil {
+		return x.AllAvailable
+	}
+	return false
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetPriceMinor() int64 {
+	if x != nil {
+		return x.PriceMinor
+	}
+	return 0
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+var File_proto_v1_booking_thirdparty_proto protoreflect.FileDescriptor
+
+const file_proto_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\n" +
-	"\x1bv1/booking/thirdparty.proto\x12\x11riptik.booking.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xab\x06\n" +
+	"!proto/v1/booking/thirdparty.proto\x12\x11riptik.booking.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19google/protobuf/any.proto\"\xab\x06\n" +
 	"\x12ThirdPartySupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
@@ -8548,22 +8812,48 @@ const file_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\a \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\b \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage\"\xfe\x01\n" +
+	"!CheckRecurringAvailabilityRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x17\n" +
+	"\aitem_id\x18\x03 \x01(\x03R\x06itemId\x12\x18\n" +
+	"\aweekday\x18\x04 \x01(\tR\aweekday\x12\x1d\n" +
+	"\n" +
+	"start_time\x18\x05 \x01(\tR\tstartTime\x12\x19\n" +
+	"\bend_time\x18\x06 \x01(\tR\aendTime\x12\x1d\n" +
+	"\n" +
+	"start_date\x18\a \x01(\tR\tstartDate\x12\x19\n" +
+	"\bend_date\x18\b \x01(\tR\aendDate\"\xa9\x01\n" +
+	"\x1fRecurringAvailabilityOccurrence\x12\x19\n" +
+	"\bstart_at\x18\x01 \x01(\tR\astartAt\x12\x15\n" +
+	"\x06end_at\x18\x02 \x01(\tR\x05endAt\x12\x1c\n" +
+	"\tavailable\x18\x03 \x01(\bR\tavailable\x126\n" +
+	"\x17conflict_reservation_id\x18\x04 \x01(\tR\x15conflictReservationId\"\xba\x02\n" +
+	"\"CheckRecurringAvailabilityResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12T\n" +
+	"\voccurrences\x18\x02 \x03(\v22.riptik.booking.v1.RecurringAvailabilityOccurrenceR\voccurrences\x12#\n" +
+	"\rall_available\x18\x03 \x01(\bR\fallAvailable\x12\x1f\n" +
+	"\vprice_minor\x18\x04 \x01(\x03R\n" +
+	"priceMinor\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\a \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
-	file_v1_booking_thirdparty_proto_rawDescOnce sync.Once
-	file_v1_booking_thirdparty_proto_rawDescData []byte
+	file_proto_v1_booking_thirdparty_proto_rawDescOnce sync.Once
+	file_proto_v1_booking_thirdparty_proto_rawDescData []byte
 )
 
-func file_v1_booking_thirdparty_proto_rawDescGZIP() []byte {
-	file_v1_booking_thirdparty_proto_rawDescOnce.Do(func() {
-		file_v1_booking_thirdparty_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_v1_booking_thirdparty_proto_rawDesc), len(file_v1_booking_thirdparty_proto_rawDesc)))
+func file_proto_v1_booking_thirdparty_proto_rawDescGZIP() []byte {
+	file_proto_v1_booking_thirdparty_proto_rawDescOnce.Do(func() {
+		file_proto_v1_booking_thirdparty_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_v1_booking_thirdparty_proto_rawDesc), len(file_proto_v1_booking_thirdparty_proto_rawDesc)))
 	})
-	return file_v1_booking_thirdparty_proto_rawDescData
+	return file_proto_v1_booking_thirdparty_proto_rawDescData
 }
 
-var file_v1_booking_thirdparty_proto_msgTypes = make([]protoimpl.MessageInfo, 123)
-var file_v1_booking_thirdparty_proto_goTypes = []any{
+var file_proto_v1_booking_thirdparty_proto_msgTypes = make([]protoimpl.MessageInfo, 126)
+var file_proto_v1_booking_thirdparty_proto_goTypes = []any{
 	(*ThirdPartySupplier)(nil),                   // 0: riptik.booking.v1.ThirdPartySupplier
 	(*CreateSupplierRequest)(nil),                // 1: riptik.booking.v1.CreateSupplierRequest
 	(*UpdateSupplierRequest)(nil),                // 2: riptik.booking.v1.UpdateSupplierRequest
@@ -8656,114 +8946,117 @@ var file_v1_booking_thirdparty_proto_goTypes = []any{
 	(*CheckReservationAvailabilityRequest)(nil),  // 89: riptik.booking.v1.CheckReservationAvailabilityRequest
 	(*ReservationAvailabilitySlot)(nil),          // 90: riptik.booking.v1.ReservationAvailabilitySlot
 	(*CheckReservationAvailabilityResponse)(nil), // 91: riptik.booking.v1.CheckReservationAvailabilityResponse
-	nil,                         // 92: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
-	nil,                         // 93: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
-	nil,                         // 94: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
-	nil,                         // 95: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
-	nil,                         // 96: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
-	nil,                         // 97: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
-	nil,                         // 98: riptik.booking.v1.ListSuppliersRequest.FilterEntry
-	nil,                         // 99: riptik.booking.v1.SupplierImportItem.ApiConfigEntry
-	nil,                         // 100: riptik.booking.v1.SupplierImportItem.CsvConfigEntry
-	nil,                         // 101: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
-	nil,                         // 102: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
-	nil,                         // 103: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
-	nil,                         // 104: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
-	nil,                         // 105: riptik.booking.v1.CreateProductRequest.RequestMappingEntry
-	nil,                         // 106: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
-	nil,                         // 107: riptik.booking.v1.CreateProductRequest.MetaDataEntry
-	nil,                         // 108: riptik.booking.v1.ListProductsRequest.FilterEntry
-	nil,                         // 109: riptik.booking.v1.ProductImportItem.RequestMappingEntry
-	nil,                         // 110: riptik.booking.v1.ProductImportItem.ResponseMappingEntry
-	nil,                         // 111: riptik.booking.v1.ProductImportItem.MetaDataEntry
-	nil,                         // 112: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
-	nil,                         // 113: riptik.booking.v1.ImportInventoryRequest.ConfigEntry
-	nil,                         // 114: riptik.booking.v1.ListInventoryRequest.FilterEntry
-	nil,                         // 115: riptik.booking.v1.InventoryStatsResponse.CountsEntry
-	nil,                         // 116: riptik.booking.v1.Fulfillment.MetadataEntry
-	nil,                         // 117: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
-	nil,                         // 118: riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
-	nil,                         // 119: riptik.booking.v1.AssignProductToEventRequest.NameEntry
-	nil,                         // 120: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
-	nil,                         // 121: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
-	nil,                         // 122: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
-	(*timestamp.Timestamp)(nil), // 123: google.protobuf.Timestamp
-	(*any1.Any)(nil),            // 124: google.protobuf.Any
+	(*CheckRecurringAvailabilityRequest)(nil),    // 92: riptik.booking.v1.CheckRecurringAvailabilityRequest
+	(*RecurringAvailabilityOccurrence)(nil),      // 93: riptik.booking.v1.RecurringAvailabilityOccurrence
+	(*CheckRecurringAvailabilityResponse)(nil),   // 94: riptik.booking.v1.CheckRecurringAvailabilityResponse
+	nil,                         // 95: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
+	nil,                         // 96: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
+	nil,                         // 97: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
+	nil,                         // 98: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
+	nil,                         // 99: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
+	nil,                         // 100: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
+	nil,                         // 101: riptik.booking.v1.ListSuppliersRequest.FilterEntry
+	nil,                         // 102: riptik.booking.v1.SupplierImportItem.ApiConfigEntry
+	nil,                         // 103: riptik.booking.v1.SupplierImportItem.CsvConfigEntry
+	nil,                         // 104: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
+	nil,                         // 105: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
+	nil,                         // 106: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
+	nil,                         // 107: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
+	nil,                         // 108: riptik.booking.v1.CreateProductRequest.RequestMappingEntry
+	nil,                         // 109: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
+	nil,                         // 110: riptik.booking.v1.CreateProductRequest.MetaDataEntry
+	nil,                         // 111: riptik.booking.v1.ListProductsRequest.FilterEntry
+	nil,                         // 112: riptik.booking.v1.ProductImportItem.RequestMappingEntry
+	nil,                         // 113: riptik.booking.v1.ProductImportItem.ResponseMappingEntry
+	nil,                         // 114: riptik.booking.v1.ProductImportItem.MetaDataEntry
+	nil,                         // 115: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
+	nil,                         // 116: riptik.booking.v1.ImportInventoryRequest.ConfigEntry
+	nil,                         // 117: riptik.booking.v1.ListInventoryRequest.FilterEntry
+	nil,                         // 118: riptik.booking.v1.InventoryStatsResponse.CountsEntry
+	nil,                         // 119: riptik.booking.v1.Fulfillment.MetadataEntry
+	nil,                         // 120: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
+	nil,                         // 121: riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
+	nil,                         // 122: riptik.booking.v1.AssignProductToEventRequest.NameEntry
+	nil,                         // 123: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
+	nil,                         // 124: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
+	nil,                         // 125: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
+	(*timestamp.Timestamp)(nil), // 126: google.protobuf.Timestamp
+	(*any1.Any)(nil),            // 127: google.protobuf.Any
 }
-var file_v1_booking_thirdparty_proto_depIdxs = []int32{
-	92,  // 0: riptik.booking.v1.ThirdPartySupplier.api_config:type_name -> riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
-	93,  // 1: riptik.booking.v1.ThirdPartySupplier.csv_config:type_name -> riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
-	123, // 2: riptik.booking.v1.ThirdPartySupplier.created_at:type_name -> google.protobuf.Timestamp
-	123, // 3: riptik.booking.v1.ThirdPartySupplier.updated_at:type_name -> google.protobuf.Timestamp
-	94,  // 4: riptik.booking.v1.CreateSupplierRequest.api_config:type_name -> riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
-	95,  // 5: riptik.booking.v1.CreateSupplierRequest.csv_config:type_name -> riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
-	96,  // 6: riptik.booking.v1.UpdateSupplierRequest.api_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
-	97,  // 7: riptik.booking.v1.UpdateSupplierRequest.csv_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
-	98,  // 8: riptik.booking.v1.ListSuppliersRequest.filter:type_name -> riptik.booking.v1.ListSuppliersRequest.FilterEntry
+var file_proto_v1_booking_thirdparty_proto_depIdxs = []int32{
+	95,  // 0: riptik.booking.v1.ThirdPartySupplier.api_config:type_name -> riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry
+	96,  // 1: riptik.booking.v1.ThirdPartySupplier.csv_config:type_name -> riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry
+	126, // 2: riptik.booking.v1.ThirdPartySupplier.created_at:type_name -> google.protobuf.Timestamp
+	126, // 3: riptik.booking.v1.ThirdPartySupplier.updated_at:type_name -> google.protobuf.Timestamp
+	97,  // 4: riptik.booking.v1.CreateSupplierRequest.api_config:type_name -> riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry
+	98,  // 5: riptik.booking.v1.CreateSupplierRequest.csv_config:type_name -> riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry
+	99,  // 6: riptik.booking.v1.UpdateSupplierRequest.api_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry
+	100, // 7: riptik.booking.v1.UpdateSupplierRequest.csv_config:type_name -> riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry
+	101, // 8: riptik.booking.v1.ListSuppliersRequest.filter:type_name -> riptik.booking.v1.ListSuppliersRequest.FilterEntry
 	0,   // 9: riptik.booking.v1.CreateSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 10: riptik.booking.v1.UpdateSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 11: riptik.booking.v1.GetSupplierResponse.supplier:type_name -> riptik.booking.v1.ThirdPartySupplier
 	0,   // 12: riptik.booking.v1.ListSuppliersResponse.suppliers:type_name -> riptik.booking.v1.ThirdPartySupplier
 	12,  // 13: riptik.booking.v1.BulkImportSuppliersRequest.suppliers:type_name -> riptik.booking.v1.SupplierImportItem
-	99,  // 14: riptik.booking.v1.SupplierImportItem.api_config:type_name -> riptik.booking.v1.SupplierImportItem.ApiConfigEntry
-	100, // 15: riptik.booking.v1.SupplierImportItem.csv_config:type_name -> riptik.booking.v1.SupplierImportItem.CsvConfigEntry
+	102, // 14: riptik.booking.v1.SupplierImportItem.api_config:type_name -> riptik.booking.v1.SupplierImportItem.ApiConfigEntry
+	103, // 15: riptik.booking.v1.SupplierImportItem.csv_config:type_name -> riptik.booking.v1.SupplierImportItem.CsvConfigEntry
 	18,  // 16: riptik.booking.v1.BulkImportSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
-	101, // 17: riptik.booking.v1.BulkUpdateSuppliersRequest.updates:type_name -> riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
+	104, // 17: riptik.booking.v1.BulkUpdateSuppliersRequest.updates:type_name -> riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry
 	18,  // 18: riptik.booking.v1.BulkUpdateSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
 	18,  // 19: riptik.booking.v1.BulkDeleteSuppliersResponse.errors:type_name -> riptik.booking.v1.BulkSupplierError
-	102, // 20: riptik.booking.v1.ThirdPartyProduct.request_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
-	103, // 21: riptik.booking.v1.ThirdPartyProduct.response_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
-	104, // 22: riptik.booking.v1.ThirdPartyProduct.meta_data:type_name -> riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
-	123, // 23: riptik.booking.v1.ThirdPartyProduct.created_at:type_name -> google.protobuf.Timestamp
-	123, // 24: riptik.booking.v1.ThirdPartyProduct.updated_at:type_name -> google.protobuf.Timestamp
-	105, // 25: riptik.booking.v1.CreateProductRequest.request_mapping:type_name -> riptik.booking.v1.CreateProductRequest.RequestMappingEntry
-	106, // 26: riptik.booking.v1.CreateProductRequest.response_mapping:type_name -> riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
-	107, // 27: riptik.booking.v1.CreateProductRequest.meta_data:type_name -> riptik.booking.v1.CreateProductRequest.MetaDataEntry
-	108, // 28: riptik.booking.v1.ListProductsRequest.filter:type_name -> riptik.booking.v1.ListProductsRequest.FilterEntry
+	105, // 20: riptik.booking.v1.ThirdPartyProduct.request_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry
+	106, // 21: riptik.booking.v1.ThirdPartyProduct.response_mapping:type_name -> riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry
+	107, // 22: riptik.booking.v1.ThirdPartyProduct.meta_data:type_name -> riptik.booking.v1.ThirdPartyProduct.MetaDataEntry
+	126, // 23: riptik.booking.v1.ThirdPartyProduct.created_at:type_name -> google.protobuf.Timestamp
+	126, // 24: riptik.booking.v1.ThirdPartyProduct.updated_at:type_name -> google.protobuf.Timestamp
+	108, // 25: riptik.booking.v1.CreateProductRequest.request_mapping:type_name -> riptik.booking.v1.CreateProductRequest.RequestMappingEntry
+	109, // 26: riptik.booking.v1.CreateProductRequest.response_mapping:type_name -> riptik.booking.v1.CreateProductRequest.ResponseMappingEntry
+	110, // 27: riptik.booking.v1.CreateProductRequest.meta_data:type_name -> riptik.booking.v1.CreateProductRequest.MetaDataEntry
+	111, // 28: riptik.booking.v1.ListProductsRequest.filter:type_name -> riptik.booking.v1.ListProductsRequest.FilterEntry
 	19,  // 29: riptik.booking.v1.CreateProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 30: riptik.booking.v1.UpdateProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 31: riptik.booking.v1.GetProductResponse.product:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 32: riptik.booking.v1.ListProductsResponse.products:type_name -> riptik.booking.v1.ThirdPartyProduct
 	31,  // 33: riptik.booking.v1.BulkImportProductsRequest.products:type_name -> riptik.booking.v1.ProductImportItem
-	109, // 34: riptik.booking.v1.ProductImportItem.request_mapping:type_name -> riptik.booking.v1.ProductImportItem.RequestMappingEntry
-	110, // 35: riptik.booking.v1.ProductImportItem.response_mapping:type_name -> riptik.booking.v1.ProductImportItem.ResponseMappingEntry
-	111, // 36: riptik.booking.v1.ProductImportItem.meta_data:type_name -> riptik.booking.v1.ProductImportItem.MetaDataEntry
+	112, // 34: riptik.booking.v1.ProductImportItem.request_mapping:type_name -> riptik.booking.v1.ProductImportItem.RequestMappingEntry
+	113, // 35: riptik.booking.v1.ProductImportItem.response_mapping:type_name -> riptik.booking.v1.ProductImportItem.ResponseMappingEntry
+	114, // 36: riptik.booking.v1.ProductImportItem.meta_data:type_name -> riptik.booking.v1.ProductImportItem.MetaDataEntry
 	37,  // 37: riptik.booking.v1.BulkImportProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
-	112, // 38: riptik.booking.v1.BulkUpdateProductsRequest.updates:type_name -> riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
+	115, // 38: riptik.booking.v1.BulkUpdateProductsRequest.updates:type_name -> riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry
 	37,  // 39: riptik.booking.v1.BulkUpdateProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
 	37,  // 40: riptik.booking.v1.BulkDeleteProductsResponse.errors:type_name -> riptik.booking.v1.BulkProductError
-	123, // 41: riptik.booking.v1.InventoryCode.created_at:type_name -> google.protobuf.Timestamp
-	123, // 42: riptik.booking.v1.InventoryCode.reserved_until:type_name -> google.protobuf.Timestamp
-	123, // 43: riptik.booking.v1.InventoryCode.redeemed_at:type_name -> google.protobuf.Timestamp
-	123, // 44: riptik.booking.v1.InventoryCode.expired_at:type_name -> google.protobuf.Timestamp
-	113, // 45: riptik.booking.v1.ImportInventoryRequest.config:type_name -> riptik.booking.v1.ImportInventoryRequest.ConfigEntry
-	114, // 46: riptik.booking.v1.ListInventoryRequest.filter:type_name -> riptik.booking.v1.ListInventoryRequest.FilterEntry
+	126, // 41: riptik.booking.v1.InventoryCode.created_at:type_name -> google.protobuf.Timestamp
+	126, // 42: riptik.booking.v1.InventoryCode.reserved_until:type_name -> google.protobuf.Timestamp
+	126, // 43: riptik.booking.v1.InventoryCode.redeemed_at:type_name -> google.protobuf.Timestamp
+	126, // 44: riptik.booking.v1.InventoryCode.expired_at:type_name -> google.protobuf.Timestamp
+	116, // 45: riptik.booking.v1.ImportInventoryRequest.config:type_name -> riptik.booking.v1.ImportInventoryRequest.ConfigEntry
+	117, // 46: riptik.booking.v1.ListInventoryRequest.filter:type_name -> riptik.booking.v1.ListInventoryRequest.FilterEntry
 	38,  // 47: riptik.booking.v1.ListInventoryResponse.codes:type_name -> riptik.booking.v1.InventoryCode
-	115, // 48: riptik.booking.v1.InventoryStatsResponse.counts:type_name -> riptik.booking.v1.InventoryStatsResponse.CountsEntry
-	123, // 49: riptik.booking.v1.Fulfillment.created_at:type_name -> google.protobuf.Timestamp
-	123, // 50: riptik.booking.v1.Fulfillment.fulfilled_at:type_name -> google.protobuf.Timestamp
-	116, // 51: riptik.booking.v1.Fulfillment.metadata:type_name -> riptik.booking.v1.Fulfillment.MetadataEntry
-	117, // 52: riptik.booking.v1.ListFulfillmentsRequest.filter:type_name -> riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
+	118, // 48: riptik.booking.v1.InventoryStatsResponse.counts:type_name -> riptik.booking.v1.InventoryStatsResponse.CountsEntry
+	126, // 49: riptik.booking.v1.Fulfillment.created_at:type_name -> google.protobuf.Timestamp
+	126, // 50: riptik.booking.v1.Fulfillment.fulfilled_at:type_name -> google.protobuf.Timestamp
+	119, // 51: riptik.booking.v1.Fulfillment.metadata:type_name -> riptik.booking.v1.Fulfillment.MetadataEntry
+	120, // 52: riptik.booking.v1.ListFulfillmentsRequest.filter:type_name -> riptik.booking.v1.ListFulfillmentsRequest.FilterEntry
 	45,  // 53: riptik.booking.v1.GetFulfillmentResponse.fulfillment:type_name -> riptik.booking.v1.Fulfillment
 	45,  // 54: riptik.booking.v1.ListFulfillmentsResponse.fulfillments:type_name -> riptik.booking.v1.Fulfillment
-	118, // 55: riptik.booking.v1.FulfillmentStatsResponse.stats:type_name -> riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
-	119, // 56: riptik.booking.v1.AssignProductToEventRequest.name:type_name -> riptik.booking.v1.AssignProductToEventRequest.NameEntry
-	120, // 57: riptik.booking.v1.AssignProductToEventRequest.event_pricing:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
-	121, // 58: riptik.booking.v1.AssignProductToEventRequest.event_settings:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
-	122, // 59: riptik.booking.v1.GetEventProductAssignmentsRequest.filters:type_name -> riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
+	121, // 55: riptik.booking.v1.FulfillmentStatsResponse.stats:type_name -> riptik.booking.v1.FulfillmentStatsResponse.StatsEntry
+	122, // 56: riptik.booking.v1.AssignProductToEventRequest.name:type_name -> riptik.booking.v1.AssignProductToEventRequest.NameEntry
+	123, // 57: riptik.booking.v1.AssignProductToEventRequest.event_pricing:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry
+	124, // 58: riptik.booking.v1.AssignProductToEventRequest.event_settings:type_name -> riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry
+	125, // 59: riptik.booking.v1.GetEventProductAssignmentsRequest.filters:type_name -> riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry
 	19,  // 60: riptik.booking.v1.ListEventProductsResponse.products:type_name -> riptik.booking.v1.ThirdPartyProduct
 	19,  // 61: riptik.booking.v1.EventInventoryStatsResponse.items:type_name -> riptik.booking.v1.ThirdPartyProduct
-	123, // 62: riptik.booking.v1.StockReconciliation.checked_at:type_name -> google.protobuf.Timestamp
+	126, // 62: riptik.booking.v1.StockReconciliation.checked_at:type_name -> google.protobuf.Timestamp
 	66,  // 63: riptik.booking.v1.TriggerReconciliationResponse.reconciliation:type_name -> riptik.booking.v1.StockReconciliation
 	66,  // 64: riptik.booking.v1.ListReconciliationHistoryResponse.records:type_name -> riptik.booking.v1.StockReconciliation
-	123, // 65: riptik.booking.v1.Settlement.period_start:type_name -> google.protobuf.Timestamp
-	123, // 66: riptik.booking.v1.Settlement.period_end:type_name -> google.protobuf.Timestamp
-	123, // 67: riptik.booking.v1.Settlement.confirmed_at:type_name -> google.protobuf.Timestamp
-	123, // 68: riptik.booking.v1.Settlement.paid_at:type_name -> google.protobuf.Timestamp
-	123, // 69: riptik.booking.v1.Settlement.created_at:type_name -> google.protobuf.Timestamp
+	126, // 65: riptik.booking.v1.Settlement.period_start:type_name -> google.protobuf.Timestamp
+	126, // 66: riptik.booking.v1.Settlement.period_end:type_name -> google.protobuf.Timestamp
+	126, // 67: riptik.booking.v1.Settlement.confirmed_at:type_name -> google.protobuf.Timestamp
+	126, // 68: riptik.booking.v1.Settlement.paid_at:type_name -> google.protobuf.Timestamp
+	126, // 69: riptik.booking.v1.Settlement.created_at:type_name -> google.protobuf.Timestamp
 	71,  // 70: riptik.booking.v1.Settlement.items:type_name -> riptik.booking.v1.SettlementItem
-	123, // 71: riptik.booking.v1.CreateSettlementRequest.period_start:type_name -> google.protobuf.Timestamp
-	123, // 72: riptik.booking.v1.CreateSettlementRequest.period_end:type_name -> google.protobuf.Timestamp
+	126, // 71: riptik.booking.v1.CreateSettlementRequest.period_start:type_name -> google.protobuf.Timestamp
+	126, // 72: riptik.booking.v1.CreateSettlementRequest.period_end:type_name -> google.protobuf.Timestamp
 	72,  // 73: riptik.booking.v1.CreateSettlementResponse.settlement:type_name -> riptik.booking.v1.Settlement
 	72,  // 74: riptik.booking.v1.GetSettlementResponse.settlement:type_name -> riptik.booking.v1.Settlement
 	72,  // 75: riptik.booking.v1.ListSettlementsResponse.settlements:type_name -> riptik.booking.v1.Settlement
@@ -8773,60 +9066,61 @@ var file_v1_booking_thirdparty_proto_depIdxs = []int32{
 	83,  // 79: riptik.booking.v1.ListApiCallLogsResponse.logs:type_name -> riptik.booking.v1.ApiCallLogSummary
 	84,  // 80: riptik.booking.v1.GetApiCallLogResponse.log:type_name -> riptik.booking.v1.ApiCallLog
 	90,  // 81: riptik.booking.v1.CheckReservationAvailabilityResponse.items:type_name -> riptik.booking.v1.ReservationAvailabilitySlot
-	124, // 82: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 83: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 84: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 85: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 86: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 87: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 88: riptik.booking.v1.ListSuppliersRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	124, // 89: riptik.booking.v1.SupplierImportItem.ApiConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 90: riptik.booking.v1.SupplierImportItem.CsvConfigEntry.value:type_name -> google.protobuf.Any
-	124, // 91: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
-	124, // 92: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 93: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 94: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry.value:type_name -> google.protobuf.Any
-	124, // 95: riptik.booking.v1.CreateProductRequest.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 96: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 97: riptik.booking.v1.CreateProductRequest.MetaDataEntry.value:type_name -> google.protobuf.Any
-	124, // 98: riptik.booking.v1.ListProductsRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	124, // 99: riptik.booking.v1.ProductImportItem.RequestMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 100: riptik.booking.v1.ProductImportItem.ResponseMappingEntry.value:type_name -> google.protobuf.Any
-	124, // 101: riptik.booking.v1.ProductImportItem.MetaDataEntry.value:type_name -> google.protobuf.Any
-	124, // 102: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
-	124, // 103: riptik.booking.v1.ListInventoryRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	124, // 104: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry.value:type_name -> google.protobuf.Any
-	124, // 105: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry.value:type_name -> google.protobuf.Any
-	124, // 106: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry.value:type_name -> google.protobuf.Any
-	124, // 107: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry.value:type_name -> google.protobuf.Any
-	108, // [108:108] is the sub-list for method output_type
-	108, // [108:108] is the sub-list for method input_type
-	108, // [108:108] is the sub-list for extension type_name
-	108, // [108:108] is the sub-list for extension extendee
-	0,   // [0:108] is the sub-list for field type_name
+	93,  // 82: riptik.booking.v1.CheckRecurringAvailabilityResponse.occurrences:type_name -> riptik.booking.v1.RecurringAvailabilityOccurrence
+	127, // 83: riptik.booking.v1.ThirdPartySupplier.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 84: riptik.booking.v1.ThirdPartySupplier.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 85: riptik.booking.v1.CreateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 86: riptik.booking.v1.CreateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 87: riptik.booking.v1.UpdateSupplierRequest.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 88: riptik.booking.v1.UpdateSupplierRequest.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 89: riptik.booking.v1.ListSuppliersRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	127, // 90: riptik.booking.v1.SupplierImportItem.ApiConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 91: riptik.booking.v1.SupplierImportItem.CsvConfigEntry.value:type_name -> google.protobuf.Any
+	127, // 92: riptik.booking.v1.BulkUpdateSuppliersRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
+	127, // 93: riptik.booking.v1.ThirdPartyProduct.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 94: riptik.booking.v1.ThirdPartyProduct.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 95: riptik.booking.v1.ThirdPartyProduct.MetaDataEntry.value:type_name -> google.protobuf.Any
+	127, // 96: riptik.booking.v1.CreateProductRequest.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 97: riptik.booking.v1.CreateProductRequest.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 98: riptik.booking.v1.CreateProductRequest.MetaDataEntry.value:type_name -> google.protobuf.Any
+	127, // 99: riptik.booking.v1.ListProductsRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	127, // 100: riptik.booking.v1.ProductImportItem.RequestMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 101: riptik.booking.v1.ProductImportItem.ResponseMappingEntry.value:type_name -> google.protobuf.Any
+	127, // 102: riptik.booking.v1.ProductImportItem.MetaDataEntry.value:type_name -> google.protobuf.Any
+	127, // 103: riptik.booking.v1.BulkUpdateProductsRequest.UpdatesEntry.value:type_name -> google.protobuf.Any
+	127, // 104: riptik.booking.v1.ListInventoryRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	127, // 105: riptik.booking.v1.ListFulfillmentsRequest.FilterEntry.value:type_name -> google.protobuf.Any
+	127, // 106: riptik.booking.v1.AssignProductToEventRequest.EventPricingEntry.value:type_name -> google.protobuf.Any
+	127, // 107: riptik.booking.v1.AssignProductToEventRequest.EventSettingsEntry.value:type_name -> google.protobuf.Any
+	127, // 108: riptik.booking.v1.GetEventProductAssignmentsRequest.FiltersEntry.value:type_name -> google.protobuf.Any
+	109, // [109:109] is the sub-list for method output_type
+	109, // [109:109] is the sub-list for method input_type
+	109, // [109:109] is the sub-list for extension type_name
+	109, // [109:109] is the sub-list for extension extendee
+	0,   // [0:109] is the sub-list for field type_name
 }
 
-func init() { file_v1_booking_thirdparty_proto_init() }
-func file_v1_booking_thirdparty_proto_init() {
-	if File_v1_booking_thirdparty_proto != nil {
+func init() { file_proto_v1_booking_thirdparty_proto_init() }
+func file_proto_v1_booking_thirdparty_proto_init() {
+	if File_proto_v1_booking_thirdparty_proto != nil {
 		return
 	}
-	file_v1_booking_thirdparty_proto_msgTypes[2].OneofWrappers = []any{}
+	file_proto_v1_booking_thirdparty_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_thirdparty_proto_rawDesc), len(file_v1_booking_thirdparty_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_v1_booking_thirdparty_proto_rawDesc), len(file_proto_v1_booking_thirdparty_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   123,
+			NumMessages:   126,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_v1_booking_thirdparty_proto_goTypes,
-		DependencyIndexes: file_v1_booking_thirdparty_proto_depIdxs,
-		MessageInfos:      file_v1_booking_thirdparty_proto_msgTypes,
+		GoTypes:           file_proto_v1_booking_thirdparty_proto_goTypes,
+		DependencyIndexes: file_proto_v1_booking_thirdparty_proto_depIdxs,
+		MessageInfos:      file_proto_v1_booking_thirdparty_proto_msgTypes,
 	}.Build()
-	File_v1_booking_thirdparty_proto = out.File
-	file_v1_booking_thirdparty_proto_goTypes = nil
-	file_v1_booking_thirdparty_proto_depIdxs = nil
+	File_proto_v1_booking_thirdparty_proto = out.File
+	file_proto_v1_booking_thirdparty_proto_goTypes = nil
+	file_proto_v1_booking_thirdparty_proto_depIdxs = nil
 }
