@@ -7786,6 +7786,7 @@ type RecurringAvailabilityOccurrence struct {
 	EndAt                 string                 `protobuf:"bytes,2,opt,name=end_at,json=endAt,proto3" json:"end_at,omitempty"`
 	Available             bool                   `protobuf:"varint,3,opt,name=available,proto3" json:"available,omitempty"`
 	ConflictReservationId string                 `protobuf:"bytes,4,opt,name=conflict_reservation_id,json=conflictReservationId,proto3" json:"conflict_reservation_id,omitempty"`
+	PriceMinor            int64                  `protobuf:"varint,5,opt,name=price_minor,json=priceMinor,proto3" json:"price_minor,omitempty"` // giá buổi đó SAU chiết khấu gói định kỳ, chỉ có ý nghĩa khi available=true
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -7848,17 +7849,26 @@ func (x *RecurringAvailabilityOccurrence) GetConflictReservationId() string {
 	return ""
 }
 
+func (x *RecurringAvailabilityOccurrence) GetPriceMinor() int64 {
+	if x != nil {
+		return x.PriceMinor
+	}
+	return 0
+}
+
 type CheckRecurringAvailabilityResponse struct {
-	state         protoimpl.MessageState             `protogen:"open.v1"`
-	Success       bool                               `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
-	Occurrences   []*RecurringAvailabilityOccurrence `protobuf:"bytes,2,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
-	AllAvailable  bool                               `protobuf:"varint,3,opt,name=all_available,json=allAvailable,proto3" json:"all_available,omitempty"`
-	PriceMinor    int64                              `protobuf:"varint,4,opt,name=price_minor,json=priceMinor,proto3" json:"price_minor,omitempty"` // chỉ có ý nghĩa khi all_available=true
-	Currency      string                             `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
-	ErrorCode     string                             `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
-	ErrorMessage  string                             `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState             `protogen:"open.v1"`
+	Success           bool                               `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Occurrences       []*RecurringAvailabilityOccurrence `protobuf:"bytes,2,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
+	AllAvailable      bool                               `protobuf:"varint,3,opt,name=all_available,json=allAvailable,proto3" json:"all_available,omitempty"`
+	PriceMinor        int64                              `protobuf:"varint,4,opt,name=price_minor,json=priceMinor,proto3" json:"price_minor,omitempty"` // TỔNG cả gói SAU chiết khấu, chỉ có ý nghĩa khi all_available=true
+	Currency          string                             `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"`
+	ErrorCode         string                             `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage      string                             `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	PeriodOccurrences int32                              `protobuf:"varint,8,opt,name=period_occurrences,json=periodOccurrences,proto3" json:"period_occurrences,omitempty"`   // venue cấu hình "1 kỳ" = bao nhiêu buổi (thu tiền theo kỳ)
+	Period1PriceMinor int64                              `protobuf:"varint,9,opt,name=period1_price_minor,json=period1PriceMinor,proto3" json:"period1_price_minor,omitempty"` // tiền phải trả NGAY (kỳ 1), <= price_minor
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *CheckRecurringAvailabilityResponse) Reset() {
@@ -7938,6 +7948,20 @@ func (x *CheckRecurringAvailabilityResponse) GetErrorMessage() string {
 		return x.ErrorMessage
 	}
 	return ""
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetPeriodOccurrences() int32 {
+	if x != nil {
+		return x.PeriodOccurrences
+	}
+	return 0
+}
+
+func (x *CheckRecurringAvailabilityResponse) GetPeriod1PriceMinor() int64 {
+	if x != nil {
+		return x.Period1PriceMinor
+	}
+	return 0
 }
 
 var File_proto_v1_booking_thirdparty_proto protoreflect.FileDescriptor
@@ -8823,12 +8847,14 @@ const file_proto_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\bend_time\x18\x06 \x01(\tR\aendTime\x12\x1d\n" +
 	"\n" +
 	"start_date\x18\a \x01(\tR\tstartDate\x12\x19\n" +
-	"\bend_date\x18\b \x01(\tR\aendDate\"\xa9\x01\n" +
+	"\bend_date\x18\b \x01(\tR\aendDate\"\xca\x01\n" +
 	"\x1fRecurringAvailabilityOccurrence\x12\x19\n" +
 	"\bstart_at\x18\x01 \x01(\tR\astartAt\x12\x15\n" +
 	"\x06end_at\x18\x02 \x01(\tR\x05endAt\x12\x1c\n" +
 	"\tavailable\x18\x03 \x01(\bR\tavailable\x126\n" +
-	"\x17conflict_reservation_id\x18\x04 \x01(\tR\x15conflictReservationId\"\xba\x02\n" +
+	"\x17conflict_reservation_id\x18\x04 \x01(\tR\x15conflictReservationId\x12\x1f\n" +
+	"\vprice_minor\x18\x05 \x01(\x03R\n" +
+	"priceMinor\"\x99\x03\n" +
 	"\"CheckRecurringAvailabilityResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12T\n" +
 	"\voccurrences\x18\x02 \x03(\v22.riptik.booking.v1.RecurringAvailabilityOccurrenceR\voccurrences\x12#\n" +
@@ -8838,7 +8864,9 @@ const file_proto_v1_booking_thirdparty_proto_rawDesc = "" +
 	"\bcurrency\x18\x05 \x01(\tR\bcurrency\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessageB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\x12-\n" +
+	"\x12period_occurrences\x18\b \x01(\x05R\x11periodOccurrences\x12.\n" +
+	"\x13period1_price_minor\x18\t \x01(\x03R\x11period1PriceMinorB)Z'github.com/rp-game/mantik_pb/v1/bookingb\x06proto3"
 
 var (
 	file_proto_v1_booking_thirdparty_proto_rawDescOnce sync.Once
