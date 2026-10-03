@@ -2447,11 +2447,15 @@ func (x *ListVoucherBatchCodesResponse) GetErrorMessage() string {
 // redeem gì (redeem xảy ra qua consumer JetStream subscribe pos.promotion.*.confirmed, xem
 // booking-core/internal/nats — không phải qua subject này).
 type ValidateVoucherForOrganizerRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Organizer     string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // fnbpos tenant_id, dùng thẳng làm organizer slug (quy ước có sẵn)
-	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
-	OutletId      int64                  `protobuf:"varint,3,opt,name=outlet_id,json=outletId,proto3" json:"outlet_id,omitempty"`         // 0 = không biết/không áp dụng outlet-scope check
-	MenuItemId    int64                  `protobuf:"varint,4,opt,name=menu_item_id,json=menuItemId,proto3" json:"menu_item_id,omitempty"` // 0 = không biết/không áp dụng menu-item-scope check
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Organizer  string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"` // fnbpos tenant_id, dùng thẳng làm organizer slug (quy ước có sẵn)
+	Code       string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	OutletId   int64                  `protobuf:"varint,3,opt,name=outlet_id,json=outletId,proto3" json:"outlet_id,omitempty"`         // 0 = không biết/không áp dụng outlet-scope check
+	MenuItemId int64                  `protobuf:"varint,4,opt,name=menu_item_id,json=menuItemId,proto3" json:"menu_item_id,omitempty"` // 0 = không biết/không áp dụng menu-item-scope check
+	// customer_id (v0.2.27, task 028/034) — customer-service UUID của khách GẮN VỚI ĐƠN (fnbpos tra theo SĐT
+	// trên đơn). Voucher có chủ (owner_customer_id) chỉ hợp lệ khi khớp; rỗng + voucher có chủ →
+	// error_code "voucher_owner_required". Voucher không chủ bỏ qua field này.
+	CustomerId    string `protobuf:"bytes,5,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2514,6 +2518,13 @@ func (x *ValidateVoucherForOrganizerRequest) GetMenuItemId() int64 {
 	return 0
 }
 
+func (x *ValidateVoucherForOrganizerRequest) GetCustomerId() string {
+	if x != nil {
+		return x.CustomerId
+	}
+	return ""
+}
+
 type ValidateVoucherForOrganizerResponse struct {
 	state     protoimpl.MessageState `protogen:"open.v1"`
 	Success   bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`                     // false = lỗi hệ thống (DB, v.v.) — fnbpos PHẢI fail-open
@@ -2525,8 +2536,11 @@ type ValidateVoucherForOrganizerResponse struct {
 	MaxDiscountAmount string `protobuf:"bytes,5,opt,name=max_discount_amount,json=maxDiscountAmount,proto3" json:"max_discount_amount,omitempty"` // Decimal string, rỗng = không giới hạn
 	ErrorCode         string `protobuf:"bytes,6,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
 	ErrorMessage      string `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// benefit_type (v0.2.27) — loại ưu đãi của voucher có chủ: member|birthday|welcome|campaign|manual;
+	// rỗng = voucher thường.
+	BenefitType   string `protobuf:"bytes,8,opt,name=benefit_type,json=benefitType,proto3" json:"benefit_type,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ValidateVoucherForOrganizerResponse) Reset() {
@@ -2602,6 +2616,217 @@ func (x *ValidateVoucherForOrganizerResponse) GetErrorCode() string {
 }
 
 func (x *ValidateVoucherForOrganizerResponse) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetBenefitType() string {
+	if x != nil {
+		return x.BenefitType
+	}
+	return ""
+}
+
+// CreateOwnedFnbVoucher (v0.2.27, task 028/034) — tạo ĐÚNG 1 voucher F&B GẮN CHỦ (vd quà sinh nhật):
+// mã ngẫu nhiên do booking-core sinh, dùng 1 lần, chỉ chủ (owner_customer_id) áp được tại POS.
+// Subject: vouchers.fnb.create-owned. idempotency_key giống nhau → trả lại ĐÚNG voucher đã tạo (job gọi lại
+// sau khi chết giữa chừng không sinh mã thứ hai).
+type CreateOwnedFnbVoucherRequest struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Organizer         string                 `protobuf:"bytes,1,opt,name=organizer,proto3" json:"organizer,omitempty"`                                            // org slug
+	OwnerCustomerId   string                 `protobuf:"bytes,2,opt,name=owner_customer_id,json=ownerCustomerId,proto3" json:"owner_customer_id,omitempty"`       // customer-service UUID (khác service, không FK)
+	BenefitType       string                 `protobuf:"bytes,3,opt,name=benefit_type,json=benefitType,proto3" json:"benefit_type,omitempty"`                     // member|birthday|welcome|campaign|manual
+	PriceMode         string                 `protobuf:"bytes,4,opt,name=price_mode,json=priceMode,proto3" json:"price_mode,omitempty"`                           // "percent" | "subtract"
+	Value             string                 `protobuf:"bytes,5,opt,name=value,proto3" json:"value,omitempty"`                                                    // decimal string
+	MaxDiscountAmount string                 `protobuf:"bytes,6,opt,name=max_discount_amount,json=maxDiscountAmount,proto3" json:"max_discount_amount,omitempty"` // decimal string, rỗng = không trần
+	ValidUntil        string                 `protobuf:"bytes,7,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                        // RFC3339
+	Comment           string                 `protobuf:"bytes,8,opt,name=comment,proto3" json:"comment,omitempty"`                                                // hiển thị trong backoffice
+	FnbOutletIds      []int64                `protobuf:"varint,9,rep,packed,name=fnb_outlet_ids,json=fnbOutletIds,proto3" json:"fnb_outlet_ids,omitempty"`        // rỗng = mọi outlet
+	IdempotencyKey    string                 `protobuf:"bytes,10,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`           // bắt buộc
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *CreateOwnedFnbVoucherRequest) Reset() {
+	*x = CreateOwnedFnbVoucherRequest{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateOwnedFnbVoucherRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOwnedFnbVoucherRequest) ProtoMessage() {}
+
+func (x *CreateOwnedFnbVoucherRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOwnedFnbVoucherRequest.ProtoReflect.Descriptor instead.
+func (*CreateOwnedFnbVoucherRequest) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetOrganizer() string {
+	if x != nil {
+		return x.Organizer
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetOwnerCustomerId() string {
+	if x != nil {
+		return x.OwnerCustomerId
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetBenefitType() string {
+	if x != nil {
+		return x.BenefitType
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetPriceMode() string {
+	if x != nil {
+		return x.PriceMode
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetMaxDiscountAmount() string {
+	if x != nil {
+		return x.MaxDiscountAmount
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetValidUntil() string {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetComment() string {
+	if x != nil {
+		return x.Comment
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetFnbOutletIds() []int64 {
+	if x != nil {
+		return x.FnbOutletIds
+	}
+	return nil
+}
+
+func (x *CreateOwnedFnbVoucherRequest) GetIdempotencyKey() string {
+	if x != nil {
+		return x.IdempotencyKey
+	}
+	return ""
+}
+
+type CreateOwnedFnbVoucherResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`
+	ValidUntil    string                 `protobuf:"bytes,3,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // RFC3339
+	Duplicate     bool                   `protobuf:"varint,4,opt,name=duplicate,proto3" json:"duplicate,omitempty"`                    // true = trả lại voucher đã tạo trước đó với cùng idempotency_key
+	ErrorCode     string                 `protobuf:"bytes,5,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,6,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateOwnedFnbVoucherResponse) Reset() {
+	*x = CreateOwnedFnbVoucherResponse{}
+	mi := &file_v1_booking_voucher_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateOwnedFnbVoucherResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateOwnedFnbVoucherResponse) ProtoMessage() {}
+
+func (x *CreateOwnedFnbVoucherResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_booking_voucher_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateOwnedFnbVoucherResponse.ProtoReflect.Descriptor instead.
+func (*CreateOwnedFnbVoucherResponse) Descriptor() ([]byte, []int) {
+	return file_v1_booking_voucher_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetValidUntil() string {
+	if x != nil {
+		return x.ValidUntil
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetDuplicate() bool {
+	if x != nil {
+		return x.Duplicate
+	}
+	return false
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *CreateOwnedFnbVoucherResponse) GetErrorMessage() string {
 	if x != nil {
 		return x.ErrorMessage
 	}
@@ -2873,13 +3098,15 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\bvouchers\x18\x02 \x03(\v2\x1a.riptik.booking.v1.VoucherR\bvouchers\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x03 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\x95\x01\n" +
+	"\rerror_message\x18\x04 \x01(\tR\ferrorMessage\"\xb6\x01\n" +
 	"\"ValidateVoucherForOrganizerRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x1b\n" +
 	"\toutlet_id\x18\x03 \x01(\x03R\boutletId\x12 \n" +
 	"\fmenu_item_id\x18\x04 \x01(\x03R\n" +
-	"menuItemId\"\xfe\x01\n" +
+	"menuItemId\x12\x1f\n" +
+	"\vcustomer_id\x18\x05 \x01(\tR\n" +
+	"customerId\"\xa1\x02\n" +
 	"#ValidateVoucherForOrganizerResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05valid\x18\x02 \x01(\bR\x05valid\x12\x1d\n" +
@@ -2889,7 +3116,31 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\x13max_discount_amount\x18\x05 \x01(\tR\x11maxDiscountAmount\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
-	"\rerror_message\x18\a \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
+	"\rerror_message\x18\a \x01(\tR\ferrorMessage\x12!\n" +
+	"\fbenefit_type\x18\b \x01(\tR\vbenefitType\"\xfa\x02\n" +
+	"\x1cCreateOwnedFnbVoucherRequest\x12\x1c\n" +
+	"\torganizer\x18\x01 \x01(\tR\torganizer\x12*\n" +
+	"\x11owner_customer_id\x18\x02 \x01(\tR\x0fownerCustomerId\x12!\n" +
+	"\fbenefit_type\x18\x03 \x01(\tR\vbenefitType\x12\x1d\n" +
+	"\n" +
+	"price_mode\x18\x04 \x01(\tR\tpriceMode\x12\x14\n" +
+	"\x05value\x18\x05 \x01(\tR\x05value\x12.\n" +
+	"\x13max_discount_amount\x18\x06 \x01(\tR\x11maxDiscountAmount\x12\x1f\n" +
+	"\vvalid_until\x18\a \x01(\tR\n" +
+	"validUntil\x12\x18\n" +
+	"\acomment\x18\b \x01(\tR\acomment\x12$\n" +
+	"\x0efnb_outlet_ids\x18\t \x03(\x03R\ffnbOutletIds\x12'\n" +
+	"\x0fidempotency_key\x18\n" +
+	" \x01(\tR\x0eidempotencyKey\"\xd0\x01\n" +
+	"\x1dCreateOwnedFnbVoucherResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\x12\x1f\n" +
+	"\vvalid_until\x18\x03 \x01(\tR\n" +
+	"validUntil\x12\x1c\n" +
+	"\tduplicate\x18\x04 \x01(\bR\tduplicate\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x05 \x01(\tR\terrorCode\x12#\n" +
+	"\rerror_message\x18\x06 \x01(\tR\ferrorMessageB*Z(github.com/riptik/services/pb/v1/bookingb\x06proto3"
 
 var (
 	file_v1_booking_voucher_proto_rawDescOnce sync.Once
@@ -2903,7 +3154,7 @@ func file_v1_booking_voucher_proto_rawDescGZIP() []byte {
 	return file_v1_booking_voucher_proto_rawDescData
 }
 
-var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_v1_booking_voucher_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_v1_booking_voucher_proto_goTypes = []any{
 	(*ListVouchersRequest)(nil),                 // 0: riptik.booking.v1.ListVouchersRequest
 	(*GetVoucherRequest)(nil),                   // 1: riptik.booking.v1.GetVoucherRequest
@@ -2930,7 +3181,9 @@ var file_v1_booking_voucher_proto_goTypes = []any{
 	(*ListVoucherBatchCodesResponse)(nil),       // 22: riptik.booking.v1.ListVoucherBatchCodesResponse
 	(*ValidateVoucherForOrganizerRequest)(nil),  // 23: riptik.booking.v1.ValidateVoucherForOrganizerRequest
 	(*ValidateVoucherForOrganizerResponse)(nil), // 24: riptik.booking.v1.ValidateVoucherForOrganizerResponse
-	nil, // 25: riptik.booking.v1.Voucher.MetaDataEntry
+	(*CreateOwnedFnbVoucherRequest)(nil),        // 25: riptik.booking.v1.CreateOwnedFnbVoucherRequest
+	(*CreateOwnedFnbVoucherResponse)(nil),       // 26: riptik.booking.v1.CreateOwnedFnbVoucherResponse
+	nil,                                         // 27: riptik.booking.v1.Voucher.MetaDataEntry
 }
 var file_v1_booking_voucher_proto_depIdxs = []int32{
 	3,  // 0: riptik.booking.v1.CreateVoucherRequest.restrictions:type_name -> riptik.booking.v1.VoucherRestrictions
@@ -2941,7 +3194,7 @@ var file_v1_booking_voucher_proto_depIdxs = []int32{
 	13, // 5: riptik.booking.v1.BulkCreateVouchersResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	13, // 6: riptik.booking.v1.ValidateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
 	13, // 7: riptik.booking.v1.UpdateVoucherResponse.voucher:type_name -> riptik.booking.v1.Voucher
-	25, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
+	27, // 8: riptik.booking.v1.Voucher.meta_data:type_name -> riptik.booking.v1.Voucher.MetaDataEntry
 	14, // 9: riptik.booking.v1.ListVoucherBatchesResponse.batches:type_name -> riptik.booking.v1.VoucherBatch
 	13, // 10: riptik.booking.v1.ListVoucherBatchCodesResponse.vouchers:type_name -> riptik.booking.v1.Voucher
 	11, // [11:11] is the sub-list for method output_type
@@ -2962,7 +3215,7 @@ func file_v1_booking_voucher_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_booking_voucher_proto_rawDesc), len(file_v1_booking_voucher_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   26,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
