@@ -2538,9 +2538,12 @@ type ValidateVoucherForOrganizerResponse struct {
 	ErrorMessage      string `protobuf:"bytes,7,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
 	// benefit_type (v0.2.27) — loại ưu đãi của voucher có chủ: member|birthday|welcome|campaign|manual;
 	// rỗng = voucher thường.
-	BenefitType   string `protobuf:"bytes,8,opt,name=benefit_type,json=benefitType,proto3" json:"benefit_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	BenefitType string `protobuf:"bytes,8,opt,name=benefit_type,json=benefitType,proto3" json:"benefit_type,omitempty"`
+	// min_order_amount (v0.2.29, task 074) — hoá đơn tối thiểu để voucher có hiệu lực (decimal, đơn vị tiền tệ nhỏ nhất
+	// của POS — đồng); rỗng/"0" = không điều kiện. fnbpos kiểm trên subtotal đơn trước khi áp mã.
+	MinOrderAmount string `protobuf:"bytes,9,opt,name=min_order_amount,json=minOrderAmount,proto3" json:"min_order_amount,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ValidateVoucherForOrganizerResponse) Reset() {
@@ -2625,6 +2628,13 @@ func (x *ValidateVoucherForOrganizerResponse) GetErrorMessage() string {
 func (x *ValidateVoucherForOrganizerResponse) GetBenefitType() string {
 	if x != nil {
 		return x.BenefitType
+	}
+	return ""
+}
+
+func (x *ValidateVoucherForOrganizerResponse) GetMinOrderAmount() string {
+	if x != nil {
+		return x.MinOrderAmount
 	}
 	return ""
 }
@@ -3106,7 +3116,7 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\fmenu_item_id\x18\x04 \x01(\x03R\n" +
 	"menuItemId\x12\x1f\n" +
 	"\vcustomer_id\x18\x05 \x01(\tR\n" +
-	"customerId\"\xa1\x02\n" +
+	"customerId\"\xcb\x02\n" +
 	"#ValidateVoucherForOrganizerResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05valid\x18\x02 \x01(\bR\x05valid\x12\x1d\n" +
@@ -3117,7 +3127,8 @@ const file_v1_booking_voucher_proto_rawDesc = "" +
 	"\n" +
 	"error_code\x18\x06 \x01(\tR\terrorCode\x12#\n" +
 	"\rerror_message\x18\a \x01(\tR\ferrorMessage\x12!\n" +
-	"\fbenefit_type\x18\b \x01(\tR\vbenefitType\"\xfa\x02\n" +
+	"\fbenefit_type\x18\b \x01(\tR\vbenefitType\x12(\n" +
+	"\x10min_order_amount\x18\t \x01(\tR\x0eminOrderAmount\"\xfa\x02\n" +
 	"\x1cCreateOwnedFnbVoucherRequest\x12\x1c\n" +
 	"\torganizer\x18\x01 \x01(\tR\torganizer\x12*\n" +
 	"\x11owner_customer_id\x18\x02 \x01(\tR\x0fownerCustomerId\x12!\n" +
